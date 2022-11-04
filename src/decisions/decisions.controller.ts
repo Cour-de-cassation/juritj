@@ -1,9 +1,20 @@
-import { Controller, Post } from '@nestjs/common'
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UploadedFile,
+  UseInterceptors
+} from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @Controller('decisions')
 export class DecisionsController {
   @Post()
-  collectDecisions(decisionFile) {
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor('decisionIntegre'))
+  collectDecisions(@UploadedFile() decisionFile: Express.Multer.File) {
+    console.log(decisionFile)
     return 200
   }
 }

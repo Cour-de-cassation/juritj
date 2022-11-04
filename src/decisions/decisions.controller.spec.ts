@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
+import { Readable } from 'stream'
 import { DecisionsController } from './decisions.controller'
 
 export interface CustomFile extends Blob {
@@ -23,7 +24,18 @@ describe('DecisionsController', () => {
   describe('collectDecisions', () => {
     it('should return status code 200 after sending the correct file', () => {
       // GIVEN
-      const decisionFile = null
+      const decisionFile: Express.Multer.File = {
+        originalname: 'test.wpd',
+        mimetype: 'text/csv',
+        buffer: Buffer.from('string from decision'),
+        fieldname: '',
+        encoding: '',
+        size: 1024,
+        stream: new Readable(),
+        destination: '',
+        filename: '',
+        path: ''
+      }
       // WHEN
       const response = controller.collectDecisions(decisionFile)
 
