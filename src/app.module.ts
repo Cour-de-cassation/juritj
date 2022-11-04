@@ -1,14 +1,12 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { DecisionModule } from './decision/decision.module';
-import { DecisionController } from './decision/decision.controller';
-import { DecisionService } from './decision/decision.service';
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { HttpModule } from '@nestjs/axios'
+import { DecisionsModule } from './decisions/decisions.module'
 
 @Module({
-  imports: [DecisionModule, HttpModule],
-  controllers: [AppController, DecisionController],
-  providers: [AppService, DecisionService],
+  imports: [HttpModule, DecisionsModule],
+  controllers: [AppController],
+  providers: [AppService]
 })
 export class AppModule {}
