@@ -15,7 +15,7 @@ describe('Decisions Module - Integration Test', () => {
     await app.init()
   })
 
-  it('POST /decisions returns 202 (Accepted) when a file is received', () => {
+  it('POST /decisions returns 202 (Accepted) when a wordperfect document is received', () => {
     // Given
     const myBufferedFile = Buffer.from('some data')
 
@@ -23,9 +23,23 @@ describe('Decisions Module - Integration Test', () => {
     return (
       request(app.getHttpServer())
         .post('/decisions')
-        .attach('decisionIntegre', myBufferedFile, 'filename')
+        .attach('decisionIntegre', myBufferedFile, 'filename.wpd')
         // Then
         .expect(202)
+    )
+  })
+
+  it('POST /decisions returns 400 when a file is not the correct type', () => {
+    // Given
+    const myBufferedFile = Buffer.from('some fake data')
+
+    // When
+    return (
+      request(app.getHttpServer())
+        .post('/decisions')
+        .attach('decisionIntegre', myBufferedFile, 'filename.xml')
+        // Then
+        .expect(400)
     )
   })
 
