@@ -14,11 +14,11 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "test": "jest & npm run test:integration",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:integration": "jest --config ./jest-integration.json",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -40,6 +40,7 @@
     "@nestjs/testing": "9.0.0",
     "@types/express": "4.17.13",
     "@types/jest": "28.1.8",
+    "@types/multer": "^1.4.7",
     "@types/node": "16.0.0",
     "@types/supertest": "2.0.11",
     "@typescript-eslint/eslint-plugin": "5.0.0",
