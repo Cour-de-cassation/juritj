@@ -14,8 +14,8 @@ describe('Decisions Module - Integration Test', () => {
     app = moduleFixture.createNestApplication()
     await app.init()
   })
-
-  it('POST /decisions returns 202 (Accepted) when a wordperfect document is received', () => {
+  // Devenu obsolete avec l'ajout des metadonnees
+  it.skip('POST /decisions returns 202 (Accepted) when a wordperfect document is received', () => {
     // Given
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
@@ -55,6 +55,38 @@ describe('Decisions Module - Integration Test', () => {
         .send(someBody)
         // Then
         .expect(400)
+    )
+  })
+
+  it('POST /decisions returns 400 when there is no metadata present with the wordperfect file', () => {
+    // Given
+    const myBufferedFile = Buffer.from('some data')
+    const wordperfectFilename = 'filename.wpd'
+
+    // When
+    return (
+      request(app.getHttpServer())
+        .post('/decisions')
+        .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
+        // Then
+        .expect(400)
+    )
+  })
+
+  it('POST /decisions returns 202 when there is metadata present with the wordperfect file', () => {
+    // Given
+    const myBufferedFile = Buffer.from('some data')
+    const wordperfectFilename = 'filename.wpd'
+    const metadata = { title: 'hello' }
+
+    // When
+    return (
+      request(app.getHttpServer())
+        .post('/decisions')
+        .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
+        .field('metadonnees', JSON.stringify(metadata))
+        // Then
+        .expect(202)
     )
   })
 })
