@@ -1,31 +1,29 @@
-import { FileInterceptor } from '@nestjs/platform-express'
 import {
+  BadRequestException,
   Controller,
+  HttpCode,
   HttpStatus,
   Post,
-  HttpCode,
   UploadedFile,
-  UseInterceptors,
-  ParseFilePipe,
-  FileTypeValidator
+  UseInterceptors
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @Controller('decisions')
 export class DecisionsController {
   @Post()
   @HttpCode(HttpStatus.ACCEPTED)
   @UseInterceptors(FileInterceptor('decisionIntegre'))
-  collectDecisions(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: 'vnd.wordperfect' })]
-      })
-    )
-    decisionIntegre: Express.Multer.File
-  ) {
-    /* TODO : poser un test avant de tirer le FileTypeValidator */
-
+  collectDecisions(@UploadedFile() decisionIntegre: Express.Multer.File) {
+    if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
+      throw new BadRequestException('Provided file must be a wordperfect file.')
+    }
     console.log(decisionIntegre)
     return 202
   }
+}
+
+function isWordperfectFileType(decisionIntegre: Express.Multer.File): boolean {
+  const wordperfectMimeType = 'application/vnd.wordperfect'
+  return decisionIntegre.mimetype === wordperfectMimeType
 }

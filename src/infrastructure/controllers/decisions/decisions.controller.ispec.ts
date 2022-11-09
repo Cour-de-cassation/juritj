@@ -18,12 +18,13 @@ describe('Decisions Module - Integration Test', () => {
   it('POST /decisions returns 202 (Accepted) when a wordperfect document is received', () => {
     // Given
     const myBufferedFile = Buffer.from('some data')
+    const wordperfectFilename = 'filename.wpd'
 
     // When
     return (
       request(app.getHttpServer())
         .post('/decisions')
-        .attach('decisionIntegre', myBufferedFile, 'filename.wpd')
+        .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
         // Then
         .expect(202)
     )
@@ -32,23 +33,26 @@ describe('Decisions Module - Integration Test', () => {
   it('POST /decisions returns 400 when a file is not the correct type', () => {
     // Given
     const myBufferedFile = Buffer.from('some fake data')
+    const xmlFilename = 'filename.xml'
 
     // When
     return (
       request(app.getHttpServer())
         .post('/decisions')
-        .attach('decisionIntegre', myBufferedFile, 'filename.xml')
+        .attach('decisionIntegre', myBufferedFile, xmlFilename)
         // Then
         .expect(400)
     )
   })
 
-  it('POST /decisions returns 400 when file is invalid', () => {
+  it('POST /decisions returns 400 when there is no file attached', () => {
+    const someBody = { some: 'value' }
+
     // When
     return (
       request(app.getHttpServer())
         .post('/decisions')
-        .send({ some: 'value' })
+        .send(someBody)
         // Then
         .expect(400)
     )
