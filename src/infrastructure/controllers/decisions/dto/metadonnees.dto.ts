@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsString } from 'class-validator'
+import { IsOptional, IsString, Length, Matches } from 'class-validator'
 
 export class MetadonneesDto {
   @ApiProperty({
@@ -7,5 +7,17 @@ export class MetadonneesDto {
     type: String
   })
   @IsString()
+  @Length(2, 42)
   juridictionName: string
+
+  @IsString()
+  @Matches('^TJ[0-9]{5}$')
+  juridictionId: string
+
+  @IsOptional()
+  jurisdictionCode: string
+
+  @IsString()
+  @Length(1)
+  numRegistre: string
 }

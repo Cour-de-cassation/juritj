@@ -65,7 +65,12 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
-    const metadata = { juridictionName: 'hello' }
+    const metadata = {
+      juridictionName: 'some juridiction name',
+      juridictionId: 'TJ00000',
+      jurisdictionCode: 'code',
+      numRegistre: 'A'
+    }
 
     // WHEN
     return (
