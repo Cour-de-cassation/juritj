@@ -1,25 +1,34 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   HttpCode,
   HttpStatus,
   Post,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
+  UsePipes
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
+import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
+import { MetadonneesDto } from './dto/metadonnees.dto'
 
 @Controller('decisions')
 export class DecisionsController {
   @Post()
   @HttpCode(HttpStatus.ACCEPTED)
   @UseInterceptors(FileInterceptor('decisionIntegre'))
-  collectDecisions(@UploadedFile() decisionIntegre: Express.Multer.File) {
+  @UsePipes()
+  collectDecisions(
+    @UploadedFile() decisionIntegre: Express.Multer.File,
+    @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
+    metadonneesDto: MetadonneesDto
+  ) {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       throw new BadRequestException('Provided file must be a wordperfect file.')
     }
-    console.log(decisionIntegre)
-    return 202
+    return metadonneesDto
   }
 }
 
