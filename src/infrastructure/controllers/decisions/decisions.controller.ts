@@ -28,7 +28,7 @@ export class DecisionsController {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       throw new BadRequestException('Provided file must be a wordperfect file.')
     }
-    return 202
+    return metadonneesDto
   }
 }
 
