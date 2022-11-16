@@ -6,6 +6,10 @@ export class StringToJsonPipe implements PipeTransform {
     if (!value) {
       throw new BadRequestException('Field is missing')
     }
-    return JSON.parse(value)
+    try {
+      return JSON.parse(value)
+    } catch (error) {
+      throw new BadRequestException('JSON format is invalid')
+    }
   }
 }
