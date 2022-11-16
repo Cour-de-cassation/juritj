@@ -15,46 +15,66 @@ describe('Decisions Module - Integration Test', () => {
     await app.init()
   })
 
-  it('POST /decisions returns 202 (Accepted) when a wordperfect document is received', () => {
-    // Given
-    const myBufferedFile = Buffer.from('some data')
-    const wordperfectFilename = 'filename.wpd'
+  it('POST /decisions returns 400 when there is no file attached', () => {
+    // GIVEN
+    const metadata = { juridictionName: 'hello' }
 
-    // When
+    // WHEN
     return (
       request(app.getHttpServer())
         .post('/decisions')
-        .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
-        // Then
-        .expect(202)
+        .send({ metadonnees: metadata })
+        // THEN
+        .expect(400)
     )
   })
 
-  it('POST /decisions returns 400 when a file is not the correct type', () => {
-    // Given
+  it('POST /decisions returns 400 when file has an incorrect type', () => {
+    // GIVEN
     const myBufferedFile = Buffer.from('some fake data')
     const xmlFilename = 'filename.xml'
+    const metadata = { juridictionName: 'hello' }
 
-    // When
+    // WHEN
     return (
       request(app.getHttpServer())
         .post('/decisions')
         .attach('decisionIntegre', myBufferedFile, xmlFilename)
-        // Then
+        .field('metadonnees', JSON.stringify(metadata))
+        // THEN
         .expect(400)
     )
   })
 
-  it('POST /decisions returns 400 when there is no file attached', () => {
-    const someBody = { some: 'value' }
+  it('POST /decisions returns 400 when there is no metadata with the wordperfect file', () => {
+    // GIVEN
+    const myBufferedFile = Buffer.from('some data')
+    const wordperfectFilename = 'filename.wpd'
 
-    // When
+    // WHEN
     return (
       request(app.getHttpServer())
         .post('/decisions')
-        .send(someBody)
-        // Then
+        .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
+        // THEN
         .expect(400)
+    )
+  })
+
+  it('POST /decisions returns 202 when there is metadata present with the wordperfect file', () => {
+    // GIVEN
+    const myBufferedFile = Buffer.from('some data')
+    const wordperfectFilename = 'filename.wpd'
+    const metadata = { juridictionName: 'hello' }
+
+    // WHEN
+    return (
+      request(app.getHttpServer())
+        .post('/decisions')
+        .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
+        .field('metadonnees', JSON.stringify(metadata))
+        // THEN
+        .expect(202)
     )
   })
 })
