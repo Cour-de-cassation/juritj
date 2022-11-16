@@ -25,16 +25,6 @@ export class DecisionsController {
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto
   ) {
-    /**
-     * Idees :
-     * 0. pouvoir parser la string en objet
-     * 1. : parser via un pipe avant validation du dto : https://stackoverflow.com/questions/51782257/postman-form-data-sending-complex-object-with-file
-     *
-     */
-    const metadonnees2: MetadonneesDto = metadonneesDto
-    console.log(metadonnees2)
-    console.log(metadonneesDto)
-
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       throw new BadRequestException('Provided file must be a wordperfect file.')
     }

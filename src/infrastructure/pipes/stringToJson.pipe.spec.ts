@@ -7,14 +7,15 @@ describe('convert a string to json', () => {
     // GIVEN
     const incorrectJson = 'something'
     // WHEN
-    // THEN
-    expect(() => target.transform(incorrectJson)).toThrow(BadRequestException)
+    expect(() => target.transform(incorrectJson))
+      // THEN
+      .toThrow(BadRequestException)
   })
 
   it('should return a valid json', () => {
     // GIVEN
-    const correctString = '{"title": "my title"}'
-    const correctJson = { title: 'my title' }
+    const correctString = '{"juridictionName": "my title"}'
+    const correctJson = { juridictionName: 'my title' }
     // WHEN
     const resultTransform = target.transform(correctString)
     // THEN
