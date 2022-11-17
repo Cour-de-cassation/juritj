@@ -1,6 +1,21 @@
+import { Type } from 'class-transformer'
+import {
+  IsDefined,
+  IsNotEmptyObject,
+  IsObject,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+  ValidateNested
+} from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsOptional, IsString, Length, Matches } from 'class-validator'
 
+
+export class PresidentDto {
+  @IsString()
+  fctPresident: string
+}
 export class MetadonneesDto {
   @ApiProperty({
     description: 'Nom de la juridiction émetrice de la décision.',
@@ -20,4 +35,13 @@ export class MetadonneesDto {
   @IsString()
   @Length(1)
   numRegistre: string
+
+  //...
+
+  @IsDefined()
+  @IsObject()
+  @IsNotEmptyObject()
+  @ValidateNested()
+  @Type(() => PresidentDto)
+  president: PresidentDto
 }

@@ -12,7 +12,7 @@ export class ValidateDtoPipe implements PipeTransform {
     const errors: ValidationError[] = await validate(object)
     if (errors.length > 0) {
       const messages = errors.map((err) => err.toString(false))
-
+      //TODO : Flatten array + tests
       throw new BadRequestException(messages)
     }
     return value

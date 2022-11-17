@@ -13,8 +13,10 @@ describe('Validate MetadonneeDTO format', () => {
   const someValidMetaDonneeDto = {
     juridictionName: 'some juridiction name',
     juridictionId: 'TJ00000',
-    jurisdictionCode: 'code',
-    numRegistre: 'A'
+    numRegistre: 'A',
+    president: {
+      fctPresident: 'president'
+    }
   }
 
   describe('juridictionName property', () => {
@@ -88,12 +90,124 @@ describe('Validate MetadonneeDTO format', () => {
         expect(error.response.message[0]).toContain(failingPropertyName)
       }
     })
+
+    it('throws an error when juridictionId is not a string', async () => {
+      // GIVEN
+      const invalidJuridictionId = 1234
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, juridictionId: invalidJuridictionId }
+      const failingPropertyName = 'juridictionId'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
   })
 
-  it('returns provided object when provided object is a MetadonneeDto with valid properties', async () => {
-    // WHEN
-    const response = await target.transform(someValidMetaDonneeDto, metadata)
-    // THEN
-    expect(response).toEqual(someValidMetaDonneeDto)
+  describe('juridictionCode property', () => {
+    it('throws an error when juridictionCode is not a string', async () => {
+      // GIVEN
+      const invalidJuridictionCode = 1234
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        juridictionCode: invalidJuridictionCode
+      }
+      const failingPropertyName = 'juridictionCode'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('numRegistre property', () => {
+    it('throws an error when numRegistre is not a string', async () => {
+      // GIVEN
+      const invalidNumRegistre = 123
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        numRegistre: invalidNumRegistre
+      }
+      const failingPropertyName = 'numRegistre'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when numRegistre different than length 1', async () => {
+      // GIVEN
+      const invalidNumRegistre = 'Some numRegistre name'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        numRegistre: invalidNumRegistre
+      }
+      const failingPropertyName = 'numRegistre'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        console.log(error)
+
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).not.toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('validate PresidentDTO format', () => {
+    it('throws an error when president is not defined', async () => {
+      // GIVEN
+      const { president, ...invalidMetadonnee } = someValidMetaDonneeDto
+      const failingPropertyName = 'president'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+    describe('property fctPresident', () => {
+      it('throws an error when fctPresident is not a string', async () => {
+        // GIVEN
+        const invalidFctPresident = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          president: {
+            fctPresident: invalidFctPresident
+          }
+        }
+        const failingPropertyName = 'fctPresident'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+
+    it('returns provided object when provided object is a MetadonneeDto with valid properties', async () => {
+      // WHEN
+      const response = await target.transform(someValidMetaDonneeDto, metadata)
+      // THEN
+      expect(response).toEqual(someValidMetaDonneeDto)
+    })
   })
 })
