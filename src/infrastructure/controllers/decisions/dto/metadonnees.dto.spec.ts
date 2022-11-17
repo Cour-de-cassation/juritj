@@ -10,55 +10,90 @@ describe('Validate MetadonneeDTO format', () => {
     data: ''
   }
 
-  it('throws an error when juridictionName is invalid', async () => {
-    // GIVEN
-    const invalidMetadonnee = { juridictionName: 123 }
-    // WHEN
-    await expect(target.transform(invalidMetadonnee, metadata))
-      // THEN
-      .rejects.toThrow(BadRequestException)
+  const someValidMetaDonneeDto = {
+    juridictionName: 'some juridiction name',
+    juridictionId: 'TJ00000',
+    jurisdictionCode: 'code',
+    numRegistre: 'A'
+  }
+
+  describe('juridictionName property', () => {
+    it('throws an error when juridictionName is not a string', async () => {
+      // GIVEN
+      const invalidJuridictionName = 123
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        juridictionName: invalidJuridictionName
+      }
+      const failingPropertyName = 'juridictionName'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when juridictionName is a too long string', async () => {
+      // GIVEN
+      const invalidJuridictionName = 'Some jurisdiction name which is way too long to fit'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        juridictionName: invalidJuridictionName
+      }
+      const failingPropertyName = 'juridictionName'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when juridictionName is a too short string', async () => {
+      // GIVEN
+      const invalidJuridictionName = 'S'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        juridictionName: invalidJuridictionName
+      }
+      const failingPropertyName = 'juridictionName'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
   })
 
-  it("throws an error when juridictionName is invalid because it's too long", async () => {
-    // GIVEN
-    const invalidMetadonnee = {
-      juridictionName: 'Some jurisdiction name which is way too long to fit'
-    }
-    // WHEN
-    await expect(target.transform(invalidMetadonnee, metadata))
-      // THEN
-      .rejects.toThrow(BadRequestException)
+  describe('juridictionId property', () => {
+    it('throws an error when juridictionId is invalid', async () => {
+      // GIVEN
+      const invalidJuridictionId = 'INVALID'
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, juridictionId: invalidJuridictionId }
+      const failingPropertyName = 'juridictionId'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
   })
 
-  it("throws an error when juridictionName is invalid because it's too short", async () => {
-    // GIVEN
-    const invalidMetadonnee = { juridictionName: 'S' }
+  it('returns provided object when provided object is a MetadonneeDto with valid properties', async () => {
     // WHEN
-    await expect(target.transform(invalidMetadonnee, metadata))
-      // THEN
-      .rejects.toThrow(BadRequestException)
-  })
-
-  it('throws an error when juridictionId is invalid', async () => {
-    // GIVEN
-    const invalidMetadonnee = { juridictionName: 'S', juridictionId: 'INVALID' }
-    // WHEN
-    await expect(target.transform(invalidMetadonnee, metadata))
-      // THEN
-      .rejects.toThrow(BadRequestException)
-  })
-
-  it('returns provided object when juridictionName is valid', async () => {
-    // GIVEN
-    const validMetadonnee = {
-      juridictionName: 'some juridiction name',
-      juridictionId: 'TJ00000',
-      jurisdictionCode: 'code',
-      numRegistre: 'A'
-    }
-    // WHEN
-    const response = await target.transform(validMetadonnee, metadata)
+    const response = await target.transform(someValidMetaDonneeDto, metadata)
     // THEN
-    expect(response).toEqual(validMetadonnee)
+    expect(response).toEqual(someValidMetaDonneeDto)
   })
 })
