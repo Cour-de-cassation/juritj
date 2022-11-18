@@ -30,10 +30,11 @@ export class MetadonneesDto {
   juridictionId: string
 
   @IsOptional()
-  jurisdictionCode: string
+  @IsString()
+  juridictionCode: string
 
   @IsString()
-  @Length(1)
+  @Length(1, 1)
   numRegistre: string
 
   @IsString()
@@ -41,7 +42,7 @@ export class MetadonneesDto {
   numRG: string
 
   @IsString()
-  @Length(10)
+  @Length(10, 10)
   numMesureInstruction: string
 
   //...

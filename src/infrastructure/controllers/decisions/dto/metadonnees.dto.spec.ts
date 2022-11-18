@@ -112,7 +112,7 @@ describe('Validate MetadonneeDTO format', () => {
   describe('juridictionCode property', () => {
     it('throws an error when juridictionCode is not a string', async () => {
       // GIVEN
-      const invalidJuridictionCode = 1234
+      const invalidJuridictionCode = 12345
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
         juridictionCode: invalidJuridictionCode
@@ -132,7 +132,7 @@ describe('Validate MetadonneeDTO format', () => {
   describe('numRegistre property', () => {
     it('throws an error when numRegistre is not a string', async () => {
       // GIVEN
-      const invalidNumRegistre = 123
+      const invalidNumRegistre = 1
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
         numRegistre: invalidNumRegistre
