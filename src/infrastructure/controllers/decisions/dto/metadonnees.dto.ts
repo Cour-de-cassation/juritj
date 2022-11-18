@@ -40,6 +40,10 @@ export class MetadonneesDto {
   @Matches('^[0-9]{2}/[0-9]{5}$')
   numRG: string
 
+  @IsString()
+  @Length(10)
+  numMesureInstruction: string
+
   //...
 
   @IsDefined()

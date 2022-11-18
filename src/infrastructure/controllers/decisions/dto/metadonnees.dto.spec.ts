@@ -15,6 +15,7 @@ describe('Validate MetadonneeDTO format', () => {
     juridictionId: 'TJ00000',
     numRegistre: 'A',
     numRG: '01/12345',
+    numMesureInstruction: '0123456789',
     president: {
       fctPresident: 'president'
     }
@@ -160,10 +161,8 @@ describe('Validate MetadonneeDTO format', () => {
         await target.transform(invalidMetadonnee, metadata)
       } catch (error) {
         // THEN
-        console.log(error)
-
         expect(error).toBeInstanceOf(BadRequestException)
-        expect(error.response.message[0]).not.toContain(failingPropertyName)
+        expect(error.response.message[0]).toContain(failingPropertyName)
       }
     })
   })
@@ -192,6 +191,44 @@ describe('Validate MetadonneeDTO format', () => {
       const invalidNumRG = 'INVALID REGEX'
       const invalidMetadonnee = { ...someValidMetaDonneeDto, numRG: invalidNumRG }
       const failingPropertyName = 'numRG'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('numMesureInstruction property', () => {
+    it('throws an error when numMesureInstruction is not a string', async () => {
+      // GIVEN
+      const invalidNumMesureInstruction = 123
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        numMesureInstruction: invalidNumMesureInstruction
+      }
+      const failingPropertyName = 'numMesureInstruction'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when numMesureInstruction different than length 10', async () => {
+      // GIVEN
+      const invalidNumMesureInstruction = 'short'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        numMesureInstruction: invalidNumMesureInstruction
+      }
+      const failingPropertyName = 'numMesureInstruction'
       // WHEN
       try {
         await target.transform(invalidMetadonnee, metadata)

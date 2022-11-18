@@ -70,6 +70,7 @@ describe('Decisions Module - Integration Test', () => {
       juridictionId: 'TJ00000',
       numRegistre: 'A',
       numRG: '01/12345',
+      numMesureInstruction: '0123456789',
       president: {
         fctPresident: 'president'
       }
