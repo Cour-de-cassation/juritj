@@ -45,12 +45,46 @@ export class MetadonneesDto {
   @Length(10, 10)
   numMesureInstruction: string
 
-  //...
+  @IsString()
+  @Matches('^[0-9a-zA-Z]{2}$')
+  codeService: string
+
+  @IsString()
+  @Length(0, 25)
+  libelleService: string
+
+  // dateDecision: Date
+
+  @IsString()
+  @Matches('^[0-9a-zA-Z]{3}$')
+  codeDecision: string
+
+  @IsString()
+  @Length(0, 200)
+  libelleCodeDecision: string
 
   @IsDefined()
+  @IsOptional()
   @IsObject()
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => PresidentDto)
   president: PresidentDto
+
+  // ... Les spéciaux
+
+  @IsString()
+  @IsOptional()
+  sommaire: string
+
+  @IsString()
+  @Matches('^[0-9a-zA-Z]{3}$')
+  codeNAC: string
+
+  @IsString()
+  libelleNAC: string
+
+  @IsString()
+  @Matches('^[0-9a-zA-Z]{1,2}$')
+  codeNature: string
 }

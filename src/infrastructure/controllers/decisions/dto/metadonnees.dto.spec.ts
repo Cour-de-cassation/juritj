@@ -16,9 +16,16 @@ describe('Validate MetadonneeDTO format', () => {
     numRegistre: 'A',
     numRG: '01/12345',
     numMesureInstruction: '0123456789',
+    codeService: '0A',
+    libelleService: 'some libelle',
+    codeDecision: '0aA',
+    libelleCodeDecision: 'some libelle code decision',
     president: {
       fctPresident: 'president'
-    }
+    },
+    codeNAC: '0aA',
+    libelleNAC: 'some libelle NAC',
+    codeNature: '0a'
   }
 
   describe('juridictionName property', () => {
@@ -148,7 +155,7 @@ describe('Validate MetadonneeDTO format', () => {
       }
     })
 
-    it('throws an error when numRegistre different than length 1', async () => {
+    it('throws an error when numRegistre is different than length 1', async () => {
       // GIVEN
       const invalidNumRegistre = 'Some numRegistre name'
       const invalidMetadonnee = {
@@ -221,7 +228,7 @@ describe('Validate MetadonneeDTO format', () => {
       }
     })
 
-    it('throws an error when numMesureInstruction different than length 10', async () => {
+    it('throws an error when numMesureInstruction is different than length 10', async () => {
       // GIVEN
       const invalidNumMesureInstruction = 'short'
       const invalidMetadonnee = {
@@ -229,6 +236,156 @@ describe('Validate MetadonneeDTO format', () => {
         numMesureInstruction: invalidNumMesureInstruction
       }
       const failingPropertyName = 'numMesureInstruction'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('codeService property', () => {
+    it('throws an error when codeService is not a string', async () => {
+      // GIVEN
+      const invalidCodeService = 12
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        codeService: invalidCodeService
+      }
+      const failingPropertyName = 'codeService'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when codeService is invalid', async () => {
+      // GIVEN
+      const invalidCodeService = 'INVALID REGEX'
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, codeService: invalidCodeService }
+      const failingPropertyName = 'codeService'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('libelleService property', () => {
+    it('throws an error when libelleService is not a string', async () => {
+      // GIVEN
+      const invalidLibelleService = 123
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        libelleService: invalidLibelleService
+      }
+      const failingPropertyName = 'libelleService'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when libelleService is longer than length 25', async () => {
+      // GIVEN
+      const invalidLibelleService =
+        'my super hyper mega long libelleService string longer than length 25'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        libelleService: invalidLibelleService
+      }
+      const failingPropertyName = 'libelleService'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  // describe('dateDecision property')
+
+  describe('codeDecision property', () => {
+    it('throws an error when codeDecision is not a string', async () => {
+      // GIVEN
+      const invalidCodeDecision = 123
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        codeDecision: invalidCodeDecision
+      }
+      const failingPropertyName = 'codeDecision'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when codeDecision is invalid', async () => {
+      // GIVEN
+      const invalidCodeDecision = 'INVALID REGEX'
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, codeDecision: invalidCodeDecision }
+      const failingPropertyName = 'codeDecision'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('libelleCodeDecision property', () => {
+    it('throws an error when libelleCodeDecision is not a string', async () => {
+      // GIVEN
+      const invalidLibelleCodeDecision = 123
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        libelleCodeDecision: invalidLibelleCodeDecision
+      }
+      const failingPropertyName = 'libelleCodeDecision'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when libelleCodeDecision is longer than length 200', async () => {
+      // GIVEN
+      const invalidLibelleCodeDecision =
+        'My super text that is longer than 200 character is starting with this beautiful sentence and then going to another one which makes no sense but for the sake of testing it is necessary to do so and here I am with 225 character'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        libelleCodeDecision: invalidLibelleCodeDecision
+      }
+      const failingPropertyName = 'libelleCodeDecision'
       // WHEN
       try {
         await target.transform(invalidMetadonnee, metadata)
@@ -274,6 +431,118 @@ describe('Validate MetadonneeDTO format', () => {
           expect(error.response.message[0]).toContain(failingPropertyName)
         }
       })
+    })
+  })
+
+  // ... describe('les speciaux')
+
+  describe('sommaire property', () => {
+    it('throws an error when sommaire is not a string', async () => {
+      // GIVEN
+      const invalidSommaire = 12345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        sommaire: invalidSommaire
+      }
+      const failingPropertyName = 'sommaire'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('codeNAC property', () => {
+    it('throws an error when codeNAC is not a string', async () => {
+      // GIVEN
+      const invalidCodeNAC = 123
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        codeNAC: invalidCodeNAC
+      }
+      const failingPropertyName = 'codeNAC'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when codeNAC is invalid', async () => {
+      // GIVEN
+      const invalidCodeNAC = 'INVALID REGEX'
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, codeNAC: invalidCodeNAC }
+      const failingPropertyName = 'codeNAC'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('libelleNAC property', () => {
+    it('throws an error when libelleNAC is not a string', async () => {
+      // GIVEN
+      const invalidLibelleNAC = 12345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        libelleNAC: invalidLibelleNAC
+      }
+      const failingPropertyName = 'libelleNAC'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('codeNature property', () => {
+    it('throws an error when codeNature is not a string', async () => {
+      // GIVEN
+      const invalidCodeNature = 12
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        codeNature: invalidCodeNature
+      }
+      const failingPropertyName = 'codeNature'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when codeNature is invalid', async () => {
+      // GIVEN
+      const invalidCodeNature = 'INVALID REGEX'
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, codeNature: invalidCodeNature }
+      const failingPropertyName = 'codeNature'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
     })
   })
 
