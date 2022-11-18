@@ -68,8 +68,11 @@ describe('Decisions Module - Integration Test', () => {
     const metadata = {
       juridictionName: 'some juridiction name',
       juridictionId: 'TJ00000',
-      jurisdictionCode: 'code',
-      numRegistre: 'A'
+      numRegistre: 'A',
+      numRG: '01/12345',
+      president: {
+        fctPresident: 'president'
+      }
     }
 
     // WHEN

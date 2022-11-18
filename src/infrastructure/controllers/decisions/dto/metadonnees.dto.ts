@@ -36,6 +36,10 @@ export class MetadonneesDto {
   @Length(1)
   numRegistre: string
 
+  @IsString()
+  @Matches('^[0-9]{2}/[0-9]{5}$')
+  numRG: string
+
   //...
 
   @IsDefined()
