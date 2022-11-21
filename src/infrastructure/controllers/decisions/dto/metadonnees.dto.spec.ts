@@ -3,6 +3,18 @@ import { MetadonneesDto } from './metadonnees.dto'
 import { ValidateDtoPipe } from '../../../pipes/validateDto.pipe'
 import { MockUtils } from '../../../utils/mock.utils'
 
+class NoErrorThrownError extends Error {}
+
+const getError = async <Error>(call: () => any): Promise<Error> => {
+  try {
+    await call()
+
+    throw new NoErrorThrownError()
+  } catch (error: any) {
+    return error as Error
+  }
+}
+
 describe('Validate MetadonneeDTO format', () => {
   const target = new ValidateDtoPipe()
   const metadata: ArgumentMetadata = {
@@ -435,20 +447,6 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('validate PresidentDTO (president property) format', () => {
-    it('throws an error when president is not defined', async () => {
-      // GIVEN
-      const { president, ...invalidMetadonnee } = someValidMetaDonneeDto
-      const failingPropertyName = 'president'
-      // WHEN
-      try {
-        await target.transform(invalidMetadonnee, metadata)
-      } catch (error) {
-        // THEN
-        expect(error).toBeInstanceOf(BadRequestException)
-        expect(error.response.message[0]).toContain(failingPropertyName)
-      }
-    })
-
     describe('property fctPresident', () => {
       it('throws an error when fctPresident is not a string', async () => {
         // GIVEN
@@ -822,6 +820,56 @@ describe('Validate MetadonneeDTO format', () => {
         }
       })
     })
+  })
+
+  describe('validate PartieDTO (partie property) format', () => {
+    it.only('throws an error when partie is not defined', async () => {
+      // GIVEN
+      const { ...invalidMetadonnee } = someValidMetaDonneeDto
+      const failingPropertyName = 'partie'
+
+      const error = await getError(async () => target.transform(invalidMetadonnee, metadata))
+
+      // WHEN
+      console.log(error)
+      expect(error).not.toBeInstanceOf(NoErrorThrownError)
+      expect(error).toBeInstanceOf(BadRequestException)
+      // expect(error.response.message).toContain('partie')
+
+      // try {
+      //   await target.transform(invalidMetadonnee, metadata).catch(error => {
+      //     console.log(error)
+      //   })
+      //   expect(false).toBe(true)
+      // } catch (error) {
+      //   console.log(error);
+
+      //   // THEN
+      //   expect(error).toBeInstanceOf(BadRequestException)
+      //   expect(error.response.message[0]).toContain(failingPropertyName)
+      // }
+    })
+
+    // describe('property typePartie', () => {
+    //   it('throws an error when typePartie is not a valid value', async () => {
+    //     // GIVEN
+    //     const invalidTypePartie = 123
+    //     const invalidMetadonnee = {
+    //       ...someValidMetaDonneeDto,
+    //       partie: { ...new MockUtils().partieDtoMock, typePartie: invalidTypePartie }
+    //     }
+    //     const failingPropertyName = 'typePartie'
+    //     // WHEN
+    //     try {
+    //       await target.transform(invalidMetadonnee, metadata)
+    //     } catch (error) {
+    //       // THEN
+    //       expect(error).toBeInstanceOf(BadRequestException)
+    //       expect(error.response.message[0]).toContain(failingPropertyName)
+    //     }
+    //   })
+
+    // })
   })
 
   describe('sommaire property', () => {

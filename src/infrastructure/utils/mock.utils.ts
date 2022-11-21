@@ -5,13 +5,13 @@ import {
 } from '../controllers/decisions/dto/metadonnees.dto'
 
 export class MockUtils {
-  presidentDtoMock: PresidentDto = {
+  presidentDtoMock = {
     fctPresident: 'president',
     nomPresident: 'Nom President',
     prenomPresident: 'prenom President'
   }
 
-  decisionDtoMock: DecisionDto = {
+  decisionDtoMock = {
     numRegistre: 'A',
     numRG: '01/12345',
     juridictionId: 'TJ00000',
@@ -19,7 +19,11 @@ export class MockUtils {
     numMesureInstruction: 'BCDEFGHIJK'
   }
 
-  metadonneesDtoMock: MetadonneesDto = {
+  partieDtoMock = {
+    typePartie: 'PP'
+  }
+
+  metadonneesDtoMock = {
     juridictionName: 'some juridiction name',
     juridictionId: 'TJ00000',
     numRegistre: 'A',
@@ -31,6 +35,7 @@ export class MockUtils {
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
     decisionAssociee: this.decisionDtoMock,
+    // partie: this.partieDtoMock,
     codeNAC: '0aA',
     libelleNAC: 'some libelle NAC',
     codeNature: '0a',

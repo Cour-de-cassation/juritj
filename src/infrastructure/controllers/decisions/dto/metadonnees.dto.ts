@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsDateString,
   IsDefined,
+  IsEnum,
   IsNotEmptyObject,
   IsObject,
   IsOptional,
@@ -47,6 +48,17 @@ export class DecisionDto {
   @IsString()
   @Length(10, 10)
   numMesureInstruction: string
+}
+
+export enum TypePartie {
+  PP = 'PP',
+  PM = 'PM',
+  AA = 'AA'
+}
+
+export class PartieDto {
+  @IsEnum(TypePartie)
+  typePartie: TypePartie
 }
 
 export class MetadonneesDto {
@@ -120,7 +132,12 @@ export class MetadonneesDto {
   @Type(() => DecisionDto)
   decisionAssociee: DecisionDto
 
-  // ... Les spéciaux
+  @IsDefined()
+  @IsObject()
+  @IsNotEmptyObject()
+  @ValidateNested()
+  @Type(() => PartieDto)
+  partie: PartieDto
 
   @IsString()
   @IsOptional()
