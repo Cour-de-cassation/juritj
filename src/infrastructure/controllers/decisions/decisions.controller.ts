@@ -9,14 +9,33 @@ import {
   UseInterceptors,
   UsePipes
 } from '@nestjs/common'
+import {
+  ApiTags,
+  ApiBody,
+  ApiConsumes,
+  ApiAcceptedResponse,
+  ApiBadRequestResponse
+} from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
+
+import { CollectDto } from './dto/collect.dto'
+import { MetadonneesDto } from './dto/metadonnees.dto'
 import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
-import { MetadonneesDto } from './dto/metadonnees.dto'
 
+@ApiTags('Collect')
 @Controller('decisions')
 export class DecisionsController {
   @Post()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Décision intègre au format wordperfect et metadonnées associées.',
+    type: CollectDto
+  })
+  @ApiAcceptedResponse({ description: 'La requête a été acceptée et va être traitée.' })
+  @ApiBadRequestResponse({
+    description: "Le format des métadonnées est incorrect et/ou le fichier n'est pas au bon format."
+  })
   @HttpCode(HttpStatus.ACCEPTED)
   @UseInterceptors(FileInterceptor('decisionIntegre'))
   @UsePipes()
@@ -24,7 +43,7 @@ export class DecisionsController {
     @UploadedFile() decisionIntegre: Express.Multer.File,
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto
-  ) {
+  ): MetadonneesDto {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       throw new BadRequestException('Provided file must be a wordperfect file.')
     }

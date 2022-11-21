@@ -27,3 +27,11 @@ To launch the tests :
  ```bash
 npm run test
  ```
+
+### Create a `.env` file in the root directory with the following content: 
+
+```.env
+### API DOCUMENTATION
+DOC_LOGIN=votre_login
+DOC_PASSWORD=votre_mot_de_passe
+```
