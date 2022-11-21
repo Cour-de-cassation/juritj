@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer'
 import {
+  IsArray,
   IsBoolean,
   IsDateString,
   IsDefined,
@@ -24,6 +25,30 @@ export class PresidentDto {
   @IsString()
   prenomPresident: string
 }
+
+export class DecisionDto {
+  @IsString()
+  @Length(1, 1)
+  numRegistre: string
+
+  @IsString()
+  @Matches('^[0-9]{2}/[0-9]{5}$')
+  numRG: string
+
+  @IsString()
+  @Matches('^TJ[0-9]{5}$')
+  juridictionId: string
+
+  @IsString()
+  @Matches('^[0-9]{8}$')
+  @IsDateString()
+  dateDecision: string
+
+  @IsString()
+  @Length(10, 10)
+  numMesureInstruction: string
+}
+
 export class MetadonneesDto {
   @ApiProperty({
     description: 'Nom de la juridiction émetrice de la décision.',
@@ -81,6 +106,19 @@ export class MetadonneesDto {
   @ValidateNested()
   @Type(() => PresidentDto)
   president?: PresidentDto
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => DecisionDto)
+  chainage?: DecisionDto[]
+
+  @IsDefined()
+  @IsObject()
+  @IsNotEmptyObject()
+  @ValidateNested()
+  @Type(() => DecisionDto)
+  decisionAssociee: DecisionDto
 
   // ... Les spéciaux
 

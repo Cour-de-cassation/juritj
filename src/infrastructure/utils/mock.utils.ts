@@ -1,4 +1,8 @@
-import { MetadonneesDto, PresidentDto } from '../controllers/decisions/dto/metadonnees.dto'
+import {
+  DecisionDto,
+  MetadonneesDto,
+  PresidentDto
+} from '../controllers/decisions/dto/metadonnees.dto'
 
 export class MockUtils {
   presidentDtoMock: PresidentDto = {
@@ -6,6 +10,15 @@ export class MockUtils {
     nomPresident: 'Nom President',
     prenomPresident: 'prenom President'
   }
+
+  decisionDtoMock: DecisionDto = {
+    numRegistre: 'A',
+    numRG: '01/12345',
+    juridictionId: 'TJ00000',
+    dateDecision: '20221121',
+    numMesureInstruction: 'BCDEFGHIJK'
+  }
+
   metadonneesDtoMock: MetadonneesDto = {
     juridictionName: 'some juridiction name',
     juridictionId: 'TJ00000',
@@ -17,6 +30,7 @@ export class MockUtils {
     libelleService: 'some libelle',
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
+    decisionAssociee: this.decisionDtoMock,
     codeNAC: '0aA',
     libelleNAC: 'some libelle NAC',
     codeNature: '0a',

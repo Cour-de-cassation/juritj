@@ -434,7 +434,7 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('validate PresidentDTO format', () => {
+  describe('validate PresidentDTO (president property) format', () => {
     it('throws an error when president is not defined', async () => {
       // GIVEN
       const { president, ...invalidMetadonnee } = someValidMetaDonneeDto
@@ -541,7 +541,288 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  // ... describe('les speciaux')
+  describe('chainage property', () => {
+    it('throws an error when chainage is not an array', async () => {
+      // GIVEN
+      const invalidChainage = 12345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        chainage: invalidChainage
+      }
+      const failingPropertyName = 'chainage'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    it('throws an error when chainage is not an array of decision', async () => {
+      // GIVEN
+      const invalidChainage = [1, 2, 3]
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        chainage: invalidChainage
+      }
+      const failingPropertyName = 'chainage'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('validate DecisionDTO (decisionAssociee property) format', () => {
+    it('throws an error when decisionAssociee is not defined', async () => {
+      // GIVEN
+      const { decisionAssociee, ...invalidMetadonnee } = someValidMetaDonneeDto
+      const failingPropertyName = 'decisionAssociee'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+
+    describe('property numRegistre', () => {
+      it('throws an error when numRegistre is not a string', async () => {
+        // GIVEN
+        const invalidNumRegistre = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: { ...new MockUtils().decisionDtoMock, numRegistre: invalidNumRegistre }
+        }
+        const failingPropertyName = 'numRegistre'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+
+      it('throws an error when numRegistre is different than length 1', async () => {
+        // GIVEN
+        const invalidNumRegistre = 'my num registre'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: { ...new MockUtils().decisionDtoMock, numRegistre: invalidNumRegistre }
+        }
+        const failingPropertyName = 'numRegistre'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+
+    describe('property numRG', () => {
+      it('throws an error when numRG is not a string', async () => {
+        // GIVEN
+        const invalidNumRG = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: { ...new MockUtils().decisionDtoMock, numRG: invalidNumRG }
+        }
+        const failingPropertyName = 'numRG'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+
+      it('throws an error when numRG is invalid', async () => {
+        // GIVEN
+        const invalidNumRG = 'my num rg'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: { ...new MockUtils().decisionDtoMock, numRG: invalidNumRG }
+        }
+        const failingPropertyName = 'numRG'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+
+    describe('property juridictionId', () => {
+      it('throws an error when juridictionId is not a string', async () => {
+        // GIVEN
+        const invalidJuridictionId = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            juridictionId: invalidJuridictionId
+          }
+        }
+        const failingPropertyName = 'juridictionId'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+
+      it('throws an error when juridictionId is invalid', async () => {
+        // GIVEN
+        const invalidJuridictionId = 'my num registre'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            juridictionId: invalidJuridictionId
+          }
+        }
+        const failingPropertyName = 'juridictionId'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+
+    describe('property dateDecision', () => {
+      it('throws an error when dateDecision is not a string', async () => {
+        // GIVEN
+        const invalidDateDecision = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            dateDecision: invalidDateDecision
+          }
+        }
+        const failingPropertyName = 'dateDecision'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+
+      it('throws an error when dateDecision is too long', async () => {
+        // GIVEN
+        const invalidDateDecision = 'my long date decision'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            dateDecision: invalidDateDecision
+          }
+        }
+        const failingPropertyName = 'dateDecision'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+
+      it('throws an error when dateDecision is not a valid date', async () => {
+        // GIVEN
+        const invalidDateDecision = '20223333'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            dateDecision: invalidDateDecision
+          }
+        }
+        const failingPropertyName = 'dateDecision'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+
+    describe('property numMesureInstruction', () => {
+      it('throws an error when numMesureInstruction is not a string', async () => {
+        // GIVEN
+        const invalidNumMesureInstruction = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            numMesureInstruction: invalidNumMesureInstruction
+          }
+        }
+        const failingPropertyName = 'numMesureInstruction'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+
+      it('throws an error when numMesureInstruction is different than length 10', async () => {
+        // GIVEN
+        const invalidNumMesureInstruction = 'small'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            numMesureInstruction: invalidNumMesureInstruction
+          }
+        }
+        const failingPropertyName = 'numMesureInstruction'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+  })
 
   describe('sommaire property', () => {
     it('throws an error when sommaire is not a string', async () => {
