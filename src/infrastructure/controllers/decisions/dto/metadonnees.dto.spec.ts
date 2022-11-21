@@ -1,6 +1,7 @@
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common'
 import { MetadonneesDto } from './metadonnees.dto'
 import { ValidateDtoPipe } from '../../../pipes/validateDto.pipe'
+import { MockUtils } from '../../../utils/mock.utils'
 
 describe('Validate MetadonneeDTO format', () => {
   const target = new ValidateDtoPipe()
@@ -10,25 +11,7 @@ describe('Validate MetadonneeDTO format', () => {
     data: ''
   }
 
-  const someValidMetaDonneeDto = {
-    juridictionName: 'some juridiction name',
-    juridictionId: 'TJ00000',
-    numRegistre: 'A',
-    numRG: '01/12345',
-    numMesureInstruction: '0123456789',
-    codeService: '0A',
-    dateDecision: '20221121',
-    libelleService: 'some libelle',
-    codeDecision: '0aA',
-    libelleCodeDecision: 'some libelle code decision',
-    president: {
-      fctPresident: 'president'
-    },
-    codeNAC: '0aA',
-    libelleNAC: 'some libelle NAC',
-    codeNature: '0a',
-    libelleNature: 'libelle'
-  }
+  const someValidMetaDonneeDto = new MockUtils().metadonneesDtoMock
 
   describe('juridictionName property', () => {
     it('throws an error when juridictionName is not a string', async () => {

@@ -32,7 +32,7 @@ export class MetadonneesDto {
 
   @IsOptional()
   @IsString()
-  juridictionCode: string
+  juridictionCode?: string
 
   @IsString()
   @Length(1, 1)
@@ -73,13 +73,13 @@ export class MetadonneesDto {
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => PresidentDto)
-  president: PresidentDto
+  president?: PresidentDto
 
   // ... Les spéciaux
 
   @IsString()
   @IsOptional()
-  sommaire: string
+  sommaire?: string
 
   @IsString()
   @Matches('^[0-9a-zA-Z]{3}$')
@@ -97,5 +97,5 @@ export class MetadonneesDto {
 
   @IsString()
   @IsOptional()
-  occultComp: string
+  occultComp?: string
 }
