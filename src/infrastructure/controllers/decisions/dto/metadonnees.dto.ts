@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer'
 import {
+  IsDateString,
   IsDefined,
   IsNotEmptyObject,
   IsObject,
@@ -53,7 +54,10 @@ export class MetadonneesDto {
   @Length(0, 25)
   libelleService: string
 
-  // dateDecision: Date
+  @IsString()
+  @Matches('^[0-9]{8}$')
+  @IsDateString()
+  dateDecision: string
 
   @IsString()
   @Matches('^[0-9a-zA-Z]{3}$')
@@ -87,4 +91,11 @@ export class MetadonneesDto {
   @IsString()
   @Matches('^[0-9a-zA-Z]{1,2}$')
   codeNature: string
+
+  @IsString()
+  libelleNature: string
+
+  @IsString()
+  @IsOptional()
+  occultComp: string
 }

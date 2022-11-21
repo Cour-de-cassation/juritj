@@ -17,6 +17,7 @@ describe('Validate MetadonneeDTO format', () => {
     numRG: '01/12345',
     numMesureInstruction: '0123456789',
     codeService: '0A',
+    dateDecision: '20221121',
     libelleService: 'some libelle',
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
@@ -25,7 +26,8 @@ describe('Validate MetadonneeDTO format', () => {
     },
     codeNAC: '0aA',
     libelleNAC: 'some libelle NAC',
-    codeNature: '0a'
+    codeNature: '0a',
+    libelleNature: 'libelle'
   }
 
   describe('juridictionName property', () => {
@@ -321,7 +323,59 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  // describe('dateDecision property')
+  describe('dateDecision property', () => {
+    it('throws an error when dateDecision is not a string', async () => {
+      // GIVEN
+      const invalidDateDecision = 123
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        dateDecision: invalidDateDecision
+      }
+      const failingPropertyName = 'dateDecision'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+    it('throws an error when dateDecision is a too long string', async () => {
+      // GIVEN
+      const invalidDateDecision = 'A too long string'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        dateDecision: invalidDateDecision
+      }
+      const failingPropertyName = 'dateDecision'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+    it('throws an error when dateDecision is a string but not a valid date', async () => {
+      // GIVEN
+      const invalidDateDecision = '20223333'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        dateDecision: invalidDateDecision
+      }
+      const failingPropertyName = 'dateDecision'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
 
   describe('codeDecision property', () => {
     it('throws an error when codeDecision is not a string', async () => {
@@ -535,6 +589,46 @@ describe('Validate MetadonneeDTO format', () => {
       const invalidCodeNature = 'INVALID REGEX'
       const invalidMetadonnee = { ...someValidMetaDonneeDto, codeNature: invalidCodeNature }
       const failingPropertyName = 'codeNature'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('libelleNature property', () => {
+    it('throws an error when libelleNature is not a string', async () => {
+      // GIVEN
+      const invalidLibelleNature = 12345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        libelleNature: invalidLibelleNature
+      }
+      const failingPropertyName = 'libelleNature'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('occultComp property', () => {
+    it('throws an error when occultComp is not a string', async () => {
+      // GIVEN
+      const invalidOccultComp = 12345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        occultComp: invalidOccultComp
+      }
+      const failingPropertyName = 'occultComp'
       // WHEN
       try {
         await target.transform(invalidMetadonnee, metadata)
