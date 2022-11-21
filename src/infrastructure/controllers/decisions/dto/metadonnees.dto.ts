@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer'
 import {
+  IsBoolean,
   IsDateString,
   IsDefined,
   IsNotEmptyObject,
@@ -16,6 +17,12 @@ import { ApiProperty } from '@nestjs/swagger'
 export class PresidentDto {
   @IsString()
   fctPresident: string
+
+  @IsString()
+  nomPresident: string
+
+  @IsString()
+  prenomPresident: string
 }
 export class MetadonneesDto {
   @ApiProperty({
@@ -94,6 +101,12 @@ export class MetadonneesDto {
 
   @IsString()
   libelleNature: string
+
+  @IsBoolean()
+  public: boolean
+
+  @IsBoolean()
+  recomOccult: boolean
 
   @IsString()
   @IsOptional()

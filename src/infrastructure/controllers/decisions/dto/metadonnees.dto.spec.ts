@@ -434,7 +434,7 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe.skip('validate PresidentDTO format', () => {
+  describe('validate PresidentDTO format', () => {
     it('throws an error when president is not defined', async () => {
       // GIVEN
       const { president, ...invalidMetadonnee } = someValidMetaDonneeDto
@@ -448,7 +448,8 @@ describe('Validate MetadonneeDTO format', () => {
         expect(error.response.message[0]).toContain(failingPropertyName)
       }
     })
-    describe.skip('property fctPresident', () => {
+
+    describe('property fctPresident', () => {
       it('throws an error when fctPresident is not a string', async () => {
         // GIVEN
         const invalidFctPresident = 123
@@ -459,6 +460,75 @@ describe('Validate MetadonneeDTO format', () => {
           }
         }
         const failingPropertyName = 'fctPresident'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+
+    describe('property nomPresident', () => {
+      it('throws an error when nomPresident is not a string', async () => {
+        // GIVEN
+        const invalidNomPresident = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          president: {
+            ...new MockUtils().presidentDtoMock,
+            nomPresident: invalidNomPresident
+          }
+        }
+        const failingPropertyName = 'nomPresident'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+
+    describe('property prenomPresident', () => {
+      it('throws an error when prenomPresident is not a string', async () => {
+        // GIVEN
+        const invalidPrenomPresident = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          president: {
+            ...new MockUtils().presidentDtoMock,
+            prenomPresident: invalidPrenomPresident
+          }
+        }
+        const failingPropertyName = 'prenomPresident'
+        // WHEN
+        try {
+          await target.transform(invalidMetadonnee, metadata)
+        } catch (error) {
+          // THEN
+          expect(error).toBeInstanceOf(BadRequestException)
+          expect(error.response.message[0]).toContain(failingPropertyName)
+        }
+      })
+    })
+
+    describe('property civilitePresident', () => {
+      it('throws an error when civilitePresident is not a string', async () => {
+        // GIVEN
+        const invalidCivilitePresident = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          president: {
+            ...new MockUtils().presidentDtoMock,
+            civilitePresident: invalidCivilitePresident
+          }
+        }
+        const failingPropertyName = 'civilitePresident'
         // WHEN
         try {
           await target.transform(invalidMetadonnee, metadata)
@@ -592,6 +662,46 @@ describe('Validate MetadonneeDTO format', () => {
         libelleNature: invalidLibelleNature
       }
       const failingPropertyName = 'libelleNature'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('public property', () => {
+    it('throws an error when public is not a boolean', async () => {
+      // GIVEN
+      const invalidPublic = 12345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        public: invalidPublic
+      }
+      const failingPropertyName = 'public'
+      // WHEN
+      try {
+        await target.transform(invalidMetadonnee, metadata)
+      } catch (error) {
+        // THEN
+        expect(error).toBeInstanceOf(BadRequestException)
+        expect(error.response.message[0]).toContain(failingPropertyName)
+      }
+    })
+  })
+
+  describe('recomOccult property', () => {
+    it('throws an error when recomOccult is not a boolean', async () => {
+      // GIVEN
+      const invalidRecomOccult = 12345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        recomOccult: invalidRecomOccult
+      }
+      const failingPropertyName = 'recomOccult'
       // WHEN
       try {
         await target.transform(invalidMetadonnee, metadata)
