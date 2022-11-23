@@ -8,7 +8,8 @@ export class MockUtils {
   presidentDtoMock = {
     fctPresident: 'president',
     nomPresident: 'Nom President',
-    prenomPresident: 'prenom President'
+    prenomPresident: 'prenom President',
+    civilitePresident: 'civilite President'
   }
 
   decisionDtoMock = {

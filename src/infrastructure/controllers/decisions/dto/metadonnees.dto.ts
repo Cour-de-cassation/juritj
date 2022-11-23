@@ -25,6 +25,9 @@ export class PresidentDto {
 
   @IsString()
   prenomPresident: string
+
+  @IsString()
+  civilitePresident: string
 }
 
 export class DecisionDto {
@@ -132,12 +135,12 @@ export class MetadonneesDto {
   @Type(() => DecisionDto)
   decisionAssociee: DecisionDto
 
-  @IsDefined()
-  @IsObject()
-  @IsNotEmptyObject()
-  @ValidateNested()
-  @Type(() => PartieDto)
-  partie: PartieDto
+  // @IsDefined()
+  // @IsObject()
+  // @IsNotEmptyObject()
+  // @ValidateNested()
+  // @Type(() => PartieDto)
+  // partie: PartieDto
 
   @IsString()
   @IsOptional()
