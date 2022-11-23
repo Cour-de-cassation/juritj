@@ -1,8 +1,4 @@
-import {
-  DecisionDto,
-  MetadonneesDto,
-  PresidentDto
-} from '../controllers/decisions/dto/metadonnees.dto'
+import { TypePartie } from '../controllers/decisions/dto/metadonnees.dto'
 
 export class MockUtils {
   presidentDtoMock = {
@@ -21,7 +17,8 @@ export class MockUtils {
   }
 
   partieDtoMock = {
-    typePartie: 'PP'
+    typePartie: TypePartie.PP,
+    nomPartie: 'nom Partie'
   }
 
   metadonneesDtoMock = {
@@ -36,7 +33,8 @@ export class MockUtils {
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
     decisionAssociee: this.decisionDtoMock,
-    // partie: this.partieDtoMock,
+    parties: [this.partieDtoMock, this.partieDtoMock],
+    partie: this.partieDtoMock,
     codeNAC: '0aA',
     libelleNAC: 'some libelle NAC',
     codeNature: '0a',

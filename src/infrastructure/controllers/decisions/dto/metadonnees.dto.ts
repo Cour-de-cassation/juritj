@@ -59,9 +59,35 @@ export enum TypePartie {
   AA = 'AA'
 }
 
+export enum QualitePartie {
+  F = 'F',
+  G = 'G',
+  I = 'I',
+  J = 'J',
+  K = 'K',
+  L = 'L',
+  M = 'M',
+  N = 'N'
+}
+
 export class PartieDto {
   @IsEnum(TypePartie)
   typePartie: TypePartie
+
+  @IsString()
+  nomPartie: string
+
+  @IsString()
+  @IsOptional()
+  prenomPartie?: string
+
+  @IsString()
+  @IsOptional()
+  civilitePartie?: string
+
+  @IsEnum(QualitePartie)
+  @IsOptional()
+  qualitePartie?: QualitePartie
 }
 
 export class MetadonneesDto {
@@ -135,12 +161,17 @@ export class MetadonneesDto {
   @Type(() => DecisionDto)
   decisionAssociee: DecisionDto
 
-  // @IsDefined()
-  // @IsObject()
-  // @IsNotEmptyObject()
-  // @ValidateNested()
-  // @Type(() => PartieDto)
-  // partie: PartieDto
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PartieDto)
+  parties: PartieDto[]
+
+  @IsDefined()
+  @IsObject()
+  @IsNotEmptyObject()
+  @ValidateNested()
+  @Type(() => PartieDto)
+  partie: PartieDto
 
   @IsString()
   @IsOptional()

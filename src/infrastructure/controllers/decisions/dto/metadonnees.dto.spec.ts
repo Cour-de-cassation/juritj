@@ -358,6 +358,7 @@ describe('Validate MetadonneeDTO format', () => {
         }
 
         // WHEN
+        // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
           .rejects.toThrow(BadRequestException)
@@ -376,6 +377,7 @@ describe('Validate MetadonneeDTO format', () => {
           }
         }
 
+        // WHEN
         // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
@@ -396,6 +398,7 @@ describe('Validate MetadonneeDTO format', () => {
         }
 
         // WHEN
+        // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
           .rejects.toThrow(BadRequestException)
@@ -414,6 +417,7 @@ describe('Validate MetadonneeDTO format', () => {
           }
         }
 
+        // WHEN
         // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
@@ -473,6 +477,7 @@ describe('Validate MetadonneeDTO format', () => {
         }
 
         // WHEN
+        // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
           .rejects.toThrow(BadRequestException)
@@ -486,6 +491,7 @@ describe('Validate MetadonneeDTO format', () => {
           decisionAssociee: { ...new MockUtils().decisionDtoMock, numRegistre: invalidNumRegistre }
         }
 
+        // WHEN
         // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
@@ -503,6 +509,7 @@ describe('Validate MetadonneeDTO format', () => {
         }
 
         // WHEN
+        // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
           .rejects.toThrow(BadRequestException)
@@ -515,6 +522,7 @@ describe('Validate MetadonneeDTO format', () => {
           decisionAssociee: { ...new MockUtils().decisionDtoMock, numRG: invalidNumRG }
         }
 
+        // WHEN
         // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
@@ -646,55 +654,155 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  // describe('validate PartieDTO (partie property) format', () => {
-  //   it.only('throws an error when partie is not defined', async () => {
-  //     // GIVEN
-  //     const { ...invalidMetadonnee } = someValidMetaDonneeDto
-  //
+  describe('parties property', () => {
+    it('throws an error when parties is not an array', async () => {
+      // GIVEN
+      const invalidParties = 12345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        parties: invalidParties
+      }
 
-  //     const error = await getError(async () => target.transform(invalidMetadonnee, metadata))
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
 
-  //     // WHEN
-  //     console.log(error)
-  //     expect(error).not.toBeInstanceOf(NoErrorThrownError)
-  //     expect(error).toBeInstanceOf(BadRequestException)
-  //     // expect(error.response.message).toContain('partie')
+    it('throws an error when parties is not an array of partie', async () => {
+      // GIVEN
+      const invalidParties = [1, 2, 3]
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        parties: invalidParties
+      }
 
-  //     // try {
-  //     //   await target.transform(invalidMetadonnee, metadata).catch(error => {
-  //     //     console.log(error)
-  //     //   })
-  //     //   expect(false).toBe(true)
-  //     // } catch (error) {
-  //     //   console.log(error);
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
 
-  //     //   // THEN
-  //     //   expect(error).toBeInstanceOf(BadRequestException)
-  //     //   expect(error.response.message[0]).toContain(failingPropertyName)
-  //     // }
-  //   })
+  describe('validate PartieDTO (partie property) format', () => {
+    it('throws an error when partie is not defined', async () => {
+      // GIVEN
+      const { partie, ...invalidMetadonnee } = someValidMetaDonneeDto
 
-  //   // describe('property typePartie', () => {
-  //   //   it('throws an error when typePartie is not a valid value', async () => {
-  //   //     // GIVEN
-  //   //     const invalidTypePartie = 123
-  //   //     const invalidMetadonnee = {
-  //   //       ...someValidMetaDonneeDto,
-  //   //       partie: { ...new MockUtils().partieDtoMock, typePartie: invalidTypePartie }
-  //   //     }
-  //   //
-  //   //     // WHEN
-  //   //     try {
-  //   //       await target.transform(invalidMetadonnee, metadata)
-  //   //     } catch (error) {
-  //   //       // THEN
-  //   //       expect(error).toBeInstanceOf(BadRequestException)
-  //   //       expect(error.response.message[0]).toContain(failingPropertyName)
-  //   //     }
-  //   //   })
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
 
-  //   // })
-  // })
+    describe('property typePartie', () => {
+      it('throws an error when typePartie is not a valid value', async () => {
+        // GIVEN
+        const invalidTypePartie = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          partie: { ...new MockUtils().partieDtoMock, typePartie: invalidTypePartie }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+
+      it('throws an error when typePartie is not a valid enum value', async () => {
+        // GIVEN
+        const invalidTypePartie = '123'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          partie: { ...new MockUtils().partieDtoMock, typePartie: invalidTypePartie }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+    })
+
+    describe('property nomPartie', () => {
+      it('throws an error when nomPartie is not a string', async () => {
+        // GIVEN
+        const invalidNomPartie = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          partie: { ...new MockUtils().partieDtoMock, nomPartie: invalidNomPartie }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+    })
+
+    describe('property prenomPartie', () => {
+      it('throws an error when prenomPartie is not a string', async () => {
+        // GIVEN
+        const invalidprenomPartie = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          partie: { ...new MockUtils().partieDtoMock, prenomPartie: invalidprenomPartie }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+    })
+
+    describe('property civilitePartie', () => {
+      it('throws an error when civilitePartie is not a string', async () => {
+        // GIVEN
+        const invalidCivilitePartie = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          partie: { ...new MockUtils().partieDtoMock, civilitePartie: invalidCivilitePartie }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+    })
+
+    describe('property qualitePartie', () => {
+      it('throws an error when qualitePartie is not a valid value', async () => {
+        // GIVEN
+        const invalidQualitePartie = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          partie: { ...new MockUtils().partieDtoMock, qualitePartie: invalidQualitePartie }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+
+      it('throws an error when qualitePartie is not a valid enum value', async () => {
+        // GIVEN
+        const invalidQualitePartie = '123'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          partie: { ...new MockUtils().partieDtoMock, qualitePartie: invalidQualitePartie }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+    })
+  })
 
   describe('sommaire property', () => {
     it('throws an error when sommaire is not a string', async () => {
