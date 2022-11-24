@@ -14,7 +14,7 @@ import {
   ValidateNested
 } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-
+import { TypePartie, QualitePartie } from 'src/domain/enums'
 
 export class PresidentDto {
   @IsString()
@@ -53,23 +53,6 @@ export class DecisionDto {
   numMesureInstruction: string
 }
 
-export enum TypePartie {
-  PP = 'PP',
-  PM = 'PM',
-  AA = 'AA'
-}
-
-export enum QualitePartie {
-  F = 'F',
-  G = 'G',
-  I = 'I',
-  J = 'J',
-  K = 'K',
-  L = 'L',
-  M = 'M',
-  N = 'N'
-}
-
 export class PartieDto {
   @IsEnum(TypePartie)
   typePartie: TypePartie
@@ -92,7 +75,7 @@ export class PartieDto {
 
 export class MetadonneesDto {
   @ApiProperty({
-    description: 'Nom de la juridiction émetrice de la décision.',
+    description: 'Nom de la juridiction émettrice de la décision.',
     type: String
   })
   @IsString()

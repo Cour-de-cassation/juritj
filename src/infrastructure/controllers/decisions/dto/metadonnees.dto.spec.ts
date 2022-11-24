@@ -21,6 +21,7 @@ describe('Validate MetadonneeDTO format', () => {
       expect(response).toEqual(someValidMetaDonneeDto)
     })
   })
+
   describe('juridictionName property', () => {
     it('throws an error when juridictionName is not a string', async () => {
       // GIVEN
@@ -35,7 +36,7 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when juridictionName is a too long string', async () => {
+    it('throws an error when juridictionName has more than 42 characters', async () => {
       // GIVEN
       const invalidJuridictionName = 'Some jurisdiction name which is way too long to fit'
       const invalidMetadonnee = {
@@ -48,7 +49,7 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when juridictionName is a too short string', async () => {
+    it('throws an error when juridictionName has less than 2 characters', async () => {
       // GIVEN
       const invalidJuridictionName = 'S'
       const invalidMetadonnee = {
@@ -259,9 +260,10 @@ describe('Validate MetadonneeDTO format', () => {
         // THEN
         .rejects.toThrow(BadRequestException)
     })
-    it('throws an error when dateDecision is a too long string', async () => {
+
+    it('throws an error when dateDecision is more than 8 characters', async () => {
       // GIVEN
-      const invalidDateDecision = 'A too long string'
+      const invalidDateDecision = '2022-11-22T 07:07:07'
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
         dateDecision: invalidDateDecision
@@ -272,9 +274,38 @@ describe('Validate MetadonneeDTO format', () => {
         // THEN
         .rejects.toThrow(BadRequestException)
     })
-    it('throws an error when dateDecision is a string but not a valid date', async () => {
+
+    it('throws an error when dateDecision is a string but incorrect valid values', async () => {
       // GIVEN
       const invalidDateDecision = '20223333'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        dateDecision: invalidDateDecision
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+
+    it('throws an error when dateDecision is a string but incorrect format', async () => {
+      // GIVEN
+      const invalidDateDecision = '20102022' // DDMMYYYY instead of YYYYMMDD
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        dateDecision: invalidDateDecision
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+
+    it('throws an error when dateDecision is a string but incorrect format', async () => {
+      // GIVEN
+      const invalidDateDecision = '20223012' // YYYYDDMM instead of YYYYMMDD
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
         dateDecision: invalidDateDecision
@@ -358,7 +389,6 @@ describe('Validate MetadonneeDTO format', () => {
         }
 
         // WHEN
-        // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
           .rejects.toThrow(BadRequestException)
@@ -377,7 +407,6 @@ describe('Validate MetadonneeDTO format', () => {
           }
         }
 
-        // WHEN
         // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
@@ -398,7 +427,6 @@ describe('Validate MetadonneeDTO format', () => {
         }
 
         // WHEN
-        // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
           .rejects.toThrow(BadRequestException)
@@ -417,7 +445,6 @@ describe('Validate MetadonneeDTO format', () => {
           }
         }
 
-        // WHEN
         // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
@@ -477,7 +504,6 @@ describe('Validate MetadonneeDTO format', () => {
         }
 
         // WHEN
-        // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
           .rejects.toThrow(BadRequestException)
@@ -491,7 +517,6 @@ describe('Validate MetadonneeDTO format', () => {
           decisionAssociee: { ...new MockUtils().decisionDtoMock, numRegistre: invalidNumRegistre }
         }
 
-        // WHEN
         // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
@@ -509,7 +534,6 @@ describe('Validate MetadonneeDTO format', () => {
         }
 
         // WHEN
-        // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
           .rejects.toThrow(BadRequestException)
@@ -522,7 +546,6 @@ describe('Validate MetadonneeDTO format', () => {
           decisionAssociee: { ...new MockUtils().decisionDtoMock, numRG: invalidNumRG }
         }
 
-        // WHEN
         // WHEN
         await expect(async () => await target.transform(invalidMetadonnee, metadata))
           // THEN
@@ -585,7 +608,7 @@ describe('Validate MetadonneeDTO format', () => {
 
     it('throws an error when dateDecision is too long', async () => {
       // GIVEN
-      const invalidDateDecision = 'my long date decision'
+      const invalidDateDecision = '2022-11-22T 07:07:07'
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
         decisionAssociee: {
