@@ -1,4 +1,4 @@
-import { TypePartie } from '../controllers/decisions/dto/metadonnees.dto'
+import { TypePartie } from '../../domain/enums'
 
 export class MockUtils {
   presidentDtoMock = {

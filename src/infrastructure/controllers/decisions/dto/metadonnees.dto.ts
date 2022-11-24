@@ -14,7 +14,7 @@ import {
   ValidateNested
 } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-import { TypePartie, QualitePartie } from 'src/domain/enums'
+import { TypePartie, QualitePartie } from '../../../../domain/enums'
 
 export class PresidentDto {
   @IsString()
