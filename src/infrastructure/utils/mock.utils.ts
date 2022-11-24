@@ -2,31 +2,31 @@ import { TypePartie } from '../../domain/enums'
 
 export class MockUtils {
   presidentDtoMock = {
-    fctPresident: 'president',
-    nomPresident: 'Nom President',
-    prenomPresident: 'prenom President',
-    civilitePresident: 'civilite President'
+    fonction: 'president',
+    nom: 'Nom President',
+    prenom: 'prenom President',
+    civilite: 'civilite President'
   }
 
   decisionDtoMock = {
-    numRegistre: 'A',
-    numRG: '01/12345',
-    juridictionId: 'TJ00000',
-    dateDecision: '20221121',
-    numMesureInstruction: 'BCDEFGHIJK'
+    numeroRegistre: 'A',
+    numeroRG: '01/12345',
+    idJuridiction: 'TJ00000',
+    date: '20221121',
+    numeroMesureInstruction: 'BCDEFGHIJK'
   }
 
   partieDtoMock = {
-    typePartie: TypePartie.PP,
-    nomPartie: 'nom Partie'
+    type: TypePartie.PP,
+    nom: 'nom Partie'
   }
 
   metadonneesDtoMock = {
-    juridictionName: 'some juridiction name',
-    juridictionId: 'TJ00000',
-    numRegistre: 'A',
-    numRG: '01/12345',
-    numMesureInstruction: '0123456789',
+    nomJuridiction: 'some juridiction name',
+    idJuridiction: 'TJ00000',
+    numeroRegistre: 'A',
+    numeroRG: '01/12345',
+    numeroMesureInstruction: '0123456789',
     codeService: '0A',
     dateDecision: '20221121',
     libelleService: 'some libelle',
@@ -40,6 +40,6 @@ export class MockUtils {
     codeNature: '0a',
     libelleNature: 'libelle',
     public: false,
-    recomOccult: false
+    recommandationOccultation: false
   }
 }

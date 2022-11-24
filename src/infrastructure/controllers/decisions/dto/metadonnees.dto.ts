@@ -18,59 +18,59 @@ import { TypePartie, QualitePartie } from '../../../../domain/enums'
 
 export class PresidentDto {
   @IsString()
-  fctPresident: string
+  fonction: string
 
   @IsString()
-  nomPresident: string
+  nom: string
 
   @IsString()
-  prenomPresident: string
+  prenom: string
 
   @IsString()
-  civilitePresident: string
+  civilite: string
 }
 
 export class DecisionDto {
   @IsString()
   @Length(1, 1)
-  numRegistre: string
+  numeroRegistre: string
 
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
-  numRG: string
+  numeroRG: string
 
   @IsString()
   @Matches('^TJ[0-9]{5}$')
-  juridictionId: string
+  idJuridiction: string
 
   @IsString()
   @Matches('^[0-9]{8}$')
   @IsDateString()
-  dateDecision: string
+  date: string
 
   @IsString()
   @Length(10, 10)
-  numMesureInstruction: string
+  numeroMesureInstruction: string
 }
 
 export class PartieDto {
   @IsEnum(TypePartie)
-  typePartie: TypePartie
+  type: TypePartie
 
   @IsString()
-  nomPartie: string
-
-  @IsString()
-  @IsOptional()
-  prenomPartie?: string
+  nom: string
 
   @IsString()
   @IsOptional()
-  civilitePartie?: string
+  prenom?: string
+
+  @IsString()
+  @IsOptional()
+  civilite?: string
 
   @IsEnum(QualitePartie)
   @IsOptional()
-  qualitePartie?: QualitePartie
+  qualite?: QualitePartie
 }
 
 export class MetadonneesDto {
@@ -80,27 +80,27 @@ export class MetadonneesDto {
   })
   @IsString()
   @Length(2, 42)
-  juridictionName: string
+  nomJuridiction: string
 
   @IsString()
   @Matches('^TJ[0-9]{5}$')
-  juridictionId: string
+  idJuridiction: string
 
   @IsOptional()
   @IsString()
-  juridictionCode?: string
+  codeJuridiction?: string
 
   @IsString()
   @Length(1, 1)
-  numRegistre: string
+  numeroRegistre: string
 
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
-  numRG: string
+  numeroRG: string
 
   @IsString()
   @Length(10, 10)
-  numMesureInstruction: string
+  numeroMesureInstruction: string
 
   @IsString()
   @Matches('^[0-9a-zA-Z]{2}$')
@@ -178,9 +178,9 @@ export class MetadonneesDto {
   public: boolean
 
   @IsBoolean()
-  recomOccult: boolean
+  recommandationOccultation: boolean
 
   @IsString()
   @IsOptional()
-  occultComp?: string
+  occultationComplementaire?: string
 }

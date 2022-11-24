@@ -22,13 +22,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('juridictionName property', () => {
-    it('throws an error when juridictionName is not a string', async () => {
+  describe('nomJuridiction property', () => {
+    it('throws an error when nomJuridiction is not a string', async () => {
       // GIVEN
-      const invalidJuridictionName = 123
+      const invalidNomJuridiction = 123
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        juridictionName: invalidJuridictionName
+        nomJuridiction: invalidNomJuridiction
       }
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
@@ -36,12 +36,12 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when juridictionName has more than 42 characters', async () => {
+    it('throws an error when nomJuridiction has more than 42 characters', async () => {
       // GIVEN
-      const invalidJuridictionName = 'Some jurisdiction name which is way too long to fit'
+      const invalidNomJuridiction = 'Some jurisdiction name which is way too long to fit'
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        juridictionName: invalidJuridictionName
+        nomJuridiction: invalidNomJuridiction
       }
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
@@ -49,12 +49,12 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when juridictionName has less than 2 characters', async () => {
+    it('throws an error when nomJuridiction has less than 2 characters', async () => {
       // GIVEN
-      const invalidJuridictionName = 'S'
+      const invalidNomJuridiction = 'S'
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        juridictionName: invalidJuridictionName
+        nomJuridiction: invalidNomJuridiction
       }
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
@@ -63,37 +63,21 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('juridictionId property', () => {
-    it('throws an error when juridictionId is invalid', async () => {
+  describe('idJuridiction property', () => {
+    it('throws an error when idJuridiction is invalid', async () => {
       // GIVEN
-      const invalidJuridictionId = 'INVALID'
-      const invalidMetadonnee = { ...someValidMetaDonneeDto, juridictionId: invalidJuridictionId }
+      const invalidIdJuridiction = 'INVALID'
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, idJuridiction: invalidIdJuridiction }
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
         // THEN
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when juridictionId is not a string', async () => {
+    it('throws an error when idJuridiction is not a string', async () => {
       // GIVEN
-      const invalidJuridictionId = 1234
-      const invalidMetadonnee = { ...someValidMetaDonneeDto, juridictionId: invalidJuridictionId }
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
-  })
-
-  describe('juridictionCode property', () => {
-    it('throws an error when juridictionCode is not a string', async () => {
-      // GIVEN
-      const invalidJuridictionCode = 12345
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        juridictionCode: invalidJuridictionCode
-      }
-
+      const invalidIdJuridiction = 1234
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, idJuridiction: invalidIdJuridiction }
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
         // THEN
@@ -101,27 +85,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('numRegistre property', () => {
-    it('throws an error when numRegistre is not a string', async () => {
+  describe('codeJuridiction property', () => {
+    it('throws an error when codeJuridiction is not a string', async () => {
       // GIVEN
-      const invalidNumRegistre = 1
+      const invalidCodeJuridiction = 12345
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        numRegistre: invalidNumRegistre
-      }
-
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
-
-    it('throws an error when numRegistre is different than length 1', async () => {
-      // GIVEN
-      const invalidNumRegistre = 'Some numRegistre name'
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        numRegistre: invalidNumRegistre
+        codeJuridiction: invalidCodeJuridiction
       }
 
       // WHEN
@@ -131,13 +101,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('numRG property', () => {
-    it('throws an error when numRG is not a string', async () => {
+  describe('numeroRegistre property', () => {
+    it('throws an error when numeroRegistre is not a string', async () => {
       // GIVEN
-      const invalidNumRG = 123
+      const invalidNumeroRegistre = 1
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        numRG: invalidNumRG
+        numeroRegistre: invalidNumeroRegistre
       }
 
       // WHEN
@@ -146,10 +116,13 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when numRG is invalid', async () => {
+    it('throws an error when numeroRegistre is different than length 1', async () => {
       // GIVEN
-      const invalidNumRG = 'INVALID REGEX'
-      const invalidMetadonnee = { ...someValidMetaDonneeDto, numRG: invalidNumRG }
+      const invalidNumeroRegistre = 'Some numeroRegistre name'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        numeroRegistre: invalidNumeroRegistre
+      }
 
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
@@ -158,13 +131,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('numMesureInstruction property', () => {
-    it('throws an error when numMesureInstruction is not a string', async () => {
+  describe('numeroRG property', () => {
+    it('throws an error when numeroRG is not a string', async () => {
       // GIVEN
-      const invalidNumMesureInstruction = 123
+      const invalidNumeroRG = 123
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        numMesureInstruction: invalidNumMesureInstruction
+        numeroRG: invalidNumeroRG
       }
 
       // WHEN
@@ -173,12 +146,39 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when numMesureInstruction is different than length 10', async () => {
+    it('throws an error when numeroRG is invalid', async () => {
       // GIVEN
-      const invalidNumMesureInstruction = 'short'
+      const invalidNumeroRG = 'INVALID REGEX'
+      const invalidMetadonnee = { ...someValidMetaDonneeDto, numeroRG: invalidNumeroRG }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('numeroMesureInstruction property', () => {
+    it('throws an error when numeroMesureInstruction is not a string', async () => {
+      // GIVEN
+      const invalidNumeroMesureInstruction = 123
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        numMesureInstruction: invalidNumMesureInstruction
+        numeroMesureInstruction: invalidNumeroMesureInstruction
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+
+    it('throws an error when numeroMesureInstruction is different than length 10', async () => {
+      // GIVEN
+      const invalidNumeroMesureInstruction = 'short'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        numeroMesureInstruction: invalidNumeroMesureInstruction
       }
 
       // WHEN
@@ -377,14 +377,14 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('validate PresidentDTO (president property) format', () => {
-    describe('property fctPresident', () => {
-      it('throws an error when fctPresident is not a string', async () => {
+    describe('property fonction', () => {
+      it('throws an error when fonction is not a string', async () => {
         // GIVEN
-        const invalidFctPresident = 123
+        const invalidFonction = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           president: {
-            fctPresident: invalidFctPresident
+            fonction: invalidFonction
           }
         }
 
@@ -395,15 +395,15 @@ describe('Validate MetadonneeDTO format', () => {
       })
     })
 
-    describe('property nomPresident', () => {
-      it('throws an error when nomPresident is not a string', async () => {
+    describe('property nom', () => {
+      it('throws an error when nom is not a string', async () => {
         // GIVEN
-        const invalidNomPresident = 123
+        const invalidNom = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           president: {
             ...new MockUtils().presidentDtoMock,
-            nomPresident: invalidNomPresident
+            nom: invalidNom
           }
         }
 
@@ -414,15 +414,15 @@ describe('Validate MetadonneeDTO format', () => {
       })
     })
 
-    describe('property prenomPresident', () => {
-      it('throws an error when prenomPresident is not a string', async () => {
+    describe('property prenom', () => {
+      it('throws an error when prenom is not a string', async () => {
         // GIVEN
-        const invalidPrenomPresident = 123
+        const invalidPrenom = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           president: {
             ...new MockUtils().presidentDtoMock,
-            prenomPresident: invalidPrenomPresident
+            prenom: invalidPrenom
           }
         }
 
@@ -433,15 +433,15 @@ describe('Validate MetadonneeDTO format', () => {
       })
     })
 
-    describe('property civilitePresident', () => {
-      it('throws an error when civilitePresident is not a string', async () => {
+    describe('property civilite', () => {
+      it('throws an error when civilite is not a string', async () => {
         // GIVEN
-        const invalidCivilitePresident = 123
+        const invalidCivilite = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           president: {
             ...new MockUtils().presidentDtoMock,
-            civilitePresident: invalidCivilitePresident
+            civilite: invalidCivilite
           }
         }
 
@@ -486,6 +486,7 @@ describe('Validate MetadonneeDTO format', () => {
   describe('validate DecisionDTO (decisionAssociee property) format', () => {
     it('throws an error when decisionAssociee is not defined', async () => {
       // GIVEN
+      // eslint-disable-next-line
       const { decisionAssociee, ...invalidMetadonnee } = someValidMetaDonneeDto
 
       // WHEN
@@ -494,13 +495,16 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    describe('property numRegistre', () => {
-      it('throws an error when numRegistre is not a string', async () => {
+    describe('property numeroRegistre', () => {
+      it('throws an error when numeroRegistre is not a string', async () => {
         // GIVEN
-        const invalidNumRegistre = 123
+        const invalidNumeroRegistre = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          decisionAssociee: { ...new MockUtils().decisionDtoMock, numRegistre: invalidNumRegistre }
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            numeroRegistre: invalidNumeroRegistre
+          }
         }
 
         // WHEN
@@ -509,12 +513,15 @@ describe('Validate MetadonneeDTO format', () => {
           .rejects.toThrow(BadRequestException)
       })
 
-      it('throws an error when numRegistre is different than length 1', async () => {
+      it('throws an error when numeroRegistre is different than length 1', async () => {
         // GIVEN
-        const invalidNumRegistre = 'my num registre'
+        const invalidNumeroRegistre = 'my num registre'
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          decisionAssociee: { ...new MockUtils().decisionDtoMock, numRegistre: invalidNumRegistre }
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            numeroRegistre: invalidNumeroRegistre
+          }
         }
 
         // WHEN
@@ -524,13 +531,13 @@ describe('Validate MetadonneeDTO format', () => {
       })
     })
 
-    describe('property numRG', () => {
-      it('throws an error when numRG is not a string', async () => {
+    describe('property numeroRG', () => {
+      it('throws an error when numeroRG is not a string', async () => {
         // GIVEN
-        const invalidNumRG = 123
+        const invalidNumeroRG = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          decisionAssociee: { ...new MockUtils().decisionDtoMock, numRG: invalidNumRG }
+          decisionAssociee: { ...new MockUtils().decisionDtoMock, numeroRG: invalidNumeroRG }
         }
 
         // WHEN
@@ -538,12 +545,12 @@ describe('Validate MetadonneeDTO format', () => {
           // THEN
           .rejects.toThrow(BadRequestException)
       })
-      it('throws an error when numRG is invalid', async () => {
+      it('throws an error when numeroRG is invalid', async () => {
         // GIVEN
-        const invalidNumRG = 'my num rg'
+        const invalidNumeroRG = 'my num rg'
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          decisionAssociee: { ...new MockUtils().decisionDtoMock, numRG: invalidNumRG }
+          decisionAssociee: { ...new MockUtils().decisionDtoMock, numeroRG: invalidNumeroRG }
         }
 
         // WHEN
@@ -552,128 +559,128 @@ describe('Validate MetadonneeDTO format', () => {
           .rejects.toThrow(BadRequestException)
       })
     })
-  })
 
-  describe('property juridictionId', () => {
-    it('throws an error when juridictionId is not a string', async () => {
-      // GIVEN
-      const invalidJuridictionId = 123
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        decisionAssociee: {
-          ...new MockUtils().decisionDtoMock,
-          juridictionId: invalidJuridictionId
+    describe('property idJuridiction', () => {
+      it('throws an error when idJuridiction is not a string', async () => {
+        // GIVEN
+        const invalidIdJuridiction = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            idJuridiction: invalidIdJuridiction
+          }
         }
-      }
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+
+      it('throws an error when idJuridiction is invalid', async () => {
+        // GIVEN
+        const invalidIdJuridiction = 'my num registre'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            idJuridiction: invalidIdJuridiction
+          }
+        }
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
     })
 
-    it('throws an error when juridictionId is invalid', async () => {
-      // GIVEN
-      const invalidJuridictionId = 'my num registre'
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        decisionAssociee: {
-          ...new MockUtils().decisionDtoMock,
-          juridictionId: invalidJuridictionId
+    describe('property date', () => {
+      it('throws an error when date is not a string', async () => {
+        // GIVEN
+        const invalidDate = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            date: invalidDate
+          }
         }
-      }
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
-  })
 
-  describe('property dateDecision', () => {
-    it('throws an error when dateDecision is not a string', async () => {
-      // GIVEN
-      const invalidDateDecision = 123
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        decisionAssociee: {
-          ...new MockUtils().decisionDtoMock,
-          dateDecision: invalidDateDecision
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+
+      it('throws an error when date is too long', async () => {
+        // GIVEN
+        const invalidDate = '2022-11-22T 07:07:07'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            date: invalidDate
+          }
         }
-      }
 
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
 
-    it('throws an error when dateDecision is too long', async () => {
-      // GIVEN
-      const invalidDateDecision = '2022-11-22T 07:07:07'
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        decisionAssociee: {
-          ...new MockUtils().decisionDtoMock,
-          dateDecision: invalidDateDecision
+      it('throws an error when date is not a valid date', async () => {
+        // GIVEN
+        const invalidDate = '20223333'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            date: invalidDate
+          }
         }
-      }
 
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
-
-    it('throws an error when dateDecision is not a valid date', async () => {
-      // GIVEN
-      const invalidDateDecision = '20223333'
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        decisionAssociee: {
-          ...new MockUtils().decisionDtoMock,
-          dateDecision: invalidDateDecision
-        }
-      }
-
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
-  })
-
-  describe('property numMesureInstruction', () => {
-    it('throws an error when numMesureInstruction is not a string', async () => {
-      // GIVEN
-      const invalidNumMesureInstruction = 123
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        decisionAssociee: {
-          ...new MockUtils().decisionDtoMock,
-          numMesureInstruction: invalidNumMesureInstruction
-        }
-      }
-
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
     })
 
-    it('throws an error when numMesureInstruction is different than length 10', async () => {
-      // GIVEN
-      const invalidNumMesureInstruction = 'small'
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        decisionAssociee: {
-          ...new MockUtils().decisionDtoMock,
-          numMesureInstruction: invalidNumMesureInstruction
+    describe('property numeroMesureInstruction', () => {
+      it('throws an error when numeroMesureInstruction is not a string', async () => {
+        // GIVEN
+        const invalidNumeroMesureInstruction = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            numeroMesureInstruction: invalidNumeroMesureInstruction
+          }
         }
-      }
 
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+
+      it('throws an error when numeroMesureInstruction is different than length 10', async () => {
+        // GIVEN
+        const invalidNumeroMesureInstruction = 'small'
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            numeroMesureInstruction: invalidNumeroMesureInstruction
+          }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
     })
   })
 
@@ -710,6 +717,7 @@ describe('Validate MetadonneeDTO format', () => {
   describe('validate PartieDTO (partie property) format', () => {
     it('throws an error when partie is not defined', async () => {
       // GIVEN
+      // eslint-disable-next-line
       const { partie, ...invalidMetadonnee } = someValidMetaDonneeDto
 
       // WHEN
@@ -718,13 +726,13 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    describe('property typePartie', () => {
-      it('throws an error when typePartie is not a valid value', async () => {
+    describe('property type', () => {
+      it('throws an error when type is not a valid value', async () => {
         // GIVEN
-        const invalidTypePartie = 123
+        const invalidType = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          partie: { ...new MockUtils().partieDtoMock, typePartie: invalidTypePartie }
+          partie: { ...new MockUtils().partieDtoMock, type: invalidType }
         }
 
         // WHEN
@@ -733,28 +741,12 @@ describe('Validate MetadonneeDTO format', () => {
           .rejects.toThrow(BadRequestException)
       })
 
-      it('throws an error when typePartie is not a valid enum value', async () => {
+      it('throws an error when type is not a valid enum value', async () => {
         // GIVEN
-        const invalidTypePartie = '123'
+        const invalidType = '123'
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          partie: { ...new MockUtils().partieDtoMock, typePartie: invalidTypePartie }
-        }
-
-        // WHEN
-        await expect(async () => await target.transform(invalidMetadonnee, metadata))
-          // THEN
-          .rejects.toThrow(BadRequestException)
-      })
-    })
-
-    describe('property nomPartie', () => {
-      it('throws an error when nomPartie is not a string', async () => {
-        // GIVEN
-        const invalidNomPartie = 123
-        const invalidMetadonnee = {
-          ...someValidMetaDonneeDto,
-          partie: { ...new MockUtils().partieDtoMock, nomPartie: invalidNomPartie }
+          partie: { ...new MockUtils().partieDtoMock, type: invalidType }
         }
 
         // WHEN
@@ -764,13 +756,13 @@ describe('Validate MetadonneeDTO format', () => {
       })
     })
 
-    describe('property prenomPartie', () => {
-      it('throws an error when prenomPartie is not a string', async () => {
+    describe('property nom', () => {
+      it('throws an error when nom is not a string', async () => {
         // GIVEN
-        const invalidprenomPartie = 123
+        const invalidNom = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          partie: { ...new MockUtils().partieDtoMock, prenomPartie: invalidprenomPartie }
+          partie: { ...new MockUtils().partieDtoMock, nom: invalidNom }
         }
 
         // WHEN
@@ -780,13 +772,13 @@ describe('Validate MetadonneeDTO format', () => {
       })
     })
 
-    describe('property civilitePartie', () => {
-      it('throws an error when civilitePartie is not a string', async () => {
+    describe('property prenom', () => {
+      it('throws an error when prenom is not a string', async () => {
         // GIVEN
-        const invalidCivilitePartie = 123
+        const invalidPrenom = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          partie: { ...new MockUtils().partieDtoMock, civilitePartie: invalidCivilitePartie }
+          partie: { ...new MockUtils().partieDtoMock, prenom: invalidPrenom }
         }
 
         // WHEN
@@ -796,13 +788,29 @@ describe('Validate MetadonneeDTO format', () => {
       })
     })
 
-    describe('property qualitePartie', () => {
-      it('throws an error when qualitePartie is not a valid value', async () => {
+    describe('property civilite', () => {
+      it('throws an error when civilite is not a string', async () => {
         // GIVEN
-        const invalidQualitePartie = 123
+        const invalidCivilite = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          partie: { ...new MockUtils().partieDtoMock, qualitePartie: invalidQualitePartie }
+          partie: { ...new MockUtils().partieDtoMock, civilite: invalidCivilite }
+        }
+
+        // WHEN
+        await expect(async () => await target.transform(invalidMetadonnee, metadata))
+          // THEN
+          .rejects.toThrow(BadRequestException)
+      })
+    })
+
+    describe('property qualite', () => {
+      it('throws an error when qualite is not a valid value', async () => {
+        // GIVEN
+        const invalidQualite = 123
+        const invalidMetadonnee = {
+          ...someValidMetaDonneeDto,
+          partie: { ...new MockUtils().partieDtoMock, qualite: invalidQualite }
         }
 
         // WHEN
@@ -811,12 +819,12 @@ describe('Validate MetadonneeDTO format', () => {
           .rejects.toThrow(BadRequestException)
       })
 
-      it('throws an error when qualitePartie is not a valid enum value', async () => {
+      it('throws an error when qualite is not a valid enum value', async () => {
         // GIVEN
-        const invalidQualitePartie = '123'
+        const invalidQualite = '123'
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          partie: { ...new MockUtils().partieDtoMock, qualitePartie: invalidQualitePartie }
+          partie: { ...new MockUtils().partieDtoMock, qualite: invalidQualite }
         }
 
         // WHEN
@@ -945,13 +953,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('recomOccult property', () => {
-    it('throws an error when recomOccult is not a boolean', async () => {
+  describe('recommandationOccultation property', () => {
+    it('throws an error when recommandationOccultation is not a boolean', async () => {
       // GIVEN
-      const invalidRecomOccult = 12345
+      const invalidRecommandationOccultation = 12345
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        recomOccult: invalidRecomOccult
+        recommandationOccultation: invalidRecommandationOccultation
       }
 
       // WHEN
@@ -961,13 +969,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('occultComp property', () => {
-    it('throws an error when occultComp is not a string', async () => {
+  describe('occultationComplementaire property', () => {
+    it('throws an error when occultationComplementaire is not a string', async () => {
       // GIVEN
-      const invalidOccultComp = 12345
+      const invalidOccultationComplementaire = 12345
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        occultComp: invalidOccultComp
+        occultationComplementaire: invalidOccultationComplementaire
       }
 
       // WHEN
