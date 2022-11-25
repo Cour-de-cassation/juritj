@@ -2,6 +2,7 @@ import * as request from 'supertest'
 import { INestApplication } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { DecisionsModule } from './decisions.module'
+import { MockUtils } from '../../utils/mock.utils'
 
 describe('Decisions Module - Integration Test', () => {
   let app: INestApplication
@@ -65,8 +66,7 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
-    const metadata = { juridictionName: 'hello' }
-
+    const metadata = new MockUtils().metadonneesDtoMock
     // WHEN
     return (
       request(app.getHttpServer())
