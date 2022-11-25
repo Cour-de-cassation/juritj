@@ -4,6 +4,7 @@
 1. [Fonctions](#fonctions)
 2. [Git](#git)
 3. [Versionnage](#versionnage)
+4. 
 
 # Fonctions <a name="fonctions"></a>
 ## Granularité
@@ -38,4 +39,21 @@ Pour le `sujet`, nous décrirons ce qui a été fait et pourquoi ça a été fai
 
 Par exemple : `feat(292): add POST /decisions to allow WinCI TGI to send decisons`
 
+## Merge
+Nous utiliserons l'option `Rebase and merge` sur [github](https://github.com/Cour-de-cassation) afin d'ajouter les commits à merger directement sur la branche `master`, et éviter les effets "colines" avec les commits de merge
+
 # Versionnage <a name="versionnage"></a>
+
+Nous nous inspirerons de [semVer](https://semver.org/lang/fr/) avec les numéros de versions majeur et mineur &rarr; `MAJEUR.MINEUR`.
+
+- MAJEUR = breaking change
+- MINEUR = ajouts fonctionnels + correctifs
+
+Par exemple : 2.4 => version majeur 2, mineur 4.
+
+# TDD <a name="tdd"></a>
+Nous avons deux types de tests dans le projet : 
+- des tests unitaire &rarr; 
+- des tests d'intégration &rarr; 
+
+# Langue 
