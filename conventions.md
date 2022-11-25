@@ -4,7 +4,7 @@
 1. [Fonctions](#fonctions)
 2. [Git](#git)
 3. [Versionnage](#versionnage)
-4. 
+4. [Tests](#tests)
 
 # Fonctions <a name="fonctions"></a>
 ## Granularité
@@ -51,9 +51,20 @@ Nous nous inspirerons de [semVer](https://semver.org/lang/fr/) avec les numéros
 
 Par exemple : 2.4 => version majeur 2, mineur 4.
 
-# TDD <a name="tdd"></a>
+# Tests <a name="tests"></a>
 Nous avons deux types de tests dans le projet : 
-- des tests unitaire &rarr; 
-- des tests d'intégration &rarr; 
+- des tests unitaire &rarr; chaque fonction est testée individuellement
+- des tests d'intégration &rarr; l'application est simulée entièrement 
 
-# Langue 
+# ADR (Architecture Decision Report)<a name="adr"></a>
+
+Les décisions techniques sont retranscrites dans un fichier `insert file here` Markdown afin de pouvoir comprendre le raisonnement derrière les différents choix pris.
+
+
+# IDE <a name="IDE">
+
+Le développement de ce projet a été réalisé à l'aide de [VSCode](https://code.visualstudio.com/) avec les extensions suivantes :
+ - ESLint
+ - LiveShare
+ - Jest
+
