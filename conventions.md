@@ -9,7 +9,7 @@
 # Fonctions <a name="fonctions"></a>
 ## Granularité
 
-Idéalement, une responsabilité pour chaque méthode ou classe. 
+Nous avons pour ambition de limiter chaque méthode / classe à une responsabilité.
 
 ## Nommage
 
@@ -20,10 +20,11 @@ Le nommage est le suivant :
 
 # Git <a name="git"></a>
 ## Branches
-Notre stratégie de branches sur git suit le [trunk-based development](https://trunkbaseddevelopment.com/).
+Notre stratégie de branches sur git suit le [trunk-based development](https://trunkbaseddevelopment.com/), en cohérence avec notre mode d'organisation et nos pratiques (pair programming, code review, présentiel régulier, etc...).
 
 ## Nommage des commits
 Notre convention de nommage s'inspire de cet [article](https://buzut.net/cours/versioning-avec-git/bien-nommer-ses-commits).
+Nos commits sont rédigés en anglais.
 
 `<type>(<portée>): <sujet>`
 
@@ -40,11 +41,11 @@ Pour le `sujet`, nous décrirons ce qui a été fait et pourquoi ça a été fai
 Par exemple : `feat(292): add POST /decisions to allow WinCI TGI to send decisons`
 
 ## Merge
-Nous utiliserons l'option `Rebase and merge` sur [github](https://github.com/Cour-de-cassation) afin d'ajouter les commits à merger directement sur la branche `master`, et éviter les effets "colines" avec les commits de merge
+Nous utilisons l'option `Rebase and merge` sur [github](https://github.com/Cour-de-cassation) afin d'ajouter les commits à merger directement sur la branche `master`, et éviter les effets "colines" avec les commits de merge
 
 # Versionnage <a name="versionnage"></a>
 
-Nous nous inspirerons de [semVer](https://semver.org/lang/fr/) avec les numéros de versions majeur et mineur &rarr; `MAJEUR.MINEUR`.
+Nous nous inspirons de [semVer](https://semver.org/lang/fr/) avec les numéros de versions majeur et mineur &rarr; `MAJEUR.MINEUR`.
 
 - MAJEUR = breaking change
 - MINEUR = ajouts fonctionnels + correctifs
@@ -53,17 +54,15 @@ Par exemple : 2.4 => version majeur 2, mineur 4.
 
 # Tests <a name="tests"></a>
 Nous avons deux types de tests dans le projet : 
-- des tests unitaire &rarr; chaque fonction est testée individuellement
-- des tests d'intégration &rarr; l'application est simulée entièrement 
+- des tests unitaire &rarr; testent le comportement d'un périmètre restreint
+- des tests d'intégration &rarr; testent l'API dans son ensemble, en "boîte noire" 
 
-# ADR (Architecture Decision Report)<a name="adr"></a>
 
-Les décisions techniques sont retranscrites dans un fichier `insert file here` Markdown afin de pouvoir comprendre le raisonnement derrière les différents choix pris.
 
 
 # IDE <a name="IDE">
 
-Le développement de ce projet a été réalisé à l'aide de [VSCode](https://code.visualstudio.com/) avec les extensions suivantes :
+Le développement de ce projet est réalisé à l'aide de [VSCode](https://code.visualstudio.com/) avec les extensions suivantes :
  - ESLint
  - LiveShare
  - Jest
