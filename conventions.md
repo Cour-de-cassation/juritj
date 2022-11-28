@@ -1,10 +1,19 @@
 # Conventions d'équipe
 
 # Table des matières
-1. [Fonctions](#fonctions)
-2. [Git](#git)
-3. [Versionnage](#versionnage)
-4. [Tests](#tests)
+1. [Langues](#langues)
+2. [Fonctions](#fonctions)
+3. [Git](#git)
+4. [Versionnage](#versionnage)
+5. [Tests](#tests)
+6. [IDE](#ide)
+
+
+# Langues <a name="langues">
+Les éléments liés au fonctionnel sont en français et les éléments techniques sont en anglais.
+Par exemple :
+- nous retrouvons les termes fonctionnels `metadonnees` ou `decisions` en français dans le code afin de rester au plus proche de notre métier
+- sur des aspects plus techniques, nous avons définis des classes comme `StringToJson` ou `ValidateDto` en anglais
 
 # Fonctions <a name="fonctions"></a>
 ## Granularité
@@ -57,13 +66,8 @@ Nous avons deux types de tests dans le projet :
 - des tests unitaire &rarr; testent le comportement d'un périmètre restreint
 - des tests d'intégration &rarr; testent l'API dans son ensemble, en "boîte noire" 
 
-
-
-
 # IDE <a name="IDE">
-
 Le développement de ce projet est réalisé à l'aide de [VSCode](https://code.visualstudio.com/) avec les extensions suivantes :
  - ESLint
  - LiveShare
  - Jest
-
