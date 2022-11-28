@@ -4,7 +4,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as basicAuth from 'express-basic-auth'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule, {
+    logger: ['log', 'error', 'warn']
+  })
 
   // Add login/password to access to API Documentation
   const basicAuthOptions: basicAuth.IUsersOptions = {
