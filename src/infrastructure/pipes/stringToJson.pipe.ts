@@ -4,7 +4,7 @@ import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common'
 export class StringToJsonPipe implements PipeTransform {
   transform(value: string) {
     if (!value) {
-      throw new BadRequestException('Field is missing')
+      throw new BadRequestException('You must provide "metadonnees" field')
     }
     try {
       return JSON.parse(value)
