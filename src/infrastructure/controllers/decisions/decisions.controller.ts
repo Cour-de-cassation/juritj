@@ -51,7 +51,7 @@ export class DecisionsController {
     @Req() req
   ): MetadonneesDto {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
-      const errorMessage = 'You must provide a wordperfect file.'
+      const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
       throw new BadRequestException(errorMessage)
     }
     const routePath = req.method + ' ' + req.path
