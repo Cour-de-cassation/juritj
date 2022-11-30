@@ -15,6 +15,7 @@ import {
 } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 import { TypePartie, QualitePartie } from '../../../../domain/enums'
+import { MockUtils } from '../../../utils/mock.utils'
 
 export class PresidentDto {
   @IsString()
@@ -75,17 +76,30 @@ export class PartieDto {
 
 export class MetadonneesDto {
   @ApiProperty({
-    description: 'Nom de la juridiction émettrice de la décision.',
-    type: String
+    description:
+      'Nom de la juridiction émettrice de la décision, mnémonique « TJ » suivi du nom de la juridiction de 2 à 42 caractères.',
+    type: String,
+    example: new MockUtils().metadonneesDtoMock.nomJuridiction
   })
   @IsString()
   @Length(2, 42)
   nomJuridiction: string
 
+  @ApiProperty({
+    description:
+      'identifiant de la juridiction émettrice, mnémonique « TJ » suivi du code INSEE de la commune.',
+    type: String,
+    example: new MockUtils().metadonneesDtoMock.idJuridiction
+  })
   @IsString()
   @Matches('^TJ[0-9]{5}$')
   idJuridiction: string
 
+  @ApiProperty({
+    description: 'Code de la juridiction émettrice propre au système d’information originel.',
+    type: String,
+    example: ''
+  })
   @IsOptional()
   @IsString()
   codeJuridiction?: string
@@ -94,6 +108,12 @@ export class MetadonneesDto {
   @Length(1, 1)
   numeroRegistre: string
 
+  @ApiProperty({
+    description:
+      'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents).',
+    type: String,
+    example: new MockUtils().metadonneesDtoMock.numeroRG
+  })
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
   numeroRoleGeneral: string

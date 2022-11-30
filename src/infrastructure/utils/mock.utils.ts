@@ -23,7 +23,7 @@ export class MockUtils {
 
   metadonneesDtoMock = {
     nomJuridiction: 'some juridiction name',
-    idJuridiction: 'TJ00000',
+    idJuridiction: 'TJ75011',
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
     numeroMesureInstruction: '0123456789',
