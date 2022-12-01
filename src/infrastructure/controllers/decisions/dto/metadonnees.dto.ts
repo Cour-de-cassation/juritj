@@ -76,8 +76,7 @@ export class PartieDto {
 
 export class MetadonneesDto {
   @ApiProperty({
-    description:
-      'Nom de la juridiction émettrice de la décision, mnémonique « TJ » suivi du nom de la juridiction de 2 à 42 caractères.',
+    description: 'Intitulé de la juridiction émettrice propre au système d’information originel',
     type: String,
     example: new MockUtils().metadonneesDtoMock.nomJuridiction
   })
@@ -86,8 +85,7 @@ export class MetadonneesDto {
   nomJuridiction: string
 
   @ApiProperty({
-    description:
-      'identifiant de la juridiction émettrice, mnémonique « TJ » suivi du code INSEE de la commune.',
+    description: 'Identifiant de la juridiction émettrice propre au système d’information originel',
     type: String,
     example: new MockUtils().metadonneesDtoMock.idJuridiction
   })
