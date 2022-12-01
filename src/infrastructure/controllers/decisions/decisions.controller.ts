@@ -25,6 +25,7 @@ import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { CustomLogger } from '../../utils/log.utils'
+import { saveDecisionUsecase } from '../../../domain/decisions/usecases/saveDecision.usecase'
 
 @ApiTags('Collect')
 @Controller('decisions')
@@ -58,6 +59,11 @@ export class DecisionsController {
     this.logger.log(
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )
+    try {
+      new saveDecisionUsecase().execute(decisionIntegre)
+    } catch (error) {
+      throw error
+    }
     return metadonneesDto
   }
 }
