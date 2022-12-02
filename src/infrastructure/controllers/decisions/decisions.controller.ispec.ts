@@ -3,28 +3,16 @@ import { INestApplication } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { DecisionsModule } from './decisions.module'
 import { MockUtils } from '../../utils/mock.utils'
-import { DecisionS3Repository } from '../../../infrastructure/database/repositories/decisionS3.repository'
-jest.mock('../../../infrastructure/database/repositories/decisionS3.repository') //FIXME trop magique...
 
 describe('Decisions Module - Integration Test', () => {
   let app: INestApplication
-  let decisionRepository: DecisionS3Repository
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [DecisionsModule],
-      providers: [
-        {
-          provide: DecisionS3Repository,
-          useFactory: () => ({
-            saveDecision: jest.fn(() => true)
-          })
-        }
-      ]
+      imports: [DecisionsModule]
     }).compile()
 
     app = moduleFixture.createNestApplication()
-    decisionRepository = moduleFixture.get<DecisionS3Repository>(DecisionS3Repository)
     await app.init()
   })
 
@@ -80,11 +68,7 @@ describe('Decisions Module - Integration Test', () => {
     const wordperfectFilename = 'filename.wpd'
     const metadata = new MockUtils().metadonneesDtoMock
 
-    //const decisionS3Repository = new DecisionS3Repository()
-    jest.spyOn(decisionRepository, 'saveDecision').mockImplementation(async () => {
-      'ok'
-    })
-    // DecisionS3Repository.saveDecision = jest.fn().mockReturnValue(200)
+    // TODO : use nock instead
 
     // WHEN
     return await request(app.getHttpServer())
