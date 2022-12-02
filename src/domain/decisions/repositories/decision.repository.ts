@@ -1,3 +1,5 @@
+import { Request } from 'express'
+
 export interface DecisionRepository {
-  saveDecision(decision)
+  saveDecision(request: Request, decisionIntegre: Express.Multer.File) // TODO : ajouter le type du retour
 }

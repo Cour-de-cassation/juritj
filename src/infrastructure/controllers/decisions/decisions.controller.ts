@@ -18,6 +18,7 @@ import {
   ApiBadRequestResponse
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { Request } from 'express'
 
 import { CollectDto } from './dto/collect.dto'
 import { MetadonneesDto } from './dto/metadonnees.dto'
@@ -25,7 +26,8 @@ import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { CustomLogger } from '../../utils/log.utils'
-import { saveDecisionUsecase } from '../../../domain/decisions/usecases/saveDecision.usecase'
+import { SaveDecisionUsecase } from '../../../usecase/saveDecision'
+import { DecisionS3Repository } from 'src/infrastructure/repositories/decisionS3.repository'
 
 @ApiTags('Collect')
 @Controller('decisions')
@@ -45,25 +47,31 @@ export class DecisionsController {
   @HttpCode(HttpStatus.ACCEPTED)
   @UseInterceptors(FileInterceptor('decisionIntegre'), LoggingInterceptor)
   @UsePipes()
-  collectDecisions(
+  async collectDecisions(
     @UploadedFile() decisionIntegre: Express.Multer.File,
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto,
-    @Req() req
-  ): MetadonneesDto {
+    @Req() request: Request
+  ): Promise<MetadonneesDto> {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
       throw new BadRequestException(errorMessage)
     }
-    const routePath = req.method + ' ' + req.path
+    const routePath = request.method + ' ' + request.path
     this.logger.log(
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )
-    try {
-      new saveDecisionUsecase().execute(decisionIntegre)
-    } catch (error) {
+
+    const decisionsUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
+    await decisionsUseCase.execute(request, decisionIntegre).catch((error) => {
+      this.logger.error(
+        routePath + ' returns ' + error.getStatus() + ': ' + error.response.message.toString()
+      )
+      // TODO : throw une HTTP Error cohérente selon le type d'erreur
       throw error
-    }
+    })
+
+    // TODO : retourner un élément plus cohérent que metadonneesDto
     return metadonneesDto
   }
 }
