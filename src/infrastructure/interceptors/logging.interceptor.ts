@@ -19,12 +19,13 @@ export class LoggingInterceptor implements NestInterceptor {
         const request: Request = context.switchToHttp().getRequest()
         const routePath = request.method + ' ' + request.path
 
-        if (err.response) {
+        if (err) {
+          console.log(err)
           this.logger.error(
             routePath + ' returns ' + err.getStatus() + ': ' + err.response.message.toString()
           )
         } else {
-          this.logger.error(routePath + ' returns ' + err.getStatus() + ' without error message.')
+          this.logger.error(routePath + ' returns error without error status')
         }
         return throwError(() => err)
       })
