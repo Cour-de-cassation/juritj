@@ -1,15 +1,15 @@
 import * as AWS from 'aws-sdk'
 
-import { Request } from 'express'
 import { ServiceUnavailableException } from '@nestjs/common'
 import { CustomLogger } from '../utils/log.utils'
+import { DecisionRepository } from 'src/domain/decisions/repositories/decision.repository'
 
-export class DecisionS3Repository {
+export class DecisionS3Repository implements DecisionRepository {
   private s3ApiClient: AWS.S3
 
   private logger = new CustomLogger()
 
-  async saveDecision(request: Request, decisionIntegre: Express.Multer.File) {
+  async saveDecision(requestInFile: string, decisionIntegreName: string) {
     console.log('inside real saveDecision')
     console.log('inside real saveDecision')
     console.log('inside real saveDecision')
@@ -26,9 +26,9 @@ export class DecisionS3Repository {
     })
 
     const reqParams = {
-      Body: request,
+      Body: requestInFile,
       Bucket: process.env.SCW_BUCKET_NAME,
-      Key: new Date().toISOString() + decisionIntegre.originalname
+      Key: new Date().toISOString() + decisionIntegreName
     }
 
     await this.s3ApiClient.putObject(reqParams, (err, data) => {

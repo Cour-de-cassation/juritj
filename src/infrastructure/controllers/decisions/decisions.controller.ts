@@ -62,8 +62,13 @@ export class DecisionsController {
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )
 
-    const decisionsUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
-    await decisionsUseCase.execute(request, decisionIntegre).catch((error) => {
+    // TODO : à ajuster pour avoir un objet propre
+    const dataToStore = JSON.stringify(request.body) + JSON.stringify(decisionIntegre)
+
+    console.log({ dataToStore })
+
+    const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
+    await decisionUseCase.execute(dataToStore, decisionIntegre.originalname).catch((error) => {
       this.logger.error(
         routePath + ' returns ' + error.getStatus() + ': ' + error.response.message.toString()
       )
