@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  ExecutionContext,
-  CallHandler,
-  NestInterceptor,
-  HttpException
-} from '@nestjs/common'
+import { Injectable, ExecutionContext, CallHandler, NestInterceptor } from '@nestjs/common'
 import { catchError, Observable, throwError } from 'rxjs'
 import { Request } from 'express'
 import { CustomLogger } from '../utils/log.utils'
@@ -18,16 +12,19 @@ export class LoggingInterceptor implements NestInterceptor {
     const routePath = request.method + ' ' + request.path
     const file = request.file ? request.file.originalname : 'no file'
 
-    this.logger.log(routePath + ' received with ' + file)
+    this.logger.log(routePath + ' received with ' + file + '.')
 
     return next.handle().pipe(
       catchError((err) => {
         const request: Request = context.switchToHttp().getRequest()
         const routePath = request.method + ' ' + request.path
+
         if (err.response) {
           this.logger.error(
             routePath + ' returns ' + err.getStatus() + ': ' + err.response.message.toString()
           )
+        } else {
+          this.logger.error(routePath + ' returns ' + err.getStatus() + ' without error message.')
         }
         return throwError(() => err)
       })
