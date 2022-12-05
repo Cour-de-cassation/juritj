@@ -69,12 +69,10 @@ export class DecisionsController {
     }
     const dataToStore = JSON.stringify(requestS3Dto)
 
-    console.log({ dataToStore })
-
     const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
     await decisionUseCase.execute(dataToStore, decisionIntegre.originalname).catch((error) => {
       this.logger.error(
-        routePath + ' returns ' + error.getStatus() + ': ' + error.response.message.toString()
+        routePath + ' returns ' + error /*.getStatus() + ': ' + error.response.message.toString()*/
       )
       // TODO : throw une HTTP Error cohérente selon le type d'erreur
       throw error

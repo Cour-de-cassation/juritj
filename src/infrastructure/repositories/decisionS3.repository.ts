@@ -1,22 +1,16 @@
-import * as AWS from 'aws-sdk'
+import * as S3 from 'aws-sdk/clients/s3'
 
 import { ServiceUnavailableException } from '@nestjs/common'
 import { CustomLogger } from '../utils/log.utils'
 import { DecisionRepository } from 'src/domain/decisions/repositories/decision.repository'
 
 export class DecisionS3Repository implements DecisionRepository {
-  private s3ApiClient: AWS.S3
+  private s3ApiClient: S3
 
   private logger = new CustomLogger()
 
   async saveDecision(requestInFile: string, decisionIntegreName: string) {
-    console.log('inside real saveDecision')
-    console.log('inside real saveDecision')
-    console.log('inside real saveDecision')
-    console.log('inside real saveDecision')
-    console.log('inside real saveDecision')
-
-    this.s3ApiClient = new AWS.S3({
+    this.s3ApiClient = new S3({
       endpoint: process.env.SCW_S3_URL,
       region: process.env.SCW_S3_REGION,
       credentials: {
@@ -31,7 +25,7 @@ export class DecisionS3Repository implements DecisionRepository {
       Key: new Date().toISOString() + decisionIntegreName
     }
 
-    await this.s3ApiClient.putObject(reqParams, (err, data) => {
+    const result = await this.s3ApiClient.putObject(reqParams, (err, data) => {
       if (err) {
         this.logger.error(err + err.stack)
         throw new ServiceUnavailableException('Error from S3 API')
@@ -39,5 +33,8 @@ export class DecisionS3Repository implements DecisionRepository {
         this.logger.log('S3 called successfully')
       }
     })
+    this.logger.log(
+      result.httpRequest.method + ' ' + result.httpRequest.endpoint.href + result.httpRequest.path
+    )
   }
 }

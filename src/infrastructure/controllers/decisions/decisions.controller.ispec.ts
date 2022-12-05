@@ -4,6 +4,24 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { DecisionsModule } from './decisions.module'
 import { MockUtils } from '../../utils/mock.utils'
 
+// simule la création du client s3
+const mockedPutObject = jest.fn()
+jest.mock('aws-sdk/clients/s3', () => {
+  return class S3 {
+    putObject(params, cb) {
+      mockedPutObject(params, cb)
+      return {
+        /* afin de pouvoir afficher les logs */
+        httpRequest: {
+          method: 'PUT',
+          path: '/filename.wpd',
+          endpoint: { href: '' }
+        }
+      }
+    }
+  }
+})
+
 describe('Decisions Module - Integration Test', () => {
   let app: INestApplication
 
@@ -67,8 +85,6 @@ describe('Decisions Module - Integration Test', () => {
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
     const metadata = new MockUtils().metadonneesDtoMock
-
-    // TODO : use nock instead
 
     // WHEN
     return await request(app.getHttpServer())
