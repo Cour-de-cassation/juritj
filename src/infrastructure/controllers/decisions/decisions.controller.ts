@@ -27,7 +27,7 @@ import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { CustomLogger } from '../../utils/log.utils'
 import { SaveDecisionUsecase } from '../../../usecase/saveDecision'
-import { DecisionS3Repository } from 'src/infrastructure/repositories/decisionS3.repository'
+import { DecisionS3Repository } from '../../../infrastructure/repositories/decisionS3.repository'
 
 @ApiTags('Collect')
 @Controller('decisions')
@@ -63,7 +63,11 @@ export class DecisionsController {
     )
 
     // TODO : à ajuster pour avoir un objet propre
-    const dataToStore = JSON.stringify(request.body) + JSON.stringify(decisionIntegre)
+    const requestS3Dto = {
+      decisionIntegre: JSON.stringify(decisionIntegre),
+      metadonnees: JSON.stringify(request.body)
+    }
+    const dataToStore = JSON.stringify(requestS3Dto)
 
     console.log({ dataToStore })
 
