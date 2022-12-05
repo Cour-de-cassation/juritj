@@ -8,7 +8,7 @@ Date : 30/11/2022
 
 ## Contexte
 
-Le traitement Judilibre dispose d'application backend développées avec le framework [ExpressJS](https://expressjs.com/fr/), qui est le [framework NodeJS le plus commun](https://2021.stateofjs.com/fr-FR/libraries/back-end-frameworks/).
+Le traitement Judilibre dispose d'applications backend développées avec le framework [ExpressJS](https://expressjs.com/fr/), qui est le [framework NodeJS le plus commun](https://2021.stateofjs.com/fr-FR/libraries/back-end-frameworks/).
 
 Pour les traitements JuriTJ, nous souhaitions comparer [NestJS](https://nestjs.com/) à [ExpressJS](https://expressjs.com/fr/), de manière à disposer d'un outil adapté à notre besoin. 
 

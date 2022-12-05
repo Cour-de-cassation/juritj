@@ -8,8 +8,8 @@ Date : 30/11/2022
 
 ## Contexte
 
-JuriTJ Collect est une nouvelle application de l'API Judilibre ayant pour objectif de collecter des décisions de justice de tribunaux judiciaire. Elle s'inscrit dans le traitement Judilibre qui consiste à collecter, pseudonimiser et publier les décisions de justice en Open Data via l'[API Judilibre](https://api.gouv.fr/les-api/api-judilibre). 
-Nous souhaitons documenter nos choix structurants de manière à garder une trace des raisons qui nous ont poussées à prendre nos décisions. 
+JuriTJ Collect est une nouvelle application de l'API Judilibre ayant pour objectif de collecter des décisions de justice de tribunaux judiciaire. Elle s'inscrit dans le traitement Judilibre qui consiste à collecter, pseudonymiser et publier les décisions de justice en Open Data via l'[API Judilibre](https://api.gouv.fr/les-api/api-judilibre). 
+Nous souhaitons documenter nos choix structurants de manière à garder une trace des raisons qui nous ont poussé à prendre nos décisions. 
 Ces traces serviront de références dans le temps. 
 Elles pourront cependant être remises en question en cas d'évolution du contexte. 
 
