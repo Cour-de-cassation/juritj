@@ -37,7 +37,7 @@ export class DecisionDto {
 
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
-  numeroRG: string
+  numeroRoleGeneral: string
 
   @IsString()
   @Matches('^TJ[0-9]{5}$')
@@ -96,7 +96,7 @@ export class MetadonneesDto {
 
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
-  numeroRG: string
+  numeroRoleGeneral: string
 
   @IsString()
   @Length(10, 10)
