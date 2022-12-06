@@ -62,7 +62,8 @@ export class DecisionDto {
   numeroRegistre: string
 
   @ApiProperty({
-    description: 'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents). Au format : ^[0-9]{2}/[0-9]{5}$',
+    description:
+      'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents). Au format : ^[0-9]{2}/[0-9]{5}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.decisionAssociee.numeroRG
   })
@@ -72,7 +73,7 @@ export class DecisionDto {
 
   @ApiProperty({
     description:
-      'Identifiant de la juridiction émettrice propre au système d’information originel pour la décision associée',
+      'Identifiant de la juridiction émettrice propre au système d’information originel pour la décision associée. Au format ^TJ[0-9]{5}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.decisionAssociee.idJuridiction
   })
@@ -81,7 +82,7 @@ export class DecisionDto {
   idJuridiction: string
 
   @ApiProperty({
-    description: 'Date de la décision associée',
+    description: 'Date de la décision associée. Au format AAAAMMJJ',
     type: String,
     example: new MockUtils().metadonneesDtoMock.decisionAssociee.date
   })
