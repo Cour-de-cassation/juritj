@@ -137,7 +137,7 @@ export class PartieDto {
 
   @ApiPropertyOptional({
     description: 'Qualité du partie de la décision',
-    type: String,
+    enum: QualitePartie,
     example: 'Qualité'
   })
   @IsEnum(QualitePartie)
@@ -156,7 +156,8 @@ export class MetadonneesDto {
   nomJuridiction: string
 
   @ApiProperty({
-    description: 'Identifiant de la juridiction émettrice propre au système d’information originel',
+    description:
+      'Identifiant de la juridiction émettrice propre au système d’information originel. Au format ^TJ[0-9]{5}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.idJuridiction
   })
@@ -184,7 +185,7 @@ export class MetadonneesDto {
 
   @ApiProperty({
     description:
-      'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents).',
+      'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents). Au format : ^[0-9]{2}/[0-9]{5}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.numeroRG
   })
@@ -202,7 +203,7 @@ export class MetadonneesDto {
   numeroMesureInstruction: string
 
   @ApiProperty({
-    description: 'Identifiant du service de la juridiction',
+    description: 'Identifiant du service de la juridiction. Au format: ^[0-9a-zA-Z]{2}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.codeService
   })
@@ -220,7 +221,7 @@ export class MetadonneesDto {
   libelleService: string
 
   @ApiProperty({
-    description: 'Date de rendu de la décision',
+    description: 'Date de rendu de la décision. Au format : AAAAMMJJ',
     type: String,
     example: new MockUtils().metadonneesDtoMock.dateDecision
   })
@@ -230,7 +231,7 @@ export class MetadonneesDto {
   dateDecision: string
 
   @ApiProperty({
-    description: 'Code du type de décision',
+    description: 'Code du type de décision. Au format : ^[0-9a-zA-Z]{3}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.codeDecision
   })
@@ -239,7 +240,7 @@ export class MetadonneesDto {
   codeDecision: string
 
   @ApiProperty({
-    description: 'Libellé type de décision',
+    description: 'Libellé du type de décision',
     type: String,
     example: new MockUtils().metadonneesDtoMock.libelleCodeDecision
   })
@@ -315,7 +316,7 @@ export class MetadonneesDto {
   sommaire?: string
 
   @ApiProperty({
-    description: 'Code NAC de la décision',
+    description: 'Code NAC de la décision. Au format : ^[0-9a-zA-Z]{3}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.codeNAC
   })
@@ -332,7 +333,7 @@ export class MetadonneesDto {
   libelleNAC: string
 
   @ApiProperty({
-    description: "Complément d'information du code NAC",
+    description: "Complément d'information du code NAC. Au format : ^[0-9a-zA-Z]{1-2}$",
     type: String,
     example: new MockUtils().metadonneesDtoMock.codeNature
   })

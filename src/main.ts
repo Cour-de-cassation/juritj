@@ -20,9 +20,9 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('API JuriTJ')
     .setDescription(
-      "Documentation de l'API JuriTJ permettant de gèrer des décisions intègres et leurs métadonnées."
+      "Documentation de l'API JuriTJ, qui permet la collecte, le traitement et la mise en Open Data de décisions de tribunaux judiciaires."
     )
-    .setVersion('0.0')
+    .setVersion('1.0')
     .addTag('Collect')
     .build()
   const document = SwaggerModule.createDocument(app, config)

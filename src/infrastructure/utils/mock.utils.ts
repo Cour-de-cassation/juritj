@@ -3,9 +3,9 @@ import { TypePartie } from '../../domain/enums'
 export class MockUtils {
   presidentDtoMock = {
     fonction: 'president',
-    nom: 'Nom President',
-    prenom: 'prenom President',
-    civilite: 'civilite President'
+    nom: 'Nom Presidente',
+    prenom: 'Prenom Presidente',
+    civilite: 'Mme.'
   }
 
   decisionDtoMock = {
@@ -22,14 +22,14 @@ export class MockUtils {
   }
 
   metadonneesDtoMock = {
-    nomJuridiction: 'some juridiction name',
+    nomJuridiction: 'Juridictions civiles de première instance',
     idJuridiction: 'TJ75011',
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
     numeroMesureInstruction: '0123456789',
     codeService: '0A',
     dateDecision: '20221121',
-    libelleService: 'some libelle',
+    libelleService: 'Libelle de service',
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
     decisionAssociee: this.decisionDtoMock,
