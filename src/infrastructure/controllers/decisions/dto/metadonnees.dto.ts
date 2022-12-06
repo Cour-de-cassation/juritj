@@ -62,7 +62,7 @@ export class DecisionDto {
   numeroRegistre: string
 
   @ApiProperty({
-    description: 'Numéro RG de la décision associée',
+    description: 'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents). Au format : ^[0-9]{2}/[0-9]{5}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.decisionAssociee.numeroRG
   })
