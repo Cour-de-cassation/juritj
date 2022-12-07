@@ -65,7 +65,7 @@ export class DecisionDto {
     description:
       'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents). Au format : ^[0-9]{2}/[0-9]{5}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.decisionAssociee.numeroRG
+    example: new MockUtils().metadonneesDtoMock.decisionAssociee.numeroRoleGeneral
   })
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
@@ -188,7 +188,7 @@ export class MetadonneesDto {
     description:
       'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents). Au format : ^[0-9]{2}/[0-9]{5}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.numeroRG
+    example: new MockUtils().metadonneesDtoMock.numeroRoleGeneral
   })
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
