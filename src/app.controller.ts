@@ -7,6 +7,6 @@ export class RedirectController {
   @Get()
   @Redirect('/doc')
   redirect(): string {
-    return 'This action redirects user to the swagger.'
+    return null
   }
 }
