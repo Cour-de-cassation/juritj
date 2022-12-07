@@ -9,6 +9,8 @@ export class CollectDto {
   })
   decisionIntegre: any
 
-  @ApiProperty({ description: 'Metadonnées associées à la décision intègre.' })
+  @ApiProperty({
+    description: 'Metadonnées associées à la décision intègre.'
+  })
   metadonnees: MetadonneesDto
 }

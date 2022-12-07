@@ -19,7 +19,9 @@ async function bootstrap() {
   // Add API Documentation with Swagger
   const config = new DocumentBuilder()
     .setTitle('API JuriTJ')
-    .setDescription("Documentation de l'API JuriTJ. ")
+    .setDescription(
+      "Documentation de l'API JuriTJ, qui permet la collecte, le traitement et la mise en Open Data de décisions de tribunaux judiciaires."
+    )
     .setVersion('1.0')
     .addTag('Collect')
     .build()
