@@ -131,13 +131,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('numeroRG property', () => {
-    it('throws an error when numeroRG is not a string', async () => {
+  describe('numeroRoleGeneral property', () => {
+    it('throws an error when numeroRoleGeneral is not a string', async () => {
       // GIVEN
-      const invalidNumeroRG = 123
+      const invalidNumeroRoleGeneral = 123
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        numeroRG: invalidNumeroRG
+        numeroRoleGeneral: invalidNumeroRoleGeneral
       }
 
       // WHEN
@@ -146,10 +146,13 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when numeroRG is invalid', async () => {
+    it('throws an error when numeroRoleGeneral is invalid', async () => {
       // GIVEN
-      const invalidNumeroRG = 'INVALID REGEX'
-      const invalidMetadonnee = { ...someValidMetaDonneeDto, numeroRG: invalidNumeroRG }
+      const invalidNumeroRoleGeneral = 'INVALID REGEX'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        numeroRoleGeneral: invalidNumeroRoleGeneral
+      }
 
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
@@ -531,13 +534,16 @@ describe('Validate MetadonneeDTO format', () => {
       })
     })
 
-    describe('property numeroRG', () => {
-      it('throws an error when numeroRG is not a string', async () => {
+    describe('property numeroRoleGeneral', () => {
+      it('throws an error when numeroRoleGeneral is not a string', async () => {
         // GIVEN
-        const invalidNumeroRG = 123
+        const invalidNumeroRoleGeneral = 123
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          decisionAssociee: { ...new MockUtils().decisionDtoMock, numeroRG: invalidNumeroRG }
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            numeroRoleGeneral: invalidNumeroRoleGeneral
+          }
         }
 
         // WHEN
@@ -545,12 +551,15 @@ describe('Validate MetadonneeDTO format', () => {
           // THEN
           .rejects.toThrow(BadRequestException)
       })
-      it('throws an error when numeroRG is invalid', async () => {
+      it('throws an error when numeroRoleGeneral is invalid', async () => {
         // GIVEN
-        const invalidNumeroRG = 'my num rg'
+        const invalidNumeroRoleGeneral = 'my num rg'
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
-          decisionAssociee: { ...new MockUtils().decisionDtoMock, numeroRG: invalidNumeroRG }
+          decisionAssociee: {
+            ...new MockUtils().decisionDtoMock,
+            numeroRoleGeneral: invalidNumeroRoleGeneral
+          }
         }
 
         // WHEN

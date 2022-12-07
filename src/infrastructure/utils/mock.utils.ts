@@ -10,7 +10,7 @@ export class MockUtils {
 
   decisionDtoMock = {
     numeroRegistre: 'A',
-    numeroRG: '01/12345',
+    numeroRoleGeneral: '01/12345',
     idJuridiction: 'TJ00000',
     date: '20221121',
     numeroMesureInstruction: 'BCDEFGHIJK'
@@ -25,7 +25,7 @@ export class MockUtils {
     nomJuridiction: 'some juridiction name',
     idJuridiction: 'TJ00000',
     numeroRegistre: 'A',
-    numeroRG: '01/12345',
+    numeroRoleGeneral: '01/12345',
     numeroMesureInstruction: '0123456789',
     codeService: '0A',
     dateDecision: '20221121',
