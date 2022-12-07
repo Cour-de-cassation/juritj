@@ -35,10 +35,10 @@ export class MockUtils {
     decisionAssociee: this.decisionDtoMock,
     parties: [this.partieDtoMock, this.partieDtoMock],
     partie: this.partieDtoMock,
-    codeNAC: '0aA',
-    libelleNAC: 'some libelle NAC',
-    codeNature: '0a',
-    libelleNature: 'libelle',
+    codeNAC: '88F',
+    libelleNAC: 'Demande en dommages-intérêts contre un organisme',
+    codeNature: '6C',
+    libelleNature: 'Autres demandes en matière de frais et dépens',
     public: false,
     recommandationOccultation: false
   }
