@@ -9,7 +9,7 @@ export class DecisionS3Repository implements DecisionRepository {
 
   private logger = new CustomLogger()
 
-  async saveDecision(requestInFile: string, decisionIntegreName: string) {
+  async saveDecision(requestToS3Dto: string, filename: string): Promise<void> {
     this.s3ApiClient = new S3({
       endpoint: process.env.SCW_S3_URL,
       region: process.env.SCW_S3_REGION,
@@ -20,9 +20,9 @@ export class DecisionS3Repository implements DecisionRepository {
     })
 
     const reqParams = {
-      Body: requestInFile,
+      Body: requestToS3Dto,
       Bucket: process.env.SCW_BUCKET_NAME,
-      Key: new Date().toISOString() + decisionIntegreName
+      Key: new Date().toISOString() + filename
     }
 
     const result = await this.s3ApiClient.putObject(reqParams, (err, data) => {

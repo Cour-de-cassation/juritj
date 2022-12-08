@@ -15,7 +15,8 @@ import {
   ApiBody,
   ApiConsumes,
   ApiAcceptedResponse,
-  ApiBadRequestResponse
+  ApiBadRequestResponse,
+  ApiServiceUnavailableResponse
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Request } from 'express'
@@ -26,7 +27,7 @@ import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { CustomLogger } from '../../utils/log.utils'
-import { SaveDecisionUsecase } from '../../../usecase/saveDecision'
+import { SaveDecisionUsecase } from '../../../usecase/saveDecision.usecase'
 import { DecisionS3Repository } from '../../../infrastructure/repositories/decisionS3.repository'
 
 @ApiTags('Collect')
@@ -44,6 +45,9 @@ export class DecisionsController {
   @ApiBadRequestResponse({
     description: "Le format des métadonnées est incorrect et/ou le fichier n'est pas au bon format."
   })
+  @ApiServiceUnavailableResponse({
+    description: "Une erreur inattendue liée à une dépendance de l'API a été rencontrée. "
+  })
   @HttpCode(HttpStatus.ACCEPTED)
   @UseInterceptors(FileInterceptor('decisionIntegre'), LoggingInterceptor)
   @UsePipes()
@@ -52,34 +56,27 @@ export class DecisionsController {
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto,
     @Req() request: Request
-  ): Promise<MetadonneesDto> {
+  ): Promise<string> {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
       throw new BadRequestException(errorMessage)
     }
     const routePath = request.method + ' ' + request.path
+
+    this.logger.log(routePath + ' received with: ' + JSON.stringify(metadonneesDto))
+    const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
+    await decisionUseCase.execute(decisionIntegre, metadonneesDto).catch((error) => {
+      this.logger.error(
+        routePath + ' returns ' + error.getStatus() + ': ' + error.response.message.toString()
+      )
+      throw error
+    })
+
     this.logger.log(
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )
 
-    // TODO : à ajuster pour avoir un objet propre
-    const requestS3Dto = {
-      decisionIntegre: JSON.stringify(decisionIntegre),
-      metadonnees: JSON.stringify(request.body)
-    }
-    const dataToStore = JSON.stringify(requestS3Dto)
-
-    const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
-    await decisionUseCase.execute(dataToStore, decisionIntegre.originalname).catch((error) => {
-      this.logger.error(
-        routePath + ' returns ' + error /*.getStatus() + ': ' + error.response.message.toString()*/
-      )
-      // TODO : throw une HTTP Error cohérente selon le type d'erreur
-      throw error
-    })
-
-    // TODO : retourner un élément plus cohérent que metadonneesDto
-    return metadonneesDto
+    return 'Nous avons bien reçu la décision intègre et ses métadonnées.'
   }
 }
 
