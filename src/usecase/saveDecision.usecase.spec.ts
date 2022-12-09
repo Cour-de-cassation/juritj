@@ -4,6 +4,7 @@ import { Readable } from 'stream'
 import { SaveDecisionUsecase } from './saveDecision.usecase'
 
 // simule la création du client s3
+const fileName = 'test.wpd'
 const mockedPutObject = jest.fn()
 jest.mock('aws-sdk/clients/s3', () => {
   return class S3 {
@@ -13,7 +14,7 @@ jest.mock('aws-sdk/clients/s3', () => {
         /* afin de pouvoir afficher les logs */
         httpRequest: {
           method: 'PUT',
-          path: '/filename.wpd',
+          path: '/' + fileName,
           endpoint: { href: '' }
         }
       }
@@ -22,27 +23,36 @@ jest.mock('aws-sdk/clients/s3', () => {
 })
 
 describe('SaveDecisionUsecase', () => {
-  const usecase = new SaveDecisionUsecase(new DecisionS3Repository())
+  const S3Repository = new DecisionS3Repository()
+  const usecase = new SaveDecisionUsecase(S3Repository)
+
   it('should call the repository if all parameters are OK', async () => {
     // GIVEN
     const decisionIntegre: Express.Multer.File = {
       fieldname: '',
-      originalname: 'test.wpd',
+      originalname: fileName,
       encoding: '',
       mimetype: '',
       size: 0,
       stream: new Readable(),
       destination: '',
-      filename: '',
+      filename: fileName,
       path: '',
       buffer: Buffer.from('text')
     }
+    console.log(decisionIntegre.filename)
     const metadonnees = new MockUtils().metadonneesDtoMock
-    // const spy = jest.spyOn()
+
+    const requestS3Dto = {
+      decisionIntegre: decisionIntegre,
+      metadonnees: metadonnees
+    }
+    const spy = jest.spyOn(S3Repository, 'saveDecision')
 
     // WHEN
     usecase.execute(decisionIntegre, metadonnees)
+
     // THEN
-    // expect(spy).toBeCalled()
+    expect(spy).toBeCalledWith(JSON.stringify(requestS3Dto), fileName)
   })
 })

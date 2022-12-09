@@ -6,10 +6,7 @@ import { DecisionRepository } from 'src/domain/decisions/repositories/decision.r
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3ApiClient: S3
-
-  private logger = new CustomLogger()
-
-  async saveDecision(requestToS3Dto: string, filename: string): Promise<void> {
+  constructor() {
     this.s3ApiClient = new S3({
       endpoint: process.env.SCW_S3_URL,
       region: process.env.SCW_S3_REGION,
@@ -18,7 +15,10 @@ export class DecisionS3Repository implements DecisionRepository {
         secretAccessKey: process.env.SCW_S3_SECRET_KEY
       }
     })
+  }
+  private logger = new CustomLogger()
 
+  async saveDecision(requestToS3Dto: string, filename: string): Promise<void> {
     const reqParams = {
       Body: requestToS3Dto,
       Bucket: process.env.SCW_BUCKET_NAME,

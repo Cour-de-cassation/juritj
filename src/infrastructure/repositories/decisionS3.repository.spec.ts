@@ -1,3 +1,4 @@
+import { ServiceUnavailableException } from '@nestjs/common'
 import { DecisionS3Repository } from './decisionS3.repository'
 
 describe('DecisionS3Repository', () => {
@@ -19,14 +20,35 @@ describe('DecisionS3Repository', () => {
     }
   })
   const repository = new DecisionS3Repository()
+
   describe('saveDecision', () => {
-    it('throws error when s3 called failed', () => {
+    it('throws error when S3 called failed', async () => {
       // GIVEN
       const filename = 'test.wpd'
       const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
       // WHEN
-      repository.saveDecision(JSON.stringify(requestS3Dto), filename)
+
       // THEN
+      await expect(
+        async () => await repository.saveDecision(JSON.stringify(requestS3Dto), filename)
+      ).rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
+    })
+
+    it.skip('should save the decision on S3', async () => {
+      // GIVEN
+      const filename = 'test.wpd'
+      const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
+      // WHEN
+      jest.mock('./decisionS3.repository', () => {
+        return class DecisionS3Repository {
+          saveDecision(requestS3Dto, filename) {
+            console.log('mocked stuff')
+            mockedPutObject(requestS3Dto, filename)
+          }
+        }
+      })
+      // THEN
+      expect(mockedPutObject).toBeCalled()
     })
   })
 })
