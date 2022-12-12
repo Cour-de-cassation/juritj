@@ -1,11 +1,11 @@
 import * as request from 'supertest'
-import { INestApplication } from '@nestjs/common'
+import { INestApplication, ServiceUnavailableException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { DecisionsModule } from './decisions.module'
 import { MockUtils } from '../../utils/mock.utils'
 
 // simule la création du client s3
-const mockedPutObject = jest.fn()
+let mockedPutObject = jest.fn()
 jest.mock('aws-sdk/clients/s3', () => {
   return class S3 {
     putObject(params, cb) {
@@ -95,5 +95,21 @@ describe('Decisions Module - Integration Test', () => {
       .expect(202)
   })
 
-  // TODO : ajouter un cas de test "erreur 503"
+  it('POST /decisions returns 503 when s3 is unavailable', async () => {
+    // GIVEN
+    const myBufferedFile = Buffer.from('some data')
+    const wordperfectFilename = 'filename.wpd'
+    const metadata = new MockUtils().metadonneesDtoMock
+    mockedPutObject = jest.fn(() => {
+      throw new ServiceUnavailableException()
+    })
+
+    // WHEN
+    return await request(app.getHttpServer())
+      .post('/decisions')
+      .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
+      .field('metadonnees', JSON.stringify(metadata))
+      // THEN
+      .expect(503)
+  })
 })
