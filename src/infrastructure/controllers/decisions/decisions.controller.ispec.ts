@@ -1,8 +1,26 @@
 import * as request from 'supertest'
-import { INestApplication } from '@nestjs/common'
+import { INestApplication, ServiceUnavailableException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { DecisionsModule } from './decisions.module'
 import { MockUtils } from '../../utils/mock.utils'
+
+// simule la création du client s3
+let mockedPutObject = jest.fn()
+jest.mock('aws-sdk/clients/s3', () => {
+  return class S3 {
+    putObject(params, cb) {
+      mockedPutObject(params, cb)
+      return {
+        /* afin de pouvoir afficher les logs */
+        httpRequest: {
+          method: 'PUT',
+          path: '/filename.wpd',
+          endpoint: { href: '' }
+        }
+      }
+    }
+  }
+})
 
 describe('Decisions Module - Integration Test', () => {
   let app: INestApplication
@@ -62,19 +80,36 @@ describe('Decisions Module - Integration Test', () => {
     )
   })
 
-  it('POST /decisions returns 202 when there is metadata present with the wordperfect file', () => {
+  it('POST /decisions returns 202 when there is metadata present with the wordperfect file', async () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
     const metadata = new MockUtils().metadonneesDtoMock
+
     // WHEN
-    return (
-      request(app.getHttpServer())
-        .post('/decisions')
-        .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
-        .field('metadonnees', JSON.stringify(metadata))
-        // THEN
-        .expect(202)
-    )
+    return await request(app.getHttpServer())
+      .post('/decisions')
+      .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
+      .field('metadonnees', JSON.stringify(metadata))
+      // THEN
+      .expect(202)
+  })
+
+  it('POST /decisions returns 503 when S3 is unavailable', async () => {
+    // GIVEN
+    const myBufferedFile = Buffer.from('some data')
+    const wordperfectFilename = 'filename.wpd'
+    const metadata = new MockUtils().metadonneesDtoMock
+    mockedPutObject = jest.fn(() => {
+      throw new ServiceUnavailableException()
+    })
+
+    // WHEN
+    return await request(app.getHttpServer())
+      .post('/decisions')
+      .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
+      .field('metadonnees', JSON.stringify(metadata))
+      // THEN
+      .expect(503)
   })
 })

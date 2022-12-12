@@ -12,7 +12,7 @@ export class LoggingInterceptor implements NestInterceptor {
     const routePath = request.method + ' ' + request.path
     const file = request.file ? request.file.originalname : 'no file'
 
-    this.logger.log(routePath + ' received with ' + file)
+    this.logger.log(routePath + ' received with ' + file + '.')
 
     return next.handle().pipe(
       catchError((err) => {
