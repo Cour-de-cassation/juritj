@@ -34,21 +34,20 @@ describe('DecisionS3Repository', () => {
       ).rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
     })
 
-    it.skip('should save the decision on S3', async () => {
+    it('should save the decision on S3', async () => {
       // GIVEN
       const filename = 'test.wpd'
       const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
-      // WHEN
-      jest.mock('./decisionS3.repository', () => {
-        return class DecisionS3Repository {
-          saveDecision(requestS3Dto, filename) {
-            console.log('mocked stuff')
-            mockedPutObject(requestS3Dto, filename)
-          }
-        }
+      jest.spyOn(repository, 'saveDecision').mockImplementation(() => {
+        return Promise.resolve()
       })
-      // THEN
-      expect(mockedPutObject).toBeCalled()
+
+      expect(
+        //WHEN
+        await repository.saveDecision(JSON.stringify(requestS3Dto), filename)
+      )
+        // THEN
+        .toEqual(undefined)
     })
   })
 })
