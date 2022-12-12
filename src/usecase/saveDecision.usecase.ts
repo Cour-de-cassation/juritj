@@ -17,11 +17,12 @@ export class SaveDecisionUsecase {
    * En cas d'évolution du contexte, nous créerons les interfaces et entities du domaine
    */
   async execute(decisionIntegre: Express.Multer.File, metadonnees: MetadonneesDto): Promise<void> {
-    const requestS3Dto = {
-      decisionIntegre: decisionIntegre,
-      metadonnees: metadonnees
+    const requestDto = {
+      decisionIntegre,
+      metadonnees
     }
     const filename = decisionIntegre.originalname
-    await this.decisionsRepository.saveDecision(JSON.stringify(requestS3Dto), filename)
+
+    await this.decisionsRepository.saveDecision(JSON.stringify(requestDto), filename)
   }
 }

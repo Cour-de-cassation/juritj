@@ -95,7 +95,7 @@ describe('Decisions Module - Integration Test', () => {
       .expect(202)
   })
 
-  it('POST /decisions returns 503 when s3 is unavailable', async () => {
+  it('POST /decisions returns 503 when S3 is unavailable', async () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
