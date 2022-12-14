@@ -26,8 +26,8 @@ import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
 import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
 import { DecisionS3Repository } from '../../repositories/decisionS3.repository'
-import { CollectDto } from './dto/collect.dto'
-import { MetadonneesDto } from './dto/metadonnees.dto'
+import { CollectDto } from '../../../../shared/infrastructure/dto/collect.dto'
+import { MetadonneesDto } from '../../../../shared/infrastructure/dto/metadonnees.dto'
 
 @ApiTags('Collect')
 @Controller('decisions')
