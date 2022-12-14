@@ -14,8 +14,8 @@ import {
   ValidateNested
 } from 'class-validator'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { TypePartie, QualitePartie } from '../../../../domain/enums'
-import { MockUtils } from '../../../utils/mock.utils'
+import { MockUtils } from '../../../../../shared/infrastructure/utils/mock.utils'
+import { QualitePartie, TypePartie } from '../../../../../api/domain/enums'
 
 export class PresidentDto {
   @ApiProperty({

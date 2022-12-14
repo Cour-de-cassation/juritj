@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
 import { MockProxy, mock } from 'jest-mock-extended'
-import { MockUtils } from '../../src/infrastructure/utils/mock.utils'
+import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { SaveDecisionUsecase } from './saveDecision.usecase'
 import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
 

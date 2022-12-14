@@ -1,8 +1,8 @@
 import * as S3 from 'aws-sdk/clients/s3'
 
 import { ServiceUnavailableException } from '@nestjs/common'
-import { CustomLogger } from '../utils/log.utils'
-import { DecisionRepository } from 'src/domain/decisions/repositories/decision.repository'
+import { CustomLogger } from '../../../shared/infrastructure/utils/log.utils'
+import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3ApiClient: S3

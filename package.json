@@ -1,5 +1,5 @@
 {
-  "name": "juritj-collect",
+  "name": "juritj",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -72,7 +72,7 @@
       "ts"
     ],
     "rootDir": "src",
-    "roots":["<rootDir>", "<rootDir>/../run"],
+    "roots":["<rootDir>"],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
