@@ -1,5 +1,5 @@
-import { DecisionRepository } from 'src/domain/decisions/repositories/decision.repository'
-import { MetadonneesDto } from 'src/infrastructure/controllers/decisions/dto/metadonnees.dto'
+import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
+import { MetadonneesDto } from '../infrastructure/controllers/decisions/dto/metadonnees.dto'
 
 export class SaveDecisionUsecase {
   constructor(private decisionsRepository: DecisionRepository) {}

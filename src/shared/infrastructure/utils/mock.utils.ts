@@ -1,4 +1,4 @@
-import { TypePartie } from '../../domain/enums'
+import { TypePartie } from '../../../api/domain/enums'
 
 export class MockUtils {
   presidentDtoMock = {
