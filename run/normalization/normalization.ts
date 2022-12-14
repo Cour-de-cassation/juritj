@@ -1,5 +1,4 @@
 import { CustomLogger } from '../../src/infrastructure/utils/log.utils';
-import {Md5} from 'ts-md5';
 import { MockUtils } from '../../src/infrastructure/utils/mock.utils';
 
 const metadonnees = new MockUtils().metadonneesDtoMock
@@ -9,19 +8,16 @@ const logger = new CustomLogger
 
 export function executeNormalization(metadonnees): void {
     if (hasMandatoryMetadonnees(metadonnees)) {      
-        const uniqueMetadonnees = metadonnees.idJuridiction + 
-                                  metadonnees.numeroRegistre + 
-                                  metadonnees.numeroRoleGeneral + 
-                                  metadonnees.dateDecision 
+        const requiredMetadonnees = metadonnees.idJuridiction + 
+                                    metadonnees.numeroRegistre + 
+                                    metadonnees.numeroRoleGeneral + 
+                                    metadonnees.dateDecision 
         
-        const idMetadonnees = (optionalKey in metadonnees) ? uniqueMetadonnees + metadonnees.numeroMesureInstruction : uniqueMetadonnees
-
-        // metadonnees.hash = Md5.hashStr(idMetadonnees) 
-        metadonnees.hash = idMetadonnees
-        logger.log('Normalization : added hash ' + metadonnees.hash + ' to metadata')
+        metadonnees.idDecision = (optionalKey in metadonnees) ? requiredMetadonnees + metadonnees.numeroMesureInstruction : requiredMetadonnees
+        logger.log('Normalization : added idDecision ' + metadonnees.idDecision + ' to metadata')
     }   
     else {
-        logger.error('Normalization : could not add hash to metadata')
+        logger.error('Normalization : could not add idDecision to metadata')
     }    
 }
 
