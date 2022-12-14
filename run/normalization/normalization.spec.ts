@@ -1,5 +1,5 @@
 import { MockUtils } from "../../src/infrastructure/utils/mock.utils"
-import { executeNormalization } from "./normalization"
+import { generateIdDecision } from "./normalization"
 
 const metadonnees = new MockUtils().metadonneesDtoMock
 
@@ -9,7 +9,7 @@ describe('normalization script', () => {
         // GIVEN
         const someMetadonnees = {...metadonnees}          
         // WHEN
-        executeNormalization(someMetadonnees)
+        generateIdDecision(someMetadonnees)
         // THEN
         expect(someMetadonnees).toHaveProperty('idDecision')
       })
@@ -19,7 +19,7 @@ describe('normalization script', () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {numeroMesureInstruction, ...someMetadonnees} = metadonnees          
         // WHEN
-        executeNormalization(someMetadonnees)
+        generateIdDecision(someMetadonnees)
         // THEN
         expect(someMetadonnees).toHaveProperty('idDecision')
       })
@@ -29,7 +29,7 @@ describe('normalization script', () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const {idJuridiction, ...someMetadonnees} = metadonnees          
           // WHEN
-          executeNormalization(someMetadonnees)
+          generateIdDecision(someMetadonnees)
           // THEN
           expect(someMetadonnees).not.toHaveProperty('idDecision')
       })

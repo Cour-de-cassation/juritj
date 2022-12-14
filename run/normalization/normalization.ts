@@ -6,7 +6,7 @@ const requiredKeys = ['idJuridiction', 'numeroRegistre', 'numeroRoleGeneral', 'd
 const optionalKey = 'numeroMesureInstruction'
 const logger = new CustomLogger
 
-export function executeNormalization(metadonnees): void {
+export function generateIdDecision(metadonnees): void {
     if (hasMandatoryMetadonnees(metadonnees)) {      
         const requiredMetadonnees = metadonnees.idJuridiction + 
                                     metadonnees.numeroRegistre + 
@@ -30,4 +30,4 @@ function hasMandatoryMetadonnees(metadonnees): boolean {
     return true
 }
 
-executeNormalization(metadonnees)
+generateIdDecision(metadonnees)
