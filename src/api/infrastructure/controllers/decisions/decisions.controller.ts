@@ -8,11 +8,13 @@ import {
   Req,
   UploadedFile,
   UseInterceptors,
-  UsePipes
+  UsePipes,
+  Headers
 } from '@nestjs/common'
 import {
   ApiTags,
   ApiBody,
+  ApiHeader,
   ApiConsumes,
   ApiAcceptedResponse,
   ApiBadRequestResponse,
@@ -36,6 +38,10 @@ export class DecisionsController {
 
   @Post()
   @ApiConsumes('multipart/form-data')
+  @ApiHeader({
+    name: 'X-Correlation-ID',
+    description: 'Identifiant de correlation'
+  })
   @ApiBody({
     description: 'Décision intègre au format wordperfect et metadonnées associées.',
     type: CollectDto
@@ -54,7 +60,8 @@ export class DecisionsController {
     @UploadedFile() decisionIntegre: Express.Multer.File,
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto,
-    @Req() request: Request
+    @Req() request: Request,
+    @Headers('X-Correlation-ID') correlationId: string
   ): Promise<string> {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
