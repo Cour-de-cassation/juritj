@@ -1,6 +1,13 @@
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { generateUniqueId } from './generateUniqueId'
 
+jest.mock('../normalization', () => ({
+  logger: {
+    log: jest.fn(),
+    error: jest.fn()
+  }
+}))
+
 const mockUtils = new MockUtils()
 const metadonnees = mockUtils.metadonneesDtoMock
 

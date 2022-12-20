@@ -8,11 +8,13 @@ import {
   Req,
   UploadedFile,
   UseInterceptors,
-  UsePipes
+  UsePipes,
+  Logger
 } from '@nestjs/common'
 import {
   ApiTags,
   ApiBody,
+  ApiHeader,
   ApiConsumes,
   ApiAcceptedResponse,
   ApiBadRequestResponse,
@@ -21,7 +23,6 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Request } from 'express'
 import { SaveDecisionUsecase } from '../../../../api/usecase/saveDecision.usecase'
-import { CustomLogger } from '../../../../shared/infrastructure/utils/customLogger.utils'
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
 import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
@@ -32,10 +33,14 @@ import { MetadonneesDto } from '../../../../shared/infrastructure/dto/metadonnee
 @ApiTags('Collect')
 @Controller('decisions')
 export class DecisionsController {
-  private readonly logger = new CustomLogger()
+  private readonly logger = new Logger()
 
   @Post()
   @ApiConsumes('multipart/form-data')
+  @ApiHeader({
+    name: 'x-correlation-id',
+    description: 'Identifiant de correlation'
+  })
   @ApiBody({
     description: 'Décision intègre au format wordperfect et metadonnées associées.',
     type: CollectDto
