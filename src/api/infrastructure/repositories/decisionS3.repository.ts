@@ -30,6 +30,7 @@ export class DecisionS3Repository implements DecisionRepository {
       Key: new Date().toISOString() + filename
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const result = await this.s3ApiClient.putObject(reqParams, (err, data) => {
       if (err) {
         this.logger.error(err + err.stack)
