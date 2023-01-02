@@ -1,4 +1,4 @@
-import { MetadonneesDto } from 'src/shared/infrastructure/dto/metadonnees.dto'
+import { MetadonneesDto } from '../../../shared/infrastructure/dto/metadonnees.dto'
 import { CustomLogger } from '../../../shared/infrastructure/utils/log.utils'
 
 const requiredKeys = ['idJuridiction', 'numeroRegistre', 'numeroRoleGeneral', 'dateDecision']
