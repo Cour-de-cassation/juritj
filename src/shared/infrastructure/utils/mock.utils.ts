@@ -1,4 +1,4 @@
-import { TypePartie } from '../../../api/domain/enums'
+import { TypePartie } from '../../domain/enums'
 
 export class MockUtils {
   presidentDtoMock = {
@@ -42,4 +42,7 @@ export class MockUtils {
     public: false,
     recommandationOccultation: false
   }
+
+  uniqueDecisionId = `TJ75011A01/12345202211210123456789`
+  uniqueDecisionIdWithoutNumeroMesureInstruction = `TJ75011A01/1234520221121`
 }

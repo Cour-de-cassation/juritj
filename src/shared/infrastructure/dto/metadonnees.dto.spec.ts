@@ -1,6 +1,6 @@
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common'
-import { ValidateDtoPipe } from '../../../../../api/infrastructure/pipes/validateDto.pipe'
-import { MockUtils } from '../../../../../shared/infrastructure/utils/mock.utils'
+import { ValidateDtoPipe } from '../../../api/infrastructure/pipes/validateDto.pipe'
+import { MockUtils } from '../utils/mock.utils'
 import { MetadonneesDto } from './metadonnees.dto'
 
 describe('Validate MetadonneeDTO format', () => {
