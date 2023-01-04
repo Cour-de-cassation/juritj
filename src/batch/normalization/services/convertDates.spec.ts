@@ -17,7 +17,7 @@ describe('Convert dates in ISO8601 format', () => {
     it('converts literal month to a numerical month format', () => {
       // GIVEN
       const literalMonths =
-        'janvier Février mars Avril mai Juin juillet août septembre octobre novembre décembre'
+        'janvier Février mars avril mai Juin juillet août septembre octobre novembre décembre'
       const numericalMonths = '01 02 03 04 05 06 07 08 09 10 11 12'
 
       // WHEN
@@ -100,6 +100,30 @@ describe('Convert dates in ISO8601 format', () => {
       // THEN
       expect(normalizedDateString).toEqual(correctDateFormat)
     })
+
+    it('converts a D-MM-YYYY date to a YYYY-MM-DD date format', () => {
+      // GIVEN
+      const literalStringDate = 'le 2-11-2022 il y a ...'
+      const correctDateFormat = 'le 2022-11-02 il y a ...'
+
+      // WHEN
+      const normalizedDateString = normalizeDatesToIso8601(literalStringDate)
+
+      // THEN
+      expect(normalizedDateString).toEqual(correctDateFormat)
+    })
+
+    it('converts a D-M-YYYY date to a YYYY-MM-DD date format', () => {
+      // GIVEN
+      const literalStringDate = 'le 2-3-2022 il y a ...'
+      const correctDateFormat = 'le 2022-03-02 il y a ...'
+
+      // WHEN
+      const normalizedDateString = normalizeDatesToIso8601(literalStringDate)
+
+      // THEN
+      expect(normalizedDateString).toEqual(correctDateFormat)
+    })
   })
 
   describe('when date has "/" separator', () => {
@@ -143,6 +167,30 @@ describe('Convert dates in ISO8601 format', () => {
       // GIVEN
       const literalStringDate = 'le 11/12/2022 il y a ...'
       const correctDateFormat = 'le 2022-12-11 il y a ...'
+
+      // WHEN
+      const normalizedDateString = normalizeDatesToIso8601(literalStringDate)
+
+      // THEN
+      expect(normalizedDateString).toEqual(correctDateFormat)
+    })
+
+    it('converts a D/MM/YYYY date to a YYYY-MM-DD date format', () => {
+      // GIVEN
+      const literalStringDate = 'le 2/11/2022 il y a ...'
+      const correctDateFormat = 'le 2022-11-02 il y a ...'
+
+      // WHEN
+      const normalizedDateString = normalizeDatesToIso8601(literalStringDate)
+
+      // THEN
+      expect(normalizedDateString).toEqual(correctDateFormat)
+    })
+
+    it('converts a D/M/YYYY date to a YYYY-MM-DD date format', () => {
+      // GIVEN
+      const literalStringDate = 'le 2/3/2022 il y a ...'
+      const correctDateFormat = 'le 2022-03-02 il y a ...'
 
       // WHEN
       const normalizedDateString = normalizeDatesToIso8601(literalStringDate)

@@ -52,7 +52,7 @@ export function normalizeDatesToIso8601(decision: string): string {
       (providedDate) => convertDateStringToList(providedDate, false, hyphenSeparator)
     )
 
-  const yearInLastPositionWithHyphenSeparatorRegex = /[0-9]{2}-[0-9]{2}-[0-9]{4}/gim // Exemple : 03-02-2022
+  const yearInLastPositionWithHyphenSeparatorRegex = /[0-9]{1,2}-[0-9]{1,2}-[0-9]{4}/gim // Exemple : 03-02-2022
   const decisionWithFormatedYearInLastPositionWithHyphenSeparator =
     decisionWithFormatedYearInFirstPositionWithHyphenSeparator.replace(
       yearInLastPositionWithHyphenSeparatorRegex,
@@ -66,7 +66,7 @@ export function normalizeDatesToIso8601(decision: string): string {
       (providedDate) => convertDateStringToList(providedDate, false, slashSeparator)
     )
 
-  const yearInLastPositioWithSlashSeparatorRegex = /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/gim // Exemple : 03/02/2022
+  const yearInLastPositioWithSlashSeparatorRegex = /[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}/gim // Exemple : 03/02/2022
   const decisionWithYearInLastPositioWithSlashSeparator =
     decisionWithFormatedYearInFirstPositionWithSlashSeparator.replace(
       yearInLastPositioWithSlashSeparatorRegex,
@@ -93,13 +93,14 @@ function convertDateStringToList(
     }
     return listDate[2] + '-' + listDate[1] + '-' + listDate[0]
   } else {
-    const month: string = listDate[1]
+    const month: string = listDate[1].length == 1 ? '0' + listDate[1] : listDate[1]
     const year: string = listDate[0].length == 4 ? listDate[0] : listDate[2]
 
     listDate.splice(listDate.indexOf(month), 1)
     listDate.splice(listDate.indexOf(year), 1)
 
-    const day: string = listDate[0]
+    // Dans le cas où il n'y a qu'un seul chiffre, on ajoute un 0 pour avoir le format DD
+    const day: string = listDate[0].length == 1 ? '0' + listDate[0] : listDate[0]
 
     // les Regex de normalizeDateString nous permettent de parseInt sereinement
     if (parseInt(month) > 12 && parseInt(day) <= 12) {
