@@ -4,14 +4,14 @@ import { ServiceUnavailableException } from '@nestjs/common'
 import { DecisionS3Repository } from './decisionS3.repository'
 
 describe('DecisionS3Repository', () => {
+  const mockS3: MockProxy<S3> = mockDeep<S3>()
+  const repository = new DecisionS3Repository(mockS3)
   describe('saveDecision', () => {
     it('throws error when S3 called failed', async () => {
       // GIVEN
       const filename = 'test.wpd'
       const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
 
-      const mockS3: MockProxy<S3> = mockDeep<S3>()
-      const repository = new DecisionS3Repository(mockS3)
       mockS3.putObject.mockImplementation(() => {
         throw new ServiceUnavailableException('Error from S3 API')
       })
@@ -50,6 +50,39 @@ describe('DecisionS3Repository', () => {
       )
         // THEN
         .toEqual(undefined)
+    })
+  })
+
+  describe('getDecisionByFilename', () => {
+    it('throws an error when the s3 could not be called', async () => {
+      // GIVEN
+      const filename = 'file.wpd'
+      repository.getDecisionByFilename = jest.fn().mockImplementation(() => {
+        throw new ServiceUnavailableException('Error from S3 API')
+      })
+
+      await expect(
+        // WHEN
+        async () => await repository.getDecisionByFilename(filename)
+      )
+        // THEN
+        .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
+    })
+
+    it('returns the decision from s3', async () => {
+      // GIVEN
+      const filename = 'file.wpd'
+
+      repository.getDecisionByFilename = jest.fn().mockImplementation(() => {
+        return Promise.resolve('body')
+      })
+
+      expect(
+        //WHEN
+        await repository.getDecisionByFilename(filename)
+      )
+        // THEN
+        .toEqual('body')
     })
   })
 })
