@@ -1,9 +1,9 @@
 import * as S3 from 'aws-sdk/clients/s3'
 
 import { ServiceUnavailableException } from '@nestjs/common'
-import { CustomLogger } from '../../../shared/infrastructure/utils/log.utils'
+import { CustomLogger } from '../utils/log.utils'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
-import { getEnvironment } from '../../../shared/infrastructure/utils/env.utils'
+import { getEnvironment } from '../utils/env.utils'
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3ApiClient: S3
@@ -44,5 +44,24 @@ export class DecisionS3Repository implements DecisionRepository {
     this.logger.log(
       result.httpRequest.method + ' ' + result.httpRequest.endpoint.href + result.httpRequest.path
     )
+  }
+
+  async getDecisionByFilename(filename: string) {
+    const reqParams = {
+      Bucket: getEnvironment('SCW_BUCKET_NAME'),
+      Key: filename
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const result = await this.s3ApiClient.getObject(reqParams, (err, data) => {
+      if (err) {
+        this.logger.error(err + err.stack)
+        throw new ServiceUnavailableException('Error from S3 API')
+      } else {
+        console.log('Function HERE =======')
+        console.log(data)
+        this.logger.log('S3 called successfully')
+      }
+    })
   }
 }
