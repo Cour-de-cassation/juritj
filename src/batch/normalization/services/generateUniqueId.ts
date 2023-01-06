@@ -1,5 +1,5 @@
 import { MetadonneesDto } from '../../../shared/infrastructure/dto/metadonnees.dto'
-import { CustomLogger } from '../../../shared/infrastructure/utils/log.utils'
+import { CustomLogger } from '../../../shared/infrastructure/utils/customLogger.utils'
 
 const requiredKeys = ['idJuridiction', 'numeroRegistre', 'numeroRoleGeneral', 'dateDecision']
 const optionalKey = 'numeroMesureInstruction'
@@ -17,11 +17,11 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
       optionalKey in metadonnees
         ? requiredMetadonnees + metadonnees.numeroMesureInstruction
         : requiredMetadonnees
-    logger.log('Normalization : added idDecision ' + uniqueId + ' to metadata')
+    logger.log('[NORMALIZATION JOB] Unique ID generated.', uniqueId)
     return uniqueId
   } else {
     logger.error(
-      'Normalization : could not generate unique ID based on metadata: ' +
+      '[NORMALIZATION JOB] Could not generate unique ID based on metadata: ' +
         JSON.stringify({
           idJuridiction: metadonnees.idJuridiction,
           numeroRegistre: metadonnees.numeroRegistre,
@@ -30,7 +30,7 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
           numeroMesureInstruction: metadonnees.numeroMesureInstruction
         })
     )
-    throw new Error('Normalization : could not generate unique ID based on metadata.')
+    throw new Error('Could not generate unique ID based on metadata.')
   }
 }
 

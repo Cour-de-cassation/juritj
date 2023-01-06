@@ -2,7 +2,7 @@ import * as request from 'supertest'
 import { INestApplication, ServiceUnavailableException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
-import { DecisionsModule } from './decisions.module'
+import { AppModule } from '../../../app.module'
 
 // simule la création du client s3
 let mockedPutObject = jest.fn()
@@ -27,7 +27,7 @@ describe('Decisions Module - Integration Test', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [DecisionsModule]
+      imports: [AppModule]
     }).compile()
 
     app = moduleFixture.createNestApplication()
