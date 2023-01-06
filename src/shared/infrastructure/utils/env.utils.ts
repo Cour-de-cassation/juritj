@@ -15,8 +15,7 @@ function readEnvironmentFile() {
 
   // step 2 : separer la cle de la valeur (=)
   const mapEnv = cleanEnvContent.map((item) => {
-    const envVar = item.split('=') // [0] key , [1] valeur
-    return envVar
+    return [item.substring(0, item.indexOf('=')), item.substring(item.indexOf('=') + 1)]
   })
   // step 3 : transformer en objet : DOC_LOGIN : valueLogin ==> env[DOC_LOGIN] = valueLogin
 

@@ -5,6 +5,7 @@ import { MetadonneesDto } from '../../shared/infrastructure/dto/metadonnees.dto'
 import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
 import { CustomLogger } from '../../shared/infrastructure/utils/log.utils'
 import { ConvertedDecisionWithMetadonneesDto } from '../../shared/infrastructure/dto/convertedDecisionWithMetadonnees.dto'
+import { saveDecision } from './services/saveToMongo'
 // import { getDecision } from './services/getDecisionFromS3'
 
 const fakeMetadonnees = new MockUtils().metadonneesDtoMock
@@ -37,7 +38,7 @@ export function normalizationJob(
       ' and decision: ' +
       convertedDecision
   )
-
+  saveDecision()
   return {
     metadonnees: { ...metadonnees, idDecision },
     decisionNormalisee: convertedDecision

@@ -4,13 +4,14 @@ import { ConfigModule } from '@nestjs/config'
 import { RedirectController } from './app.controller'
 import { DecisionsModule } from './infrastructure/controllers/decisions/decisions.module'
 import { MongooseModule } from '@nestjs/mongoose'
+import { getEnvironment } from 'src/shared/infrastructure/utils/env.utils'
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     HttpModule,
-    DecisionsModule
-    // MongooseModule.forRoot('mongodb://localhost/local')
+    DecisionsModule,
+    MongooseModule.forRoot(getEnvironment('MONGODB_URL'))
   ],
   controllers: [RedirectController],
   providers: []
