@@ -5,6 +5,7 @@ import { MetadonneesDto } from '../../shared/infrastructure/dto/metadonnees.dto'
 import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
 import { CustomLogger } from '../../shared/infrastructure/utils/log.utils'
 import { ConvertedDecisionWithMetadonneesDto } from '../../shared/infrastructure/dto/convertedDecisionWithMetadonnees.dto'
+import { getEnvironment } from '../../shared/infrastructure/utils/env.utils'
 
 const fakeMetadonnees = new MockUtils().metadonneesDtoMock
 const fakeDecisionContent = ''
@@ -36,6 +37,7 @@ export function normalizationJob(
       ' and decision: ' +
       convertedDecision
   )
+  console.log(getEnvironment('DOC_LOGIN'))
   return {
     metadonnees: { ...metadonnees, idDecision },
     decisionNormalisee: convertedDecision
