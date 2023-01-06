@@ -37,7 +37,7 @@ export function normalizationJob(
       ' and decision: ' +
       convertedDecision
   )
-  console.log(getEnvironment('DOC_LOGIN'))
+
   return {
     metadonnees: { ...metadonnees, idDecision },
     decisionNormalisee: convertedDecision

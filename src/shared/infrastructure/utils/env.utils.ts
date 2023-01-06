@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
+// Ajout d'un export pour que la fonction soit testé
 function readEnvironmentFile() {
   const contents = fs.readFileSync(path.join(__dirname, '../../../../.env'), 'utf-8')
   const rawEnvironmentContent = contents.split(/\r?\n/)
@@ -30,7 +31,12 @@ export function getEnvironment(key: string): string {
   const env = readEnvironmentFile()[key]
 
   if (!env) {
-    throw new Error(`${key} is not defined`)
+    // Pour fonctionner avec l'environnement de développement
+    if (!process.env[key]) {
+      throw new Error(`${key} is not defined`)
+    } else {
+      return process.env[key]
+    }
   }
   return env
 }
