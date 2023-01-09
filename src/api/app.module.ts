@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common'
 import { HttpModule } from '@nestjs/axios'
 import { ConfigModule } from '@nestjs/config'
 import { RedirectController } from './app.controller'
-import { DecisionsModule } from './infrastructure/controllers/decisions/decisions.module'
+import { DecisionsController } from './infrastructure/controllers/decisions/decisions.controller'
 
 @Module({
-  imports: [ConfigModule.forRoot(), HttpModule, DecisionsModule],
-  controllers: [RedirectController],
+  imports: [ConfigModule.forRoot(), HttpModule],
+  controllers: [RedirectController, DecisionsController],
   providers: []
 })
 export class AppModule {}
