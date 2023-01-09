@@ -6,7 +6,7 @@ import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharact
 import { CustomLogger } from '../../shared/infrastructure/utils/log.utils'
 import { ConvertedDecisionWithMetadonneesDto } from '../../shared/infrastructure/dto/convertedDecisionWithMetadonnees.dto'
 import { saveDecision } from './services/saveToMongo'
-// import { getDecision } from './services/getDecisionFromS3'
+import { getDecisionMetadonneesFromS3File } from './services/getDecisionFromS3'
 
 const fakeMetadonnees = new MockUtils().metadonneesDtoMock
 const fakeDecisionContent = ''
@@ -45,6 +45,6 @@ export function normalizationJob(
   }
 }
 
-// const decision = getDecision('business_plan.wpd')
+const decision = getDecisionMetadonneesFromS3File('2023-01-06T13:57:13.288Zole6.wpd')
 
 normalizationJob(fakeMetadonnees, fakeDecisionContent)

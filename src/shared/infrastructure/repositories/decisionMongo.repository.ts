@@ -6,7 +6,5 @@ export class DecisionMongoRepository {
 
   async saveDecision() {
     this.mongoClient = await mongoose.connect(getEnvironment('MONGODB_URL'))
-
-    console.log(this.mongoClient.models)
   }
 }

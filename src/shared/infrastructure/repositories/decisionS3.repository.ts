@@ -4,6 +4,7 @@ import { ServiceUnavailableException } from '@nestjs/common'
 import { CustomLogger } from '../utils/log.utils'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 import { getEnvironment } from '../utils/env.utils'
+import { buffer } from 'rxjs'
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3ApiClient: S3
@@ -47,21 +48,18 @@ export class DecisionS3Repository implements DecisionRepository {
   }
 
   async getDecisionByFilename(filename: string) {
-    const reqParams = {
-      Bucket: getEnvironment('SCW_BUCKET_NAME'),
-      Key: filename
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const result = await this.s3ApiClient.getObject(reqParams, (err, data) => {
-      if (err) {
-        this.logger.error(err + err.stack)
-        throw new ServiceUnavailableException('Error from S3 API')
-      } else {
-        console.log('Function HERE =======')
-        console.log(data)
-        this.logger.log('S3 called successfully')
+    try {
+      const reqParams = {
+        Bucket: getEnvironment('SCW_BUCKET_NAME'),
+        Key: filename
       }
-    })
+
+      const data = await this.s3ApiClient.getObject(reqParams).promise()
+
+      return data.Body
+    } catch (e) {
+      this.logger.error(e + e.stack)
+      throw new ServiceUnavailableException('Error from S3 API')
+    }
   }
 }
