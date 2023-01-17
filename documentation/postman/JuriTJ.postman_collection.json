@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "c8df5954-8832-4076-9354-b9966bf34373",
+		"name": "JuriTJ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14689636"
+	},
+	"item": [
+		{
+			"name": "Collecte",
+			"item": [
+				{
+					"name": "Envoie d'une décision valide",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "metadonnees",
+									"value": "{\"nomJuridiction\": \"some juridiction name\", \"idJuridiction\": \"TJ00000\", \"numeroRegistre\": \"A\", \"numeroRoleGeneral\": \"01/12345\", \"numeroMesureInstruction\": \"0123456789\", \"codeService\": \"0A\", \"dateDecision\": \"20221121\", \"libelleService\": \"some libelle\", \"codeDecision\": \"0aA\", \"libelleCodeDecision\": \"some libelle code decision\", \"decisionAssociee\": { \"numeroRegistre\": \"A\", \"numeroRoleGeneral\": \"01/12345\", \"idJuridiction\": \"TJ00000\", \"date\": \"20221121\", \"numeroMesureInstruction\": \"BCDEFGHIJK\" }, \"parties\": [ { \"type\": \"PP\", \"nom\": \"nom Partie\" },  { \"type\": \"PP\", \"nom\": \"nom Partie\" }], \"partie\": { \"type\": \"PP\", \"nom\": \"nom Partie\" }, \"codeNAC\": \"0aA\", \"libelleNAC\": \"some libelle NAC\", \"codeNature\": \"0a\", \"libelleNature\": \"libelle\", \"public\": false, \"recommandationOccultation\": false }",
+									"type": "text"
+								},
+								{
+									"key": "decisionIntegre",
+									"type": "file",
+									"src": "./fichier-exemples/business_plan.wpd"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/decisions",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"decisions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Envoie d'une décision sans fichier",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "metadonnees",
+									"value": "{\"nomJuridiction\": \"some juridiction name\", \"idJuridiction\": \"TJ00000\", \"numeroRegistre\": \"A\", \"numeroRoleGeneral\": \"01/12345\", \"numeroMesureInstruction\": \"0123456789\", \"codeService\": \"0A\", \"dateDecision\": \"20221121\", \"libelleService\": \"some libelle\", \"codeDecision\": \"0aA\", \"libelleCodeDecision\": \"some libelle code decision\", \"decisionAssociee\": { \"numeroRegistre\": \"A\", \"numeroRoleGeneral\": \"01/12345\", \"idJuridiction\": \"TJ00000\", \"date\": \"20221121\", \"numeroMesureInstruction\": \"BCDEFGHIJK\" }, \"parties\": [ { \"type\": \"PP\", \"nom\": \"nom Partie\" },  { \"type\": \"PP\", \"nom\": \"nom Partie\" }], \"partie\": { \"type\": \"PP\", \"nom\": \"nom Partie\" }, \"codeNAC\": \"0aA\", \"libelleNAC\": \"some libelle NAC\", \"codeNature\": \"0a\", \"libelleNature\": \"libelle\", \"public\": false, \"recommandationOccultation\": false }",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/decisions",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"decisions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Envoie d'une décision avec un fichier au mauvais format",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "metadonnees",
+									"value": "{\"nomJuridiction\": \"some juridiction name\", \"idJuridiction\": \"TJ00000\", \"numeroRegistre\": \"A\", \"numeroRoleGeneral\": \"01/12345\", \"numeroMesureInstruction\": \"0123456789\", \"codeService\": \"0A\", \"dateDecision\": \"20221121\", \"libelleService\": \"some libelle\", \"codeDecision\": \"0aA\", \"libelleCodeDecision\": \"some libelle code decision\", \"decisionAssociee\": { \"numeroRegistre\": \"A\", \"numeroRoleGeneral\": \"01/12345\", \"idJuridiction\": \"TJ00000\", \"date\": \"20221121\", \"numeroMesureInstruction\": \"BCDEFGHIJK\" }, \"parties\": [ { \"type\": \"PP\", \"nom\": \"nom Partie\" },  { \"type\": \"PP\", \"nom\": \"nom Partie\" }], \"partie\": { \"type\": \"PP\", \"nom\": \"nom Partie\" }, \"codeNAC\": \"0aA\", \"libelleNAC\": \"some libelle NAC\", \"codeNature\": \"0a\", \"libelleNature\": \"libelle\", \"public\": false, \"recommandationOccultation\": false }",
+									"type": "text"
+								},
+								{
+									"key": "decisionIntegre",
+									"type": "file",
+									"src": "./fichier-exemples/octoLogo.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/decisions",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"decisions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Envoie d'une décision sans métadonnées",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "decisionIntegre",
+									"type": "file",
+									"src": "./fichier-exemples/business_plan.wpd"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/decisions",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"decisions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Envoie d'une décision avec métadonnées incomplètes",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "metadonnees",
+									"value": "{\"nomJuridiction\": \"some juridiction name\", \"idJuridiction\": \"TJ00000\", \"numeroRegistre\": \"A\", \"numeroRoleGeneral\": \"01/12345\", \"numeroMesureInstruction\": \"0123456789\", \"codeService\": \"0)A\", \"dateDecision\": \"20221121\", \"libelleService\": \"some libelle\", \"codeDecision\": \"0aA\", \"libelleCodeDecision\": \"some libelle code decision\", \"decisionAssociee\": { \"numeroRegistre\": \"A\", \"numeroRoleGeneral\": \"01/12345\", \"idJuridiction\": \"TJ00000\", \"date\": \"20221121\", \"numeroMesureInstruction\": \"BCDEFGHIJK\" }, \"parties\": [ { \"type\": \"PP\", \"nom\": \"nom Partie\" },  { \"type\": \"PP\", \"nom\": \"nom Partie\" }], \"partie\": { \"type\": \"PP\", \"nom\": \"nom Partie\" }, \"codeNAC\": \"0aA\", \"libelleNAC\": \"some libelle NAC\", \"codeNature\": \"0a\", \"libelleNature\": \"libelle\", \"public\": false, \"recommandationOccultation\": false }",
+									"type": "text"
+								},
+								{
+									"key": "decisionIntegre",
+									"type": "file",
+									"src": "./fichier-exemples/business_plan.wpd"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/decisions",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"decisions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
