@@ -1,7 +1,7 @@
 import * as S3 from 'aws-sdk/clients/s3'
 
 import { ServiceUnavailableException } from '@nestjs/common'
-import { CustomLogger } from '../utils/log.utils'
+import { CustomLogger } from '../utils/customLogger.utils'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 import { getEnvironment } from '../utils/env.utils'
 import { CollectDto } from '../dto/collect.dto'

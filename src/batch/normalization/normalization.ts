@@ -30,10 +30,6 @@ export function normalizationJob(
       )
 
       const idDecision = generateUniqueId(metadonnees)
-      logger.log('[NORMALIZATION JOB] Decision ID generated : ' + idDecision)
-      const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
-      logger.log('[NORMALIZATION JOB] Unnecessary characters removed from decision.')
-      const idDecision = generateUniqueId(metadonnees)
       logger.log('[NORMALIZATION JOB] Decision ID generated', idDecision)
 
       const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
