@@ -23,6 +23,7 @@ describe('saveDecision', () => {
     // GIVEN
     jest.spyOn(mongoRepository, 'insertMetadonnees').mockReturnValueOnce(true)
     const saveDecisionFn = jest.spyOn(mongoRepository, 'saveDecision')
+    saveDecisionFn.mockImplementationOnce(jest.fn())
     // WHEN
     mongoRepository.saveDecision(mockMetadonnees)
 

@@ -2,6 +2,11 @@ import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { normalizationJob } from './normalization'
 import * as getDecisionMetadonneesFromS3File from './services/getDecisionFromS3'
 
+// import * as saveToMongo from './services/saveToMongo'
+// jest.spyOn(saveToMongo, "saveMetadonnees").mockImplementation(jest.fn())
+
+jest.mock('./services/saveToMongo')
+
 describe('Normalization job', () => {
   const mockUtils = new MockUtils()
   const fakeMetadonnees = mockUtils.metadonneesDtoMock
