@@ -21,17 +21,13 @@ export class DecisionMongoRepository {
 
   insertMetadonnees(collection, metadonnees: MetadonneesDto): boolean {
     let isInserted = false
-    collection
-      .create(metadonnees)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .then((ans) => {
-        console.log('Document inserted')
-        isInserted = true
-      })
-      .catch((err) => {
-        console.log(err.Message)
-        throw new ServiceUnavailableException(err.Message)
-      })
+    try {
+      collection.create(metadonnees)
+      isInserted = true
+    } catch (e) {
+      console.log(e)
+      throw new ServiceUnavailableException('Error from Mongo')
+    }
     return isInserted
   }
 }
