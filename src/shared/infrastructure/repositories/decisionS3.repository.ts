@@ -53,9 +53,13 @@ export class DecisionS3Repository implements DecisionRepository {
         Key: filename
       }
 
-      const data = await this.s3ApiClient.getObject(reqParams).promise()
+      const dataFromS3 = await this.s3ApiClient.getObject(reqParams)
 
-      return JSON.parse(data.Body.toString())
+      const decision = await dataFromS3.promise().then((data) => {
+        return data.Body
+      })
+
+      return JSON.parse(decision.toString())
     } catch (e) {
       this.logger.error(e + e.stack)
       throw new ServiceUnavailableException('Error from S3 API')

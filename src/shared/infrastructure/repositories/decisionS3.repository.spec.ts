@@ -72,17 +72,27 @@ describe('DecisionS3Repository', () => {
     it('returns the decision from s3', async () => {
       // GIVEN
       const filename = 'file.wpd'
+      const expected = { decisionIntegre: 'some body from S3' }
 
-      repository.getDecisionByFilename = jest.fn().mockImplementation(() => {
-        return Promise.resolve('body')
+      const mockedGetObject = jest.fn().mockImplementation(() => {
+        return {
+          promise: () =>
+            Promise.resolve({
+              Body: `{"decisionIntegre":"some body from S3"}`
+            })
+        }
       })
+      const mockS3: MockProxy<S3> = mockDeep<S3>({
+        getObject: mockedGetObject
+      })
+      const repository = new DecisionS3Repository(mockS3)
 
       expect(
         //WHEN
         await repository.getDecisionByFilename(filename)
       )
         // THEN
-        .toEqual('body')
+        .toEqual(expected)
     })
   })
 })
