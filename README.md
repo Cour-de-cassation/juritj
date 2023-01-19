@@ -46,3 +46,4 @@ DOC_PASSWORD=votre_mot_de_passe
 Le dossier `/documentation` contient : 
 - `conventions.md` qui liste les choix de l'équipe concernant la base de code 
 - Le dossier `adr` qui historise les choix structurant de l'équipe 
+- Les requêtes Postman et comment les installer [lien](documentation/postman/README.md)
