@@ -16,8 +16,6 @@ export function normalizationJob(
   decisionName: string,
   decisionContent: string
 ): Promise<ConvertedDecisionWithMetadonneesDto> {
-  // decisionContent mis en dur temporairement, car on ne sait pas lire le .wpd actuellement
-
   const res = getDecisionMetadonneesFromS3File(decisionName).then(
     (metadonnees: Metadonnees): ConvertedDecisionWithMetadonneesDto => {
       logger.log(

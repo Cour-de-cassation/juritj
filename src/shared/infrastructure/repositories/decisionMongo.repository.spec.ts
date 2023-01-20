@@ -5,6 +5,7 @@ import { DecisionMongoRepository } from './decisionMongo.repository'
 describe('saveDecision', () => {
   const mockMetadonnees = new MockUtils().metadonneesDtoMock
   const mongoRepository = new DecisionMongoRepository()
+
   it('throws an error when connection to mongo failed', async () => {
     // GIVEN
     jest.spyOn(mongoRepository, 'saveDecision').mockImplementationOnce(() => {
@@ -26,7 +27,6 @@ describe('saveDecision', () => {
     saveDecisionFn.mockImplementationOnce(jest.fn())
     // WHEN
     mongoRepository.saveDecision(mockMetadonnees)
-
     // THEN
     expect(saveDecisionFn).toHaveBeenCalled()
   })
