@@ -1,23 +1,24 @@
 import * as S3 from 'aws-sdk/clients/s3'
 
 import { ServiceUnavailableException } from '@nestjs/common'
-import { CustomLogger } from '../../../shared/infrastructure/utils/customLogger.utils'
+import { CustomLogger } from '../utils/customLogger.utils'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
-
+import { getEnvironment } from '../utils/env.utils'
+import { CollectDto } from '../dto/collect.dto'
 export class DecisionS3Repository implements DecisionRepository {
   private s3ApiClient: S3
-  private readonly logger = new CustomLogger()
+  private logger = new CustomLogger()
 
   constructor(providedS3Client?: S3) {
     if (providedS3Client) {
       this.s3ApiClient = providedS3Client
     } else {
       this.s3ApiClient = new S3({
-        endpoint: process.env.SCW_S3_URL,
-        region: process.env.SCW_S3_REGION,
+        endpoint: getEnvironment('SCW_S3_URL'),
+        region: getEnvironment('SCW_S3_REGION'),
         credentials: {
-          accessKeyId: process.env.SCW_S3_ACCESS_KEY,
-          secretAccessKey: process.env.SCW_S3_SECRET_KEY
+          accessKeyId: getEnvironment('SCW_S3_ACCESS_KEY'),
+          secretAccessKey: getEnvironment('SCW_S3_SECRET_KEY')
         }
       })
     }
@@ -26,7 +27,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async saveDecision(requestToS3Dto: string, filename: string): Promise<void> {
     const reqParams = {
       Body: requestToS3Dto,
-      Bucket: process.env.SCW_BUCKET_NAME,
+      Bucket: getEnvironment('SCW_BUCKET_NAME'),
       Key: new Date().toISOString() + filename
     }
 
@@ -43,5 +44,25 @@ export class DecisionS3Repository implements DecisionRepository {
     this.logger.log(
       result.httpRequest.method + ' ' + result.httpRequest.endpoint.href + result.httpRequest.path
     )
+  }
+
+  async getDecisionByFilename(filename: string): Promise<CollectDto> {
+    try {
+      const reqParams = {
+        Bucket: getEnvironment('SCW_BUCKET_NAME'),
+        Key: filename
+      }
+
+      const dataFromS3 = await this.s3ApiClient.getObject(reqParams)
+
+      const decision = await dataFromS3.promise().then((data) => {
+        return data.Body
+      })
+
+      return JSON.parse(decision.toString())
+    } catch (e) {
+      this.logger.error(e + e.stack)
+      throw new ServiceUnavailableException('Error from S3 API')
+    }
   }
 }

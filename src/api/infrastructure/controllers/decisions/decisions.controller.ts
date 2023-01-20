@@ -25,7 +25,7 @@ import { CustomLogger } from '../../../../shared/infrastructure/utils/customLogg
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
 import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
-import { DecisionS3Repository } from '../../repositories/decisionS3.repository'
+import { DecisionS3Repository } from '../../../../shared/infrastructure/repositories/decisionS3.repository'
 import { CollectDto } from '../../../../shared/infrastructure/dto/collect.dto'
 import { MetadonneesDto } from '../../../../shared/infrastructure/dto/metadonnees.dto'
 

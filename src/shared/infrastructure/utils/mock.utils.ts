@@ -1,6 +1,9 @@
 import { TypePartie } from '../../domain/enums'
 
 export class MockUtils {
+  uniqueDecisionId = `TJ75011A01/12345202211210123456789`
+  uniqueDecisionIdWithoutNumeroMesureInstruction = `TJ75011A01/1234520221121`
+
   presidentDtoMock = {
     fonction: 'president',
     nom: 'Nom Presidente',
@@ -22,6 +25,7 @@ export class MockUtils {
   }
 
   metadonneesDtoMock = {
+    idDecision: this.uniqueDecisionId,
     nomJuridiction: 'Juridictions civiles de première instance',
     idJuridiction: 'TJ75011',
     numeroRegistre: 'A',
@@ -43,6 +47,6 @@ export class MockUtils {
     recommandationOccultation: false
   }
 
-  uniqueDecisionId = `TJ75011A01/12345202211210123456789`
-  uniqueDecisionIdWithoutNumeroMesureInstruction = `TJ75011A01/1234520221121`
+  decisionContent =
+    '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t'
 }
