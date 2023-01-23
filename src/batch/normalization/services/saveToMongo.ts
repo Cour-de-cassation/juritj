@@ -1,8 +1,8 @@
-import { Metadonnees } from '../../../shared/domain/metadonnees'
+import { Decisions } from '../../../shared/domain/decisions'
 import { DecisionMongoRepository } from '../repositories/decisionMongo.repository'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 
-export async function saveMetadonnees(metadonnees: Metadonnees) {
-  await decisionMongoRepository.saveDecision(metadonnees)
+export async function saveDecisionToMongo(decision: Decisions) {
+  await decisionMongoRepository.saveDecision(decision)
 }

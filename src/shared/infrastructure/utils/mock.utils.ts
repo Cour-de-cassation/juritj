@@ -49,4 +49,9 @@ export class MockUtils {
 
   decisionContent =
     '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t'
+
+  decisionMock = {
+    decision: this.decisionContent,
+    ...this.metadonneesDtoMock
+  }
 }
