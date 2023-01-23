@@ -1,14 +1,16 @@
 import { ServiceUnavailableException } from '@nestjs/common'
 import mongoose, { Mongoose } from 'mongoose'
 import { MetadonneesDto } from '../dto/metadonnees.dto'
-import { getEnvironment } from '../utils/env.utils'
 import { MetadonneesSchema } from './decisionMongo.schema'
+import 'dotenv/config'
+import { CustomLogger } from '../utils/customLogger.utils'
 
 export class DecisionMongoRepository {
   private mongoClient: Mongoose
+  private logger = new CustomLogger()
 
   async saveDecision(metadonnees: MetadonneesDto): Promise<boolean> {
-    this.mongoClient = await mongoose.connect(getEnvironment('MONGODB_URL'))
+    this.mongoClient = await mongoose.connect(process.env.MONGODB_URL)
 
     const collections = this.mongoClient.model('metadonnees', MetadonneesSchema)
 
@@ -23,9 +25,10 @@ export class DecisionMongoRepository {
     let isInserted = false
     try {
       collection.create(metadonnees)
+      this.logger.log('inserted to Mongo', metadonnees.idDecision)
       isInserted = true
     } catch (e) {
-      console.log(e)
+      this.logger.error(e)
       throw new ServiceUnavailableException('Error from Mongo')
     }
     return isInserted

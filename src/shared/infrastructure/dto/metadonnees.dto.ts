@@ -166,6 +166,10 @@ export class MetadonneesDto {
   @Matches('^TJ[0-9]{5}$')
   idJuridiction: string
 
+  @IsString()
+  @IsOptional() //Optionnel car c'est une donnée générée apres réception
+  idDecision: string
+
   @ApiPropertyOptional({
     description: 'Code de la juridiction émettrice propre au système d’information originel.',
     type: String,

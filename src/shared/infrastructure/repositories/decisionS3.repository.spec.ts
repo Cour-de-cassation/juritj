@@ -54,7 +54,6 @@ describe('DecisionS3Repository', () => {
   })
 
   describe('getDecisionByFilename', () => {
-     
     // TODO : corriger ce test car mocker getDecisionByFilename est trop haut niveau
     it('throws an error when the s3 could not be called', async () => {
       // GIVEN
