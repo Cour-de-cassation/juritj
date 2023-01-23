@@ -4,7 +4,6 @@ import { ServiceUnavailableException } from '@nestjs/common'
 import { CustomLogger } from '../utils/customLogger.utils'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 import { CollectDto } from '../dto/collect.dto'
-import 'dotenv/config'
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3ApiClient: S3

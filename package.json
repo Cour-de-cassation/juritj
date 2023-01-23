@@ -13,7 +13,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/api/main",
-    "batch:start": "npx ts-node src/batch/normalization/normalization.ts",
+    "batch:start": "npx ts-node -r dotenv/config src/batch/normalization/normalization.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest & npm run test:integration",
     "test:watch": "jest --watch",
