@@ -1,5 +1,5 @@
 import { Metadonnees } from '../../../shared/domain/metadonnees'
-import { DecisionMongoRepository } from '../../../shared/infrastructure/repositories/decisionMongo.repository'
+import { DecisionMongoRepository } from '../repositories/decisionMongo.repository'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 

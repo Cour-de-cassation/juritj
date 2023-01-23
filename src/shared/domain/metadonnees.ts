@@ -24,7 +24,7 @@ export class Partie {
 }
 
 export class Metadonnees {
-  idDecision: string
+  idDecision?: string
   nomJuridiction: string
   idJuridiction: string
   codeJuridiction?: string

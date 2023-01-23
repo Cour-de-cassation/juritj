@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as basicAuth from 'express-basic-auth'
-import { getEnvironment } from '../shared/infrastructure/utils/env.utils'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -14,7 +13,7 @@ async function bootstrap() {
     challenge: true,
     users: {}
   }
-  basicAuthOptions.users[getEnvironment('DOC_LOGIN')] = getEnvironment('DOC_PASSWORD')
+  basicAuthOptions.users[process.env.DOC_LOGIN] = process.env.DOC_PASSWORD
   app.use(['/doc', '/doc-json'], basicAuth(basicAuthOptions))
 
   // Add API Documentation with Swagger

@@ -1,12 +1,16 @@
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
-import { normalizationJob } from './normalization'
-import * as getDecisionMetadonneesFromS3File from './services/getDecisionFromS3'
 
 jest.mock('./services/saveToMongo')
+const mockUtils = new MockUtils()
+const fakeMetadonnees = mockUtils.metadonneesDtoMock
+jest.mock('./services/extractMetadonneesFromS3', () => ({
+  extractMetadonneesFromS3: jest.fn(() => fakeMetadonnees)
+}))
+jest.spyOn(process, 'exit').mockImplementation()
+
+import { normalizationJob } from './normalization'
 
 describe('Normalization job', () => {
-  const mockUtils = new MockUtils()
-  const fakeMetadonnees = mockUtils.metadonneesDtoMock
   const decisionName = 'filename.wpd'
 
   it('returns metadonnees with uniqueDecisionId', async () => {
@@ -18,10 +22,6 @@ describe('Normalization job', () => {
     }
     const decisionName = 'filename.wpd'
     const decisionContent = new MockUtils().decisionContent
-
-    jest
-      .spyOn(getDecisionMetadonneesFromS3File, 'getDecisionMetadonneesFromS3File')
-      .mockImplementationOnce(async () => fakeMetadonnees)
 
     expect(
       // WHEN
@@ -42,10 +42,6 @@ describe('Normalization job', () => {
       decisionNormalisee: expectedDecision
     }
 
-    jest
-      .spyOn(getDecisionMetadonneesFromS3File, 'getDecisionMetadonneesFromS3File')
-      .mockImplementationOnce(async () => fakeMetadonnees)
-
     expect(
       // WHEN
       await normalizationJob(decisionName, fakeDecision)
@@ -64,10 +60,6 @@ describe('Normalization job', () => {
       metadonnees: { ...fakeMetadonnees, idDecision: mockUtils.uniqueDecisionId },
       decisionNormalisee: expectedDecision
     }
-
-    jest
-      .spyOn(getDecisionMetadonneesFromS3File, 'getDecisionMetadonneesFromS3File')
-      .mockImplementationOnce(async () => fakeMetadonnees)
 
     expect(
       // WHEN

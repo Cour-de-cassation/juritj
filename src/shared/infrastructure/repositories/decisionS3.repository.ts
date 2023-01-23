@@ -3,8 +3,8 @@ import * as S3 from 'aws-sdk/clients/s3'
 import { ServiceUnavailableException } from '@nestjs/common'
 import { CustomLogger } from '../utils/customLogger.utils'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
-import { getEnvironment } from '../utils/env.utils'
 import { CollectDto } from '../dto/collect.dto'
+
 export class DecisionS3Repository implements DecisionRepository {
   private s3ApiClient: S3
   private logger = new CustomLogger()
@@ -14,11 +14,11 @@ export class DecisionS3Repository implements DecisionRepository {
       this.s3ApiClient = providedS3Client
     } else {
       this.s3ApiClient = new S3({
-        endpoint: getEnvironment('SCW_S3_URL'),
-        region: getEnvironment('SCW_S3_REGION'),
+        endpoint: process.env.SCW_S3_URL,
+        region: process.env.SCW_S3_REGION,
         credentials: {
-          accessKeyId: getEnvironment('SCW_S3_ACCESS_KEY'),
-          secretAccessKey: getEnvironment('SCW_S3_SECRET_KEY')
+          accessKeyId: process.env.SCW_S3_ACCESS_KEY,
+          secretAccessKey: process.env.SCW_S3_SECRET_KEY
         }
       })
     }
@@ -27,7 +27,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async saveDecision(requestToS3Dto: string, filename: string): Promise<void> {
     const reqParams = {
       Body: requestToS3Dto,
-      Bucket: getEnvironment('SCW_BUCKET_NAME'),
+      Bucket: process.env.SCW_BUCKET_NAME,
       Key: new Date().toISOString() + filename
     }
 
@@ -49,7 +49,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async getDecisionByFilename(filename: string): Promise<CollectDto> {
     try {
       const reqParams = {
-        Bucket: getEnvironment('SCW_BUCKET_NAME'),
+        Bucket: process.env.SCW_BUCKET_NAME,
         Key: filename
       }
 

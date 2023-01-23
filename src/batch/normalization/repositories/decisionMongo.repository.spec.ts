@@ -1,5 +1,5 @@
 import { ServiceUnavailableException } from '@nestjs/common'
-import { MockUtils } from '../utils/mock.utils'
+import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { DecisionMongoRepository } from './decisionMongo.repository'
 
 describe('saveDecision', () => {
@@ -24,7 +24,7 @@ describe('saveDecision', () => {
   // TODO : mocker le saveDecision fait qu'on n'est pas assez précis, on mock la totalité de l'implem de la fonction qu'on teste
   it('calls the function to insert data to the collection', async () => {
     // GIVEN
-    jest.spyOn(mongoRepository, 'insertMetadonnees').mockReturnValueOnce(true)
+    jest.spyOn(mongoRepository, 'insertMetadonnees')
     const saveDecisionFn = jest.spyOn(mongoRepository, 'saveDecision')
     saveDecisionFn.mockImplementationOnce(jest.fn())
     // WHEN
