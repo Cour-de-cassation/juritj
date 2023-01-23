@@ -23,13 +23,25 @@ export class DecisionS3Repository implements DecisionRepository {
     }
   }
 
-  async saveDecision(requestToS3Dto: string, filename: string): Promise<void> {
+  async saveRawDecision(requestToS3Dto, filename) {
     const reqParams = {
       Body: requestToS3Dto,
-      Bucket: process.env.SCW_BUCKET_NAME,
+      Bucket: process.env.SCW_BUCKET_NAME_RAW,
       Key: new Date().toISOString() + filename
     }
 
+    await this.saveDecision(reqParams)
+  }
+  async saveNormalizedDecision(requestToS3Dto, filename) {
+    const reqParams = {
+      Body: requestToS3Dto,
+      Bucket: process.env.SCW_BUCKET_NAME_NORMALIZED,
+      Key: filename
+    }
+    await this.saveDecision(reqParams)
+  }
+
+  async saveDecision(reqParams): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const result = await this.s3ApiClient.putObject(reqParams, (err, data) => {
       if (err) {
@@ -45,10 +57,27 @@ export class DecisionS3Repository implements DecisionRepository {
     )
   }
 
+  async deleteDecision(filename: string, bucketName: string): Promise<void> {
+    const reqParams = {
+      Bucket: bucketName,
+      Key: filename
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const result = await this.s3ApiClient.deleteObject(reqParams, (err, data) => {
+      if (err) {
+        this.logger.error(err + err.stack)
+        throw new ServiceUnavailableException('Error from S3 API')
+      } else {
+        this.logger.log('S3 called successfully')
+      }
+    })
+  }
+
   async getDecisionByFilename(filename: string): Promise<CollectDto> {
     try {
       const reqParams = {
-        Bucket: process.env.SCW_BUCKET_NAME,
+        Bucket: process.env.SCW_BUCKET_NAME_RAW,
         Key: filename
       }
 
@@ -61,6 +90,23 @@ export class DecisionS3Repository implements DecisionRepository {
       return JSON.parse(decision.toString())
     } catch (e) {
       this.logger.error(e + e.stack)
+      throw new ServiceUnavailableException('Error from S3 API')
+    }
+  }
+
+  async getDecisionList(): Promise<any> {
+    try {
+      const reqParams = {
+        Bucket: process.env.SCW_BUCKET_NAME_RAW
+      }
+      const dataFromS3 = await this.s3ApiClient.listObjectsV2(reqParams)
+      const decisionList = await dataFromS3.promise().then((data) => {
+        return data.Contents
+      })
+
+      return decisionList
+    } catch (error) {
+      this.logger.error(error + error.stack)
       throw new ServiceUnavailableException('Error from S3 API')
     }
   }

@@ -3,6 +3,6 @@ import { DecisionMongoRepository } from '../repositories/decisionMongo.repositor
 
 const decisionMongoRepository = new DecisionMongoRepository()
 
-export async function saveMetadonnees(metadonnees: Metadonnees) {
+export async function saveMetadonneesToMongo(metadonnees: Metadonnees) {
   await decisionMongoRepository.saveDecision(metadonnees)
 }
