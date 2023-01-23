@@ -28,7 +28,7 @@ jest.mock('aws-sdk/clients/s3', () => {
 describe('Decisions Module - Integration Test', () => {
   let app: INestApplication
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule]
     }).compile()
