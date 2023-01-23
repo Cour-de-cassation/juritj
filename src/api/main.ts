@@ -1,12 +1,23 @@
 import { NestFactory } from '@nestjs/core'
-import { AppModule } from './app.module'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as basicAuth from 'express-basic-auth'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import { AppModule } from './app.module'
+import { Context } from '../shared/infrastructure/utils/context'
+import { CustomLogger } from '../shared/infrastructure/utils/customLogger.utils'
+import { RequestLoggerInterceptor } from './infrastructure/interceptors/request-logger.interceptor'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['log', 'error', 'warn']
   })
+
+  // Create a global store with AsyncLocalStorage and provide it to the logger
+  const apiContext = new Context()
+  apiContext.start()
+  const customLogger = new CustomLogger(apiContext)
+
+  app.useLogger(customLogger)
+  app.useGlobalInterceptors(new RequestLoggerInterceptor(apiContext))
 
   // Add login/password to access to API Documentation
   const basicAuthOptions: basicAuth.IUsersOptions = {

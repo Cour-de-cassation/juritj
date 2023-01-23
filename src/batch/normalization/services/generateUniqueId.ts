@@ -1,9 +1,8 @@
+import { logger } from '../normalization'
 import { MetadonneesDto } from '../../../shared/infrastructure/dto/metadonnees.dto'
-import { CustomLogger } from '../../../shared/infrastructure/utils/customLogger.utils'
 
 const requiredKeys = ['idJuridiction', 'numeroRegistre', 'numeroRoleGeneral', 'dateDecision']
 const optionalKey = 'numeroMesureInstruction'
-const logger = new CustomLogger()
 
 export function generateUniqueId(metadonnees: MetadonneesDto): string {
   if (hasMandatoryMetadonnees(metadonnees)) {

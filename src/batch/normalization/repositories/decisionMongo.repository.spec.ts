@@ -2,6 +2,13 @@ import { ServiceUnavailableException } from '@nestjs/common'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { DecisionMongoRepository } from './decisionMongo.repository'
 
+jest.mock('../normalization', () => ({
+  logger: {
+    log: jest.fn(),
+    error: jest.fn()
+  }
+}))
+
 describe('saveDecision', () => {
   const mockMetadonnees = new MockUtils().metadonneesDtoMock
   const mongoRepository = new DecisionMongoRepository()

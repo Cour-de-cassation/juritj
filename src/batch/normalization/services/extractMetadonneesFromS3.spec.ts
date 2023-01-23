@@ -1,6 +1,13 @@
 import { ServiceUnavailableException } from '@nestjs/common'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 
+jest.mock('../normalization', () => ({
+  logger: {
+    log: jest.fn(),
+    error: jest.fn()
+  }
+}))
+
 describe('getDecisionFromS3', () => {
   describe('getDecisionMetadonneesFromS3File', () => {
     // TODO : mocker le getDecisionMetadonneesFromS3File fait qu'on n'est pas assez précis, on mock la totalité de l'implem de la fonction qu'on teste
