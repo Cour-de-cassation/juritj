@@ -1,10 +1,10 @@
+import { v4 as uuidv4 } from 'uuid'
 import { Metadonnees } from '../../shared/domain/metadonnees'
 import { saveMetadonnees } from './services/saveToMongo'
 import { generateUniqueId } from './services/generateUniqueId'
 import { normalizeDatesToIso8601 } from './services/convertDates'
 import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
 import { extractMetadonneesFromS3 } from './services/extractMetadonneesFromS3'
-import { v4 as uuidv4 } from 'uuid'
 import { Context } from '../../shared/infrastructure/utils/context'
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { MetadonneesDto } from '../../shared/infrastructure/dto/metadonnees.dto'
@@ -23,24 +23,24 @@ export async function normalizationJob(
 ): Promise<ConvertedDecisionWithMetadonneesDto> {
   normalizationContext.start()
   normalizationContext.setCorrelationId(uuidv4())
-  
+
   try {
     const metadonnees: MetadonneesDto = await extractMetadonneesFromS3(decisionName)
 
     logger.log(
       '[NORMALIZATION JOB] Starting with: ' +
-      JSON.stringify(metadonnees) +
-      ' and decision: ' +
-      decisionContent
+        JSON.stringify(metadonnees) +
+        ' and decision: ' +
+        decisionContent
     )
 
     logger.log(
       '[NORMALIZATION JOB] Normalization job starting for decision ' +
-      decisionName +
-      ' with metadata: ' +
-      JSON.stringify(metadonnees) +
-      ' and decision: ' +
-      decisionContent
+        decisionName +
+        ' with metadata: ' +
+        JSON.stringify(metadonnees) +
+        ' and decision: ' +
+        decisionContent
     )
 
     const idDecision = generateUniqueId(metadonnees)
@@ -60,11 +60,12 @@ export async function normalizationJob(
 
     logger.log(
       '[NORMALIZATION JOB] End of normalization job for decision ' +
-      decisionName +
-      ' with metadata: ' +
-      JSON.stringify(transformedMetadonnees) +
-      ' and decision: ' +
-      convertedDecision, idDecision
+        decisionName +
+        ' with metadata: ' +
+        JSON.stringify(transformedMetadonnees) +
+        ' and decision: ' +
+        convertedDecision,
+      idDecision
     )
     return {
       metadonnees: transformedMetadonnees,
