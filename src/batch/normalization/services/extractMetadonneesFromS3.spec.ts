@@ -1,5 +1,6 @@
 import { ServiceUnavailableException } from '@nestjs/common'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
+import { DecisionS3Repository } from '../../../shared/infrastructure/repositories/decisionS3.repository'
 
 jest.mock('../normalization', () => ({
   logger: {
@@ -8,31 +9,42 @@ jest.mock('../normalization', () => ({
   }
 }))
 
+import { extractMetadonneesFromS3 } from './extractMetadonneesFromS3'
+
 describe('getDecisionFromS3', () => {
   describe('getDecisionMetadonneesFromS3File', () => {
-    // TODO : mocker le getDecisionMetadonneesFromS3File fait qu'on n'est pas assez précis, on mock la totalité de l'implem de la fonction qu'on teste
     it('throws an error when call to S3 failed', () => {
       // GIVEN
       const filename = 'notFoundFile.wpd'
-      const mockedGetDecisionMetadonneesFromS3File = jest
-        .fn()
-        .mockRejectedValue(new ServiceUnavailableException('Error from S3 API'))
+      jest.spyOn(DecisionS3Repository.prototype, 'getDecisionByFilename').mockImplementation(() => {
+        throw new ServiceUnavailableException('Error from S3 API')
+      })
+
       expect(
         // WHEN
-        mockedGetDecisionMetadonneesFromS3File(filename)
-      ).rejects.toEqual(new ServiceUnavailableException('Error from S3 API'))
+        extractMetadonneesFromS3(filename)
+      )
+        // THEN
+        .rejects.toEqual(new ServiceUnavailableException('Error from S3 API'))
     })
 
-    it('returns metadata of the decision', () => {
+    it('returns metadata of the decision', async () => {
       // GIVEN
       const filename = 'file.wpd'
       const expected = new MockUtils().metadonneesDtoMock
-      const mockedGetDecisionMetadonneesFromS3File = jest
-        .fn()
-        .mockImplementation(() => new MockUtils().metadonneesDtoMock)
+
+      jest
+        .spyOn(DecisionS3Repository.prototype, 'getDecisionByFilename')
+        .mockImplementation(async () => {
+          return await {
+            metadonnees: new MockUtils().metadonneesDtoMock,
+            decisionIntegre: ''
+          }
+        })
+
       expect(
         // WHEN
-        mockedGetDecisionMetadonneesFromS3File(filename)
+        await extractMetadonneesFromS3(filename)
       )
         // THEN
         .toEqual(expected)

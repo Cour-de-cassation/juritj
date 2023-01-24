@@ -6,6 +6,7 @@ import { DecisionS3Repository } from './decisionS3.repository'
 describe('DecisionS3Repository', () => {
   const mockS3: MockProxy<S3> = mockDeep<S3>()
   const repository = new DecisionS3Repository(mockS3)
+
   describe('saveDecision', () => {
     it('throws error when S3 called failed', async () => {
       // GIVEN
@@ -54,11 +55,10 @@ describe('DecisionS3Repository', () => {
   })
 
   describe('getDecisionByFilename', () => {
-    // TODO : corriger ce test car mocker getDecisionByFilename est trop haut niveau
-    it('throws an error when the s3 could not be called', async () => {
+    it('throws an error when the S3 could not be called', async () => {
       // GIVEN
       const filename = 'file.wpd'
-      repository.getDecisionByFilename = jest.fn().mockImplementation(() => {
+      mockS3.getObject.mockImplementation(() => {
         throw new ServiceUnavailableException('Error from S3 API')
       })
 
