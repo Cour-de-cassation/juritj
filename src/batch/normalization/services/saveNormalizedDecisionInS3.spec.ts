@@ -10,7 +10,7 @@ jest.mock('../normalization', () => ({
   }
 }))
 
-import { saveNormalizedDecisionToS3 } from './saveNormalizedDecisionToS3'
+import { saveNormalizedDecisionInS3 } from './saveNormalizedDecisionInS3'
 
 describe('saveNormalizedDecisionFromS3', () => {
   it('throws an error when call to S3 failed', () => {
@@ -28,7 +28,7 @@ describe('saveNormalizedDecisionFromS3', () => {
 
     expect(
       // WHEN
-      saveNormalizedDecisionToS3(mockDecision, filename)
+      saveNormalizedDecisionInS3(mockDecision, filename)
     )
       // THEN
       .rejects.toEqual(new ServiceUnavailableException('Error from S3 API'))
@@ -46,7 +46,7 @@ describe('saveNormalizedDecisionFromS3', () => {
     spyOnSaveDecision.mockImplementationOnce(jest.fn())
 
     // WHEN
-    await saveNormalizedDecisionToS3(mockDecision, filename)
+    await saveNormalizedDecisionInS3(mockDecision, filename)
 
     // THEN
     expect(spyOnSaveDecision).toHaveBeenCalled()

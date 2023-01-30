@@ -36,6 +36,6 @@ describe('SaveDecisionUsecase', () => {
     usecase.execute(decisionIntegre, metadonnees)
 
     // THEN
-    expect(mockDecisionRepository.saveRawDecision).toBeCalledWith(expectedRequestDto, fileName)
+    expect(mockDecisionRepository.saveDecisionIntegre).toBeCalledWith(expectedRequestDto, fileName)
   })
 })

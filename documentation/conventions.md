@@ -66,6 +66,13 @@ Nous avons deux types de tests dans le projet :
 - des tests unitaire &rarr; testent le comportement d'un périmètre restreint
 - des tests d'intégration &rarr; testent l'API dans son ensemble, en "boîte noire" 
 
+Lors des tests des services de normalisation, les méthodes ne sont pas rattachés à une classe. Les spyOn sur ces fonctions sont donc utilisés avec l'import suivant :
+```JS
+import * as nomDuFichier from '/chemin/du/fichier'
+...
+jest.spyOn(nomDuFichier, 'methodeASpy')
+```
+
 # IDE <a name="IDE">
 Le développement de ce projet est réalisé à l'aide de [VSCode](https://code.visualstudio.com/) avec les extensions suivantes :
  - ESLint

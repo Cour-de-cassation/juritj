@@ -23,6 +23,6 @@ export class SaveDecisionUsecase {
     }
     const filename = decisionIntegre.originalname
 
-    await this.decisionsRepository.saveRawDecision(JSON.stringify(requestDto), filename)
+    await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), filename)
   }
 }

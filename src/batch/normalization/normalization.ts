@@ -1,18 +1,16 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Metadonnees } from '../../shared/domain/metadonnees'
-import { saveMetadonneesToMongo } from './services/saveToMongo'
+import { saveMetadonneesInDatabase } from './services/saveToMongo'
 import { generateUniqueId } from './services/generateUniqueId'
 import { normalizeDatesToIso8601 } from './services/convertDates'
 import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
 import { getDecisionFromS3 } from './services/extractMetadonneesFromS3'
 import { Context } from '../../shared/infrastructure/utils/context'
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
-import { MetadonneesDto } from '../../shared/infrastructure/dto/metadonnees.dto'
 import { CustomLogger } from '../../shared/infrastructure/utils/customLogger.utils'
 import { ConvertedDecisionWithMetadonneesDto } from '../../shared/infrastructure/dto/convertedDecisionWithMetadonnees.dto'
 import { fetchDecisionListFromS3 } from './services/fetchDecisionListFromS3'
-import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
-import { saveNormalizedDecisionToS3 } from './services/saveNormalizedDecisionToS3'
+import { saveNormalizedDecisionInS3 } from './services/saveNormalizedDecisionInS3'
 import { deleteRawDecisionFromS3 } from './services/deleteRawDecisionFromS3'
 
 const decisionContent = new MockUtils().decisionContent
@@ -29,11 +27,8 @@ export async function normalizationJob(
     normalizationContext.start()
     normalizationContext.setCorrelationId(uuidv4())
     const decisionList = await fetchDecisionListFromS3()
-    logger.debug('Found ' + decisionList.length + ' to normalize')
     if (decisionList.length > 0) {
-      for (const [index, decisionName] of decisionList.entries()) {
-        logger.debug('(' + (index + 1) + '/' + decisionList.length + ')')
-
+      for (const decisionName of decisionList) {
         const decision = await getDecisionFromS3(decisionName)
         const metadonnees = decision.metadonnees
 
@@ -50,14 +45,15 @@ export async function normalizationJob(
 
         const transformedMetadonnees: Metadonnees = metadonnees
         transformedMetadonnees.idDecision = idDecision
-        await saveMetadonneesToMongo(transformedMetadonnees)
+        await saveMetadonneesInDatabase(transformedMetadonnees)
+        logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
 
         decision.metadonnees = transformedMetadonnees
-        await saveNormalizedDecisionToS3(decision, decisionName)
+        await saveNormalizedDecisionInS3(decision, decisionName)
+        logger.log('[NORMALIZATION JOB] Metadonnees saved in normalized bucket.', idDecision)
 
         await deleteRawDecisionFromS3(decisionName)
-
-        logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
+        logger.log('[NORMALIZATION JOB] Decision deleted in raw bucket.', idDecision)
 
         logger.log(
           '[NORMALIZATION JOB] End of normalization job for decision ' + decisionName,
@@ -71,7 +67,7 @@ export async function normalizationJob(
 
       return listConvertedDecision
     } else {
-      logger.log('No decisions found to normalize...Exiting now')
+      logger.log('No decisions found to normalize... Exiting now')
       return []
     }
   } catch (error) {

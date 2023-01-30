@@ -11,7 +11,6 @@ describe('DecisionS3Repository', () => {
   describe('saveDecision', () => {
     it('throws error when S3 called failed', async () => {
       // GIVEN
-      const filename = 'test.wpd'
       const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
 
       mockS3.putObject.mockImplementation(() => {
@@ -28,7 +27,6 @@ describe('DecisionS3Repository', () => {
 
     it('saves the decision on S3', async () => {
       // GIVEN
-      const filename = 'test.wpd'
       const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
 
       const mockedPutObject = jest.fn().mockImplementation(() => {
@@ -84,9 +82,7 @@ describe('DecisionS3Repository', () => {
             })
         }
       })
-      const mockS3: MockProxy<S3> = mockDeep<S3>({
-        getObject: mockedGetObject
-      })
+      mockS3.getObject.mockImplementation(mockedGetObject)
       const repository = new DecisionS3Repository(mockS3)
 
       expect(
@@ -119,11 +115,7 @@ describe('DecisionS3Repository', () => {
       // GIVEN
       const filename = 'test.wpd'
 
-      const mockedDeleteObject = jest.fn().mockImplementation(jest.fn())
-
-      const mockS3: MockProxy<S3> = mockDeep<S3>({
-        deleteObject: mockedDeleteObject
-      })
+      mockS3.deleteObject.mockImplementation(jest.fn())
 
       const repository = new DecisionS3Repository(mockS3)
 
@@ -170,9 +162,7 @@ describe('DecisionS3Repository', () => {
             })
         }
       })
-      const mockS3: MockProxy<S3> = mockDeep<S3>({
-        listObjectsV2: mockedGetListDecisions
-      })
+      mockS3.listObjectsV2.mockImplementation(mockedGetListDecisions)
       const repository = new DecisionS3Repository(mockS3)
 
       expect(

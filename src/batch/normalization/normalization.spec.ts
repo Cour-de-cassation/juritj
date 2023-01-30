@@ -9,7 +9,7 @@ jest.spyOn(process, 'exit').mockImplementation()
 import { normalizationJob } from './normalization'
 import * as fetchDecisionListFromS3 from './services/fetchDecisionListFromS3'
 import * as getDecisionFromS3 from './services/extractMetadonneesFromS3'
-import * as saveNormalizedDecisionToS3 from './services/saveNormalizedDecisionToS3'
+import * as saveNormalizedDecisionInS3 from './services/saveNormalizedDecisionInS3'
 import * as deleteRawDecisionFromS3 from './services/deleteRawDecisionFromS3'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 
@@ -28,7 +28,7 @@ describe('Normalization job', () => {
     .spyOn(getDecisionFromS3, 'getDecisionFromS3')
     .mockImplementation(() => Promise.resolve(mockDecision))
 
-  jest.spyOn(saveNormalizedDecisionToS3, 'saveNormalizedDecisionToS3').mockImplementation(jest.fn())
+  jest.spyOn(saveNormalizedDecisionInS3, 'saveNormalizedDecisionInS3').mockImplementation(jest.fn())
 
   jest.spyOn(deleteRawDecisionFromS3, 'deleteRawDecisionFromS3').mockImplementation(jest.fn())
   const decisionContent = new MockUtils().decisionContent

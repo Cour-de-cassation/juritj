@@ -1,5 +1,5 @@
 import * as S3 from 'aws-sdk/clients/s3'
-
+import { v4 as uuidv4 } from 'uuid'
 import { ServiceUnavailableException, Logger } from '@nestjs/common'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 import { CollectDto } from '../dto/collect.dto'
@@ -23,16 +23,17 @@ export class DecisionS3Repository implements DecisionRepository {
     }
   }
 
-  async saveRawDecision(requestToS3Dto, filename) {
+  async saveDecisionIntegre(requestToS3Dto, filename) {
     const reqParams = {
       Body: requestToS3Dto,
       Bucket: process.env.SCW_BUCKET_NAME_RAW,
-      Key: new Date().toISOString() + filename
+      Key: uuidv4() + '-' + filename
     }
 
     await this.saveDecision(reqParams)
   }
-  async saveNormalizedDecision(requestToS3Dto, filename) {
+
+  async saveDecisionNormalisee(requestToS3Dto, filename) {
     const reqParams = {
       Body: requestToS3Dto,
       Bucket: process.env.SCW_BUCKET_NAME_NORMALIZED,

@@ -37,8 +37,21 @@ Créer un fichier `.env` à la racine du dossier avec les variables suivantes :
 
 ```.env
 ### API DOCUMENTATION
-DOC_LOGIN=votre_login
-DOC_PASSWORD=votre_mot_de_passe
+DOC_LOGIN=loginDoc
+DOC_PASSWORD=motDePasseDoc
+
+### SCW Keys 
+SCW_S3_ACCESS_KEY=CleAccesS3Scaleway
+SCW_S3_SECRET_KEY=CleSecreteS3Scaleway
+SCW_PROJECT_ID=idProjetScaleway
+SCW_S3_URL=urlDuS3Scaleway
+SCW_S3_REGION=region
+SCW_BUCKET_NAME_RAW=nomDuBucket
+SCW_BUCKET_NAME_NORMALIZED=nomDuBucket
+
+# DB
+
+MONGODB_URL=mongodb://url-du-mongo/
 ```
 
 ### Documentation complémentaire 
