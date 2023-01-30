@@ -1,7 +1,7 @@
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { generateUniqueId } from './generateUniqueId'
 
-jest.mock('../normalization', () => ({
+jest.mock('../index', () => ({
   logger: {
     log: jest.fn(),
     error: jest.fn()

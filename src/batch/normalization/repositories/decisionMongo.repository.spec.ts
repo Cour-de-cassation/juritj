@@ -3,7 +3,7 @@ import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { DecisionMongoRepository } from './decisionMongo.repository'
 import mongoose from 'mongoose'
 
-jest.mock('../normalization', () => ({
+jest.mock('../index', () => ({
   logger: {
     log: jest.fn(),
     error: jest.fn()
