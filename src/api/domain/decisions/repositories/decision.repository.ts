@@ -1,3 +1,4 @@
 export interface DecisionRepository {
-  saveDecision(decisionIntegre: string, filename: string): Promise<void>
+  saveDecisionIntegre(decisionIntegre: string, filename?: string): Promise<void>
+  saveDecisionNormalisee(decisionIntegre: string, filename?: string): Promise<void>
 }
