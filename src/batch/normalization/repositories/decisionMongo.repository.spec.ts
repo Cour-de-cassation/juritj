@@ -11,7 +11,7 @@ jest.mock('../index', () => ({
 }))
 
 describe('saveDecision', () => {
-  const mockMetadonnees = new MockUtils().metadonneesDtoMock
+  const mockDecision = new MockUtils().decisionMock
   const mongoRepository = new DecisionMongoRepository()
 
   it('throws an error when connection to mongo failed', async () => {
@@ -22,7 +22,7 @@ describe('saveDecision', () => {
 
     expect(
       // WHEN
-      mongoRepository.saveDecision(mockMetadonnees)
+      mongoRepository.saveDecision(mockDecision)
     )
       // THEN
       .rejects.toEqual(new ServiceUnavailableException('Error from database'))
@@ -38,11 +38,11 @@ describe('saveDecision', () => {
     const insertDataMock = jest
       .spyOn(mongoRepository, 'insertMetadonnees')
       .mockImplementation(async () => {
-        return mockMetadonnees
+        return mockDecision
       })
 
     // WHEN
-    await mongoRepository.saveDecision(mockMetadonnees)
+    await mongoRepository.saveDecision(mockDecision)
 
     // THEN
     expect(insertDataMock).toHaveBeenCalled()

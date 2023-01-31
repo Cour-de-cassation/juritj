@@ -1,8 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Decision, Partie, President } from '../../../shared/domain/metadonnees'
+import { DecisionAssociee, Partie, President } from '../../domain/metadonnees'
 
 @Schema()
-export class Metadonnees {
+export class DecisionModel {
+  @Prop()
+  decision: string
+
   @Prop()
   idDecision: string
 
@@ -43,10 +46,10 @@ export class Metadonnees {
   president?: President
 
   @Prop()
-  chainage?: Decision[]
+  chainage?: DecisionAssociee[]
 
   @Prop()
-  decisionAssociee: Decision
+  decisionAssociee: DecisionAssociee
 
   @Prop()
   parties: Partie[]
@@ -79,4 +82,4 @@ export class Metadonnees {
   occultationComplementaire?: string
 }
 
-export const MetadonneesSchema = SchemaFactory.createForClass(Metadonnees)
+export const DecisionSchema = SchemaFactory.createForClass(DecisionModel)
