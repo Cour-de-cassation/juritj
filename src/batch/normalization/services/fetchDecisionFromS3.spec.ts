@@ -72,7 +72,7 @@ describe('fetchDecisionListFromS3', () => {
     expect(
       // WHEN
       await fetchDecisionListFromS3()
+      // THEN
     ).toEqual(expected)
-    // THEN
   })
 })

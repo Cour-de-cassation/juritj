@@ -1,6 +1,4 @@
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
-
-jest.mock('./services/saveToMongo')
 const mockUtils = new MockUtils()
 const fakeMetadonnees = mockUtils.metadonneesDtoMock
 
@@ -8,10 +6,9 @@ jest.spyOn(process, 'exit').mockImplementation()
 
 import { normalizationJob } from './normalization'
 import * as fetchDecisionListFromS3 from './services/fetchDecisionListFromS3'
-import * as getDecisionFromS3 from './services/extractMetadonneesFromS3'
-import * as saveNormalizedDecisionInS3 from './services/saveNormalizedDecisionInS3'
-import * as deleteRawDecisionFromS3 from './services/deleteRawDecisionFromS3'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
+import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
+import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
 
 describe('Normalization job', () => {
   const decisionName = 'filename.wpd'
@@ -24,13 +21,14 @@ describe('Normalization job', () => {
   jest
     .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
     .mockImplementation(() => Promise.resolve([decisionName]))
+
+  jest.spyOn(DecisionMongoRepository.prototype, 'saveDecision').mockImplementation(jest.fn())
   jest
-    .spyOn(getDecisionFromS3, 'getDecisionFromS3')
+    .spyOn(DecisionS3Repository.prototype, 'getDecisionByFilename')
     .mockImplementation(() => Promise.resolve(mockDecision))
+  jest.spyOn(DecisionS3Repository.prototype, 'saveDecisionNormalisee').mockImplementation(jest.fn())
+  jest.spyOn(DecisionS3Repository.prototype, 'deleteDecision').mockImplementation(jest.fn())
 
-  jest.spyOn(saveNormalizedDecisionInS3, 'saveNormalizedDecisionInS3').mockImplementation(jest.fn())
-
-  jest.spyOn(deleteRawDecisionFromS3, 'deleteRawDecisionFromS3').mockImplementation(jest.fn())
   const decisionContent = new MockUtils().decisionContent
 
   describe('For one unique decision', () => {

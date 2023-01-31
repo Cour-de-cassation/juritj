@@ -1,22 +1,26 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Metadonnees } from '../../shared/domain/metadonnees'
-import { saveMetadonneesInDatabase } from './services/saveToMongo'
 import { generateUniqueId } from './services/generateUniqueId'
 import { normalizeDatesToIso8601 } from './services/convertDates'
 import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
-import { getDecisionFromS3 } from './services/extractMetadonneesFromS3'
 import { Context } from '../../shared/infrastructure/utils/context'
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { CustomLogger } from '../../shared/infrastructure/utils/customLogger.utils'
 import { ConvertedDecisionWithMetadonneesDto } from '../../shared/infrastructure/dto/convertedDecisionWithMetadonnees.dto'
 import { fetchDecisionListFromS3 } from './services/fetchDecisionListFromS3'
-import { saveNormalizedDecisionInS3 } from './services/saveNormalizedDecisionInS3'
-import { deleteRawDecisionFromS3 } from './services/deleteRawDecisionFromS3'
+import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
+import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
+// import DecisionMongoRepository from './repositories/decisionMongo.repository'
 
 const decisionContent = new MockUtils().decisionContent
 
 const normalizationContext = new Context()
 export const logger = new CustomLogger(normalizationContext)
+
+const decisionMongoRepository = new DecisionMongoRepository()
+
+const s3Repository = new DecisionS3Repository()
+const bucketNameIntegre = process.env.SCW_BUCKET_NAME_RAW
 
 export async function normalizationJob(
   decisionContent: string
@@ -29,7 +33,7 @@ export async function normalizationJob(
     const decisionList = await fetchDecisionListFromS3()
     if (decisionList.length > 0) {
       for (const decisionName of decisionList) {
-        const decision = await getDecisionFromS3(decisionName)
+        const decision = await s3Repository.getDecisionByFilename(decisionName)
         const metadonnees = decision.metadonnees
 
         logger.log('[NORMALIZATION JOB] Normalization job starting for decision ' + decisionName)
@@ -45,14 +49,14 @@ export async function normalizationJob(
 
         const transformedMetadonnees: Metadonnees = metadonnees
         transformedMetadonnees.idDecision = idDecision
-        await saveMetadonneesInDatabase(transformedMetadonnees)
+        await decisionMongoRepository.saveDecision(transformedMetadonnees)
         logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
 
         decision.metadonnees = transformedMetadonnees
-        await saveNormalizedDecisionInS3(decision, decisionName)
+        await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionName)
         logger.log('[NORMALIZATION JOB] Metadonnees saved in normalized bucket.', idDecision)
 
-        await deleteRawDecisionFromS3(decisionName)
+        await s3Repository.deleteDecision(decisionName, bucketNameIntegre)
         logger.log('[NORMALIZATION JOB] Decision deleted in raw bucket.', idDecision)
 
         logger.log(

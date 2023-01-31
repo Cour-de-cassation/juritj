@@ -7,9 +7,12 @@ import { logger } from '../normalization'
 export class DecisionMongoRepository {
   private mongoClient: Mongoose
 
+  constructor() {
+    console.log('constructor')
+  }
+
   async saveDecision(metadonnees: Metadonnees): Promise<Metadonnees> {
     this.mongoClient = await mongoose.connect(process.env.MONGODB_URL)
-
     const collections = this.mongoClient.model('metadonnees', MetadonneesSchema)
 
     return this.insertMetadonnees(collections, metadonnees).catch(() => {
