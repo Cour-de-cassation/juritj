@@ -101,9 +101,15 @@ export class DecisionS3Repository implements DecisionRepository {
         Bucket: process.env.SCW_BUCKET_NAME_RAW
       }
       const dataFromS3 = await this.s3ApiClient.listObjectsV2(reqParams)
-      const decisionList = await dataFromS3.promise().then((data) => {
-        return data.Contents
-      })
+      const decisionList = await dataFromS3
+        .promise()
+        .then((data) => {
+          return data.Contents
+        })
+        .catch((error) => {
+          this.logger.error(error + error.stack)
+          throw new ServiceUnavailableException('Error from S3 API')
+        })
 
       return decisionList
     } catch (error) {
