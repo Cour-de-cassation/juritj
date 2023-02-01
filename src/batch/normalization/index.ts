@@ -18,7 +18,7 @@ function startJob() {
         normalizationJob(decisionContent)
       } catch (error) {
         logger.error(error)
-        logger.log('leaving normalization')
+        logger.log('[NORMALIZATION JOB] Leaving due to an error...')
         process.exit(EXIT_ERROR_CODE)
       }
     },
