@@ -2,7 +2,7 @@ import { ServiceUnavailableException } from '@nestjs/common'
 import mongoose, { Mongoose } from 'mongoose'
 import { Metadonnees } from '../../../shared/domain/metadonnees'
 import { MetadonneesSchema } from '../../../shared/infrastructure/repositories/decisionMongo.schema'
-import { logger } from '../normalization'
+import { logger } from '../index'
 
 export class DecisionMongoRepository {
   private mongoClient: Mongoose
