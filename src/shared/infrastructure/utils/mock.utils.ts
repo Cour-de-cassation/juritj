@@ -52,6 +52,6 @@ export class MockUtils {
 
   decisionMock = {
     decision: this.decisionContent,
-    ...this.metadonneesDtoMock
+    metadonnees: this.metadonneesDtoMock
   }
 }
