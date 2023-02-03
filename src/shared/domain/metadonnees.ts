@@ -7,7 +7,7 @@ export class President {
   civilite: string
 }
 
-export class Decision {
+export class DecisionAssociee {
   numeroRegistre: string
   numeroRoleGeneral: string
   idJuridiction: string
@@ -24,7 +24,6 @@ export class Partie {
 }
 
 export class Metadonnees {
-  idDecision?: string
   nomJuridiction: string
   idJuridiction: string
   codeJuridiction?: string
@@ -37,8 +36,8 @@ export class Metadonnees {
   codeDecision: string
   libelleCodeDecision: string
   president?: President
-  chainage?: Decision[]
-  decisionAssociee: Decision
+  chainage?: DecisionAssociee[]
+  decisionAssociee: DecisionAssociee
   parties: Partie[]
   partie: Partie
   sommaire?: string
@@ -49,4 +48,8 @@ export class Metadonnees {
   public: boolean
   recommandationOccultation: boolean
   occultationComplementaire?: string
+}
+
+export class MetadonneesNormalisee extends Metadonnees {
+  idDecision: string
 }

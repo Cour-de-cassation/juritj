@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { Metadonnees } from '../../shared/domain/metadonnees'
+import { MetadonneesNormalisee } from '../../shared/domain/metadonnees'
 import { generateUniqueId } from './services/generateUniqueId'
 import { normalizeDatesToIso8601 } from './services/convertDates'
 import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
@@ -8,6 +8,7 @@ import { normalizationContext, logger } from './index'
 import { fetchDecisionListFromS3 } from './services/fetchDecisionListFromS3'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
+import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 const s3Repository = new DecisionS3Repository()
@@ -37,10 +38,18 @@ export async function normalizationJob(
       const convertedDecision = normalizeDatesToIso8601(cleanedDecision)
       logger.log('[NORMALIZATION JOB] Decision dates converted to ISO8601.', idDecision)
 
-      const transformedMetadonnees: Metadonnees = metadonnees
-      transformedMetadonnees.idDecision = idDecision
-      await decisionMongoRepository.saveDecision(transformedMetadonnees)
-      logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
+        const transformedMetadonnees: MetadonneesNormalisee = {
+          idDecision: idDecision,
+          ...metadonnees
+        }
+
+        const transformedDecision: DecisionModel = {
+          decision: convertedDecision,
+          ...transformedMetadonnees
+        }
+
+        await decisionMongoRepository.saveDecision(transformedDecision)
+        logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
 
       decision.metadonnees = transformedMetadonnees
       await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionName)
