@@ -38,18 +38,18 @@ export async function normalizationJob(
       const convertedDecision = normalizeDatesToIso8601(cleanedDecision)
       logger.log('[NORMALIZATION JOB] Decision dates converted to ISO8601.', idDecision)
 
-        const transformedMetadonnees: MetadonneesNormalisee = {
-          idDecision: idDecision,
-          ...metadonnees
-        }
+      const transformedMetadonnees: MetadonneesNormalisee = {
+        idDecision: idDecision,
+        ...metadonnees
+      }
 
-        const transformedDecision: DecisionModel = {
-          decision: convertedDecision,
-          ...transformedMetadonnees
-        }
+      const transformedDecision: DecisionModel = {
+        decision: convertedDecision,
+        metadonnees: transformedMetadonnees
+      }
 
-        await decisionMongoRepository.saveDecision(transformedDecision)
-        logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
+      await decisionMongoRepository.saveDecision(transformedDecision)
+      logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
 
       decision.metadonnees = transformedMetadonnees
       await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionName)
