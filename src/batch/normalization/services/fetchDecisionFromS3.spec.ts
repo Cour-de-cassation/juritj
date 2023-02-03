@@ -17,7 +17,7 @@ describe('fetchDecisionListFromS3', () => {
       .rejects.toEqual(new ServiceUnavailableException('Error from S3 API'))
   })
 
-  it('return list of decisions from s3', async () => {
+  it('return list of decisions from s3 adn fetch the 10 first', async () => {
     // GIVEN
     const expected = [
       'filename',
@@ -65,6 +65,39 @@ describe('fetchDecisionListFromS3', () => {
         },
         {
           Key: 'filename11'
+        }
+      ])
+    })
+
+    expect(
+      // WHEN
+      await fetchDecisionListFromS3()
+      // THEN
+    ).toEqual(expected)
+  })
+
+  it('return list of decisions from s3 and fetch an amount inferior of the number set', async () => {
+    // GIVEN
+    const expected = ['filename', 'filename2', 'filename3', 'filename4', 'filename5', 'filename6']
+    jest.spyOn(DecisionS3Repository.prototype, 'getDecisionList').mockImplementationOnce(() => {
+      return Promise.resolve([
+        {
+          Key: 'filename'
+        },
+        {
+          Key: 'filename2'
+        },
+        {
+          Key: 'filename3'
+        },
+        {
+          Key: 'filename4'
+        },
+        {
+          Key: 'filename5'
+        },
+        {
+          Key: 'filename6'
         }
       ])
     })

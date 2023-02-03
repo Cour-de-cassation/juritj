@@ -6,7 +6,11 @@ export async function fetchDecisionListFromS3() {
   const repository = new DecisionS3Repository()
   try {
     const rawDecisionList = await repository.getDecisionList()
-    return rawDecisionList.splice(0, NUMBER_OF_DECISION_TO_RETURN).map((decision) => decision.Key)
+    const numberOfDecisionToFetch =
+      rawDecisionList.length >= NUMBER_OF_DECISION_TO_RETURN
+        ? NUMBER_OF_DECISION_TO_RETURN
+        : rawDecisionList.length
+    return rawDecisionList.splice(0, numberOfDecisionToFetch).map((decision) => decision.Key)
   } catch (error) {
     throw new ServiceUnavailableException('Error from S3 API')
   }
