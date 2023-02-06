@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { MetadonneesNormalisee } from '../../shared/domain/metadonnees'
 import { generateUniqueId } from './services/generateUniqueId'
-import { normalizeDatesToIso8601 } from './services/convertDates'
 import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
 import { ConvertedDecisionWithMetadonneesDto } from '../../shared/infrastructure/dto/convertedDecisionWithMetadonnees.dto'
 import { normalizationContext, logger } from './index'
@@ -35,16 +34,13 @@ export async function normalizationJob(
       const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
       logger.log('[NORMALIZATION JOB] Unnecessary characters removed from decision.', idDecision)
 
-      const convertedDecision = normalizeDatesToIso8601(cleanedDecision)
-      logger.log('[NORMALIZATION JOB] Decision dates converted to ISO8601.', idDecision)
-
       const transformedMetadonnees: MetadonneesNormalisee = {
         idDecision: idDecision,
         ...metadonnees
       }
 
       const transformedDecision: DecisionModel = {
-        decision: convertedDecision,
+        decision: cleanedDecision,
         metadonnees: transformedMetadonnees
       }
 
@@ -64,7 +60,7 @@ export async function normalizationJob(
       )
       listConvertedDecision.push({
         metadonnees: transformedMetadonnees,
-        decisionNormalisee: convertedDecision
+        decisionNormalisee: cleanedDecision
       })
     }
 

@@ -1,14 +1,23 @@
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
-const mockUtils = new MockUtils()
-const fakeMetadonnees = mockUtils.metadonneesDtoMock
-
-jest.spyOn(process, 'exit').mockImplementation()
-
 import { normalizationJob } from './normalization'
 import * as fetchDecisionListFromS3 from './services/fetchDecisionListFromS3'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
+
+jest.mock('./index', () => ({
+  logger: {
+    log: jest.fn(),
+    error: jest.fn()
+  },
+  normalizationContext: {
+    start: jest.fn(),
+    setCorrelationId: jest.fn()
+  }
+}))
+
+const mockUtils = new MockUtils()
+const fakeMetadonnees = mockUtils.metadonneesDtoMock
 
 describe('Normalization job', () => {
   const decisionName = 'filename.wpd'
@@ -50,31 +59,11 @@ describe('Normalization job', () => {
         .toEqual(expected)
     })
 
-    it('returns decision with converted dates', async () => {
-      // GIVEN
-      const fakeDecision =
-        'Ceci est un texte qui contient une date : le 9 janvier 2020. Nous la retrouvons sous la forme 09/01/2020 ou encore 09-01-2020. Nous pouvons également tester le 02/23/2020.'
-      const expectedDecision =
-        'Ceci est un texte qui contient une date : le 2020-01-09. Nous la retrouvons sous la forme 2020-01-09 ou encore 2020-01-09. Nous pouvons également tester le 2020-02-23.'
-      const expected = [
-        {
-          metadonnees: { ...fakeMetadonnees, idDecision: mockUtils.uniqueDecisionId },
-          decisionNormalisee: expectedDecision
-        }
-      ]
-      expect(
-        // WHEN
-        await normalizationJob(fakeDecision)
-      )
-        // THEN
-        .toEqual(expected)
-    })
-
     it('returns decision with unnecessary characters removed', async () => {
       // GIVEN
       const fakeDecision =
         'Ceci est un\r\ntexte qui \tcontient \fune date : \rle 9    janvier    2020'
-      const expectedDecision = 'Ceci est un\ntexte qui contient une date : \nle 2020-01-09'
+      const expectedDecision = 'Ceci est un\ntexte qui contient une date : \nle 9 janvier 2020'
 
       const expected = [
         {
