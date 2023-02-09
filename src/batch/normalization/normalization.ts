@@ -8,6 +8,7 @@ import { fetchDecisionListFromS3 } from './services/fetchDecisionListFromS3'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
+import { LabelStatus } from '../../shared/domain/enums'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 const s3Repository = new DecisionS3Repository()
@@ -36,6 +37,7 @@ export async function normalizationJob(
 
       const transformedMetadonnees: MetadonneesNormalisee = {
         idDecision: idDecision,
+        labelStatus: LabelStatus.ToBeTreated,
         ...metadonnees
       }
 

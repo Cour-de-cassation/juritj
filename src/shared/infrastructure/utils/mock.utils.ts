@@ -1,4 +1,4 @@
-import { TypePartie } from '../../domain/enums'
+import { LabelStatus, TypePartie } from '../../domain/enums'
 
 export class MockUtils {
   uniqueDecisionId = `TJ75011A01/12345202211210123456789`
@@ -44,7 +44,8 @@ export class MockUtils {
     codeNature: '6C',
     libelleNature: 'Autres demandes en matière de frais et dépens',
     public: false,
-    recommandationOccultation: false
+    recommandationOccultation: false,
+    labelStatus: LabelStatus.ToBeTreated
   }
 
   decisionContent =

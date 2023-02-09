@@ -1,4 +1,4 @@
-import { QualitePartie, TypePartie } from './enums'
+import { LabelStatus, QualitePartie, TypePartie } from './enums'
 
 export class President {
   fonction: string
@@ -52,4 +52,5 @@ export class Metadonnees {
 
 export class MetadonneesNormalisee extends Metadonnees {
   idDecision: string
+  labelStatus: LabelStatus
 }
