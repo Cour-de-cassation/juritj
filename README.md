@@ -23,6 +23,12 @@ Pour démarrer l'application, écrire dans un terminal :
 npm run start:dev #for the dev environment
  ```
 
+Pour lancer l'application avec Docker, écrire dans un terminal : 
+```bash
+docker build . -t juritj:1.0.0
+docker run -p 8005:3000 --env-file=.env juritj:1.0.0
+```
+
 ### Tests
 
 Pour lancer les tests, écrire dans un terminal : 
