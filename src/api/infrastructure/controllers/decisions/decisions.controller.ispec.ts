@@ -48,7 +48,7 @@ describe('Decisions Module - Integration Test', () => {
 
   it('POST /decisions returns 400 when there is no file attached', async () => {
     // GIVEN
-    const metadata = { juridictionName: 'hello' }
+    const metadata = new MockUtils().metadonneesDtoMock
 
     // WHEN
     const res = await request(app.getHttpServer())
@@ -63,12 +63,31 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some fake data')
     const xmlFilename = 'filename.xml'
-    const metadata = { juridictionName: 'hello' }
+    const metadata = new MockUtils().metadonneesDtoMock
 
     // WHEN
     const res = await request(app.getHttpServer())
       .post('/decisions')
-      .attach('decisionIntegre', myBufferedFile, xmlFilename)
+      .attach('decisionIntegre', myBufferedFile, { filename: xmlFilename })
+      .field('metadonnees', JSON.stringify(metadata))
+
+    // THEN
+    expect(res.statusCode).toBe(HttpStatus.BAD_REQUEST)
+  })
+
+  it('POST /decisions returns 400 when file extension is not wpd', async () => {
+    // GIVEN
+    const myBufferedFile = Buffer.from('some fake data')
+    const xmlFilename = 'filename.xml'
+    const metadata = new MockUtils().metadonneesDtoMock
+
+    // WHEN
+    const res = await request(app.getHttpServer())
+      .post('/decisions')
+      .attach('decisionIntegre', myBufferedFile, {
+        filename: xmlFilename,
+        contentType: 'application/vnd.wordperfect'
+      })
       .field('metadonnees', JSON.stringify(metadata))
 
     // THEN

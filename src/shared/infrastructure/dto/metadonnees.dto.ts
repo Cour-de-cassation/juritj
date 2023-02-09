@@ -265,7 +265,7 @@ export class MetadonneesDto {
   @ApiPropertyOptional({
     description: 'Liste des décisions intègres chainées à la décision',
     type: [DecisionDto],
-    example: new MockUtils().metadonneesDtoMock.decisionAssociee
+    example: [new MockUtils().metadonneesDtoMock.decisionAssociee]
   })
   @IsArray()
   @IsOptional()
