@@ -37,7 +37,7 @@ export async function normalizationJob(
 
       const transformedMetadonnees: MetadonneesNormalisee = {
         idDecision: idDecision,
-        labelStatus: LabelStatus.ToBeTreated,
+        labelStatus: LabelStatus.TOBETREATED,
         ...metadonnees
       }
 

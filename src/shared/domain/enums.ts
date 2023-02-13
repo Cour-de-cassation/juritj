@@ -16,7 +16,7 @@ export enum QualitePartie {
 }
 
 export enum LabelStatus {
-  ToBeTreated = 'ToBeTreated',
-  Loaded = 'Loaded',
-  Done = 'Done'
+  TOBETREATED = 'toBeTreated',
+  LOADED = 'loaded',
+  DONE = 'done'
 }

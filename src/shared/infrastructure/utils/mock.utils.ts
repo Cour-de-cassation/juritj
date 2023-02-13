@@ -45,7 +45,7 @@ export class MockUtils {
     libelleNature: 'Autres demandes en matière de frais et dépens',
     public: false,
     recommandationOccultation: false,
-    labelStatus: LabelStatus.ToBeTreated
+    labelStatus: LabelStatus.TOBETREATED
   }
 
   decisionContent =
