@@ -1,3 +1,4 @@
+import { LabelStatus } from '../../../shared/domain/enums'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { DecisionLabelDTO, mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
 
@@ -30,7 +31,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       jurisdictionCode: undefined,
       jurisdictionId: 'TJ75011',
       jurisdictionName: 'Juridictions civiles de première instance',
-      labelStatus: null,
+      labelStatus: LabelStatus.TOBETREATED,
       labelTreatments: null,
       locked: false,
       natureAffaireCivil: 'Autres demandes en matière de frais et dépens',
