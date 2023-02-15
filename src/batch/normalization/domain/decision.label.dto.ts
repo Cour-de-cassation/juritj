@@ -1,9 +1,6 @@
 import { ObjectId } from 'mongoose'
+import { LabelStatus } from 'src/shared/domain/enums'
 import { DecisionModel } from 'src/shared/infrastructure/repositories/decisionModel.schema'
-
-type labelStatusType = 'toBeTreated' | 'loaded' | 'done' | 'exported' | 'blocked'
-
-const labelStatuses = ['toBeTreated', 'loaded', 'done', 'exported', 'blocked'] as labelStatusType[]
 
 export class DecisionLabelDTO {
   _id: ObjectId
@@ -28,7 +25,7 @@ export class DecisionLabelDTO {
   jurisdictionCode: string
   jurisdictionId: string
   jurisdictionName: string
-  labelStatus: typeof labelStatuses[number]
+  labelStatus: LabelStatus
   labelTreatments: labelTreatmentsType
   locked: boolean
   occultation: {
@@ -85,7 +82,7 @@ export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): D
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,
     jurisdictionName: decision.metadonnees.nomJuridiction,
-    labelStatus: null,
+    labelStatus: decision.metadonnees.labelStatus,
     labelTreatments: null,
     locked: false,
     occultation: {
