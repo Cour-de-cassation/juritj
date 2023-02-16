@@ -15,35 +15,51 @@ et sa pertinence pour JuriTJ (Dans le cadre JuriTJ, Quelle est son utilité?)
 export class DecisionLabelDTO {
   /**
    * idMongo , Pas utilisé(cf Sebastien)
+   * Sébastien : L'id MongoDB de la décision (ObjectId) est utilisé afin de générer
+   * l'id de celle-ci dans Judilibre (string).
    */
   _id: ObjectId
 
   /**
    * pas utilisé (cf Sebastien)
+   * Sébastien : Initialement prévu pour stocker le nombre de révisions successives de la décision, 
+   * au final pas utilisé.
    */
   _rev: number
 
   /**
    * Pas Utilisé (cf Sebastien)
+   * Sébastien : Initialement prévu pour stocker le numéro de version du modèle de document, 
+   * afin de gérer finement d'éventuelles mises à jour de documents déjà publiés suite à des
+   * évolutions du modèle, au final pas utilisé.
    */
   _version: number
 
   /**
    * Pas utilisé par Label (cf Sebastien)
+   * Groupe de métadonnées utilisées en partie pour la publication dans Judilibre
    */
   analysis: {
-    analyse: string[] //
-    doctrine: string //
-    link: string //
-    reference: Array<string> //
-    source: string //
-    summary: string //
-    target: string //
-    title: Array<string> //
+    analyse: string[] // Eléments de titrage et d'analyse complémentaires, non utilisé pour l'instant 
+                      // (CC seulement)
+    doctrine: string // Non utilisé
+    link: string  // Rapprochements de jurisprudence = références textuelles vers d'autres décisions de CC
+                  // (enrichissement saisi manuellement en amont, la plupart du temps postérieurement
+                  // à la publication - CC seulement)
+    reference: Array<string>  // Eléments de titrage et d'analyse complémentaires, non utilisé pour l'instant 
+                              // (CC seulement)
+    source: string  // Non utilisé
+    summary: string   // Résumé de la décision (enrichissement saisi manuellement en amont, 
+                      // la plupart du temps postérieurement à la publication - CC seulement)
+    target: string  // Texte(s) visé(s) (enrichissement saisi manuellement en amont, 
+                    // la plupart du temps postérieurement à la publication - CC seulement)
+    title: Array<string>  // Eléments de titrage (enrichissement saisi manuellement en amont, 
+                          // la plupart du temps postérieurement à la publication - CC seulement)
   }
 
   /**
    * Pas utilisé par Label (cf Sebastien)
+   * Numéro(s) de pourvoi de la décision
    */
   appeals: Array<string>
 
@@ -77,16 +93,21 @@ export class DecisionLabelDTO {
    * c'est quand on a une décision de la Cour de cassation qui attaque une décision de cour d'appel ->
    *  on va plus l'utilisé et on va passer sur la table Affaires (judilibre-index)
    * A discuter lors de sujet Chainage
+   * Sébastien : vaut uniquement pour CC, substitution en place via une API de l'Index (cf. https://github.com/Cour-de-cassation/openjustice-sder/blob/master/doc/chainage.md)
    */
   decatt?: number[]
 
   /**
    * Pas utilisé par Label
+   * Sébastien : jurisdictionCode et jurisdictionId conservent les différentes manières 
+   * (plus ou moins homogènes) de codifier et/ou identifier la juridiction émettrice.
+   * Utilisé (comme on peut) dans Judilibre. 
    */
   jurisdictionCode: string
 
   /**
    * Pas utilisé par Label
+   * Cf. jurisdictionCode.
    */
   jurisdictionId: string
 
@@ -110,6 +131,8 @@ export class DecisionLabelDTO {
 
   /**
    * Pas utilisé par Label
+   * Sébastien : Initialement prévu pour permettre de bloquer les traitemens sur une décision,
+   * au final pas utilisé.
    */
   locked: boolean
 
@@ -146,6 +169,12 @@ export class DecisionLabelDTO {
 
   /**
    * N'est pas présent dans la base SDER, donc le schéma est probablement faux sur ce champ
+   * Sébastien : reprend en fait le statut de pseudonymisation initialisé 
+   * qui est utilisé en amont (dans les bases Oracle = champ IND_ANO) : 
+   *  - 0 : à traiter
+   *  - 1 : en cours
+   *  - 2 : traité
+   *  - 4 : en erreur
    */
   pseudoStatus: string
 
@@ -164,11 +193,14 @@ export class DecisionLabelDTO {
 
   /**
    * Pas utilisé par Label (cf Sebastien)
+   * Sébastien : CA seulement, reprend et convertit en booléen la valeur de l'indicateur original JDEC_IND_DEC_PUB
    */
   public: boolean | null
 
   /**
    * Pas utilisé par Label (cf Sebastien)
+   * Sébastien : numéro de la décision "au registre" (dépend de la source, dans sa signification
+   * comme dans son utilisation pour la publication)
    */
   registerNumber: string
 
@@ -202,6 +234,9 @@ export class DecisionLabelDTO {
 
   /**
    * Probablement dupliqué pubCategory (il peut y avoir plusieurs lettres), merge dans Label
+   * Sébastien : pubCategory est un champ "historique", qui n'est plus utilisé pour le flux. 
+   * La propriété publication est alimenté par les nouveaux indicateurs positionnés en amont:  
+   * IND_BULLETIN, IND_RAPPORT, IND_LETTRE et IND_COMMUNIQUE (CC only)
    */
   publication?: string[]
 
