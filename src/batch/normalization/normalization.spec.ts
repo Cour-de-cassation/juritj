@@ -4,6 +4,7 @@ import * as fetchDecisionListFromS3 from './services/fetchDecisionListFromS3'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
+import * as getDecisionIntegreContent from './services/getDecisionIntegreContent'
 
 jest.mock('./index', () => ({
   logger: {
@@ -16,6 +17,7 @@ jest.mock('./index', () => ({
   }
 }))
 
+getDecisionIntegreContent
 const mockUtils = new MockUtils()
 const fakeMetadonnees = mockUtils.metadonneesDtoMock
 
@@ -37,9 +39,7 @@ describe('Normalization job', () => {
     .mockImplementation(() => Promise.resolve(mockDecision))
   jest.spyOn(DecisionS3Repository.prototype, 'saveDecisionNormalisee').mockImplementation(jest.fn())
   jest.spyOn(DecisionS3Repository.prototype, 'deleteDecision').mockImplementation(jest.fn())
-
-  const decisionContent = new MockUtils().decisionContent
-
+  const getDecisionIntegreMock = jest.spyOn(getDecisionIntegreContent, 'getDecisionIntegreContent')
   describe('For one unique decision', () => {
     it('returns metadonnees with uniqueDecisionId', async () => {
       // GIVEN
@@ -50,10 +50,13 @@ describe('Normalization job', () => {
             'Le contenu de ma décision avec des espaces et des backslash multiples \n '
         }
       ]
+      getDecisionIntegreMock.mockImplementationOnce(() =>
+        Promise.resolve('Le contenu de ma décision avec des espaces et des backslash multiples \n ')
+      )
 
       expect(
         // WHEN
-        await normalizationJob(decisionContent)
+        await normalizationJob()
       )
         // THEN
         .toEqual(expected)
@@ -71,10 +74,11 @@ describe('Normalization job', () => {
           decisionNormalisee: expectedDecision
         }
       ]
+      getDecisionIntegreMock.mockImplementationOnce(() => Promise.resolve(fakeDecision))
 
       expect(
         // WHEN
-        await normalizationJob(fakeDecision)
+        await normalizationJob()
       )
         // THEN
         .toEqual(expected)
@@ -99,8 +103,9 @@ describe('Normalization job', () => {
             'Le contenu de ma décision avec des espaces et des backslash multiples \n '
         }
       ]
-
-      const decisionContent = new MockUtils().decisionContent
+      getDecisionIntegreMock.mockImplementation(() =>
+        Promise.resolve('Le contenu de ma décision avec des espaces et des backslash multiples \n ')
+      )
 
       jest
         .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
@@ -108,7 +113,7 @@ describe('Normalization job', () => {
 
       expect(
         // WHEN
-        await normalizationJob(decisionContent)
+        await normalizationJob()
       )
         // THEN
         .toEqual(expected)

@@ -1,5 +1,4 @@
 # Source : https://github.com/nestjs/awesome-nestjs#resources boilerplates
-
 # --- Builder --- #
 FROM node:18-alpine as builder
 
@@ -31,6 +30,7 @@ RUN npm run build && npm prune --production
 
 # --- Base final image with only shared dist content --- #
 FROM node:18-alpine as shared
+
 
 ENV NODE_ENV production
 
