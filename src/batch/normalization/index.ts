@@ -13,7 +13,7 @@ export const logger = new CustomLogger(normalizationContext)
 
 async function startNormalization() {
   try {
-    await normalizationJob(decisionContent)
+    await normalizationJob()
   } catch (error) {
     logger.error(error)
     logger.log('[NORMALIZATION JOB] Leaving due to an error...')

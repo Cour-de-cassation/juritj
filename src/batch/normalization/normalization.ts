@@ -9,14 +9,13 @@ import { DecisionS3Repository } from '../../shared/infrastructure/repositories/d
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
 import { LabelStatus } from '../../shared/domain/enums'
+import { getDecisionIntegreContent } from './services/getDecisionIntegreContent'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 const s3Repository = new DecisionS3Repository()
 const bucketNameIntegre = process.env.SCW_BUCKET_NAME_RAW
 
-export async function normalizationJob(
-  decisionContent: string
-): Promise<ConvertedDecisionWithMetadonneesDto[]> {
+export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonneesDto[]> {
   const listConvertedDecision: ConvertedDecisionWithMetadonneesDto[] = []
 
   normalizationContext.start()
@@ -31,6 +30,8 @@ export async function normalizationJob(
 
       const idDecision = generateUniqueId(metadonnees)
       logger.log('[NORMALIZATION JOB] Decision ID generated', idDecision)
+
+      const decisionContent = await getDecisionIntegreContent(decision.decisionIntegre)
 
       const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
       logger.log('[NORMALIZATION JOB] Unnecessary characters removed from decision.', idDecision)
