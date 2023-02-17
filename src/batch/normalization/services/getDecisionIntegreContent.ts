@@ -1,4 +1,4 @@
-import { unlinkSync, writeFileSync } from 'fs'
+import { existsSync, unlinkSync, writeFileSync } from 'fs'
 import { logger } from '..'
 import { readWpd } from '../../../batch/normalization/services/transformWPDtoJson'
 
@@ -11,12 +11,13 @@ export async function getDecisionIntegreContent(decisionIntegre): Promise<string
   // recuperer son contenu dans une variable via le script
   const content = await readWpd(decisionIntegre.originalname)
   // supprime le fichier
-  /**
-    if (isDecisionFilePresent(decisionIntegre.originalname)){
-
-        unlinkSync(decisionIntegre.originalname)
-    }
-    **/
+  if (isDecisionFilePresent(decisionIntegre.originalname)) {
+    unlinkSync(decisionIntegre.originalname)
+  }
 
   return content
+}
+
+export function isDecisionFilePresent(filename: string): boolean {
+  return existsSync(filename)
 }
