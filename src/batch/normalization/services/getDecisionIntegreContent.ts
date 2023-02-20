@@ -1,6 +1,5 @@
 import { existsSync, unlinkSync, writeFileSync } from 'fs'
-import { logger } from '..'
-import { readWpd } from '../../../batch/normalization/services/transformWPDtoJson'
+import { readWordperfectDocument } from '../../../batch/normalization/services/transformWPDtoJson'
 
 export async function getDecisionIntegreContent(decisionIntegre): Promise<string> {
   // créer le fichier
@@ -9,15 +8,11 @@ export async function getDecisionIntegreContent(decisionIntegre): Promise<string
   })
   // lancer le script
   // recuperer son contenu dans une variable via le script
-  const content = await readWpd(decisionIntegre.originalname)
+  const content = await readWordperfectDocument(decisionIntegre.originalname)
   // supprime le fichier
-  if (isDecisionFilePresent(decisionIntegre.originalname)) {
+  if (existsSync(decisionIntegre.originalname)) {
     unlinkSync(decisionIntegre.originalname)
   }
 
   return content
-}
-
-export function isDecisionFilePresent(filename: string): boolean {
-  return existsSync(filename)
 }
