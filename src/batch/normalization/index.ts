@@ -1,10 +1,8 @@
 import { CronJob } from 'cron'
 import { Context } from '../../shared/infrastructure/utils/context'
 import { CustomLogger } from '../../shared/infrastructure/utils/customLogger.utils'
-import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { normalizationJob } from './normalization'
 
-const decisionContent = new MockUtils().decisionContent
 const EXIT_ERROR_CODE = 1
 const CRON_EVERY_HOUR = '0 * * * *'
 
