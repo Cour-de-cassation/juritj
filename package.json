@@ -30,7 +30,7 @@
     "@nestjs/config": "2.2.0",
     "@nestjs/core": "9.2.1",
     "@nestjs/mongoose": "9.2.1",
-    "@nestjs/platform-express": "9.2.1",
+    "@nestjs/platform-express": "9.3.9",
     "@nestjs/swagger": "6.1.4",
     "aws-sdk": "2.1284.0",
     "axios": "1.2.3",
