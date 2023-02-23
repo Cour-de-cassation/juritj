@@ -9,7 +9,8 @@ import {
   UploadedFile,
   UseInterceptors,
   UsePipes,
-  Logger
+  Logger,
+  UnauthorizedException
 } from '@nestjs/common'
 import {
   ApiTags,
@@ -21,7 +22,7 @@ import {
   ApiServiceUnavailableResponse
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { Request } from 'express'
+// import { Request } from 'express'
 import { SaveDecisionUsecase } from '../../../../api/usecase/saveDecision.usecase'
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
@@ -59,13 +60,29 @@ export class DecisionsController {
     @UploadedFile() decisionIntegre: Express.Multer.File,
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto,
-    @Req() request: Request
+    @Req() request: any
   ): Promise<string> {
+    if (!request.client.authorized) {
+      const cert = request.socket.getPeerCertificate()
+      if (cert.subject) {
+        throw new UnauthorizedException('Invalid Client Certificate: ', cert.subject.CN)
+      }
+      throw new UnauthorizedException('You must provide a client certificate.')
+    }
+
+    // console.log({request})
+
+    // console.log({path: request.path})
+    // console.log({printClient: request.client.authorized})
+    // console.log({printSocket: request.socket.getPeerCertificate()})
+
+    const routePath = request.method + ' ' + request.path
+    // console.log({routePath})
+
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
       throw new BadRequestException(errorMessage)
     }
-    const routePath = request.method + ' ' + request.path
 
     this.logger.log(routePath + ' received with: ' + JSON.stringify(metadonneesDto))
     const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
