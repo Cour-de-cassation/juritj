@@ -18,48 +18,49 @@ export class DecisionLabelDTO {
    * Sébastien : L'id MongoDB de la décision (ObjectId) est utilisé afin de générer
    * l'id de celle-ci dans Judilibre (string).
    */
-  _id: ObjectId
+  //_id: ObjectId
 
   /**
    * pas utilisé (cf Sebastien)
-   * Sébastien : Initialement prévu pour stocker le nombre de révisions successives de la décision, 
+   * Sébastien : Initialement prévu pour stocker le nombre de révisions successives de la décision,
    * au final pas utilisé.
    */
-  _rev: number
+  //_rev: number
 
   /**
    * Pas Utilisé (cf Sebastien)
-   * Sébastien : Initialement prévu pour stocker le numéro de version du modèle de document, 
+   * Sébastien : Initialement prévu pour stocker le numéro de version du modèle de document,
    * afin de gérer finement d'éventuelles mises à jour de documents déjà publiés suite à des
    * évolutions du modèle, au final pas utilisé.
    */
-  _version: number
+  //_version: number
 
   /**
    * Pas utilisé par Label (cf Sebastien)
    * Groupe de métadonnées utilisées en partie pour la publication dans Judilibre
    */
-  analysis: {
-    analyse: string[] // Eléments de titrage et d'analyse complémentaires, non utilisé pour l'instant 
-                      // (CC seulement)
-    doctrine: string // Non utilisé
-    link: string  // Rapprochements de jurisprudence = références textuelles vers d'autres décisions de CC
-                  // (enrichissement saisi manuellement en amont, la plupart du temps postérieurement
-                  // à la publication - CC seulement)
-    reference: Array<string>  // Eléments de titrage et d'analyse complémentaires, non utilisé pour l'instant 
-                              // (CC seulement)
-    source: string  // Non utilisé
-    summary: string   // Résumé de la décision (enrichissement saisi manuellement en amont, 
-                      // la plupart du temps postérieurement à la publication - CC seulement)
-    target: string  // Texte(s) visé(s) (enrichissement saisi manuellement en amont, 
-                    // la plupart du temps postérieurement à la publication - CC seulement)
-    title: Array<string>  // Eléments de titrage (enrichissement saisi manuellement en amont, 
-                          // la plupart du temps postérieurement à la publication - CC seulement)
-  }
+  // analysis: {
+  //   analyse: string[] // Eléments de titrage et d'analyse complémentaires, non utilisé pour l'instant
+  //                     // (CC seulement)
+  //   //doctrine: string // Non utilisé
+  //   link: string  // Rapprochements de jurisprudence = références textuelles vers d'autres décisions de CC
+  //                 // (enrichissement saisi manuellement en amont, la plupart du temps postérieurement
+  //                 // à la publication - CC seulement)
+  //   reference: Array<string>  // Eléments de titrage et d'analyse complémentaires, non utilisé pour l'instant
+  //                             // (CC seulement)
+  //   source: string  // Non utilisé
+  //   summary: string   // Résumé de la décision (enrichissement saisi manuellement en amont,
+  //                     // la plupart du temps postérieurement à la publication - CC seulement)
+  //   target: string  // Texte(s) visé(s) (enrichissement saisi manuellement en amont,
+  //                   // la plupart du temps postérieurement à la publication - CC seulement)
+  //   title: Array<string>  // Eléments de titrage (enrichissement saisi manuellement en amont,
+  //                         // la plupart du temps postérieurement à la publication - CC seulement)
+  // }
 
   /**
    * Pas utilisé par Label (cf Sebastien)
    * Numéro(s) de pourvoi de la décision
+   * TODO : on a pas cette valeur coté JuriTJ
    */
   appeals: Array<string>
 
@@ -67,6 +68,7 @@ export class DecisionLabelDTO {
    *  utilisé par Label
    * (composante de chamberName afin de pouvoir etre lisible pour les agents,
    *  utilisé pour les circuits de relecture)
+   * TODO : on a pas cette valeur coté JuriTJ
    */
   chamberId: string
 
@@ -75,11 +77,13 @@ export class DecisionLabelDTO {
    * (ex à la Cour de cassation, en fonction du niveau de l'affaire ou du thème : 'Chambre sociale',
    *  'Chambre commerciale', 'Saisine pour avis', 'Assemblée plénière',
    *  'Tribunal des conflit' = lorsque l'affaire est entre le juridicitionnel et l'administratif)
+   * TODO : on a pas cette valeur coté JuriTJ
    */
   chamberName: string
 
   /**
    * "date d'import" = date de réception de la part de winciTGI
+   * TODO : a rajouter dans le DTO initial (date d'arrivée sur JuriTJCollecte)
    */
   dateCreation?: string
 
@@ -95,19 +99,21 @@ export class DecisionLabelDTO {
    * A discuter lors de sujet Chainage
    * Sébastien : vaut uniquement pour CC, substitution en place via une API de l'Index (cf. https://github.com/Cour-de-cassation/openjustice-sder/blob/master/doc/chainage.md)
    */
-  decatt?: number[]
+  // decatt?: number[]
 
   /**
    * Pas utilisé par Label
-   * Sébastien : jurisdictionCode et jurisdictionId conservent les différentes manières 
+   * Sébastien : jurisdictionCode et jurisdictionId conservent les différentes manières
    * (plus ou moins homogènes) de codifier et/ou identifier la juridiction émettrice.
-   * Utilisé (comme on peut) dans Judilibre. 
+   * Utilisé (comme on peut) dans Judilibre.
+   * TODO : metadonnees.codeJuridiction
    */
   jurisdictionCode: string
 
   /**
    * Pas utilisé par Label
    * Cf. jurisdictionCode.
+   * TODO : metadonnees.idJuridiction
    */
   jurisdictionId: string
 
@@ -115,6 +121,7 @@ export class DecisionLabelDTO {
    * Comme la chambre : le titre pour l'UI Label
    * (ex: 'Cour de cassation', 'Cour d'appel d'Angers', 'Tribunal judiciaire de Bobigny')
    * + circuit de relecture
+   * TODO : metadonnees.nomJuridiction
    */
   jurisdictionName: string
 
@@ -126,6 +133,7 @@ export class DecisionLabelDTO {
 
   /**
    * Tableau rempli par Label lors de l'export de Label (passe au labelStatus done)
+   * TODO : vide pour JuriTJ Collecte et normalisation
    */
   labelTreatments: labelTreatmentsType
 
@@ -134,7 +142,7 @@ export class DecisionLabelDTO {
    * Sébastien : Initialement prévu pour permettre de bloquer les traitemens sur une décision,
    * au final pas utilisé.
    */
-  locked: boolean
+  //locked: boolean
 
   /**
    * Demandes d'occultation (instructions)
@@ -157,6 +165,8 @@ export class DecisionLabelDTO {
 
   /**
    * Texte de la decision
+   *
+   * TODO : decisionIntegre
    */
   originalText: string
 
@@ -169,17 +179,21 @@ export class DecisionLabelDTO {
 
   /**
    * N'est pas présent dans la base SDER, donc le schéma est probablement faux sur ce champ
-   * Sébastien : reprend en fait le statut de pseudonymisation initialisé 
-   * qui est utilisé en amont (dans les bases Oracle = champ IND_ANO) : 
+   * Sébastien : reprend en fait le statut de pseudonymisation initialisé
+   * qui est utilisé en amont (dans les bases Oracle = champ IND_ANO) :
    *  - 0 : à traiter
    *  - 1 : en cours
    *  - 2 : traité
    *  - 4 : en erreur
+   *
+   * TODO : soit c'est a 0 soit on y touche pas
    */
   pseudoStatus: string
 
   /**
    * Texte pseudonymisé (publié sur Judilibre)
+   *
+   * TODO : vide a l'instant de la normalisation
    */
   pseudoText: string
 
@@ -188,6 +202,8 @@ export class DecisionLabelDTO {
    * Utilisé pour l'UI Label + circuit de relecture + priorisation (publication à 14h) ;
    * 'B' = publié au Bulletin Cour de cassation, 'R' = publié au Rapport Cour de cassation,
    * 'L', 'C', 'W' = toutes les décisions CA, probablement toutes les décisions de TJ pareil
+   *
+   * TODO : Par defaut : W à voir si besoin de plus d'info
    */
   pubCategory: string
 
@@ -195,12 +211,14 @@ export class DecisionLabelDTO {
    * Pas utilisé par Label (cf Sebastien)
    * Sébastien : CA seulement, reprend et convertit en booléen la valeur de l'indicateur original JDEC_IND_DEC_PUB
    */
-  public: boolean | null
+  //public: boolean | null
 
   /**
    * Pas utilisé par Label (cf Sebastien)
    * Sébastien : numéro de la décision "au registre" (dépend de la source, dans sa signification
    * comme dans son utilisation pour la publication)
+   *
+   * TODO : numeroRegistre
    */
   registerNumber: string
 
@@ -219,12 +237,16 @@ export class DecisionLabelDTO {
 
   /**
    * 'jurica', 'jurinet', 'juritj'
+   *
+   * TODO :  par defaut juritj
    */
   sourceName: string
 
   /**
    * (zonage) Pas utilisé par Label mais affiché sur le site de la cour de cassation
    * (mise en page) + décisions diffusées par extrait
+   *
+   * TODO : par principe ( pas de zonage fait chez juritj) ce sera vide
    */
   zoning?: {
     introduction_subzonage: {
@@ -234,11 +256,11 @@ export class DecisionLabelDTO {
 
   /**
    * Probablement dupliqué pubCategory (il peut y avoir plusieurs lettres), merge dans Label
-   * Sébastien : pubCategory est un champ "historique", qui n'est plus utilisé pour le flux. 
-   * La propriété publication est alimenté par les nouveaux indicateurs positionnés en amont:  
+   * Sébastien : pubCategory est un champ "historique", qui n'est plus utilisé pour le flux.
+   * La propriété publication est alimenté par les nouveaux indicateurs positionnés en amont:
    * IND_BULLETIN, IND_RAPPORT, IND_LETTRE et IND_COMMUNIQUE (CC only)
    */
-  publication?: string[]
+  //publication?: string[]
 
   /**
    * Champ session dans Label
@@ -269,6 +291,8 @@ export class DecisionLabelDTO {
 
   /**
    * Cour d'appel : circuit de relecture (on n'enregistre pas le libellé du code NAC, c'est inutile)
+   *
+   * TODO : codeNAC
    */
   NACCode?: string
 
@@ -296,10 +320,6 @@ type labelTreatmentsType = Array<{
 
 export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): DecisionLabelDTO {
   return {
-    _id: null,
-    _rev: null,
-    _version: null,
-    analysis: null,
     appeals: [],
     chamberId: null,
     chamberName: null,
@@ -310,7 +330,6 @@ export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): D
     jurisdictionName: decision.metadonnees.nomJuridiction,
     labelStatus: decision.metadonnees.labelStatus,
     labelTreatments: null,
-    locked: false,
     occultation: {
       additionalTerms: decision.metadonnees.occultationComplementaire,
       categoriesToOmit: []
@@ -320,7 +339,6 @@ export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): D
     pseudoStatus: null,
     pseudoText: null,
     pubCategory: null,
-    public: decision.metadonnees.public,
     registerNumber: decision.metadonnees.numeroRegistre,
     solution: null,
     sourceId: null,
@@ -330,7 +348,6 @@ export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): D
         publication: []
       }
     },
-    publication: [],
     formation: null,
     blocOccultation: null,
     natureAffaireCivil: decision.metadonnees.libelleNature,
