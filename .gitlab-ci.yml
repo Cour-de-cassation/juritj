@@ -1,0 +1,56 @@
+#image: docker:23.0.0
+image: docker:20.10.22
+services:
+  - docker:23.0.0-dind
+  - docker:20.10.22-dind
+
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  services:
+  #- docker:23.0.0-dind
+  - docker:20.10.22
+  script:
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY/Cour-de-cassation
+    - docker build 
+        --build-arg http_proxy=http://10.16.117.210:3128
+        --build-arg https_proxy=http://10.16.117.210:3128
+        --target builder
+        -t $CI_REGISTRY/cour-de-cassation/juritj-builder:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY/cour-de-cassation/juritj-builder:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
+  only:
+  #  - master
+  #  - dev
+    - tech-85-ci-automation
+
+test:
+  stage: test
+  script:
+    - docker run $CI_REGISTRY/cour-de-cassation/juritj-builder:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA "npm run test"
+    - docker build
+        --build-arg http_proxy=http://10.16.117.210:3128
+        --build-arg https_proxy=http://10.16.117.210:3128
+        --target api
+        -t $CI_REGISTRY/cour-de-cassation/juritj-api:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY/cour-de-cassation/juritj-api:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
+  only:
+  #  - master
+  #  - dev
+    - tech-85-ci-automation
+
+deploy:
+  stage: deploy
+  script:
+    - echo 'coucou'
+  # TODO : complete from Ilias' deploy.yaml
+  #  - kubectl apply -f deploy_k8s.yml $CI_PROJECT_NAME $CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA $CI_COMMIT_BRANCH
+  only:
+  #  - master
+  #  - dev
+    - tech-85-ci-automation
+
+# TODO : injecter les prox en var env ci sur gitlab
