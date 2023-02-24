@@ -18,7 +18,7 @@ build:
   - docker:20.10.22
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY/Cour-de-cassation
-    - docker system prune
+    - docker system prune -f
     - docker build --build-arg --no-cache http_proxy=http://10.16.117.210:3128 --build-arg https_proxy=http://10.16.117.210:3128 -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA .
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
   only:
