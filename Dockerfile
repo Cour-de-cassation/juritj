@@ -15,8 +15,16 @@ COPY package*.json ./
 RUN npm ci
 
 COPY --chown=node:node . .
-RUN npm run build \
-    && npm prune --production
+
+### TEST ###
+FROM builder as test
+
+RUN npm run build
+
+### PROD ###
+FROM builder as prod
+
+RUN npm run build && npm prune --production
 
 # ### RUN API ###
 FROM node:18-alpine as api
@@ -26,15 +34,13 @@ ENV NODE_ENV production
 USER node
 WORKDIR /home/node
 
-COPY --from=builder --chown=node:node /home/node/package*.json ./
-COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
-COPY --from=builder --chown=node:node /home/node/dist/ ./dist/
+COPY --from=prod --chown=node:node /home/node/package*.json ./
+COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=prod --chown=node:node /home/node/dist/ ./dist/
 
 CMD ["node", "dist/api/main"]
 
-
 # ### BATCH ###
-
 FROM api as batch 
 USER root
 RUN apk add cmd:wpd2text

@@ -1,42 +1,35 @@
-#image: docker:23.0.0
 image: docker:20.10.22
 services:
   - docker:23.0.0-dind
   - docker:20.10.22-dind
 
 stages:
-  - build_dev
   - test
-  - build_prod
+  - build
   - deploy
 
-build_dev:
-  stage: build_dev
+test:
+  stage: test
   services:
-  #- docker:23.0.0-dind
   - docker:20.10.22
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build 
         --build-arg http_proxy=http://10.16.117.210:3128
         --build-arg https_proxy=http://10.16.117.210:3128
-        --target builder
-        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-builder .
-    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-builder
+        --target test
+        -t juritj-test .
+    - docker run juritj-test npm run test
+    - docker run juritj-test npm audit
+    - docker run juritj-test npm run lint
+    - docker run juritj-test npm run format
   only:
   #  - master
   #  - dev
     - tech-85-ci-automation
 
-test:
-  stage: test
-  script:
-    - echo 'ok'
-    # - docker run $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-builder "npm run test"
-    # TODO : faire fonctionner cette partie avec les devs
-
-build_prod:
-  stage: build_prod
+build_api:
+  stage: build
   script: 
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
@@ -50,15 +43,42 @@ build_prod:
   #  - dev
     - tech-85-ci-automation
 
-deploy:
+build_batch:
+  stage: build
+  script:
+    - docker build
+        --build-arg http_proxy=http://10.16.117.210:3128
+        --build-arg https_proxy=http://10.16.117.210:3128
+        --target batch
+        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch .
+    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
+  only:
+  #  - master
+  #  - dev
+    - tech-85-ci-automation
+
+deploy_api:
   stage: deploy
   script:
-    - echo 'ok'
+    - echo 'ok api'
   # TODO : complete from Ilias' deploy.yaml
   #  - kubectl apply -f deploy_k8s.yml $CI_PROJECT_NAME $CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA $CI_COMMIT_BRANCH
   only:
   #  - master
   #  - dev
     - tech-85-ci-automation
+  dependencies:
+    - build_api
+
+deploy_batch:
+  stage: deploy
+  script:
+    - echo 'ok batch'
+  only:
+  #  - master
+  #  - dev
+    - tech-85-ci-automation
+  dependencies:
+    - build_batch
 
 # TODO : injecter les prox en var env ci sur gitlab
