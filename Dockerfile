@@ -1,3 +1,5 @@
+# Source : https://github.com/nestjs/awesome-nestjs#resources boilerplates
+
 ### BUILD ###
 FROM node:18-alpine as builder
 
