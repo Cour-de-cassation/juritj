@@ -1,6 +1,4 @@
 # Source : https://github.com/nestjs/awesome-nestjs#resources boilerplates
-
-### BUILD ###
 FROM node:18-alpine as builder
 
 ENV NODE_ENV build
@@ -18,8 +16,9 @@ COPY --chown=node:node . .
 RUN npm run build \
     && npm prune --production
 
-# ### RUN API ###
-FROM node:18-alpine as api
+# ---
+
+FROM node:18-alpine
 
 ENV NODE_ENV production
 
@@ -33,11 +32,4 @@ COPY --from=builder --chown=node:node /home/node/dist/ ./dist/
 CMD ["node", "dist/api/main"]
 
 
-# ### BATCH ###
-
-FROM api as batch 
-USER root
-RUN apk add cmd:wpd2text
-USER node
-COPY batch_docker_entrypoint.sh batch_docker_entrypoint.sh
-CMD ["/bin/sh", "batch_docker_entrypoint.sh"]
+# todo : je fixe quelle version de node ?
