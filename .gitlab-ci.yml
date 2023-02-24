@@ -16,7 +16,7 @@ build_dev:
   #- docker:23.0.0-dind
   - docker:20.10.22
   script:
-    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY/Cour-de-cassation
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build 
         --build-arg http_proxy=http://10.16.117.210:3128
         --build-arg https_proxy=http://10.16.117.210:3128
@@ -38,6 +38,7 @@ test:
 build_prod:
   stage: build_prod
   script: 
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
         --build-arg http_proxy=http://10.16.117.210:3128
         --build-arg https_proxy=http://10.16.117.210:3128
