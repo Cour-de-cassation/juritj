@@ -21,8 +21,8 @@ build_dev:
         --build-arg http_proxy=http://10.16.117.210:3128
         --build-arg https_proxy=http://10.16.117.210:3128
         --target builder
-        -t $CI_REGISTRY/cour-de-cassation/juritj-builder:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA .
-    - docker push $CI_REGISTRY/cour-de-cassation/juritj-builder:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
+        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-builder .
+    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-builder
   only:
   #  - master
   #  - dev
@@ -31,7 +31,7 @@ build_dev:
 test:
   stage: test
   script:
-    - docker run $CI_REGISTRY/cour-de-cassation/juritj-builder:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA "npm run test"
+    - docker run $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-builder "npm run test"
 
 build_prod:
   stage: build_prod
@@ -40,8 +40,8 @@ build_prod:
         --build-arg http_proxy=http://10.16.117.210:3128
         --build-arg https_proxy=http://10.16.117.210:3128
         --target api
-        -t $CI_REGISTRY/cour-de-cassation/juritj-api:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA .
-    - docker push $CI_REGISTRY/cour-de-cassation/juritj-api:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
+        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api .
+    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
   only:
   #  - master
   #  - dev
