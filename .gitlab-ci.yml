@@ -72,6 +72,8 @@ deploy_api:
   #  - master
   #  - dev
     - tech-85-ci-automation
+  tags:
+    - shell
   dependencies:
     - build_api
 
