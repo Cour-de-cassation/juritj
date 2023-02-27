@@ -1,6 +1,5 @@
 image: docker:20.10.22
 services:
-  - docker:23.0.0-dind
   - docker:20.10.22-dind
 
 stages:
@@ -60,10 +59,15 @@ build_batch:
 
 deploy_api:
   stage: deploy
+  variables:
+    JURITJ_DOC_LOGIN: root
+    JURITJ_DOC_PASSWORD: root
+    MINIO_USER: root
+    MINIO_PASSWORD: root1234
   script:
-    - echo 'ok api'
-  # TODO : complete from Ilias' deploy.yaml
-  #  - kubectl apply -f deploy_k8s.yml $CI_PROJECT_NAME $CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA $CI_COMMIT_BRANCH
+    - envsubst < .deploys/deploy_api.yaml | kubectl apply -f -
+    - envsubst < .deploys/deploy_bucket.yaml | kubectl apply -f -
+    - envsubst < .deploys/deploy_database.yaml | kubectl apply -f -
   only:
   #  - master
   #  - dev
@@ -83,3 +87,4 @@ deploy_batch:
     - build_batch
 
 # TODO : injecter les prox en var env ci sur gitlab
+# de même que les root / pw pour bucket et doc
