@@ -1,16 +1,5 @@
-import { ObjectId } from 'mongoose'
 import { LabelStatus } from 'src/shared/domain/enums'
 import { DecisionModel } from 'src/shared/infrastructure/repositories/decisionModel.schema'
-
-/** Etapes : 
- 1. Pour chaque champ, 2 questions à se poser : sa description (qu'est-ce que ça represente ?)
-et sa pertinence pour JuriTJ (Dans le cadre JuriTJ, Quelle est son utilité?)
- 1b. Y indiquer le champ MetadonneesDTO equivalent
- 2. Manque-t-il des champs juriTJ ? Faut-il les rajouter au process Label ? Description, pertinence
- 3. Les champs restant :  delete ?
-
- Remarque  : Les Pas utilisé sont dans le scope Label. On sait pas si c'est utilisé autre part ( Cf Sebastien)
-*/
 
 export class DecisionLabelDTO {
   /**
@@ -323,7 +312,7 @@ export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): D
     appeals: [],
     chamberId: null,
     chamberName: null,
-    dateCreation: decision.metadonnees.dateDecision,
+    dateCreation: new Date().toISOString(),
     dateDecision: decision.metadonnees.dateDecision,
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,

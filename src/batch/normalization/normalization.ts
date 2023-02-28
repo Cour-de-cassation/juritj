@@ -9,6 +9,7 @@ import { DecisionS3Repository } from '../../shared/infrastructure/repositories/d
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
 import { LabelStatus } from '../../shared/domain/enums'
+import { mapDecisionNormaliseeToLabelDecision } from './domain/decision.label.dto'
 import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 
@@ -57,8 +58,10 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           metadonnees: transformedMetadonnees
         }
 
-        await decisionMongoRepository.saveDecision(transformedDecision)
-        logger.log('[NORMALIZATION JOB] Decision saved in database.', idDecision)
+      const savedInMongoDecision = await decisionMongoRepository.saveDecision(transformedDecision)
+      logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
+
+      console.log(mapDecisionNormaliseeToLabelDecision(savedInMongoDecision))
 
         decision.metadonnees = transformedMetadonnees
         await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionName)
