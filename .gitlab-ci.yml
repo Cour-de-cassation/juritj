@@ -14,33 +14,29 @@ test:
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build 
-        --build-arg http_proxy=http://10.16.117.210:3128
-        --build-arg https_proxy=http://10.16.117.210:3128
+        --build-arg http_proxy=$HTTP_PROXY
+        --build-arg https_proxy=$HTTPS_PROXY
         --target test
         -t juritj-test .
-    - docker run juritj-test npm run test
     - docker run juritj-test npm audit
-    - docker run juritj-test npm run lint
     - docker run juritj-test npm run format
+    - docker run juritj-test npm run lint
+    - docker run juritj-test npm run test
   only:
-  #  - master
-  #  - dev
-    - tech-85-ci-automation
+    - master
 
 build_api:
   stage: build
   script: 
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
-        --build-arg http_proxy=http://10.16.117.210:3128
-        --build-arg https_proxy=http://10.16.117.210:3128
+        --build-arg http_proxy=$HTTP_PROXY
+        --build-arg https_proxy=$HTTPS_PROXY
         --target api
         -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api .
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
   only:
-  #  - master
-  #  - dev
-    - tech-85-ci-automation
+    - master
 
 build_batch:
   stage: build
@@ -53,9 +49,7 @@ build_batch:
         -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch .
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
   only:
-  #  - master
-  #  - dev
-    - tech-85-ci-automation
+    - master
 
 deploy_api:
   stage: deploy
@@ -69,9 +63,7 @@ deploy_api:
     - envsubst < .deploys/deploy_bucket.yaml | kubectl apply -f -
     - envsubst < .deploys/deploy_database.yaml | kubectl apply -f -
   only:
-  #  - master
-  #  - dev
-    - tech-85-ci-automation
+    - master
   tags:
     - shell
   dependencies:
@@ -82,11 +74,7 @@ deploy_batch:
   script:
     - echo 'ok batch'
   only:
-  #  - master
-  #  - dev
+    - master
     - tech-85-ci-automation
   dependencies:
     - build_batch
-
-# TODO : injecter les prox en var env ci sur gitlab
-# de même que les root / pw pour bucket et doc
