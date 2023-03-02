@@ -3,8 +3,7 @@ import { getConversionCommandPath } from './transformWPDtoText'
 jest.mock('../../normalization/index', () => ({
   logger: {
     log: jest.fn(),
-    error: jest.fn(),
-    warn: jest.fn()
+    error: jest.fn()
   },
   normalizationContext: {
     start: jest.fn(),
@@ -31,20 +30,4 @@ describe('transform wordperfect document to text', () => {
       .rejects // THEN
       .toThrow(Error)
   })
-
-  // Mis en commentaire car test d'intégration ?
-  // Difficile de tester unitairement readWordPerfectDocument
-
-  // it('converts a wordperfect document to text', async () => {
-  //   // GIVEN
-  //   const mockFilename = "mockFile.wpd"
-  //   const mockBlob = new Blob(["my wordperfect document"], {type: 'application/vnd.wordperfect'})
-  //   mockBlob["name"] = mockFilename
-
-  //   const mockFile = <File>mockBlob
-  //   // WHEN
-  //   await readWordperfectDocument(mockFilename)
-  //   // THEN
-
-  // })
 })

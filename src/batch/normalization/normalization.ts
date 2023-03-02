@@ -9,7 +9,7 @@ import { DecisionS3Repository } from '../../shared/infrastructure/repositories/d
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
 import { LabelStatus } from '../../shared/domain/enums'
-import { getDecisionIntegreContent } from './services/getDecisionIntegreContent'
+import { transformDecisionIntegreFromWPDToText } from './services/getDecisionIntegreContent'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 const s3Repository = new DecisionS3Repository()
@@ -36,7 +36,10 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           '[NORMALIZATION JOB] Starting the decision conversion from WPD to text.',
           idDecision
         )
-        const decisionContent = await getDecisionIntegreContent(decision.decisionIntegre)
+
+        const decisionContent = await transformDecisionIntegreFromWPDToText(
+          decision.decisionIntegre
+        )
         logger.log('[NORMALIZATION JOB] Decision conversion finished.', idDecision)
 
         const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
@@ -54,11 +57,11 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         }
 
         await decisionMongoRepository.saveDecision(transformedDecision)
-        logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
+        logger.log('[NORMALIZATION JOB] Decision saved in database.', idDecision)
 
         decision.metadonnees = transformedMetadonnees
         await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionName)
-        logger.log('[NORMALIZATION JOB] Metadonnees saved in normalized bucket.', idDecision)
+        logger.log('[NORMALIZATION JOB] Decision saved in normalized bucket.', idDecision)
 
         await s3Repository.deleteDecision(decisionName, bucketNameIntegre)
         logger.log('[NORMALIZATION JOB] Decision deleted in raw bucket.', idDecision)
