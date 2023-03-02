@@ -15,10 +15,6 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     const mockDecision = new MockUtils().decisionMock
     const expectedDecisionLabel: DecisionLabelDTO = {
       NACCode: '88F',
-      _id: null,
-      _rev: null,
-      _version: null,
-      analysis: null,
       appeals: [],
       blocOccultation: null,
       chamberId: null,
@@ -33,7 +29,6 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       jurisdictionName: 'Juridictions civiles de première instance',
       labelStatus: LabelStatus.TOBETREATED,
       labelTreatments: null,
-      locked: false,
       natureAffaireCivil: 'Autres demandes en matière de frais et dépens',
       natureAffairePenal: null,
       occultation: {
@@ -55,8 +50,6 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       pseudoStatus: null,
       pseudoText: null,
       pubCategory: null,
-      public: false,
-      publication: [],
       registerNumber: 'A',
       solution: null,
       sourceId: null,

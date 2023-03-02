@@ -1,6 +1,9 @@
-import { LabelStatus } from 'src/shared/domain/enums'
-import { DecisionModel } from 'src/shared/infrastructure/repositories/decisionModel.schema'
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose'
+import mongoose from 'mongoose'
+import { LabelStatus } from '../../../shared/domain/enums'
+import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
 
+@Schema()
 export class DecisionLabelDTO {
   /**
    * idMongo , Pas utilisé(cf Sebastien)
@@ -51,6 +54,7 @@ export class DecisionLabelDTO {
    * Numéro(s) de pourvoi de la décision
    * TODO : on a pas cette valeur coté JuriTJ
    */
+  @Prop()
   appeals: Array<string>
 
   /**
@@ -59,6 +63,7 @@ export class DecisionLabelDTO {
    *  utilisé pour les circuits de relecture)
    * TODO : on a pas cette valeur coté JuriTJ
    */
+  @Prop()
   chamberId: string
 
   /**
@@ -68,17 +73,20 @@ export class DecisionLabelDTO {
    *  'Tribunal des conflit' = lorsque l'affaire est entre le juridicitionnel et l'administratif)
    * TODO : on a pas cette valeur coté JuriTJ
    */
+  @Prop()
   chamberName: string
 
   /**
    * "date d'import" = date de réception de la part de winciTGI
    * TODO : a rajouter dans le DTO initial (date d'arrivée sur JuriTJCollecte)
    */
+  @Prop()
   dateCreation?: string
 
   /**
    * quand la décision est rendue = metadonnees.dateDecision
    */
+  @Prop()
   dateDecision?: string
 
   /**
@@ -97,6 +105,7 @@ export class DecisionLabelDTO {
    * Utilisé (comme on peut) dans Judilibre.
    * TODO : metadonnees.codeJuridiction
    */
+  @Prop()
   jurisdictionCode: string
 
   /**
@@ -104,6 +113,7 @@ export class DecisionLabelDTO {
    * Cf. jurisdictionCode.
    * TODO : metadonnees.idJuridiction
    */
+  @Prop()
   jurisdictionId: string
 
   /**
@@ -112,18 +122,21 @@ export class DecisionLabelDTO {
    * + circuit de relecture
    * TODO : metadonnees.nomJuridiction
    */
+  @Prop()
   jurisdictionName: string
 
   /**
    * 'toBeTreated', 'loaded', 'done', 'exported',
    * 'blocked' = pas une décision (qu'on doit traiter car ancien ou autre document)
    */
+  @Prop()
   labelStatus: LabelStatus
 
   /**
    * Tableau rempli par Label lors de l'export de Label (passe au labelStatus done)
    * TODO : vide pour JuriTJ Collecte et normalisation
    */
+  @Prop()
   labelTreatments: labelTreatmentsType
 
   /**
@@ -136,6 +149,12 @@ export class DecisionLabelDTO {
   /**
    * Demandes d'occultation (instructions)
    */
+  @Prop(
+    raw({
+      additionalTerms: { type: String },
+      categoriesToOmit: [{ type: String }]
+    })
+  )
   occultation: {
     /**
      * Demandes d'occultation supplémentaires
@@ -157,6 +176,7 @@ export class DecisionLabelDTO {
    *
    * TODO : decisionIntegre
    */
+  @Prop()
   originalText: string
 
   /**
@@ -164,6 +184,7 @@ export class DecisionLabelDTO {
    * utilisé par le moteur d'annotation pour détecter les avocats qui ne doivent pas être en personnes physiques
    * /!\ any : tableau structuré avec ID, type = "avocat" et plein d'autres (à voir à Sébastien)
    */
+  @Prop()
   parties: Array<any>
 
   /**
@@ -177,6 +198,7 @@ export class DecisionLabelDTO {
    *
    * TODO : soit c'est a 0 soit on y touche pas
    */
+  @Prop()
   pseudoStatus: string
 
   /**
@@ -184,6 +206,7 @@ export class DecisionLabelDTO {
    *
    * TODO : vide a l'instant de la normalisation
    */
+  @Prop()
   pseudoText: string
 
   /**
@@ -194,6 +217,7 @@ export class DecisionLabelDTO {
    *
    * TODO : Par defaut : W à voir si besoin de plus d'info
    */
+  @Prop()
   pubCategory: string
 
   /**
@@ -209,6 +233,7 @@ export class DecisionLabelDTO {
    *
    * TODO : numeroRegistre
    */
+  @Prop()
   registerNumber: string
 
   /**
@@ -216,12 +241,14 @@ export class DecisionLabelDTO {
    * ex: 'Avis sur saisine', 'Non-admission', 'Déchéance',
    * 'Déchéance par ordonnance', 'Désistement', 'Désistement par arrêt'
    */
+  @Prop()
   solution: string
 
   /**
    * ID de la décision (ID Oracle) utilisé fréquemment dans Label
    * DL : ( c'est cet ID là que j'écris à la main quand j'import manuellement une décision)
    */
+  @Prop()
   sourceId: number
 
   /**
@@ -229,6 +256,7 @@ export class DecisionLabelDTO {
    *
    * TODO :  par defaut juritj
    */
+  @Prop()
   sourceName: string
 
   /**
@@ -237,6 +265,11 @@ export class DecisionLabelDTO {
    *
    * TODO : par principe ( pas de zonage fait chez juritj) ce sera vide
    */
+  @Prop(
+    raw({
+      introduction_subzonage: { type: Object }
+    })
+  )
   zoning?: {
     introduction_subzonage: {
       publication: string[]
@@ -255,27 +288,32 @@ export class DecisionLabelDTO {
    * Champ session dans Label
    * circuit de relecture, pour la Cour de cassation ex: "FRR" formation restreinte
    */
+  @Prop()
   formation?: string
 
   /**
    * Pas utilisé dans Label
    * catégorie pour l'occultation 1, 2, 3, 4 (1 = peu sensible, 4 = très sensible)
    */
+  @Prop()
   blocOccultation?: number
 
   /**
    * Cour de cassation : circuit de relecture
    */
+  @Prop()
   natureAffaireCivil?: string
 
   /**
    * Cour de cassation : circuit de relecture
    */
+  @Prop()
   natureAffairePenal?: string
 
   /**
    * Cour de cassation : circuit de relecture
    */
+  @Prop()
   codeMatiereCivil?: string
 
   /**
@@ -283,11 +321,13 @@ export class DecisionLabelDTO {
    *
    * TODO : codeNAC
    */
+  @Prop()
   NACCode?: string
 
   /**
    * Cour d'appel : circuit de relecture
    */
+  @Prop()
   endCaseCode?: string
 
   /** Dans le Futur
@@ -307,13 +347,18 @@ type labelTreatmentsType = Array<{
   order: number
 }>
 
+export const DecisionSchema = SchemaFactory.createForClass(DecisionLabelDTO)
+
 export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): DecisionLabelDTO {
+  console.log(parseDate(decision.metadonnees.dateDecision).toISOString())
+  console.log(parseDate(decision.metadonnees.dateDecision).toISOString())
+
   return {
     appeals: [],
     chamberId: null,
     chamberName: null,
     dateCreation: new Date().toISOString(),
-    dateDecision: decision.metadonnees.dateDecision,
+    dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,
     jurisdictionName: decision.metadonnees.nomJuridiction,
@@ -345,4 +390,11 @@ export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): D
     NACCode: decision.metadonnees.codeNAC,
     endCaseCode: null
   }
+}
+
+function parseDate(dateDecision: string) {
+  const y = dateDecision.substring(0, 4),
+    m = dateDecision.substring(4, 6),
+    d = dateDecision.substring(6, 8)
+  return new Date(parseInt(y), parseInt(m), parseInt(d))
 }
