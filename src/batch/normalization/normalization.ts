@@ -12,7 +12,7 @@ import { LabelStatus } from '../../shared/domain/enums'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 const s3Repository = new DecisionS3Repository()
-const bucketNameIntegre = process.env.SCW_BUCKET_NAME_RAW
+const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW
 
 export async function normalizationJob(
   decisionContent: string

@@ -24,6 +24,22 @@ spec:
               value: $JURITJ_DOC_LOGIN
             - name: DOC_PASSWORD
               value: $JURITJ_DOC_PASSWORD
+            - name: S3_ACCESS_KEY
+              value: $JURITJ_S3_ACCESS_KEY
+            - name: S3_SECRET_KEY
+              value: $JURITJ_S3_SECRET_KEY
+            - name: S3_URL
+              value: $JURITJ_S3_URL
+            - name: S3_REGION
+              value: $JURITJ_S3_REGION
+            - name: S3_BUCKET_NAME
+              value: $JURITJ_S3_BUCKET_NAME
+            - name: S3_S3_BUCKET_NAME_RAW
+              value: $JURITJ_S3_S3_BUCKET_NAME_RAW
+            - name: S3_S3_BUCKET_NAME_NORMALIZED
+              value: $JURITJ_S3_BUCKET_NAME_NORMALIZED
+            - name: MONGODB_URL
+              value: $JURITJ_MONGODB_URL
 
 ---
 apiVersion: v1

@@ -46,14 +46,13 @@ Créer un fichier `.env` à la racine du dossier avec les variables suivantes :
 DOC_LOGIN=loginDoc
 DOC_PASSWORD=motDePasseDoc
 
-### SCW Keys 
-SCW_S3_ACCESS_KEY=CleAccesS3Scaleway
-SCW_S3_SECRET_KEY=CleSecreteS3Scaleway
-SCW_PROJECT_ID=idProjetScaleway
-SCW_S3_URL=urlDuS3Scaleway
-SCW_S3_REGION=region
-SCW_BUCKET_NAME_RAW=nomDuBucket
-SCW_BUCKET_NAME_NORMALIZED=nomDuBucket
+### S3 Keys 
+S3_ACCESS_KEY=CleAccesS3Scaleway
+S3_SECRET_KEY=CleSecreteS3Scaleway
+S3_URL=urlDuS3Scaleway
+S3_REGION=region
+S3_BUCKET_NAME_RAW=nomDuBucket
+S3_BUCKET_NAME_NORMALIZED=nomDuBucket
 
 # DB
 
