@@ -4,7 +4,8 @@ import * as fetchDecisionListFromS3 from './services/fetchDecisionListFromS3'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
-import * as transformDecisionIntegreFromWPDToText from './services/getDecisionIntegreContent'
+import * as transformDecisionIntegreFromWPDToText from './services/transformDecisionIntegreContent'
+import { Readable } from 'stream'
 
 jest.mock('./index', () => ({
   logger: {
@@ -23,8 +24,21 @@ const fakeMetadonnees = mockUtils.metadonneesDtoMock
 describe('Normalization job', () => {
   const decisionName = 'filename.wpd'
 
+  const decisionIntegre: Express.Multer.File = {
+    fieldname: 'decisionIntegre',
+    originalname: decisionName,
+    encoding: '7bit',
+    mimetype: 'application/vnd.wordperfect',
+    size: 4,
+    stream: new Readable(),
+    destination: '',
+    filename: decisionName,
+    path: '',
+    buffer: Buffer.from('Le contenu WPD de ma decision')
+  }
+
   const mockDecision: CollectDto = {
-    decisionIntegre: 'Le contenu WPD de ma decision',
+    decisionIntegre,
     metadonnees: new MockUtils().metadonneesDtoMock
   }
 

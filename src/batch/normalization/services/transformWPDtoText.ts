@@ -9,14 +9,19 @@ const CONVERSION_COMMAND = 'wpd2text'
 export async function readWordperfectDocument(filename: string) {
   const cmdPath = await getConversionCommandPath(CONVERSION_COMMAND)
   if (cmdPath && existsSync(filename)) {
+    console.log('if')
     try {
       const { stdout } = await execPromise('wpd2text ./' + filename)
       return stdout
     } catch (error) {
-      logger.error('[NORMALIZATION JOB] Unable execute the conversion command.')
+      console.log('catch')
+
+      logger.error('[NORMALIZATION JOB] Unable to execute the conversion command.')
       throw new Error(error)
     }
   } else {
+    console.log('else')
+
     logger.error('[NORMALIZATION JOB] Unable to read Wordperfect document.')
     throw new Error()
   }

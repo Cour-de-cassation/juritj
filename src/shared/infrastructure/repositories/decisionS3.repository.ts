@@ -23,7 +23,7 @@ export class DecisionS3Repository implements DecisionRepository {
     }
   }
 
-  async saveDecisionIntegre(requestToS3Dto, filename) {
+  async saveDecisionIntegre(requestToS3Dto: string, filename: string) {
     const reqParams = {
       Body: requestToS3Dto,
       Bucket: process.env.S3_BUCKET_NAME_RAW,
@@ -33,7 +33,7 @@ export class DecisionS3Repository implements DecisionRepository {
     await this.saveDecision(reqParams)
   }
 
-  async saveDecisionNormalisee(requestToS3Dto, filename) {
+  async saveDecisionNormalisee(requestToS3Dto: string, filename: string) {
     const reqParams = {
       Body: requestToS3Dto,
       Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,

@@ -1,10 +1,10 @@
 import { existsSync, unlinkSync, writeFileSync } from 'fs'
 import { readWordperfectDocument } from './transformWPDtoText'
 
-export async function transformDecisionIntegreFromWPDToText(decisionIntegre): Promise<string> {
-  // decisionIntegre : nous n'avons pas réussi à identifier le type, car nous ne savons pas ce qui revient de S3
-
-  writeFileSync(decisionIntegre.originalname, Buffer.from(decisionIntegre.buffer.data), {
+export async function transformDecisionIntegreFromWPDToText(
+  decisionIntegre: Express.Multer.File
+): Promise<string> {
+  writeFileSync(decisionIntegre.originalname, Buffer.from(decisionIntegre.buffer), {
     encoding: 'binary'
   })
   try {

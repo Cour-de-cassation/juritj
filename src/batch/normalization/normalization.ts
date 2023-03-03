@@ -9,7 +9,8 @@ import { DecisionS3Repository } from '../../shared/infrastructure/repositories/d
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
 import { LabelStatus } from '../../shared/domain/enums'
-import { transformDecisionIntegreFromWPDToText } from './services/getDecisionIntegreContent'
+import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
+import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 const s3Repository = new DecisionS3Repository()
@@ -24,7 +25,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   if (decisionList.length > 0) {
     for (const decisionName of decisionList) {
       try {
-        const decision = await s3Repository.getDecisionByFilename(decisionName)
+        const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionName)
         const metadonnees = decision.metadonnees
 
         logger.log('[NORMALIZATION JOB] Normalization job starting for decision ' + decisionName)
