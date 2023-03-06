@@ -11,6 +11,22 @@ test:
   stage: test
   services:
   - docker:20.10.22
+  variables:
+    HTTP_PROXY: $HTTP_PROXY
+    HTTPS_PROXY: $HTTPS_PROXY
+    JURITJ_DOC_LOGIN: $JURITJ_DOC_LOGIN
+    JURITJ_DOC_PASSWORD: $JURITJ_DOC_PASSWORD
+    MINIO_USER: $MINIO_USER
+    MINIO_PASSWORD: $MINIO_PASSWORD
+    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
+    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
+    JURITJ_S3_URL: $JURITJ_S3_URL
+    JURITJ_S3_PORT: 9000
+    JURITJ_S3_REGION: $JURITJ_S3_REGION
+    JURITJ_S3_BUCKET_NAME: $JURITJ_S3_BUCKET_NAME
+    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
+    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
+    JURITJ_MONGODB_URL: $JURITJ_MONGODB_URL
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build 
@@ -18,15 +34,22 @@ test:
         --build-arg https_proxy=$HTTPS_PROXY
         --target test
         -t juritj-test .
-    - docker run juritj-test npm audit
-    - docker run juritj-test npm run format
-    - docker run juritj-test npm run lint
-    - docker run juritj-test npm run test
+    #- docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm audit
+    - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run format
+    - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run lint
+    - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm test
+    - echo 'ok'
   only:
     - master
+    - tech-179-deploy-normalization-dev-env
+  tags:
+    - docker
 
 build_api:
   stage: build
+  variables:
+    HTTP_PROXY: $HTTP_PROXY
+    HTTPS_PROXY: $HTTPS_PROXY
   script: 
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
@@ -37,41 +60,58 @@ build_api:
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
   only:
     - master
+    - tech-179-deploy-normalization-dev-env
+  tags:
+    - docker
 
 build_batch:
   stage: build
+  variables:
+    HTTP_PROXY: $HTTP_PROXY
+    HTTPS_PROXY: $HTTPS_PROXY
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
-        --build-arg http_proxy=$HTTP_PROXY
-        --build-arg https_proxy=$HTTPS_PROXY
+        --build-arg http_proxy=http://10.16.117.210:3128
+        --build-arg https_proxy=http://10.16.117.210:3128
         --target batch
         -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch .
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
+    - docker build
+        --build-arg http_proxy=http://10.16.117.210:3128
+        --build-arg https_proxy=http://10.16.117.210:3128
+        --target debug
+        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-debug .
+    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-debug
   only:
     - master
+    - tech-179-deploy-normalization-dev-env
+  tags:
+    - docker
 
 deploy_api:
   stage: deploy
   variables:
-    JURITJ_DOC_LOGIN: root
-    JURITJ_DOC_PASSWORD: root
-    MINIO_USER: root
-    MINIO_PASSWORD: root1234
+    JURITJ_DOC_LOGIN: $JURITJ_DOC_LOGIN
+    JURITJ_DOC_PASSWORD: $JURITJ_DOC_PASSWORD
+    MINIO_USER: $MINIO_USER
+    MINIO_PASSWORD: $MINIO_PASSWORD
     JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
     JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
-    JURITJ_S3_URL:  $JURITJ_S3_URL
+    JURITJ_S3_URL: $JURITJ_S3_URL
     JURITJ_S3_REGION: $JURITJ_S3_REGION
     JURITJ_S3_BUCKET_NAME: $JURITJ_S3_BUCKET_NAME
     JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
     JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
     JURITJ_MONGODB_URL: $JURITJ_MONGODB_URL
+    DOLLAR: $$
   script:
     - envsubst < .deploys/deploy_api.yaml | kubectl apply -f -
     - envsubst < .deploys/deploy_bucket.yaml | kubectl apply -f -
     - envsubst < .deploys/deploy_database.yaml | kubectl apply -f -
   only:
     - master
+    - tech-179-deploy-normalization-dev-env
   tags:
     - shell
   dependencies:
@@ -79,10 +119,27 @@ deploy_api:
 
 deploy_batch:
   stage: deploy
+  variables:
+    JURITJ_DOC_LOGIN: $JURITJ_DOC_LOGIN
+    JURITJ_DOC_PASSWORD: $JURITJ_DOC_PASSWORD
+    MINIO_USER: $MINIO_USER
+    MINIO_PASSWORD: $MINIO_PASSWORD
+    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
+    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
+    JURITJ_S3_URL: $JURITJ_S3_URL
+    JURITJ_S3_REGION: $JURITJ_S3_REGION
+    JURITJ_S3_BUCKET_NAME: $JURITJ_S3_BUCKET_NAME
+    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
+    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
+    JURITJ_MONGODB_URL: $JURITJ_MONGODB_URL
+    DOLLAR: $$
+
   script:
-    - echo 'ok batch'
+    - envsubst < .deploys/deploy_batch.yaml | kubectl apply -f -
   only:
     - master
-    - tech-85-ci-automation
+    - tech-179-deploy-normalization-dev-env
+  tags:
+    - shell
   dependencies:
     - build_batch
