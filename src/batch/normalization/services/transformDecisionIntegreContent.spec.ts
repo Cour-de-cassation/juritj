@@ -1,6 +1,7 @@
 import { Readable } from 'stream'
 import * as util from 'util'
 import { transformDecisionIntegreFromWPDToText } from './transformDecisionIntegreContent'
+import * as readWordperfectDocument from './transformWPDtoText'
 
 jest.mock('../index', () => ({
   logger: {
@@ -21,13 +22,21 @@ const mockExec = jest.fn(() => {
   stdout: responseMock
 })
 
-jest.spyOn(util, 'promisify').mockImplementation(() => mockExec)
+//jest.spyOn(util, 'promisify').mockImplementation(() => mockExec)
 
 describe('transform decision integre content from WPD to text', () => {
-  it.skip('retrieves the text from the wordperfect document', async () => {
+  it('retrieves the text from the wordperfect document', async () => {
     // GIVEN
     const fileName = 'ole6.wpd'
     const mockBuffer = Buffer.from(responseMock)
+    jest
+      .spyOn(readWordperfectDocument, 'readWordperfectDocument')
+      .mockImplementation(() => Promise.resolve(responseMock))
+    // jest.spyOn(readWordperfectDocument, 'execConversion').mockImplementation(() => {
+    //   console.log("hi");
+
+    //   return Promise.resolve("mockExec")
+    // })
 
     const decisionIntegre: Express.Multer.File = {
       fieldname: 'decisionIntegre',
