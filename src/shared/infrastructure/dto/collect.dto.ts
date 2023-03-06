@@ -3,11 +3,11 @@ import { MetadonneesDto } from './metadonnees.dto'
 
 export class CollectDto {
   @ApiProperty({
-    type: 'string',
+    type: 'File',
     format: 'binary',
     description: 'Décision intègre au format wordperfect.'
   })
-  decisionIntegre: any
+  decisionIntegre: Express.Multer.File
 
   @ApiProperty({
     description: 'Metadonnées associées à la décision intègre.'

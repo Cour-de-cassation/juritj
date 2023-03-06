@@ -4,6 +4,8 @@ import * as fetchDecisionListFromS3 from './services/fetchDecisionListFromS3'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
+import * as transformDecisionIntegreFromWPDToText from './services/transformDecisionIntegreContent'
+import { Readable } from 'stream'
 
 jest.mock('./index', () => ({
   logger: {
@@ -22,8 +24,21 @@ const fakeMetadonnees = mockUtils.metadonneesDtoMock
 describe('Normalization job', () => {
   const decisionName = 'filename.wpd'
 
+  const decisionIntegre: Express.Multer.File = {
+    fieldname: 'decisionIntegre',
+    originalname: decisionName,
+    encoding: '7bit',
+    mimetype: 'application/vnd.wordperfect',
+    size: 4,
+    stream: new Readable(),
+    destination: '',
+    filename: decisionName,
+    path: '',
+    buffer: Buffer.from('Le contenu WPD de ma decision')
+  }
+
   const mockDecision: CollectDto = {
-    decisionIntegre: '',
+    decisionIntegre,
     metadonnees: new MockUtils().metadonneesDtoMock
   }
 
@@ -38,7 +53,10 @@ describe('Normalization job', () => {
   jest.spyOn(DecisionS3Repository.prototype, 'saveDecisionNormalisee').mockImplementation(jest.fn())
   jest.spyOn(DecisionS3Repository.prototype, 'deleteDecision').mockImplementation(jest.fn())
 
-  const decisionContent = new MockUtils().decisionContent
+  const decisionIntegreMock = new MockUtils().decisionContent
+  const getDecisionIntegreMock = jest
+    .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
+    .mockImplementation(() => Promise.resolve(decisionIntegreMock))
 
   describe('For one unique decision', () => {
     it('returns metadonnees with uniqueDecisionId', async () => {
@@ -53,7 +71,7 @@ describe('Normalization job', () => {
 
       expect(
         // WHEN
-        await normalizationJob(decisionContent)
+        await normalizationJob()
       )
         // THEN
         .toEqual(expected)
@@ -71,10 +89,11 @@ describe('Normalization job', () => {
           decisionNormalisee: expectedDecision
         }
       ]
+      getDecisionIntegreMock.mockImplementationOnce(() => Promise.resolve(fakeDecision))
 
       expect(
         // WHEN
-        await normalizationJob(fakeDecision)
+        await normalizationJob()
       )
         // THEN
         .toEqual(expected)
@@ -100,15 +119,13 @@ describe('Normalization job', () => {
         }
       ]
 
-      const decisionContent = new MockUtils().decisionContent
-
       jest
         .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
         .mockImplementationOnce(() => Promise.resolve([firstDecisionName, secondDecisionName]))
 
       expect(
         // WHEN
-        await normalizationJob(decisionContent)
+        await normalizationJob()
       )
         // THEN
         .toEqual(expected)
