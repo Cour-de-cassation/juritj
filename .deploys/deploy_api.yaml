@@ -34,9 +34,9 @@ spec:
               value: $JURITJ_S3_REGION
             - name: S3_BUCKET_NAME
               value: $JURITJ_S3_BUCKET_NAME
-            - name: S3_S3_BUCKET_NAME_RAW
-              value: $JURITJ_S3_S3_BUCKET_NAME_RAW
-            - name: S3_S3_BUCKET_NAME_NORMALIZED
+            - name: S3_BUCKET_NAME_RAW
+              value: $JURITJ_S3_BUCKET_NAME_RAW
+            - name: S3_BUCKET_NAME_NORMALIZED
               value: $JURITJ_S3_BUCKET_NAME_NORMALIZED
             - name: MONGODB_URL
               value: $JURITJ_MONGODB_URL

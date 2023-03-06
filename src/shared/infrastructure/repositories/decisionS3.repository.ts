@@ -36,7 +36,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async saveDecisionNormalisee(requestToS3Dto, filename) {
     const reqParams = {
       Body: requestToS3Dto,
-      Bucket: process.env.BUCKET_NAME_NORMALIZED,
+      Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,
       Key: filename
     }
     await this.saveDecision(reqParams)
