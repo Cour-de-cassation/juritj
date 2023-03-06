@@ -1,5 +1,4 @@
 import { Readable } from 'stream'
-import * as util from 'util'
 import { transformDecisionIntegreFromWPDToText } from './transformDecisionIntegreContent'
 import * as readWordperfectDocument from './transformWPDtoText'
 
@@ -18,10 +17,6 @@ jest.mock('fs', () => ({
 
 const responseMock = 'string with text'
 
-const mockExec = jest.fn(() => {
-  stdout: responseMock
-})
-
 //jest.spyOn(util, 'promisify').mockImplementation(() => mockExec)
 
 describe('transform decision integre content from WPD to text', () => {
@@ -31,12 +26,7 @@ describe('transform decision integre content from WPD to text', () => {
     const mockBuffer = Buffer.from(responseMock)
     jest
       .spyOn(readWordperfectDocument, 'readWordperfectDocument')
-      .mockImplementation(() => Promise.resolve(responseMock))
-    // jest.spyOn(readWordperfectDocument, 'execConversion').mockImplementation(() => {
-    //   console.log("hi");
-
-    //   return Promise.resolve("mockExec")
-    // })
+      .mockImplementationOnce(() => Promise.resolve(responseMock))
 
     const decisionIntegre: Express.Multer.File = {
       fieldname: 'decisionIntegre',
@@ -54,5 +44,31 @@ describe('transform decision integre content from WPD to text', () => {
     const decisionIntegreTest = await transformDecisionIntegreFromWPDToText(decisionIntegre)
     // THEN
     expect(decisionIntegreTest).toBe(responseMock)
+  })
+
+  it('throws an error when the process failed to convert', async () => {
+    // GIVEN
+    const fileName = 'ole6.wpd'
+    const mockBuffer = Buffer.from(responseMock)
+    jest.spyOn(readWordperfectDocument, 'readWordperfectDocument').mockImplementationOnce(() => {
+      throw new Error('failed conversion')
+    })
+
+    const decisionIntegre: Express.Multer.File = {
+      fieldname: 'decisionIntegre',
+      originalname: fileName,
+      encoding: '7bit',
+      mimetype: 'application/vnd.wordperfect',
+      size: 4,
+      stream: new Readable(),
+      destination: '',
+      filename: fileName,
+      path: '',
+      buffer: mockBuffer
+    }
+    // WHEN
+    expect(transformDecisionIntegreFromWPDToText(decisionIntegre))
+      // THEN
+      .rejects.toThrow(new Error('Could not get decision ' + fileName + ' content.'))
   })
 })
