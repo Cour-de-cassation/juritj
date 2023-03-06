@@ -1,0 +1,88 @@
+image: docker:20.10.22
+services:
+  - docker:20.10.22-dind
+
+stages:
+  - test
+  - build
+  - deploy
+
+test:
+  stage: test
+  services:
+  - docker:20.10.22
+  script:
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - docker build 
+        --build-arg http_proxy=$HTTP_PROXY
+        --build-arg https_proxy=$HTTPS_PROXY
+        --target test
+        -t juritj-test .
+    - docker run juritj-test npm audit
+    - docker run juritj-test npm run format
+    - docker run juritj-test npm run lint
+    - docker run juritj-test npm run test
+  only:
+    - master
+
+build_api:
+  stage: build
+  script: 
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - docker build
+        --build-arg http_proxy=$HTTP_PROXY
+        --build-arg https_proxy=$HTTPS_PROXY
+        --target api
+        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api .
+    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
+  only:
+    - master
+
+build_batch:
+  stage: build
+  script:
+    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - docker build
+        --build-arg http_proxy=$HTTP_PROXY
+        --build-arg https_proxy=$HTTPS_PROXY
+        --target batch
+        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch .
+    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
+  only:
+    - master
+
+deploy_api:
+  stage: deploy
+  variables:
+    JURITJ_DOC_LOGIN: root
+    JURITJ_DOC_PASSWORD: root
+    MINIO_USER: root
+    MINIO_PASSWORD: root1234
+    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
+    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
+    JURITJ_S3_URL:  $JURITJ_S3_URL
+    JURITJ_S3_REGION: $JURITJ_S3_REGION
+    JURITJ_S3_BUCKET_NAME: $JURITJ_S3_BUCKET_NAME
+    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
+    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
+    JURITJ_MONGODB_URL: $JURITJ_MONGODB_URL
+  script:
+    - envsubst < .deploys/deploy_api.yaml | kubectl apply -f -
+    - envsubst < .deploys/deploy_bucket.yaml | kubectl apply -f -
+    - envsubst < .deploys/deploy_database.yaml | kubectl apply -f -
+  only:
+    - master
+  tags:
+    - shell
+  dependencies:
+    - build_api
+
+deploy_batch:
+  stage: deploy
+  script:
+    - echo 'ok batch'
+  only:
+    - master
+    - tech-85-ci-automation
+  dependencies:
+    - build_batch

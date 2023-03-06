@@ -13,11 +13,11 @@ export class DecisionS3Repository implements DecisionRepository {
       this.s3ApiClient = providedS3Client
     } else {
       this.s3ApiClient = new S3({
-        endpoint: process.env.SCW_S3_URL,
-        region: process.env.SCW_S3_REGION,
+        endpoint: process.env.S3_URL,
+        region: process.env.S3_REGION,
         credentials: {
-          accessKeyId: process.env.SCW_S3_ACCESS_KEY,
-          secretAccessKey: process.env.SCW_S3_SECRET_KEY
+          accessKeyId: process.env.S3_ACCESS_KEY,
+          secretAccessKey: process.env.S3_SECRET_KEY
         }
       })
     }
@@ -26,7 +26,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async saveDecisionIntegre(requestToS3Dto, filename) {
     const reqParams = {
       Body: requestToS3Dto,
-      Bucket: process.env.SCW_BUCKET_NAME_RAW,
+      Bucket: process.env.S3_BUCKET_NAME_RAW,
       Key: uuidv4() + '-' + filename
     }
 
@@ -36,7 +36,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async saveDecisionNormalisee(requestToS3Dto, filename) {
     const reqParams = {
       Body: requestToS3Dto,
-      Bucket: process.env.SCW_BUCKET_NAME_NORMALIZED,
+      Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,
       Key: filename
     }
     await this.saveDecision(reqParams)
@@ -78,7 +78,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async getDecisionByFilename(filename: string): Promise<CollectDto> {
     try {
       const reqParams = {
-        Bucket: process.env.SCW_BUCKET_NAME_RAW,
+        Bucket: process.env.S3_BUCKET_NAME_RAW,
         Key: filename
       }
 
@@ -98,7 +98,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async getDecisionList(): Promise<any> {
     try {
       const reqParams = {
-        Bucket: process.env.SCW_BUCKET_NAME_RAW
+        Bucket: process.env.S3_BUCKET_NAME_RAW
       }
       const dataFromS3 = await this.s3ApiClient.listObjectsV2(reqParams)
       const decisionList = await dataFromS3

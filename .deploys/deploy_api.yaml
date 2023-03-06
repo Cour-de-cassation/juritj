@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DOC_LOGIN
+              value: $JURITJ_DOC_LOGIN
+            - name: DOC_PASSWORD
+              value: $JURITJ_DOC_PASSWORD
+            - name: S3_ACCESS_KEY
+              value: $JURITJ_S3_ACCESS_KEY
+            - name: S3_SECRET_KEY
+              value: $JURITJ_S3_SECRET_KEY
+            - name: S3_URL
+              value: $JURITJ_S3_URL
+            - name: S3_REGION
+              value: $JURITJ_S3_REGION
+            - name: S3_BUCKET_NAME
+              value: $JURITJ_S3_BUCKET_NAME
+            - name: S3_BUCKET_NAME_RAW
+              value: $JURITJ_S3_BUCKET_NAME_RAW
+            - name: S3_BUCKET_NAME_NORMALIZED
+              value: $JURITJ_S3_BUCKET_NAME_NORMALIZED
+            - name: MONGODB_URL
+              value: $JURITJ_MONGODB_URL
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+spec:
+  selector:
+    app: api
+  ports:
+    - name: api
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
