@@ -1,5 +1,6 @@
 import { existsSync, unlinkSync, writeFileSync } from 'fs'
 import { readWordperfectDocument } from './transformWPDtoText'
+import { Express } from 'express'
 
 export async function transformDecisionIntegreFromWPDToText(
   decisionIntegre: Express.Multer.File
