@@ -53,15 +53,15 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           ...metadonnees
         }
 
-      const transformedDecision: DecisionModel = {
-        decision: cleanedDecision,
-        metadonnees: transformedMetadonnees
-      }
-      // on transforme la donnee en modele lisible pour label puis on le sauvegarde
-      const decisionToSave = mapDecisionNormaliseeToLabelDecision(transformedDecision)
+        const transformedDecision: DecisionModel = {
+          decision: cleanedDecision,
+          metadonnees: transformedMetadonnees
+        }
+        // on transforme la donnee en modele lisible pour label puis on le sauvegarde
+        const decisionToSave = mapDecisionNormaliseeToLabelDecision(transformedDecision)
 
-      console.log(await decisionMongoRepository.saveDecision(decisionToSave))
-      logger.log('[NORMALIZATION JOB] Metadonnees saved in database.', idDecision)
+        await decisionMongoRepository.saveDecision(decisionToSave)
+        logger.log('[NORMALIZATION JOB] Decision saved in database.', idDecision)
 
         decision.metadonnees = transformedMetadonnees
         await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionName)

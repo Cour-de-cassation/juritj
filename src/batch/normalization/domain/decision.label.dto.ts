@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import { LabelStatus } from '../../../shared/domain/enums'
 import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
 
+export const TODAY = new Date().toISOString()
 @Schema()
 export class DecisionLabelDTO {
   /**
@@ -350,14 +351,11 @@ type labelTreatmentsType = Array<{
 export const DecisionSchema = SchemaFactory.createForClass(DecisionLabelDTO)
 
 export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): DecisionLabelDTO {
-  console.log(parseDate(decision.metadonnees.dateDecision).toISOString())
-  console.log(parseDate(decision.metadonnees.dateDecision).toISOString())
-
   return {
     appeals: [],
     chamberId: null,
     chamberName: null,
-    dateCreation: new Date().toISOString(),
+    dateCreation: TODAY,
     dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,

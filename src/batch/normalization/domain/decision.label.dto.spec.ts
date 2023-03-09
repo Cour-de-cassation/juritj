@@ -1,6 +1,6 @@
 import { LabelStatus } from '../../../shared/domain/enums'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
-import { DecisionLabelDTO, mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
+import { DecisionLabelDTO, mapDecisionNormaliseeToLabelDecision, TODAY } from './decision.label.dto'
 
 jest.mock('../index', () => ({
   logger: {
@@ -20,8 +20,8 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       chamberId: null,
       chamberName: null,
       codeMatiereCivil: '6C',
-      dateCreation: '20221121',
-      dateDecision: '20221121',
+      dateCreation: TODAY,
+      dateDecision: '2022-12-20T23:00:00.000Z',
       endCaseCode: null,
       formation: null,
       jurisdictionCode: undefined,

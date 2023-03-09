@@ -24,6 +24,7 @@ export class MockUtils {
     nom: 'nom Partie'
   }
 
+  mockDate = new Date().toISOString()
   metadonneesDtoMock = {
     idDecision: this.uniqueDecisionId,
     nomJuridiction: 'Juridictions civiles de première instance',
@@ -54,5 +55,42 @@ export class MockUtils {
   decisionMock = {
     decision: this.decisionContent,
     metadonnees: this.metadonneesDtoMock
+  }
+  decisionLabelMock = {
+    appeals: [],
+    chamberId: null,
+    chamberName: null,
+    dateCreation: new Date().toISOString(),
+    dateDecision: new Date().toISOString(),
+    jurisdictionCode: 'this.metadonneesDtoMock.codeJuridiction',
+    jurisdictionId: this.metadonneesDtoMock.idJuridiction,
+    jurisdictionName: this.metadonneesDtoMock.nomJuridiction,
+    labelStatus: this.metadonneesDtoMock.labelStatus,
+    labelTreatments: null,
+    occultation: {
+      additionalTerms: 'this.metadonneesDtoMock.occultationComplementaire',
+      categoriesToOmit: []
+    },
+    originalText: this.decisionMock.decision,
+    parties: this.metadonneesDtoMock.parties,
+    pseudoStatus: null,
+    pseudoText: null,
+    pubCategory: null,
+    registerNumber: this.metadonneesDtoMock.numeroRegistre,
+    solution: null,
+    sourceId: null,
+    sourceName: null,
+    zoning: {
+      introduction_subzonage: {
+        publication: []
+      }
+    },
+    formation: null,
+    blocOccultation: null,
+    natureAffaireCivil: this.metadonneesDtoMock.libelleNature,
+    natureAffairePenal: null,
+    codeMatiereCivil: this.metadonneesDtoMock.codeNature,
+    NACCode: this.metadonneesDtoMock.codeNAC,
+    endCaseCode: null
   }
 }

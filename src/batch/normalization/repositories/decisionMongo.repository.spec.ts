@@ -11,7 +11,7 @@ jest.mock('../index', () => ({
 }))
 
 describe('saveDecision', () => {
-  const mockDecision = new MockUtils().decisionMock
+  const mockDecision = new MockUtils().decisionLabelMock
   const mongoRepository = new DecisionMongoRepository()
 
   it('throws an error when connection to mongo failed', async () => {
