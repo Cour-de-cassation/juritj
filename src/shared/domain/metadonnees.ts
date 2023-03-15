@@ -39,7 +39,6 @@ export class Metadonnees {
   chainage?: DecisionAssociee[]
   decisionAssociee: DecisionAssociee
   parties: Partie[]
-  partie: Partie
   sommaire?: string
   codeNAC: string
   libelleNAC: string

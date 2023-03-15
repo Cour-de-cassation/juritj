@@ -105,7 +105,7 @@ export class PartieDto {
   @ApiProperty({
     description: 'Type du partie de la décision',
     enum: TypePartie,
-    example: new MockUtils().metadonneesDtoMock.partie.type
+    example: new MockUtils().metadonneesDtoMock.parties[0].type
   })
   @IsEnum(TypePartie)
   type: TypePartie
@@ -113,7 +113,7 @@ export class PartieDto {
   @ApiProperty({
     description: 'Nom du partie de la décision',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.partie.nom
+    example: new MockUtils().metadonneesDtoMock.parties[0].nom
   })
   @IsString()
   nom: string
@@ -294,18 +294,6 @@ export class MetadonneesDto {
   @ValidateNested({ each: true })
   @Type(() => PartieDto)
   parties: PartieDto[]
-
-  @ApiProperty({
-    description: 'Partie de la décision',
-    type: PartieDto,
-    example: new MockUtils().metadonneesDtoMock.partie
-  })
-  @IsDefined()
-  @IsObject()
-  @IsNotEmptyObject()
-  @ValidateNested()
-  @Type(() => PartieDto)
-  partie: PartieDto
 
   @ApiPropertyOptional({
     description: 'Résumé de la décision intègre',

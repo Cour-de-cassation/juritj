@@ -39,7 +39,6 @@ export class MockUtils {
     libelleCodeDecision: 'some libelle code decision',
     decisionAssociee: this.decisionDtoMock,
     parties: [this.partieDtoMock, this.partieDtoMock],
-    partie: this.partieDtoMock,
     codeNAC: '88F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
     codeNature: '6C',
