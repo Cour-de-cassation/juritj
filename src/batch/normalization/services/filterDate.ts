@@ -14,8 +14,8 @@ export function changeLabelStatusAccordingToDateExactitude(
   decisionLabelDTO: DecisionLabelDTO
 ): DecisionLabelDTO {
   if (checkDecisionNormaliseeDateExactitude(decisionLabelDTO)) {
-    return decisionLabelDTO
-  } else {
     return { ...decisionLabelDTO, labelStatus: LabelStatus.TOIGNORE }
+  } else {
+    return decisionLabelDTO
   }
 }
