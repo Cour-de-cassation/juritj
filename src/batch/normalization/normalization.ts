@@ -12,7 +12,7 @@ import { LabelStatus } from '../../shared/domain/enums'
 import { mapDecisionNormaliseeToLabelDecision } from './domain/decision.label.dto'
 import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
-import { changeLabelStatusAccordingToDateExactitude } from './services/filterDate'
+import { changeLabelStatusAccordingToDateExactitude } from './services/changeLabelStatus'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 const s3Repository = new DecisionS3Repository()
