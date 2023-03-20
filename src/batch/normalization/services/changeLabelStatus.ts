@@ -9,6 +9,7 @@ export function changeLabelStatusAccordingToDateExactitude(
     return decisionLabelDTO
   } else {
     logger.error('[NORMALIZATION JOB] Incorrect date, dateDecision is posterior to dateCreation.')
+    logger.log('[NORMALIZATION JOB] LabelStatus changes to toIgnore.')
     return { ...decisionLabelDTO, labelStatus: LabelStatus.TOIGNORE }
   }
 }

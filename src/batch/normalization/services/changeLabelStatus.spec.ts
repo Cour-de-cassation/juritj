@@ -4,7 +4,8 @@ import { changeLabelStatusAccordingToDateExactitude } from './changeLabelStatus'
 
 jest.mock('../index', () => ({
   logger: {
-    error: jest.fn()
+    error: jest.fn(),
+    log: jest.fn()
   }
 }))
 
