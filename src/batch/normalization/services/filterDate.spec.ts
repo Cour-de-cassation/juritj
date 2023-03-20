@@ -2,34 +2,49 @@ import { LabelStatus } from '../../../shared/domain/enums'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import {
   changeLabelStatusAccordingToDateExactitude,
-  checkDecisionNormaliseeDateExactitude
+  isDateCreationAfterDateDecision
 } from './filterDate'
 
 describe('filter date function', () => {
-  const mockPastDateDecision = '2010-11-21'
-  const mockFutureDateDecision = '2050-11-21'
+  const mockDateDecision = new Date()
+  const mockPastDateDecision = new Date(
+    mockDateDecision.getFullYear() - 1,
+    mockDateDecision.getMonth(),
+    mockDateDecision.getDate()
+  )
+  const mockFutureDateDecision = new Date(
+    mockDateDecision.getFullYear() + 1,
+    mockDateDecision.getMonth(),
+    mockDateDecision.getDate()
+  )
 
-  describe('checkDate function', () => {
+  describe('isDateCreationAfterDateDecision function', () => {
     it('returns true if dateCreation is after dateDecision', () => {
       // GIVEN
       const mockMappedDecision = {
         ...new MockUtils().decisionLabelMock,
-        dateDecision: mockPastDateDecision
+        dateDecision: mockPastDateDecision.toISOString()
       }
 
+      // WHEN
+      const boolDateCreationAfterDateDecision = isDateCreationAfterDateDecision(mockMappedDecision)
+
       // THEN
-      expect(checkDecisionNormaliseeDateExactitude(mockMappedDecision)).toBe(true)
+      expect(boolDateCreationAfterDateDecision).toBe(true)
     })
 
     it('returns false if dateCreation is before dateDecision', () => {
       // GIVEN
       const mockMappedDecision = {
         ...new MockUtils().decisionLabelMock,
-        dateDecision: mockFutureDateDecision
+        dateDecision: mockFutureDateDecision.toISOString()
       }
 
+      // WHEN
+      const boolDateCreationAfterDateDecision = isDateCreationAfterDateDecision(mockMappedDecision)
+
       // THEN
-      expect(checkDecisionNormaliseeDateExactitude(mockMappedDecision)).toBe(false)
+      expect(boolDateCreationAfterDateDecision).toBe(false)
     })
   })
 
@@ -37,7 +52,7 @@ describe('filter date function', () => {
     // GIVEN
     const mockDecisionLabel = {
       ...new MockUtils().decisionLabelMock,
-      dateDecision: mockPastDateDecision
+      dateDecision: mockPastDateDecision.toISOString()
     }
     const expectedDecision = { ...mockDecisionLabel, labelStatus: LabelStatus.TOIGNORE }
 
@@ -52,7 +67,7 @@ describe('filter date function', () => {
     // GIVEN
     const mockDecisionLabel = {
       ...new MockUtils().decisionLabelMock,
-      dateDecision: mockFutureDateDecision
+      dateDecision: mockFutureDateDecision.toISOString()
     }
     const expectedDecision = mockDecisionLabel
 
