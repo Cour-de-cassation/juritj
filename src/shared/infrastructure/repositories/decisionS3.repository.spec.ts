@@ -4,9 +4,14 @@ import { ServiceUnavailableException } from '@nestjs/common'
 import { DecisionS3Repository } from './decisionS3.repository'
 
 describe('DecisionS3Repository', () => {
-  const mockS3: MockProxy<S3> = mockDeep<S3>()
-  const repository = new DecisionS3Repository(mockS3)
   const fakeBucketName = 'fake-bucket-name'
+  let repository: DecisionS3Repository
+  let mockS3: MockProxy<S3>
+
+  beforeEach(() => {
+    mockS3 = mockDeep<S3>()
+    repository = new DecisionS3Repository(mockS3)
+  })
 
   describe('saveDecision', () => {
     it('throws error when S3 called failed', async () => {
