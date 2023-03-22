@@ -18,5 +18,6 @@ export enum QualitePartie {
 export enum LabelStatus {
   TOBETREATED = 'toBeTreated',
   LOADED = 'loaded',
-  DONE = 'done'
+  DONE = 'done',
+  TOIGNORE = 'toIgnore'
 }
