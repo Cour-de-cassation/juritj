@@ -1,6 +1,6 @@
 import { LabelStatus } from '../../../shared/domain/enums'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
-import { changeLabelStatusAccordingToDateExactitude } from './changeLabelStatus'
+import { updateLabelStatusIfDateDecisionIsInFuture } from './changeLabelStatus'
 
 jest.mock('../index', () => ({
   logger: {
@@ -33,7 +33,7 @@ describe('filter date function', () => {
     const expectedDecision = { ...mockDecisionLabel, labelStatus: LabelStatus.TOIGNORE }
 
     // WHEN
-    const checkedMappedDecision = changeLabelStatusAccordingToDateExactitude(mockDecisionLabel)
+    const checkedMappedDecision = updateLabelStatusIfDateDecisionIsInFuture(mockDecisionLabel)
 
     // THEN
     expect(checkedMappedDecision).toEqual(expectedDecision)
@@ -49,7 +49,7 @@ describe('filter date function', () => {
     const expectedDecision = mockDecisionLabel
 
     // WHEN
-    const checkedMappedDecision = changeLabelStatusAccordingToDateExactitude(mockDecisionLabel)
+    const checkedMappedDecision = updateLabelStatusIfDateDecisionIsInFuture(mockDecisionLabel)
 
     // THEN
     expect(checkedMappedDecision).toEqual(expectedDecision)

@@ -12,7 +12,7 @@ import { LabelStatus } from '../../shared/domain/enums'
 import { mapDecisionNormaliseeToLabelDecision } from './domain/decision.label.dto'
 import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
-import { changeLabelStatusAccordingToDateExactitude } from './services/changeLabelStatus'
+import { updateLabelStatusIfDateDecisionIsInFuture } from './services/changeLabelStatus'
 
 const decisionMongoRepository = new DecisionMongoRepository()
 const s3Repository = new DecisionS3Repository()
@@ -61,7 +61,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         // on transforme la donnee en modele lisible pour label puis on le sauvegarde
         const decisionToSave = mapDecisionNormaliseeToLabelDecision(transformedDecision)
 
-        const decisionToSaveDateChecked = changeLabelStatusAccordingToDateExactitude(decisionToSave)
+        const decisionToSaveDateChecked = updateLabelStatusIfDateDecisionIsInFuture(decisionToSave)
 
         await decisionMongoRepository.saveDecision(decisionToSaveDateChecked)
         logger.log('[NORMALIZATION JOB] Decision saved in database.', idDecision)
