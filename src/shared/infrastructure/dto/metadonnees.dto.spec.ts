@@ -1,7 +1,7 @@
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common'
 import { ValidateDtoPipe } from '../../../api/infrastructure/pipes/validateDto.pipe'
 import { MockUtils } from '../utils/mock.utils'
-import { MetadonneesDto } from './metadonnees.dto'
+import { MetadonneesDto, PresidentDto } from './metadonnees.dto'
 
 describe('Validate MetadonneeDTO format', () => {
   const target = new ValidateDtoPipe()
@@ -162,7 +162,7 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('numeroMesureInstruction property', () => {
-    it('throws an error when numeroMesureInstruction is not a string', async () => {
+    it('throws an error when numeroMesureInstruction is not a list of strings', async () => {
       // GIVEN
       const invalidNumeroMesureInstruction = 123
       const invalidMetadonnee = {
@@ -176,18 +176,33 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when numeroMesureInstruction is different than length 10', async () => {
+    it('throws an error when an element of numeroMesureInstruction does not have 10 characters', async () => {
       // GIVEN
       const invalidNumeroMesureInstruction = 'short'
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        numeroMesureInstruction: invalidNumeroMesureInstruction
+        numeroMesureInstruction: [invalidNumeroMesureInstruction]
       }
 
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
         // THEN
         .rejects.toThrow(BadRequestException)
+    })
+
+    it('succeeds when numeroMesureInstruction is a list of 10 characters strings', async () => {
+      // GIVEN
+      const validNumeroMesureInstruction = ['1234567890']
+      const metadonneesWithValidNumeroMesureInstruction = {
+        ...someValidMetaDonneeDto,
+        numeroMesureInstruction: validNumeroMesureInstruction
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWithValidNumeroMesureInstruction, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWithValidNumeroMesureInstruction)
     })
   })
 
@@ -346,6 +361,34 @@ describe('Validate MetadonneeDTO format', () => {
         // THEN
         .rejects.toThrow(BadRequestException)
     })
+
+    it('succeeds when codeDecision has 2 characters', async () => {
+      // GIVEN
+      const metadonneesWith2charactersCodeDecision = {
+        ...someValidMetaDonneeDto,
+        codeDecision: 'a2'
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWith2charactersCodeDecision, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWith2charactersCodeDecision)
+    })
+
+    it('succeeds when codeDecision has 3 characters', async () => {
+      // GIVEN
+      const metadonneesWith3charactersCodeDecision = {
+        ...someValidMetaDonneeDto,
+        codeDecision: '4a2'
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWith3charactersCodeDecision, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWith3charactersCodeDecision)
+    })
   })
 
   describe('libelleCodeDecision property', () => {
@@ -380,6 +423,36 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('validate PresidentDTO (president property) format', () => {
+    it('succeeds when president property only has nom element', async () => {
+      // GIVEN
+      const presidentWithOneProperty: PresidentDto = { nom: 'some valid name' }
+      const metadonneesWithPresident = {
+        ...someValidMetaDonneeDto,
+        president: presidentWithOneProperty
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWithPresident, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWithPresident)
+    })
+
+    it('succeeds when president property only has prenom element', async () => {
+      // GIVEN
+      const presidentWithOneProperty: PresidentDto = { prenom: 'some valid surname' }
+      const metadonneesWithPresident = {
+        ...someValidMetaDonneeDto,
+        president: presidentWithOneProperty
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWithPresident, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWithPresident)
+    })
+
     describe('property fonction', () => {
       it('throws an error when fonction is not a string', async () => {
         // GIVEN
@@ -453,36 +526,6 @@ describe('Validate MetadonneeDTO format', () => {
           // THEN
           .rejects.toThrow(BadRequestException)
       })
-    })
-  })
-
-  describe('chainage property', () => {
-    it('throws an error when chainage is not an array', async () => {
-      // GIVEN
-      const invalidChainage = 12345
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        chainage: invalidChainage
-      }
-
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
-
-    it('throws an error when chainage is not an array of decision', async () => {
-      // GIVEN
-      const invalidChainage = [1, 2, 3]
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        chainage: invalidChainage
-      }
-
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
     })
   })
 

@@ -1,10 +1,10 @@
 import { LabelStatus, QualitePartie, TypePartie } from './enums'
 
 export class President {
-  fonction: string
-  nom: string
-  prenom: string
-  civilite: string
+  fonction?: string
+  nom?: string
+  prenom?: string
+  civilite?: string
 }
 
 export class DecisionAssociee {
@@ -29,14 +29,13 @@ export class Metadonnees {
   codeJuridiction?: string
   numeroRegistre: string
   numeroRoleGeneral: string
-  numeroMesureInstruction: string
+  numeroMesureInstruction: string[]
   codeService: string
   libelleService: string
   dateDecision: string
   codeDecision: string
   libelleCodeDecision: string
   president?: President
-  chainage?: DecisionAssociee[]
   decisionAssociee: DecisionAssociee
   parties: Partie[]
   sommaire?: string

@@ -1,7 +1,7 @@
 import { LabelStatus, TypePartie } from '../../domain/enums'
 
 export class MockUtils {
-  uniqueDecisionId = `TJ75011A01/12345202211210123456789`
+  uniqueDecisionId = `TJ75011A01/1234520221121`
   uniqueDecisionIdWithoutNumeroMesureInstruction = `TJ75011A01/1234520221121`
 
   presidentDtoMock = {
@@ -31,7 +31,7 @@ export class MockUtils {
     idJuridiction: 'TJ75011',
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
-    numeroMesureInstruction: '0123456789',
+    numeroMesureInstruction: ['0123456789'],
     codeService: '0A',
     dateDecision: '20221121',
     libelleService: 'Libelle de service',

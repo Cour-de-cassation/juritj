@@ -2,20 +2,15 @@ import { logger } from '../index'
 import { MetadonneesDto } from '../../../shared/infrastructure/dto/metadonnees.dto'
 
 const requiredKeys = ['idJuridiction', 'numeroRegistre', 'numeroRoleGeneral', 'dateDecision']
-const optionalKey = 'numeroMesureInstruction'
 
 export function generateUniqueId(metadonnees: MetadonneesDto): string {
   if (hasMandatoryMetadonnees(metadonnees)) {
-    const requiredMetadonnees =
+    const uniqueId =
       metadonnees.idJuridiction +
       metadonnees.numeroRegistre +
       metadonnees.numeroRoleGeneral +
       metadonnees.dateDecision
 
-    const uniqueId =
-      optionalKey in metadonnees
-        ? requiredMetadonnees + metadonnees.numeroMesureInstruction
-        : requiredMetadonnees
     logger.log('[NORMALIZATION JOB] Unique ID generated.', uniqueId)
     return uniqueId
   } else {
@@ -25,8 +20,7 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
           idJuridiction: metadonnees.idJuridiction,
           numeroRegistre: metadonnees.numeroRegistre,
           numeroRoleGeneral: metadonnees.numeroRoleGeneral,
-          dateDecision: metadonnees.dateDecision,
-          numeroMesureInstruction: metadonnees.numeroMesureInstruction
+          dateDecision: metadonnees.dateDecision
         })
     )
     throw new Error('Could not generate unique ID based on metadata.')

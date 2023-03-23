@@ -24,7 +24,8 @@ export class PresidentDto {
     example: new MockUtils().presidentDtoMock.fonction
   })
   @IsString()
-  fonction: string
+  @IsOptional()
+  fonction?: string
 
   @ApiProperty({
     description: 'Nom du président de jugement',
@@ -32,7 +33,8 @@ export class PresidentDto {
     example: new MockUtils().presidentDtoMock.nom
   })
   @IsString()
-  nom: string
+  @IsOptional()
+  nom?: string
 
   @ApiProperty({
     description: 'Prénom du président de jugement',
@@ -40,7 +42,8 @@ export class PresidentDto {
     example: new MockUtils().presidentDtoMock.prenom
   })
   @IsString()
-  prenom: string
+  @IsOptional()
+  prenom?: string
 
   @ApiProperty({
     description: 'Civilité du président de jugement',
@@ -48,7 +51,8 @@ export class PresidentDto {
     example: new MockUtils().presidentDtoMock.civilite
   })
   @IsString()
-  civilite: string
+  @IsOptional()
+  civilite?: string
 }
 
 export class DecisionDto {
@@ -199,9 +203,10 @@ export class MetadonneesDto {
     type: String,
     example: new MockUtils().metadonneesDtoMock.numeroMesureInstruction
   })
-  @IsString()
-  @Length(10, 10)
-  numeroMesureInstruction: string
+  @IsArray()
+  @IsString({ each: true })
+  @Length(10, 10, { each: true })
+  numeroMesureInstruction: string[]
 
   @ApiProperty({
     description: 'Identifiant du service de la juridiction. Au format: ^[0-9a-zA-Z]{2}$',
@@ -232,12 +237,12 @@ export class MetadonneesDto {
   dateDecision: string
 
   @ApiProperty({
-    description: 'Code du type de décision. Au format : ^[0-9a-zA-Z]{3}$',
+    description: 'Code du type de décision. Au format : ^[0-9a-zA-Z]{2,3}$',
     type: String,
     example: new MockUtils().metadonneesDtoMock.codeDecision
   })
   @IsString()
-  @Matches('^[0-9a-zA-Z]{3}$')
+  @Matches('^[0-9a-zA-Z]{2,3}$')
   codeDecision: string
 
   @ApiProperty({
@@ -261,17 +266,6 @@ export class MetadonneesDto {
   @ValidateNested()
   @Type(() => PresidentDto)
   president?: PresidentDto
-
-  @ApiPropertyOptional({
-    description: 'Liste des décisions intègres chainées à la décision',
-    type: [DecisionDto],
-    example: [new MockUtils().metadonneesDtoMock.decisionAssociee]
-  })
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => DecisionDto)
-  chainage?: DecisionDto[]
 
   @ApiProperty({
     description: 'Décision intègre chainée à la décision',
