@@ -97,7 +97,7 @@ describe('SaveDecisionUsecase', () => {
         libelleNAC: 'Demande en dommages-intérêts contre un organisme',
         codeNature: '6C',
         libelleNature: 'Autres demandes en matière de frais et dépens',
-        public: false,
+        decisionPublique: false,
         recommandationOccultation: false
       }
     })

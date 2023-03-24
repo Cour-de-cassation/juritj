@@ -328,10 +328,10 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Caractère public de la décision',
     type: Boolean,
-    example: metadonneesDtoExample.public
+    example: metadonneesDtoExample.decisionPublique
   })
   @IsBoolean()
-  public: boolean
+  decisionPublique: boolean
 
   @ApiProperty({
     description: "Utilisation des recommandations pour l'occultation",

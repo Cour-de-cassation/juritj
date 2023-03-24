@@ -42,7 +42,7 @@ export class Metadonnees {
   libelleNAC: string
   codeNature: string
   libelleNature: string
-  public: boolean
+  decisionPublique: boolean
   recommandationOccultation: boolean
   occultationComplementaire?: string
 }

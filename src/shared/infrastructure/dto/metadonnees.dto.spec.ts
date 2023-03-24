@@ -853,13 +853,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('public property', () => {
-    it('throws an error when public is not a boolean', async () => {
+  describe('decisionPublique property', () => {
+    it('throws an error when decisionPublique is not a boolean', async () => {
       // GIVEN
-      const invalidPublic = 12345
+      const invalidDecisionPublique = 12345
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        public: invalidPublic
+        decisionPublique: invalidDecisionPublique
       }
 
       // WHEN
