@@ -1,4 +1,5 @@
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common'
+import { Occultation } from '../../../shared/domain/enums'
 import { ValidateDtoPipe } from '../../../api/infrastructure/pipes/validateDto.pipe'
 import { MockUtils } from '../utils/mock.utils'
 import { MetadonneesDto, PresidentDto } from './metadonnees.dto'
@@ -870,7 +871,7 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('recommandationOccultation property', () => {
-    it('throws an error when recommandationOccultation is not a boolean', async () => {
+    it('throws an error when recommandationOccultation has a wrong format', async () => {
       // GIVEN
       const invalidRecommandationOccultation = 12345
       const invalidMetadonnee = {
@@ -883,6 +884,37 @@ describe('Validate MetadonneeDTO format', () => {
         // THEN
         .rejects.toThrow(BadRequestException)
     })
+
+    it('throws an error when recommandationOccultation is not a valid value', async () => {
+      // GIVEN
+      const invalidRecommandationOccultation = 'some invalid value'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        recommandationOccultation: invalidRecommandationOccultation
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+
+    it.each(Object.values(Occultation))(
+      'succeeds when recommandationOccultation is equal to %p',
+      async (providedRecommandationOccultation) => {
+        // GIVEN
+        const validMetadonnees = {
+          ...someValidMetaDonneeDto,
+          recommandationOccultation: providedRecommandationOccultation
+        }
+
+        // WHEN
+        const response = await target.transform(validMetadonnees, metadata)
+
+        // THEN
+        expect(response).toEqual(validMetadonnees)
+      }
+    )
   })
 
   describe('occultationComplementaire property', () => {

@@ -15,7 +15,7 @@ import {
 } from 'class-validator'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { MockUtils } from '../utils/mock.utils'
-import { QualitePartie, TypePartie } from '../../domain/enums'
+import { Occultation, QualitePartie, TypePartie } from '../../domain/enums'
 
 const metadonneesDtoExample = new MockUtils().allAttributesMetadonneesDtoMock
 
@@ -335,11 +335,11 @@ export class MetadonneesDto {
 
   @ApiProperty({
     description: "Utilisation des recommandations pour l'occultation",
-    type: Boolean,
+    type: Occultation,
     example: metadonneesDtoExample.recommandationOccultation
   })
-  @IsBoolean()
-  recommandationOccultation: boolean
+  @IsEnum(Occultation)
+  recommandationOccultation: Occultation
 
   @ApiPropertyOptional({
     description: "Champ libre contenant les demandes d'occultations complémentaires",

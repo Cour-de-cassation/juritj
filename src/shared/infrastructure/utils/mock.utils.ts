@@ -1,4 +1,4 @@
-import { LabelStatus, TypePartie } from '../../domain/enums'
+import { LabelStatus, Occultation, TypePartie } from '../../domain/enums'
 
 export class MockUtils {
   uniqueDecisionId = `TJ75011A01/1234520221121`
@@ -40,7 +40,7 @@ export class MockUtils {
     codeNature: '6C',
     libelleNature: 'Autres demandes en matière de frais et dépens',
     decisionPublique: false,
-    recommandationOccultation: false
+    recommandationOccultation: Occultation.AUCUNE
   }
 
   allAttributesMetadonneesDtoMock = {

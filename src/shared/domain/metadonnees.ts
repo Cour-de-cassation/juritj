@@ -1,4 +1,4 @@
-import { LabelStatus, QualitePartie, TypePartie } from './enums'
+import { LabelStatus, Occultation, QualitePartie, TypePartie } from './enums'
 
 export class President {
   fonction: string
@@ -43,7 +43,7 @@ export class Metadonnees {
   codeNature: string
   libelleNature: string
   decisionPublique: boolean
-  recommandationOccultation: boolean
+  recommandationOccultation: Occultation
   occultationComplementaire?: string
 }
 

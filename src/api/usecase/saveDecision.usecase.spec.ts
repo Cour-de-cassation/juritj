@@ -3,6 +3,7 @@ import { MockProxy, mock } from 'jest-mock-extended'
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { SaveDecisionUsecase } from './saveDecision.usecase'
 import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
+import { Occultation } from '../../shared/domain/enums'
 
 describe('SaveDecisionUsecase', () => {
   const mockDecisionRepository: MockProxy<DecisionRepository> = mock<DecisionRepository>()
@@ -98,7 +99,7 @@ describe('SaveDecisionUsecase', () => {
         codeNature: '6C',
         libelleNature: 'Autres demandes en matière de frais et dépens',
         decisionPublique: false,
-        recommandationOccultation: false
+        recommandationOccultation: Occultation.AUCUNE
       }
     })
 
