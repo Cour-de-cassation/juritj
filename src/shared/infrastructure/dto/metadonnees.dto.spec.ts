@@ -351,29 +351,32 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when codeDecision is invalid', async () => {
+    it('throws an error when codeDecision has more than 3 characters', async () => {
       // GIVEN
-      const invalidCodeDecision = 'INVALID REGEX'
-      const invalidMetadonnee = { ...someValidMetaDonneeDto, codeDecision: invalidCodeDecision }
+      const tooLongCodeDecision = 'INVALID REGEX'
+      const firstInvalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        codeDecision: tooLongCodeDecision
+      }
 
       // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+      await expect(async () => await target.transform(firstInvalidMetadonnee, metadata))
         // THEN
         .rejects.toThrow(BadRequestException)
     })
 
-    it('succeeds when codeDecision has 2 characters', async () => {
+    it('throws an error when codeDecision has less than 3 characters', async () => {
       // GIVEN
-      const metadonneesWith2charactersCodeDecision = {
+      const tooShortCodeDecision = 'a2'
+      const secondInvalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        codeDecision: 'a2'
+        codeDecision: tooShortCodeDecision
       }
 
       // WHEN
-      const response = await target.transform(metadonneesWith2charactersCodeDecision, metadata)
-
-      // THEN
-      expect(response).toEqual(metadonneesWith2charactersCodeDecision)
+      await expect(async () => await target.transform(secondInvalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
     })
 
     it('succeeds when codeDecision has 3 characters', async () => {

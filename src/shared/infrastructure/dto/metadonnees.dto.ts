@@ -240,12 +240,12 @@ export class MetadonneesDto {
   dateDecision: string
 
   @ApiProperty({
-    description: 'Code du type de décision. Au format : ^[0-9a-zA-Z]{2,3}$',
+    description: 'Code du type de décision. Au format : ^[0-9a-zA-Z]{3}$',
     type: String,
     example: metadonneesDtoExample.codeDecision
   })
   @IsString()
-  @Matches('^[0-9a-zA-Z]{2,3}$')
+  @Matches('^[0-9a-zA-Z]{3}$')
   codeDecision: string
 
   @ApiProperty({

@@ -64,6 +64,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     // WHEN
     const decisionLabel = mapDecisionNormaliseeToLabelDecision(mockDecision)
 
+    // THEN
     expect(decisionLabel).toEqual(expectedDecisionLabel)
   })
 })

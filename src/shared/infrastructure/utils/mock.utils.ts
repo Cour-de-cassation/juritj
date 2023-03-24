@@ -59,6 +59,7 @@ export class MockUtils {
     decision: this.decisionContent,
     metadonnees: this.allAttributesMetadonneesDtoMock
   }
+
   decisionLabelMock = {
     appeals: [],
     chamberId: null,
