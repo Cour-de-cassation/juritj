@@ -15,8 +15,7 @@ export class MockUtils {
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
     idJuridiction: 'TJ00000',
-    date: '20221121',
-    numeroMesureInstruction: 'BCDEFGHIJK'
+    date: '20221121'
   }
 
   partieDtoMock = {
@@ -35,7 +34,6 @@ export class MockUtils {
     libelleService: 'Libelle de service',
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
-    decisionAssociee: this.decisionDtoMock,
     parties: [this.partieDtoMock, this.partieDtoMock],
     codeNAC: '88F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
@@ -49,7 +47,8 @@ export class MockUtils {
     ...this.mandatoryMetadonneesDtoMock,
     idDecision: this.uniqueDecisionId,
     labelStatus: LabelStatus.TOBETREATED,
-    numeroMesureInstruction: ['AZERTYUIOP']
+    numeroMesureInstruction: ['AZERTYUIOP'],
+    decisionAssociee: this.decisionDtoMock
   }
 
   decisionContent =

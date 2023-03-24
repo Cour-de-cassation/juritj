@@ -94,15 +94,6 @@ export class DecisionDto {
   @Matches('^[0-9]{8}$')
   @IsDateString()
   date: string
-
-  @ApiProperty({
-    description: "Numéro de la mesure d'instruction de la décision associée",
-    type: String,
-    example: metadonneesDtoExample.decisionAssociee.numeroMesureInstruction
-  })
-  @IsString()
-  @Length(10, 10)
-  numeroMesureInstruction: string
 }
 
 export class PartieDto {
@@ -273,12 +264,13 @@ export class MetadonneesDto {
     type: DecisionDto,
     example: metadonneesDtoExample.decisionAssociee
   })
+  @IsOptional()
   @IsDefined()
   @IsObject()
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => DecisionDto)
-  decisionAssociee: DecisionDto
+  decisionAssociee?: DecisionDto
 
   @ApiProperty({
     description: 'Liste des parties de la décision',

@@ -86,13 +86,6 @@ describe('SaveDecisionUsecase', () => {
         libelleService: 'Libelle de service',
         codeDecision: '0aA',
         libelleCodeDecision: 'some libelle code decision',
-        decisionAssociee: {
-          numeroRegistre: 'A',
-          numeroRoleGeneral: '01/12345',
-          idJuridiction: 'TJ00000',
-          date: '20221121',
-          numeroMesureInstruction: 'BCDEFGHIJK'
-        },
         parties: [
           {
             type: 'PP',

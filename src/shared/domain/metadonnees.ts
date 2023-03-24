@@ -12,7 +12,6 @@ export class DecisionAssociee {
   numeroRoleGeneral: string
   idJuridiction: string
   date: string
-  numeroMesureInstruction: string
 }
 
 export class Partie {
@@ -36,7 +35,7 @@ export class Metadonnees {
   codeDecision: string
   libelleCodeDecision: string
   president?: President
-  decisionAssociee: DecisionAssociee
+  decisionAssociee?: DecisionAssociee
   parties: Partie[]
   sommaire?: string
   codeNAC: string
