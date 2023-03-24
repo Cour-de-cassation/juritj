@@ -426,9 +426,12 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('validate PresidentDTO (president property) format', () => {
-    it('succeeds when president property only has nom element', async () => {
+    it('succeeds when president property only has mandatory elements', async () => {
       // GIVEN
-      const presidentWithOneProperty: PresidentDto = { nom: 'some valid name' }
+      const presidentWithOneProperty: PresidentDto = {
+        nom: 'some valid name',
+        fonction: 'some title'
+      }
       const metadonneesWithPresident = {
         ...someValidMetaDonneeDto,
         president: presidentWithOneProperty
@@ -441,9 +444,9 @@ describe('Validate MetadonneeDTO format', () => {
       expect(response).toEqual(metadonneesWithPresident)
     })
 
-    it('succeeds when president property only has prenom element', async () => {
+    it('succeeds when president property has all elements', async () => {
       // GIVEN
-      const presidentWithOneProperty: PresidentDto = { prenom: 'some valid surname' }
+      const presidentWithOneProperty: PresidentDto = new MockUtils().presidentDtoMock
       const metadonneesWithPresident = {
         ...someValidMetaDonneeDto,
         president: presidentWithOneProperty
@@ -454,6 +457,20 @@ describe('Validate MetadonneeDTO format', () => {
 
       // THEN
       expect(response).toEqual(metadonneesWithPresident)
+    })
+
+    it('throws an error when president property does not have mandatory function element', async () => {
+      // GIVEN
+      const presidentWithPrenomAndNomProperties = { prenom: 'some valid surname', nom: 'some name' }
+      const metadonneesWithPresident = {
+        ...someValidMetaDonneeDto,
+        president: presidentWithPrenomAndNomProperties
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(metadonneesWithPresident, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
     })
 
     describe('property fonction', () => {

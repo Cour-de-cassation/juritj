@@ -1,8 +1,8 @@
 import { LabelStatus, QualitePartie, TypePartie } from './enums'
 
 export class President {
-  fonction?: string
-  nom?: string
+  fonction: string
+  nom: string
   prenom?: string
   civilite?: string
 }

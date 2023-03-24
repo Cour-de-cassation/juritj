@@ -26,8 +26,7 @@ export class PresidentDto {
     example: new MockUtils().presidentDtoMock.fonction
   })
   @IsString()
-  @IsOptional()
-  fonction?: string
+  fonction: string
 
   @ApiProperty({
     description: 'Nom du président de jugement',
@@ -35,8 +34,7 @@ export class PresidentDto {
     example: new MockUtils().presidentDtoMock.nom
   })
   @IsString()
-  @IsOptional()
-  nom?: string
+  nom: string
 
   @ApiProperty({
     description: 'Prénom du président de jugement',
