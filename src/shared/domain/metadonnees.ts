@@ -29,7 +29,7 @@ export class Metadonnees {
   codeJuridiction?: string
   numeroRegistre: string
   numeroRoleGeneral: string
-  numeroMesureInstruction: string[]
+  numeroMesureInstruction?: string[]
   codeService: string
   libelleService: string
   dateDecision: string

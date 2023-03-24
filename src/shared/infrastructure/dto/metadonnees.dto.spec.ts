@@ -11,10 +11,10 @@ describe('Validate MetadonneeDTO format', () => {
     data: ''
   }
 
-  const someValidMetaDonneeDto = new MockUtils().metadonneesDtoMock
+  const someValidMetaDonneeDto = new MockUtils().mandatoryMetadonneesDtoMock
 
-  describe('Success case', () => {
-    it('returns provided object when provided object is a MetadonneeDto with valid properties', async () => {
+  describe('Success case when all mandatory fields are provided', () => {
+    it('returns provided object when provided object is a MetadonneeDto with valid mandatory properties', async () => {
       // WHEN
       const response = await target.transform(someValidMetaDonneeDto, metadata)
       // THEN

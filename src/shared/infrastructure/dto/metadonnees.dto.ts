@@ -17,6 +17,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { MockUtils } from '../utils/mock.utils'
 import { QualitePartie, TypePartie } from '../../domain/enums'
 
+const metadonneesDtoExample = new MockUtils().allAttributesMetadonneesDtoMock
+
 export class PresidentDto {
   @ApiProperty({
     description: 'Fonction du président de jugement',
@@ -59,7 +61,7 @@ export class DecisionDto {
   @ApiProperty({
     description: 'Numéro de registre de la décision associée',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.decisionAssociee.numeroRegistre
+    example: metadonneesDtoExample.decisionAssociee.numeroRegistre
   })
   @IsString()
   @Length(1, 1)
@@ -69,7 +71,7 @@ export class DecisionDto {
     description:
       'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents). Au format : ^[0-9]{2}/[0-9]{5}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.decisionAssociee.numeroRoleGeneral
+    example: metadonneesDtoExample.decisionAssociee.numeroRoleGeneral
   })
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
@@ -79,7 +81,7 @@ export class DecisionDto {
     description:
       'Identifiant de la juridiction émettrice propre au système d’information originel pour la décision associée. Au format ^TJ[0-9]{5}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.decisionAssociee.idJuridiction
+    example: metadonneesDtoExample.decisionAssociee.idJuridiction
   })
   @IsString()
   @Matches('^TJ[0-9]{5}$')
@@ -88,7 +90,7 @@ export class DecisionDto {
   @ApiProperty({
     description: 'Date de la décision associée. Au format AAAAMMJJ',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.decisionAssociee.date
+    example: metadonneesDtoExample.decisionAssociee.date
   })
   @IsString()
   @Matches('^[0-9]{8}$')
@@ -98,7 +100,7 @@ export class DecisionDto {
   @ApiProperty({
     description: "Numéro de la mesure d'instruction de la décision associée",
     type: String,
-    example: new MockUtils().metadonneesDtoMock.decisionAssociee.numeroMesureInstruction
+    example: metadonneesDtoExample.decisionAssociee.numeroMesureInstruction
   })
   @IsString()
   @Length(10, 10)
@@ -109,7 +111,7 @@ export class PartieDto {
   @ApiProperty({
     description: 'Type du partie de la décision',
     enum: TypePartie,
-    example: new MockUtils().metadonneesDtoMock.parties[0].type
+    example: metadonneesDtoExample.parties[0].type
   })
   @IsEnum(TypePartie)
   type: TypePartie
@@ -117,7 +119,7 @@ export class PartieDto {
   @ApiProperty({
     description: 'Nom du partie de la décision',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.parties[0].nom
+    example: metadonneesDtoExample.parties[0].nom
   })
   @IsString()
   nom: string
@@ -154,7 +156,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Intitulé de la juridiction émettrice propre au système d’information originel',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.nomJuridiction
+    example: metadonneesDtoExample.nomJuridiction
   })
   @IsString()
   @Length(2, 42)
@@ -164,7 +166,7 @@ export class MetadonneesDto {
     description:
       'Identifiant de la juridiction émettrice propre au système d’information originel. Au format ^TJ[0-9]{5}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.idJuridiction
+    example: metadonneesDtoExample.idJuridiction
   })
   @IsString()
   @Matches('^TJ[0-9]{5}$')
@@ -182,7 +184,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Numéro de registre',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.numeroRegistre
+    example: metadonneesDtoExample.numeroRegistre
   })
   @IsString()
   @Length(1, 1)
@@ -192,7 +194,7 @@ export class MetadonneesDto {
     description:
       'Numéro RG (Rôle Général) du dossier. Année sur deux chiffres séparé par un «/» d’un numéro à cinq chiffres (0 non significatifs présents). Au format : ^[0-9]{2}/[0-9]{5}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.numeroRoleGeneral
+    example: metadonneesDtoExample.numeroRoleGeneral
   })
   @IsString()
   @Matches('^[0-9]{2}/[0-9]{5}$')
@@ -201,17 +203,18 @@ export class MetadonneesDto {
   @ApiProperty({
     description: "Numéro de la mesure d'instruction",
     type: String,
-    example: new MockUtils().metadonneesDtoMock.numeroMesureInstruction
+    example: new MockUtils().allAttributesMetadonneesDtoMock.numeroMesureInstruction
   })
   @IsArray()
   @IsString({ each: true })
   @Length(10, 10, { each: true })
-  numeroMesureInstruction: string[]
+  @IsOptional()
+  numeroMesureInstruction?: string[]
 
   @ApiProperty({
     description: 'Identifiant du service de la juridiction. Au format: ^[0-9a-zA-Z]{2}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.codeService
+    example: metadonneesDtoExample.codeService
   })
   @IsString()
   @Matches('^[0-9a-zA-Z]{2}$')
@@ -220,7 +223,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Libellé du service de la juridiction',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.libelleService
+    example: metadonneesDtoExample.libelleService
   })
   @IsString()
   @Length(0, 25)
@@ -229,7 +232,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Date de rendu de la décision. Au format : AAAAMMJJ',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.dateDecision
+    example: metadonneesDtoExample.dateDecision
   })
   @IsString()
   @Matches('^[0-9]{8}$')
@@ -239,7 +242,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Code du type de décision. Au format : ^[0-9a-zA-Z]{2,3}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.codeDecision
+    example: metadonneesDtoExample.codeDecision
   })
   @IsString()
   @Matches('^[0-9a-zA-Z]{2,3}$')
@@ -248,7 +251,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Libellé du type de décision',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.libelleCodeDecision
+    example: metadonneesDtoExample.libelleCodeDecision
   })
   @IsString()
   @Length(0, 200)
@@ -270,7 +273,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Décision intègre chainée à la décision',
     type: DecisionDto,
-    example: new MockUtils().metadonneesDtoMock.decisionAssociee
+    example: metadonneesDtoExample.decisionAssociee
   })
   @IsDefined()
   @IsObject()
@@ -282,7 +285,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Liste des parties de la décision',
     type: [PartieDto],
-    example: new MockUtils().metadonneesDtoMock.parties
+    example: metadonneesDtoExample.parties
   })
   @IsArray()
   @ValidateNested({ each: true })
@@ -301,7 +304,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Code NAC de la décision. Au format : ^[0-9a-zA-Z]{3}$',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.codeNAC
+    example: metadonneesDtoExample.codeNAC
   })
   @IsString()
   @Matches('^[0-9a-zA-Z]{3}$')
@@ -310,7 +313,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Libellé du code NAC de la décision',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.libelleNAC
+    example: metadonneesDtoExample.libelleNAC
   })
   @IsString()
   libelleNAC: string
@@ -318,7 +321,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: "Complément d'information du code NAC. Au format : ^[0-9a-zA-Z]{1-2}$",
     type: String,
-    example: new MockUtils().metadonneesDtoMock.codeNature
+    example: metadonneesDtoExample.codeNature
   })
   @IsString()
   @Matches('^[0-9a-zA-Z]{1,2}$')
@@ -327,7 +330,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Libellé du code de nature particulière',
     type: String,
-    example: new MockUtils().metadonneesDtoMock.libelleNature
+    example: metadonneesDtoExample.libelleNature
   })
   @IsString()
   libelleNature: string
@@ -335,7 +338,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: 'Caractère public de la décision',
     type: Boolean,
-    example: new MockUtils().metadonneesDtoMock.public
+    example: metadonneesDtoExample.public
   })
   @IsBoolean()
   public: boolean
@@ -343,7 +346,7 @@ export class MetadonneesDto {
   @ApiProperty({
     description: "Utilisation des recommandations pour l'occultation",
     type: Boolean,
-    example: new MockUtils().metadonneesDtoMock.recommandationOccultation
+    example: metadonneesDtoExample.recommandationOccultation
   })
   @IsBoolean()
   recommandationOccultation: boolean

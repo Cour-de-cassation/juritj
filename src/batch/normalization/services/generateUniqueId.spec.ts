@@ -9,7 +9,7 @@ jest.mock('../index', () => ({
 }))
 
 const mockUtils = new MockUtils()
-const metadonnees = mockUtils.metadonneesDtoMock
+const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
 
 describe('Generates a unique ID based on metadata', () => {
   it('adds a unique ID as a idDecision property to metadata when required properties are provided', () => {
