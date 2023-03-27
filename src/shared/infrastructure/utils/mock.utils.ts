@@ -44,7 +44,8 @@ export class MockUtils {
     selection: false,
     matiereDeterminee: true,
     pourvoiLocal: false,
-    pourvoiCourDeCassation: false
+    pourvoiCourDeCassation: false,
+    debatPublic: true
   }
 
   allAttributesMetadonneesDtoMock = {

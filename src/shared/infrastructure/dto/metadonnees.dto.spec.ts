@@ -996,4 +996,20 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
   })
+
+  describe('debatPublic property', () => {
+    it('throws an error when debatPublic is not a boolean', async () => {
+      // GIVEN
+      const invalidDebatPublic = 'invalid debatPublic'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        debatPublic: invalidDebatPublic
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
 })

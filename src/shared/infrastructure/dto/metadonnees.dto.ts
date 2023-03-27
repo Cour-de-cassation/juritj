@@ -381,4 +381,12 @@ export class MetadonneesDto {
   })
   @IsBoolean()
   pourvoiCourDeCassation: boolean
+
+  @ApiProperty({
+    description: "Débat public d'une décision",
+    type: Boolean,
+    example: metadonneesDtoExample.debatPublic
+  })
+  @IsBoolean()
+  debatPublic: boolean
 }
