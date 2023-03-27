@@ -932,4 +932,20 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
   })
+
+  describe('selection property', () => {
+    it('throws an error when selection is not a boolean', async () => {
+      // GIVEN
+      const invalidSelection = 'invalid selection'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        selection: invalidSelection
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
 })

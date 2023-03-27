@@ -45,6 +45,7 @@ export class Metadonnees {
   decisionPublique: boolean
   recommandationOccultation: Occultation
   occultationComplementaire?: string
+  selection: boolean
 }
 
 export class MetadonneesNormalisee extends Metadonnees {

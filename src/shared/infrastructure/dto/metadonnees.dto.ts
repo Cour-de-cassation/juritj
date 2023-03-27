@@ -349,4 +349,12 @@ export class MetadonneesDto {
   @IsString()
   @IsOptional()
   occultationComplementaire?: string
+
+  @ApiProperty({
+    description: "Selection d'une décision",
+    type: Boolean,
+    example: metadonneesDtoExample.selection
+  })
+  @IsBoolean()
+  selection: boolean
 }

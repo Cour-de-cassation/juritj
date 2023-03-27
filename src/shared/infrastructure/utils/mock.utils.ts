@@ -40,7 +40,8 @@ export class MockUtils {
     codeNature: '6C',
     libelleNature: 'Autres demandes en matière de frais et dépens',
     decisionPublique: false,
-    recommandationOccultation: Occultation.AUCUNE
+    recommandationOccultation: Occultation.AUCUNE,
+    selection: false
   }
 
   allAttributesMetadonneesDtoMock = {

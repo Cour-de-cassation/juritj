@@ -3,7 +3,6 @@ import { MockProxy, mock } from 'jest-mock-extended'
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { SaveDecisionUsecase } from './saveDecision.usecase'
 import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
-import { Occultation } from '../../shared/domain/enums'
 
 describe('SaveDecisionUsecase', () => {
   const mockDecisionRepository: MockProxy<DecisionRepository> = mock<DecisionRepository>()
@@ -77,30 +76,7 @@ describe('SaveDecisionUsecase', () => {
         path: '',
         buffer: { type: 'Buffer', data: [116, 101, 120, 116] }
       },
-      metadonnees: {
-        nomJuridiction: 'Juridictions civiles de première instance',
-        idJuridiction: 'TJ75011',
-        numeroRegistre: 'A',
-        numeroRoleGeneral: '01/12345',
-        codeService: '0A',
-        dateDecision: '20221121',
-        libelleService: 'Libelle de service',
-        codeDecision: '0aA',
-        libelleCodeDecision: 'some libelle code decision',
-        parties: [
-          {
-            type: 'PP',
-            nom: 'nom Partie'
-          },
-          { type: 'PP', nom: 'nom Partie' }
-        ],
-        codeNAC: '88F',
-        libelleNAC: 'Demande en dommages-intérêts contre un organisme',
-        codeNature: '6C',
-        libelleNature: 'Autres demandes en matière de frais et dépens',
-        decisionPublique: false,
-        recommandationOccultation: Occultation.AUCUNE
-      }
+      metadonnees
     })
 
     // WHEN
