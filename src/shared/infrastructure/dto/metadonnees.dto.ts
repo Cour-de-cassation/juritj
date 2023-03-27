@@ -335,7 +335,7 @@ export class MetadonneesDto {
 
   @ApiProperty({
     description: "Utilisation des recommandations pour l'occultation",
-    type: Occultation,
+    enum: Occultation,
     example: metadonneesDtoExample.recommandationOccultation
   })
   @IsEnum(Occultation)
