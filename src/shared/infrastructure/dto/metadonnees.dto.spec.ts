@@ -1012,4 +1012,20 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
   })
+
+  describe('idDecisionWinci property', () => {
+    it('throws an error when idDecisionWinci is not a string', async () => {
+      // GIVEN
+      const invalidIdDecisionWinci = 2345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        idDecisionWinci: invalidIdDecisionWinci
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
 })

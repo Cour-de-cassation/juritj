@@ -36,7 +36,7 @@ export class PresidentDto {
   @IsString()
   nom: string
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Prénom du président de jugement',
     type: String,
     example: new MockUtils().presidentDtoMock.prenom
@@ -45,7 +45,7 @@ export class PresidentDto {
   @IsOptional()
   prenom?: string
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Civilité du président de jugement',
     type: String,
     example: new MockUtils().presidentDtoMock.civilite
@@ -189,7 +189,7 @@ export class MetadonneesDto {
   @Matches('^[0-9]{2}/[0-9]{5}$')
   numeroRoleGeneral: string
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Numéro de la mesure d'instruction",
     type: String,
     example: new MockUtils().allAttributesMetadonneesDtoMock.numeroMesureInstruction
@@ -259,7 +259,7 @@ export class MetadonneesDto {
   @Type(() => PresidentDto)
   president?: PresidentDto
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Décision intègre chainée à la décision',
     type: DecisionDto,
     example: metadonneesDtoExample.decisionAssociee
@@ -389,4 +389,13 @@ export class MetadonneesDto {
   })
   @IsBoolean()
   debatPublic: boolean
+
+  @ApiPropertyOptional({
+    description: 'id de la décision',
+    type: String,
+    example: 'idExemple'
+  })
+  @IsString()
+  @IsOptional()
+  idDecisionWinci?: string
 }
