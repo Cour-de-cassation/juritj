@@ -41,7 +41,8 @@ export class MockUtils {
     libelleNature: 'Autres demandes en matière de frais et dépens',
     decisionPublique: false,
     recommandationOccultation: Occultation.AUCUNE,
-    selection: false
+    selection: false,
+    matiereDeterminee: true
   }
 
   allAttributesMetadonneesDtoMock = {

@@ -948,4 +948,20 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
   })
+
+  describe('matiereDeterminee property', () => {
+    it('throws an error when matiereDeterminee is not a boolean', async () => {
+      // GIVEN
+      const invalidMatiereDeterminee = 'invalid matiereDeterminee'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        matiereDeterminee: invalidMatiereDeterminee
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
 })

@@ -357,4 +357,12 @@ export class MetadonneesDto {
   })
   @IsBoolean()
   selection: boolean
+
+  @ApiProperty({
+    description: "Matière déterminée d'une décision",
+    type: Boolean,
+    example: metadonneesDtoExample.selection
+  })
+  @IsBoolean()
+  matiereDeterminee: boolean
 }
