@@ -964,4 +964,36 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
   })
+
+  describe('pourvoiLocal property', () => {
+    it('throws an error when pourvoiLocal is not a boolean', async () => {
+      // GIVEN
+      const invalidPourvoiLocal = 'invalid pourvoiLocal'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        pourvoiLocal: invalidPourvoiLocal
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('pourvoiCourDeCassation property', () => {
+    it('throws an error when pourvoiCourDeCassation is not a boolean', async () => {
+      // GIVEN
+      const invalidPourvoiCourDeCassation = 'invalid pourvoiCourDeCassation'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        pourvoiCourDeCassation: invalidPourvoiCourDeCassation
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
 })

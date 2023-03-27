@@ -42,7 +42,9 @@ export class MockUtils {
     decisionPublique: false,
     recommandationOccultation: Occultation.AUCUNE,
     selection: false,
-    matiereDeterminee: true
+    matiereDeterminee: true,
+    pourvoiLocal: false,
+    pourvoiCourDeCassation: false
   }
 
   allAttributesMetadonneesDtoMock = {

@@ -47,6 +47,8 @@ export class Metadonnees {
   occultationComplementaire?: string
   selection: boolean
   matiereDeterminee: boolean
+  pourvoiLocal: boolean
+  pourvoiCourDeCassation: boolean
 }
 
 export class MetadonneesNormalisee extends Metadonnees {

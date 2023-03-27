@@ -361,8 +361,24 @@ export class MetadonneesDto {
   @ApiProperty({
     description: "Matière déterminée d'une décision",
     type: Boolean,
-    example: metadonneesDtoExample.selection
+    example: metadonneesDtoExample.matiereDeterminee
   })
   @IsBoolean()
   matiereDeterminee: boolean
+
+  @ApiProperty({
+    description: "Pourvoi local d'une décision",
+    type: Boolean,
+    example: metadonneesDtoExample.pourvoiLocal
+  })
+  @IsBoolean()
+  pourvoiLocal: boolean
+
+  @ApiProperty({
+    description: "Pourvoi de Cour de Cassation d'une décision",
+    type: Boolean,
+    example: metadonneesDtoExample.pourvoiCourDeCassation
+  })
+  @IsBoolean()
+  pourvoiCourDeCassation: boolean
 }
