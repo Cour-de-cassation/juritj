@@ -391,7 +391,7 @@ export class MetadonneesDto {
   debatPublic: boolean
 
   @ApiPropertyOptional({
-    description: 'id de la décision',
+    description: 'Identifiant de la décision dans le système source WinCI-TGI',
     type: String,
     example: 'idExemple'
   })
