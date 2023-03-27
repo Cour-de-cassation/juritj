@@ -41,7 +41,7 @@
     "express-basic-auth": "1.2.1",
     "mongoose": "6.10.0",
     "reflect-metadata": "0.1.13",
-    "rimraf": "4.1.2",
+    "rimraf": "4.4.1",
     "rxjs": "7.8.0",
     "uuid": "9.0.0"
   },
