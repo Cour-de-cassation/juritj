@@ -3,7 +3,7 @@ import { MetadonneesDto } from './metadonnees.dto'
 
 export class CollectDto {
   @ApiProperty({
-    type: 'File',
+    type: 'string',
     format: 'binary',
     description: 'Décision intègre au format wordperfect.'
   })

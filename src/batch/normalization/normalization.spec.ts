@@ -19,7 +19,7 @@ jest.mock('./index', () => ({
 }))
 
 const mockUtils = new MockUtils()
-const fakeMetadonnees = mockUtils.metadonneesDtoMock
+const fakeWithMandatoryMetadonnees = mockUtils.mandatoryMetadonneesDtoMock
 
 describe('Normalization job', () => {
   const decisionName = 'filename.wpd'
@@ -39,7 +39,7 @@ describe('Normalization job', () => {
 
   const mockDecision: CollectDto = {
     decisionIntegre,
-    metadonnees: new MockUtils().metadonneesDtoMock
+    metadonnees: fakeWithMandatoryMetadonnees
   }
 
   jest
@@ -53,7 +53,7 @@ describe('Normalization job', () => {
   jest.spyOn(DecisionS3Repository.prototype, 'saveDecisionNormalisee').mockImplementation(jest.fn())
   jest.spyOn(DecisionS3Repository.prototype, 'deleteDecision').mockImplementation(jest.fn())
 
-  const decisionIntegreMock = new MockUtils().decisionContent
+  const decisionIntegreMock = mockUtils.decisionContent
   const getDecisionIntegreMock = jest
     .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
     .mockImplementation(() => Promise.resolve(decisionIntegreMock))
@@ -63,7 +63,11 @@ describe('Normalization job', () => {
       // GIVEN
       const expected = [
         {
-          metadonnees: { ...fakeMetadonnees, idDecision: mockUtils.uniqueDecisionId },
+          metadonnees: {
+            ...fakeWithMandatoryMetadonnees,
+            idDecision: mockUtils.uniqueDecisionId,
+            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
+          },
           decisionNormalisee:
             'Le contenu de ma décision avec des espaces et des backslash multiples \n '
         }
@@ -85,7 +89,11 @@ describe('Normalization job', () => {
 
       const expected = [
         {
-          metadonnees: { ...fakeMetadonnees, idDecision: mockUtils.uniqueDecisionId },
+          metadonnees: {
+            ...fakeWithMandatoryMetadonnees,
+            idDecision: mockUtils.uniqueDecisionId,
+            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
+          },
           decisionNormalisee: expectedDecision
         }
       ]
@@ -108,12 +116,20 @@ describe('Normalization job', () => {
       // GIVEN
       const expected = [
         {
-          metadonnees: { ...fakeMetadonnees, idDecision: mockUtils.uniqueDecisionId },
+          metadonnees: {
+            ...fakeWithMandatoryMetadonnees,
+            idDecision: mockUtils.uniqueDecisionId,
+            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
+          },
           decisionNormalisee:
             'Le contenu de ma décision avec des espaces et des backslash multiples \n '
         },
         {
-          metadonnees: { ...fakeMetadonnees, idDecision: mockUtils.uniqueDecisionId },
+          metadonnees: {
+            ...fakeWithMandatoryMetadonnees,
+            idDecision: mockUtils.uniqueDecisionId,
+            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
+          },
           decisionNormalisee:
             'Le contenu de ma décision avec des espaces et des backslash multiples \n '
         }

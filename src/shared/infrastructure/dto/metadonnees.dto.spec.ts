@@ -1,7 +1,8 @@
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common'
+import { Occultation } from '../../../shared/domain/enums'
 import { ValidateDtoPipe } from '../../../api/infrastructure/pipes/validateDto.pipe'
 import { MockUtils } from '../utils/mock.utils'
-import { MetadonneesDto } from './metadonnees.dto'
+import { MetadonneesDto, PresidentDto } from './metadonnees.dto'
 
 describe('Validate MetadonneeDTO format', () => {
   const target = new ValidateDtoPipe()
@@ -11,10 +12,11 @@ describe('Validate MetadonneeDTO format', () => {
     data: ''
   }
 
-  const someValidMetaDonneeDto = new MockUtils().metadonneesDtoMock
+  const mockUtils = new MockUtils()
+  const someValidMetaDonneeDto = mockUtils.mandatoryMetadonneesDtoMock
 
-  describe('Success case', () => {
-    it('returns provided object when provided object is a MetadonneeDto with valid properties', async () => {
+  describe('Success case when all mandatory fields are provided', () => {
+    it('returns provided object when provided object is a MetadonneeDto with valid mandatory properties', async () => {
       // WHEN
       const response = await target.transform(someValidMetaDonneeDto, metadata)
       // THEN
@@ -162,7 +164,7 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('numeroMesureInstruction property', () => {
-    it('throws an error when numeroMesureInstruction is not a string', async () => {
+    it('throws an error when numeroMesureInstruction is not a list of strings', async () => {
       // GIVEN
       const invalidNumeroMesureInstruction = 123
       const invalidMetadonnee = {
@@ -176,18 +178,33 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when numeroMesureInstruction is different than length 10', async () => {
+    it('throws an error when an element of numeroMesureInstruction does not have 10 characters', async () => {
       // GIVEN
       const invalidNumeroMesureInstruction = 'short'
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        numeroMesureInstruction: invalidNumeroMesureInstruction
+        numeroMesureInstruction: [invalidNumeroMesureInstruction]
       }
 
       // WHEN
       await expect(async () => await target.transform(invalidMetadonnee, metadata))
         // THEN
         .rejects.toThrow(BadRequestException)
+    })
+
+    it('succeeds when numeroMesureInstruction is a list of 10 characters strings', async () => {
+      // GIVEN
+      const validNumeroMesureInstruction = ['1234567890']
+      const metadonneesWithValidNumeroMesureInstruction = {
+        ...someValidMetaDonneeDto,
+        numeroMesureInstruction: validNumeroMesureInstruction
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWithValidNumeroMesureInstruction, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWithValidNumeroMesureInstruction)
     })
   })
 
@@ -336,15 +353,46 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadRequestException)
     })
 
-    it('throws an error when codeDecision is invalid', async () => {
+    it('throws an error when codeDecision has more than 3 characters', async () => {
       // GIVEN
-      const invalidCodeDecision = 'INVALID REGEX'
-      const invalidMetadonnee = { ...someValidMetaDonneeDto, codeDecision: invalidCodeDecision }
+      const tooLongCodeDecision = 'INVALID REGEX'
+      const firstInvalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        codeDecision: tooLongCodeDecision
+      }
 
       // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+      await expect(async () => await target.transform(firstInvalidMetadonnee, metadata))
         // THEN
         .rejects.toThrow(BadRequestException)
+    })
+
+    it('throws an error when codeDecision has less than 3 characters', async () => {
+      // GIVEN
+      const tooShortCodeDecision = 'a2'
+      const secondInvalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        codeDecision: tooShortCodeDecision
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(secondInvalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+
+    it('succeeds when codeDecision has 3 characters', async () => {
+      // GIVEN
+      const metadonneesWith3charactersCodeDecision = {
+        ...someValidMetaDonneeDto,
+        codeDecision: '4a2'
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWith3charactersCodeDecision, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWith3charactersCodeDecision)
     })
   })
 
@@ -380,6 +428,53 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('validate PresidentDTO (president property) format', () => {
+    it('succeeds when president property only has mandatory elements', async () => {
+      // GIVEN
+      const presidentWithOneProperty: PresidentDto = {
+        nom: 'some valid name',
+        fonction: 'some title'
+      }
+      const metadonneesWithPresident = {
+        ...someValidMetaDonneeDto,
+        president: presidentWithOneProperty
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWithPresident, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWithPresident)
+    })
+
+    it('succeeds when president property has all elements', async () => {
+      // GIVEN
+      const presidentWithOneProperty: PresidentDto = mockUtils.presidentDtoMock
+      const metadonneesWithPresident = {
+        ...someValidMetaDonneeDto,
+        president: presidentWithOneProperty
+      }
+
+      // WHEN
+      const response = await target.transform(metadonneesWithPresident, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWithPresident)
+    })
+
+    it('throws an error when president property does not have mandatory function element', async () => {
+      // GIVEN
+      const presidentWithPrenomAndNomProperties = { prenom: 'some valid surname', nom: 'some name' }
+      const metadonneesWithPresident = {
+        ...someValidMetaDonneeDto,
+        president: presidentWithPrenomAndNomProperties
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(metadonneesWithPresident, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+
     describe('property fonction', () => {
       it('throws an error when fonction is not a string', async () => {
         // GIVEN
@@ -405,7 +500,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           president: {
-            ...new MockUtils().presidentDtoMock,
+            ...mockUtils.presidentDtoMock,
             nom: invalidNom
           }
         }
@@ -424,7 +519,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           president: {
-            ...new MockUtils().presidentDtoMock,
+            ...mockUtils.presidentDtoMock,
             prenom: invalidPrenom
           }
         }
@@ -443,7 +538,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           president: {
-            ...new MockUtils().presidentDtoMock,
+            ...mockUtils.presidentDtoMock,
             civilite: invalidCivilite
           }
         }
@@ -456,46 +551,16 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('chainage property', () => {
-    it('throws an error when chainage is not an array', async () => {
-      // GIVEN
-      const invalidChainage = 12345
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        chainage: invalidChainage
-      }
-
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
-
-    it('throws an error when chainage is not an array of decision', async () => {
-      // GIVEN
-      const invalidChainage = [1, 2, 3]
-      const invalidMetadonnee = {
-        ...someValidMetaDonneeDto,
-        chainage: invalidChainage
-      }
-
-      // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
-    })
-  })
-
   describe('validate DecisionDTO (decisionAssociee property) format', () => {
-    it('throws an error when decisionAssociee is not defined', async () => {
+    it('succeeds when decisionAssociee is provided with all attributes', async () => {
       // GIVEN
-      // eslint-disable-next-line
-      const { decisionAssociee, ...invalidMetadonnee } = someValidMetaDonneeDto
+      const metadonneesWithDecisionAssociee = mockUtils.allAttributesMetadonneesDtoMock
 
       // WHEN
-      await expect(async () => await target.transform(invalidMetadonnee, metadata))
-        // THEN
-        .rejects.toThrow(BadRequestException)
+      const response = await target.transform(metadonneesWithDecisionAssociee, metadata)
+
+      // THEN
+      expect(response).toEqual(metadonneesWithDecisionAssociee)
     })
 
     describe('property numeroRegistre', () => {
@@ -505,7 +570,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             numeroRegistre: invalidNumeroRegistre
           }
         }
@@ -522,7 +587,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             numeroRegistre: invalidNumeroRegistre
           }
         }
@@ -541,7 +606,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             numeroRoleGeneral: invalidNumeroRoleGeneral
           }
         }
@@ -557,7 +622,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             numeroRoleGeneral: invalidNumeroRoleGeneral
           }
         }
@@ -576,7 +641,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             idJuridiction: invalidIdJuridiction
           }
         }
@@ -592,7 +657,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             idJuridiction: invalidIdJuridiction
           }
         }
@@ -610,7 +675,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             date: invalidDate
           }
         }
@@ -627,7 +692,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             date: invalidDate
           }
         }
@@ -644,44 +709,8 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
+            ...mockUtils.decisionDtoMock,
             date: invalidDate
-          }
-        }
-
-        // WHEN
-        await expect(async () => await target.transform(invalidMetadonnee, metadata))
-          // THEN
-          .rejects.toThrow(BadRequestException)
-      })
-    })
-
-    describe('property numeroMesureInstruction', () => {
-      it('throws an error when numeroMesureInstruction is not a string', async () => {
-        // GIVEN
-        const invalidNumeroMesureInstruction = 123
-        const invalidMetadonnee = {
-          ...someValidMetaDonneeDto,
-          decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
-            numeroMesureInstruction: invalidNumeroMesureInstruction
-          }
-        }
-
-        // WHEN
-        await expect(async () => await target.transform(invalidMetadonnee, metadata))
-          // THEN
-          .rejects.toThrow(BadRequestException)
-      })
-
-      it('throws an error when numeroMesureInstruction is different than length 10', async () => {
-        // GIVEN
-        const invalidNumeroMesureInstruction = 'small'
-        const invalidMetadonnee = {
-          ...someValidMetaDonneeDto,
-          decisionAssociee: {
-            ...new MockUtils().decisionDtoMock,
-            numeroMesureInstruction: invalidNumeroMesureInstruction
           }
         }
 
@@ -825,13 +854,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('public property', () => {
-    it('throws an error when public is not a boolean', async () => {
+  describe('decisionPublique property', () => {
+    it('throws an error when decisionPublique is not a boolean', async () => {
       // GIVEN
-      const invalidPublic = 12345
+      const invalidDecisionPublique = 12345
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        public: invalidPublic
+        decisionPublique: invalidDecisionPublique
       }
 
       // WHEN
@@ -842,7 +871,7 @@ describe('Validate MetadonneeDTO format', () => {
   })
 
   describe('recommandationOccultation property', () => {
-    it('throws an error when recommandationOccultation is not a boolean', async () => {
+    it('throws an error when recommandationOccultation has a wrong format', async () => {
       // GIVEN
       const invalidRecommandationOccultation = 12345
       const invalidMetadonnee = {
@@ -855,6 +884,37 @@ describe('Validate MetadonneeDTO format', () => {
         // THEN
         .rejects.toThrow(BadRequestException)
     })
+
+    it('throws an error when recommandationOccultation is not a valid value', async () => {
+      // GIVEN
+      const invalidRecommandationOccultation = 'some invalid value'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        recommandationOccultation: invalidRecommandationOccultation
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+
+    it.each(Object.values(Occultation))(
+      'succeeds when recommandationOccultation is equal to %p',
+      async (providedRecommandationOccultation) => {
+        // GIVEN
+        const validMetadonnees = {
+          ...someValidMetaDonneeDto,
+          recommandationOccultation: providedRecommandationOccultation
+        }
+
+        // WHEN
+        const response = await target.transform(validMetadonnees, metadata)
+
+        // THEN
+        expect(response).toEqual(validMetadonnees)
+      }
+    )
   })
 
   describe('occultationComplementaire property', () => {
@@ -864,6 +924,102 @@ describe('Validate MetadonneeDTO format', () => {
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
         occultationComplementaire: invalidOccultationComplementaire
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('selection property', () => {
+    it('throws an error when selection is not a boolean', async () => {
+      // GIVEN
+      const invalidSelection = 'invalid selection'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        selection: invalidSelection
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('matiereDeterminee property', () => {
+    it('throws an error when matiereDeterminee is not a boolean', async () => {
+      // GIVEN
+      const invalidMatiereDeterminee = 'invalid matiereDeterminee'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        matiereDeterminee: invalidMatiereDeterminee
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('pourvoiLocal property', () => {
+    it('throws an error when pourvoiLocal is not a boolean', async () => {
+      // GIVEN
+      const invalidPourvoiLocal = 'invalid pourvoiLocal'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        pourvoiLocal: invalidPourvoiLocal
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('pourvoiCourDeCassation property', () => {
+    it('throws an error when pourvoiCourDeCassation is not a boolean', async () => {
+      // GIVEN
+      const invalidPourvoiCourDeCassation = 'invalid pourvoiCourDeCassation'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        pourvoiCourDeCassation: invalidPourvoiCourDeCassation
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('debatPublic property', () => {
+    it('throws an error when debatPublic is not a boolean', async () => {
+      // GIVEN
+      const invalidDebatPublic = 'invalid debatPublic'
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        debatPublic: invalidDebatPublic
+      }
+
+      // WHEN
+      await expect(async () => await target.transform(invalidMetadonnee, metadata))
+        // THEN
+        .rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('idDecisionWinci property', () => {
+    it('throws an error when idDecisionWinci is not a string', async () => {
+      // GIVEN
+      const invalidIdDecisionWinci = 2345
+      const invalidMetadonnee = {
+        ...someValidMetaDonneeDto,
+        idDecisionWinci: invalidIdDecisionWinci
       }
 
       // WHEN

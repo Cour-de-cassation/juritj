@@ -1,7 +1,7 @@
-import { LabelStatus, TypePartie } from '../../domain/enums'
+import { LabelStatus, Occultation, TypePartie } from '../../domain/enums'
 
 export class MockUtils {
-  uniqueDecisionId = `TJ75011A01/12345202211210123456789`
+  uniqueDecisionId = `TJ75011A01/1234520221121`
   uniqueDecisionIdWithoutNumeroMesureInstruction = `TJ75011A01/1234520221121`
 
   presidentDtoMock = {
@@ -15,8 +15,7 @@ export class MockUtils {
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
     idJuridiction: 'TJ00000',
-    date: '20221121',
-    numeroMesureInstruction: 'BCDEFGHIJK'
+    date: '20221121'
   }
 
   partieDtoMock = {
@@ -25,36 +24,46 @@ export class MockUtils {
   }
 
   mockDate = new Date().toISOString()
-  metadonneesDtoMock = {
-    idDecision: this.uniqueDecisionId,
+  mandatoryMetadonneesDtoMock = {
     nomJuridiction: 'Juridictions civiles de première instance',
     idJuridiction: 'TJ75011',
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
-    numeroMesureInstruction: '0123456789',
     codeService: '0A',
     dateDecision: '20221121',
     libelleService: 'Libelle de service',
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
-    decisionAssociee: this.decisionDtoMock,
     parties: [this.partieDtoMock, this.partieDtoMock],
     codeNAC: '88F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
     codeNature: '6C',
     libelleNature: 'Autres demandes en matière de frais et dépens',
-    public: false,
-    recommandationOccultation: false,
-    labelStatus: LabelStatus.TOBETREATED
+    decisionPublique: false,
+    recommandationOccultation: Occultation.AUCUNE,
+    selection: false,
+    matiereDeterminee: true,
+    pourvoiLocal: false,
+    pourvoiCourDeCassation: false,
+    debatPublic: true
+  }
+
+  allAttributesMetadonneesDtoMock = {
+    ...this.mandatoryMetadonneesDtoMock,
+    idDecision: this.uniqueDecisionId,
+    labelStatus: LabelStatus.TOBETREATED,
+    numeroMesureInstruction: ['AZERTYUIOP'],
+    decisionAssociee: this.decisionDtoMock
   }
 
   decisionContent =
     '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t'
 
-  decisionMock = {
+  dbSderDecisionMock = {
     decision: this.decisionContent,
-    metadonnees: this.metadonneesDtoMock
+    metadonnees: this.allAttributesMetadonneesDtoMock
   }
+
   decisionLabelMock = {
     appeals: [],
     chamberId: null,
@@ -62,20 +71,20 @@ export class MockUtils {
     dateCreation: new Date().toISOString(),
     dateDecision: new Date().toISOString(),
     jurisdictionCode: 'this.metadonneesDtoMock.codeJuridiction',
-    jurisdictionId: this.metadonneesDtoMock.idJuridiction,
-    jurisdictionName: this.metadonneesDtoMock.nomJuridiction,
-    labelStatus: this.metadonneesDtoMock.labelStatus,
+    jurisdictionId: this.allAttributesMetadonneesDtoMock.idJuridiction,
+    jurisdictionName: this.allAttributesMetadonneesDtoMock.nomJuridiction,
+    labelStatus: this.allAttributesMetadonneesDtoMock.labelStatus,
     labelTreatments: null,
     occultation: {
       additionalTerms: 'this.metadonneesDtoMock.occultationComplementaire',
       categoriesToOmit: []
     },
-    originalText: this.decisionMock.decision,
-    parties: this.metadonneesDtoMock.parties,
+    originalText: this.dbSderDecisionMock.decision,
+    parties: this.allAttributesMetadonneesDtoMock.parties,
     pseudoStatus: null,
     pseudoText: null,
     pubCategory: null,
-    registerNumber: this.metadonneesDtoMock.numeroRegistre,
+    registerNumber: this.allAttributesMetadonneesDtoMock.numeroRegistre,
     solution: null,
     sourceId: null,
     sourceName: null,
@@ -86,10 +95,10 @@ export class MockUtils {
     },
     formation: null,
     blocOccultation: null,
-    natureAffaireCivil: this.metadonneesDtoMock.libelleNature,
+    natureAffaireCivil: this.allAttributesMetadonneesDtoMock.libelleNature,
     natureAffairePenal: null,
-    codeMatiereCivil: this.metadonneesDtoMock.codeNature,
-    NACCode: this.metadonneesDtoMock.codeNAC,
+    codeMatiereCivil: this.allAttributesMetadonneesDtoMock.codeNature,
+    NACCode: this.allAttributesMetadonneesDtoMock.codeNAC,
     endCaseCode: null
   }
 }

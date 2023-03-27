@@ -9,7 +9,7 @@ jest.mock('../index', () => ({
 }))
 
 const mockUtils = new MockUtils()
-const metadonnees = mockUtils.metadonneesDtoMock
+const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
 
 describe('Generates a unique ID based on metadata', () => {
   it('adds a unique ID as a idDecision property to metadata when required properties are provided', () => {
@@ -19,19 +19,6 @@ describe('Generates a unique ID based on metadata', () => {
 
     // WHEN
     const actual = generateUniqueId(someMetadonnees)
-
-    // THEN
-    expect(actual).toEqual(expected)
-  })
-
-  it('adds a unique ID as a idDecision property to metadata when only mandatory properties are provided', () => {
-    // GIVEN
-    const metadonneesWithEmptyNumeroMesureInstruction = { ...metadonnees }
-    metadonneesWithEmptyNumeroMesureInstruction.numeroMesureInstruction = ''
-    const expected = mockUtils.uniqueDecisionIdWithoutNumeroMesureInstruction
-
-    // WHEN
-    const actual = generateUniqueId(metadonneesWithEmptyNumeroMesureInstruction)
 
     // THEN
     expect(actual).toEqual(expected)

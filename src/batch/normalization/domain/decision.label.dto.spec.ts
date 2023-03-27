@@ -12,7 +12,7 @@ jest.mock('../index', () => ({
 describe('mapDecisionNormaliseeToDecisionLabel', () => {
   it('returns the correct object', async () => {
     // GIVEN
-    const mockDecision = new MockUtils().decisionMock
+    const mockDecision = new MockUtils().dbSderDecisionMock
     const expectedDecisionLabel: DecisionLabelDTO = {
       NACCode: '88F',
       appeals: [],
@@ -64,6 +64,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     // WHEN
     const decisionLabel = mapDecisionNormaliseeToLabelDecision(mockDecision)
 
+    // THEN
     expect(decisionLabel).toEqual(expectedDecisionLabel)
   })
 })

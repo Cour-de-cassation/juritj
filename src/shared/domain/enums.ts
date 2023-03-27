@@ -21,3 +21,10 @@ export enum LabelStatus {
   DONE = 'done',
   TOIGNORE = 'toIgnore'
 }
+
+export enum Occultation {
+  AUCUNE = 'aucune',
+  CONFORME = 'conforme',
+  SUBSTITUANT = 'substituant',
+  COMPLEMENT = 'complément'
+}

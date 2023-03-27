@@ -48,7 +48,7 @@ describe('Decisions Module - Integration Test', () => {
 
   it('POST /decisions returns 400 when there is no file attached', async () => {
     // GIVEN
-    const metadata = new MockUtils().metadonneesDtoMock
+    const metadata = new MockUtils().mandatoryMetadonneesDtoMock
 
     // WHEN
     const res = await request(app.getHttpServer())
@@ -63,7 +63,7 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some fake data')
     const xmlFilename = 'filename.xml'
-    const metadata = new MockUtils().metadonneesDtoMock
+    const metadata = new MockUtils().mandatoryMetadonneesDtoMock
 
     // WHEN
     const res = await request(app.getHttpServer())
@@ -79,7 +79,7 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some fake data')
     const xmlFilename = 'filename.xml'
-    const metadata = new MockUtils().metadonneesDtoMock
+    const metadata = new MockUtils().mandatoryMetadonneesDtoMock
 
     // WHEN
     const res = await request(app.getHttpServer())
@@ -112,7 +112,7 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
-    const metadata = new MockUtils().metadonneesDtoMock
+    const metadata = new MockUtils().mandatoryMetadonneesDtoMock
 
     // WHEN
     const res = await request(app.getHttpServer())
@@ -128,7 +128,7 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
-    const metadata = new MockUtils().metadonneesDtoMock
+    const metadata = new MockUtils().mandatoryMetadonneesDtoMock
     const providedCorrelationId = 'some id'
 
     // WHEN
@@ -147,7 +147,7 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
-    const metadata = new MockUtils().metadonneesDtoMock
+    const metadata = new MockUtils().mandatoryMetadonneesDtoMock
 
     // WHEN
     const res = await request(app.getHttpServer())
@@ -164,7 +164,7 @@ describe('Decisions Module - Integration Test', () => {
     // GIVEN
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
-    const metadata = new MockUtils().metadonneesDtoMock
+    const metadata = new MockUtils().mandatoryMetadonneesDtoMock
     mockedPutObject = jest.fn(() => {
       throw new ServiceUnavailableException()
     })
