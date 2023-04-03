@@ -59,6 +59,8 @@ export class MockUtils {
   decisionContent =
     '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t'
 
+  decisionName = 'decisionName.wpd'
+
   dbSderDecisionMock = {
     decision: this.decisionContent,
     metadonnees: this.allAttributesMetadonneesDtoMock
