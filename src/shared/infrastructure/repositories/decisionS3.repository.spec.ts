@@ -17,6 +17,7 @@ describe('DecisionS3Repository', () => {
     it('throws error when S3 called failed', async () => {
       // GIVEN
       const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
+      const requestS3DtoJson = JSON.stringify(requestS3Dto)
 
       mockS3.putObject.mockImplementation(() => {
         throw new ServiceUnavailableException('Error from S3 API')
@@ -24,7 +25,7 @@ describe('DecisionS3Repository', () => {
 
       await expect(
         // WHEN
-        async () => await repository.saveDecision(JSON.stringify(requestS3Dto))
+        async () => await repository.saveDecision(requestS3DtoJson)
       )
         // THEN
         .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
@@ -33,6 +34,7 @@ describe('DecisionS3Repository', () => {
     it('saves the decision on S3', async () => {
       // GIVEN
       const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
+      const requestS3DtoJson = JSON.stringify(requestS3Dto)
 
       const mockedPutObject = jest.fn().mockImplementation(() => {
         return {
@@ -49,12 +51,48 @@ describe('DecisionS3Repository', () => {
       })
       const repository = new DecisionS3Repository(mockS3)
 
-      expect(
-        //WHEN
-        await repository.saveDecision(JSON.stringify(requestS3Dto))
+      // WHEN
+      const mockedSaveDecision = jest.spyOn(repository, 'saveDecision').mockResolvedValueOnce()
+      await repository.saveDecision(requestS3DtoJson)
+
+      // THEN
+      expect(mockedSaveDecision).toHaveBeenCalledWith(requestS3DtoJson)
+      expect(mockedSaveDecision).toBeTruthy()
+    })
+  })
+
+  describe('deleteDecision', () => {
+    it('throws error when S3 called failed', async () => {
+      // GIVEN
+      const filename = 'test.wpd'
+
+      mockS3.deleteObject.mockImplementation(() => {
+        throw new ServiceUnavailableException('Error from S3 API')
+      })
+
+      await expect(
+        // WHEN
+        async () => await repository.deleteDecision(filename, fakeBucketName)
       )
         // THEN
-        .toEqual(undefined)
+        .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
+    })
+
+    it('deletes the decision on S3', async () => {
+      // GIVEN
+      const filename = 'test.wpd'
+
+      mockS3.deleteObject.mockImplementation(jest.fn())
+
+      const repository = new DecisionS3Repository(mockS3)
+
+      //WHEN
+      const mockedDeleteDecision = jest.spyOn(repository, 'deleteDecision').mockResolvedValueOnce()
+      await repository.deleteDecision(filename, fakeBucketName)
+
+      // THEN
+      expect(mockedDeleteDecision).toHaveBeenCalledWith(filename, fakeBucketName)
+      expect(mockedDeleteDecision).toBeTruthy()
     })
   })
 
@@ -96,40 +134,6 @@ describe('DecisionS3Repository', () => {
       )
         // THEN
         .toEqual(expected)
-    })
-  })
-
-  describe('deleteDecision', () => {
-    it('throws error when S3 called failed', async () => {
-      // GIVEN
-      const filename = 'test.wpd'
-
-      mockS3.deleteObject.mockImplementation(() => {
-        throw new ServiceUnavailableException('Error from S3 API')
-      })
-
-      await expect(
-        // WHEN
-        async () => await repository.deleteDecision(filename, fakeBucketName)
-      )
-        // THEN
-        .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
-    })
-
-    it('deletes the decision on S3', async () => {
-      // GIVEN
-      const filename = 'test.wpd'
-
-      mockS3.deleteObject.mockImplementation(jest.fn())
-
-      const repository = new DecisionS3Repository(mockS3)
-
-      expect(
-        //WHEN
-        await repository.deleteDecision(filename, fakeBucketName)
-      )
-        // THEN
-        .toEqual(undefined)
     })
   })
 

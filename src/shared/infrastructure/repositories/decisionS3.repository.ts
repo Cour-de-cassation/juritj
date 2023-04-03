@@ -43,36 +43,34 @@ export class DecisionS3Repository implements DecisionRepository {
   }
 
   async saveDecision(reqParams): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const result = await this.s3ApiClient.putObject(reqParams, (err, data) => {
-      if (err) {
-        this.logger.error(err + err.stack)
-        throw new ServiceUnavailableException('Error from S3 API')
-      } else {
-        this.logger.log('S3 called successfully')
-      }
-    })
+    try {
+      await this.s3ApiClient.putObject(reqParams).promise()
+      this.logger.log('S3 called successfully')
+    } catch (error) {
+      this.logger.error(error + error.stack)
+      throw new ServiceUnavailableException('Error from S3 API')
+    }
 
-    this.logger.log(
-      result.httpRequest.method + ' ' + result.httpRequest.endpoint.href + result.httpRequest.path
-    )
+    // Mis en commentaire pour l'instant, est-ce nécessaire de garder ce niveau de détails dans les logs
+
+    // this.logger.log(
+    //   result.httpRequest.method + ' ' + result.httpRequest.endpoint.href + result.httpRequest.path
+    // )
   }
 
   async deleteDecision(filename: string, bucketName: string): Promise<void> {
-    const reqParams = {
-      Bucket: bucketName,
-      Key: filename
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const result = await this.s3ApiClient.deleteObject(reqParams, (err, data) => {
-      if (err) {
-        this.logger.error(err + err.stack)
-        throw new ServiceUnavailableException('Error from S3 API')
-      } else {
-        this.logger.log('S3 called successfully')
+    try {
+      const reqParams = {
+        Bucket: bucketName,
+        Key: filename
       }
-    })
+
+      await this.s3ApiClient.deleteObject(reqParams).promise()
+      this.logger.log('S3 called successfully')
+    } catch (error) {
+      this.logger.error(error + error.stack)
+      throw new ServiceUnavailableException('Error from S3 API')
+    }
   }
 
   async getDecisionByFilename(filename: string): Promise<CollectDto> {
