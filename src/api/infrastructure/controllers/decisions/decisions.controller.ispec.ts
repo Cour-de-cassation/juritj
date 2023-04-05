@@ -15,10 +15,14 @@ jest.mock('aws-sdk/clients/s3', () => {
       mockedPutObject(params, cb)
       return {
         /* afin de pouvoir afficher les logs */
-        httpRequest: {
-          method: 'PUT',
-          path: '/filename.wpd',
-          endpoint: { href: '' }
+        promise: () => {
+          return {
+            httpRequest: {
+              method: 'PUT',
+              path: '/filename.wpd',
+              endpoint: { href: '' }
+            }
+          }
         }
       }
     }
