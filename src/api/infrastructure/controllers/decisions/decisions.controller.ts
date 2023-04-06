@@ -9,7 +9,7 @@ import {
   UploadedFile,
   UseInterceptors,
   UsePipes,
-  Logger
+  Logger, UseGuards
 } from '@nestjs/common'
 import {
   ApiTags,
@@ -29,6 +29,7 @@ import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
 import { DecisionS3Repository } from '../../../../shared/infrastructure/repositories/decisionS3.repository'
 import { CollectDto } from '../../../../shared/infrastructure/dto/collect.dto'
 import { MetadonneesDto } from '../../../../shared/infrastructure/dto/metadonnees.dto'
+import { AuthGuard } from '@nestjs/passport'
 
 @ApiTags('Collect')
 @Controller('decisions')
@@ -53,6 +54,7 @@ export class DecisionsController {
     description: "Une erreur inattendue liée à une dépendance de l'API a été rencontrée. "
   })
   @HttpCode(HttpStatus.ACCEPTED)
+  @UseGuards(AuthGuard('client-cert'))
   @UseInterceptors(FileInterceptor('decisionIntegre'), LoggingInterceptor)
   @UsePipes()
   async collectDecisions(
