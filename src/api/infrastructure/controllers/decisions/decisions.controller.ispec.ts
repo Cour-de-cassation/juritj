@@ -7,6 +7,7 @@ import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
 import { AppModule } from '../../../app.module'
 import { Context } from '../../../..//shared/infrastructure/utils/context'
 import { RequestLoggerInterceptor } from '../../interceptors/request-logger.interceptor'
+import { AuthGuard } from '@nestjs/passport'
 
 describe('Decisions Module - Integration Test', () => {
   let app: INestApplication
@@ -16,8 +17,8 @@ describe('Decisions Module - Integration Test', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule]
     })
-      // .overrideGuard(AuthGuard(''))
-      // .useValue(jest.fn(() => true))
+      .overrideGuard(AuthGuard('client-cert'))
+      .useValue(jest.fn(() => true))
       .compile()
 
     // Disable logs for Integration tests
