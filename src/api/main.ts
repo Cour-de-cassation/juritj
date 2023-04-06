@@ -5,10 +5,25 @@ import { AppModule } from './app.module'
 import { Context } from '../shared/infrastructure/utils/context'
 import { CustomLogger } from '../shared/infrastructure/utils/customLogger.utils'
 import { RequestLoggerInterceptor } from './infrastructure/interceptors/request-logger.interceptor'
+import { readFileSync } from 'fs'
+import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
 
 async function bootstrap() {
+  const serverPrivateKey = readFileSync('./secrets/server-key.pem')
+  const serverCertificate = readFileSync('./secrets/server-cert.pem')
+  const authorityCertificate = readFileSync('./secrets/ca-cert.pem')
+
+  const httpsOptions: HttpsOptions = {
+    key: serverPrivateKey,
+    cert: serverCertificate,
+    requestCert: true,
+    rejectUnauthorized: false,
+    ca: authorityCertificate
+  }
+
   const app = await NestFactory.create(AppModule, {
-    logger: ['log', 'error', 'warn']
+    logger: ['log', 'error', 'warn'],
+    httpsOptions
   })
 
   // Create a global store with AsyncLocalStorage and provide it to the logger

@@ -9,7 +9,8 @@ import {
   UploadedFile,
   UseInterceptors,
   UsePipes,
-  Logger, UseGuards
+  Logger,
+  UseGuards
 } from '@nestjs/common'
 import {
   ApiTags,

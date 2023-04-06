@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import {ClientCertStrategy} from "./client-cert.strategy";
+import { ClientCertStrategy } from './client-cert.strategy'
 
 @Module({
   imports: [ConfigModule],

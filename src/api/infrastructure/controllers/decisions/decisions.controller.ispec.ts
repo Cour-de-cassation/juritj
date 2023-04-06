@@ -15,7 +15,10 @@ describe('Decisions Module - Integration Test', () => {
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule]
-    }).compile()
+    })
+      // .overrideGuard(AuthGuard(''))
+      // .useValue(jest.fn(() => true))
+      .compile()
 
     // Disable logs for Integration tests
     app = moduleFixture.createNestApplication({ logger: false })
