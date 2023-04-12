@@ -1,15 +1,15 @@
 import { PeerCertificate, Strategy } from 'passport-client-cert'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class ClientCertStrategy extends PassportStrategy(Strategy) {
   private whitelistedCns: string[] = []
 
-  constructor(private configService: ConfigService) {
+  constructor() {
     super()
-    this.whitelistedCns.push(process.env.WHITELIST_CN)
+    // TO DO : Refacto du CC dans le ||
+    this.whitelistedCns.push(process.env.WHITELIST_CN || 'CC')
   }
 
   async validate(clientCert: PeerCertificate): Promise<any> {
