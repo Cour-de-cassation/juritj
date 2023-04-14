@@ -11,8 +11,13 @@ const emptyCertificate = {
 }
 
 describe('ClientCertStrategy', () => {
+  let certStrategy
+
+  beforeAll(async () => {
+    certStrategy = new ClientCertStrategy()
+  })
+
   describe('validate', () => {
-    const certStrategy = new ClientCertStrategy()
     it('throws an unauthorized error if my certificate is not valid', async () => {
       // GIVEN
       const certificate = {
