@@ -9,7 +9,7 @@ import { RequestLoggerInterceptor } from '../../interceptors/request-logger.inte
 
 // simule la création du client s3
 let mockedPutObject = jest.fn()
-jest.mock('aws-sdk/clients/s3', () => {
+jest.mock('@aws-sdk/client-s3', () => {
   return class S3 {
     putObject(params, cb) {
       mockedPutObject(params, cb)

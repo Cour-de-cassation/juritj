@@ -1,4 +1,4 @@
-import * as S3 from 'aws-sdk/clients/s3'
+import { S3 } from '@aws-sdk/client-s3'
 import { MockProxy, mockDeep } from 'jest-mock-extended'
 import { ServiceUnavailableException } from '@nestjs/common'
 import { DecisionS3Repository } from './decisionS3.repository'
@@ -119,17 +119,14 @@ describe('DecisionS3Repository', () => {
 
       const mockedGetObject = jest.fn().mockImplementation(() => {
         return {
-          promise: () =>
-            Promise.resolve({
-              Body: `{"decisionIntegre":"some body from S3"}`
-            })
+          Body: `{"decisionIntegre":"some body from S3"}`
         }
       })
       mockS3.getObject.mockImplementation(mockedGetObject)
       const repository = new DecisionS3Repository(mockS3)
 
       expect(
-        //WHEN
+        // WHEN
         await repository.getDecisionByFilename(filename)
       )
         // THEN
@@ -158,24 +155,21 @@ describe('DecisionS3Repository', () => {
 
       const mockedGetListDecisions = jest.fn().mockImplementation(() => {
         return {
-          promise: () =>
-            Promise.resolve({
-              Contents: [
-                {
-                  Key: 'filename'
-                },
-                {
-                  Key: 'filename2'
-                }
-              ]
-            })
+          Contents: [
+            {
+              Key: 'filename'
+            },
+            {
+              Key: 'filename2'
+            }
+          ]
         }
       })
       mockS3.listObjectsV2.mockImplementation(mockedGetListDecisions)
       const repository = new DecisionS3Repository(mockS3)
 
       expect(
-        //WHEN
+        // WHEN
         await repository.getDecisionList()
       )
         // THEN

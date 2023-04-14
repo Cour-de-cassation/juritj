@@ -1,4 +1,4 @@
-import * as S3 from 'aws-sdk/clients/s3'
+import { S3 } from '@aws-sdk/client-s3'
 import { v4 as uuidv4 } from 'uuid'
 import { ServiceUnavailableException, Logger } from '@nestjs/common'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
@@ -44,7 +44,7 @@ export class DecisionS3Repository implements DecisionRepository {
 
   async saveDecision(reqParams): Promise<void> {
     try {
-      await this.s3ApiClient.putObject(reqParams).promise()
+      await this.s3ApiClient.putObject(reqParams)
       this.logger.log('S3 called successfully')
     } catch (error) {
       this.logger.error(error + error.stack)
@@ -65,7 +65,7 @@ export class DecisionS3Repository implements DecisionRepository {
         Key: filename
       }
 
-      await this.s3ApiClient.deleteObject(reqParams).promise()
+      await this.s3ApiClient.deleteObject(reqParams)
       this.logger.log('S3 called successfully')
     } catch (error) {
       this.logger.error(error + error.stack)
@@ -80,13 +80,9 @@ export class DecisionS3Repository implements DecisionRepository {
         Key: filename
       }
 
-      const dataFromS3 = await this.s3ApiClient.getObject(reqParams)
+      const decisionFromS3 = await this.s3ApiClient.getObject(reqParams)
 
-      const decision = await dataFromS3.promise().then((data) => {
-        return data.Body
-      })
-
-      return JSON.parse(decision.toString())
+      return JSON.parse(decisionFromS3.Body.toString())
     } catch (e) {
       this.logger.error(e + e.stack)
       throw new ServiceUnavailableException('Error from S3 API')
@@ -98,18 +94,9 @@ export class DecisionS3Repository implements DecisionRepository {
       const reqParams = {
         Bucket: process.env.S3_BUCKET_NAME_RAW
       }
-      const dataFromS3 = await this.s3ApiClient.listObjectsV2(reqParams)
-      const decisionList = await dataFromS3
-        .promise()
-        .then((data) => {
-          return data.Contents
-        })
-        .catch((error) => {
-          this.logger.error(error + error.stack)
-          throw new ServiceUnavailableException('Error from S3 API')
-        })
+      const decisionListFromS3 = await this.s3ApiClient.listObjectsV2(reqParams)
 
-      return decisionList
+      return decisionListFromS3.Contents
     } catch (error) {
       this.logger.error(error + error.stack)
       throw new ServiceUnavailableException('Error from S3 API')
