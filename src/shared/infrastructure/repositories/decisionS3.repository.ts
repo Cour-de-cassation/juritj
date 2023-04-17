@@ -82,7 +82,11 @@ export class DecisionS3Repository implements DecisionRepository {
     try {
       const decisionFromS3 = await this.s3Client.send(new GetObjectCommand(reqParams))
 
-      const stringifiedDecision = await decisionFromS3.Body.transformToString()
+      console.log({ decisionFromS3 })
+
+      const stringifiedDecision = await decisionFromS3.Body?.transformToString()
+
+      console.log({ stringifiedDecision })
 
       return JSON.parse(stringifiedDecision)
     } catch (error) {

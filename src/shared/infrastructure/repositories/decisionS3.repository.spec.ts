@@ -6,8 +6,10 @@ import {
   S3Client
 } from '@aws-sdk/client-s3'
 import { mockClient, AwsClientStub } from 'aws-sdk-client-mock'
+import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
 import 'aws-sdk-client-mock-jest'
 import { DecisionS3Repository } from './decisionS3.repository'
+import { Readable } from 'stream'
 
 const someFakeUuid = '123456789'
 jest.mock('uuid', () => ({ v4: () => someFakeUuid }))
@@ -118,37 +120,24 @@ describe('DecisionS3Repository', () => {
         .rejects.toThrow(S3ErrorMessage)
     })
 
-    // it('returns the decision from s3', async () => {
-    //   // GIVEN
-    //   const expected = { decisionIntegre: 'some body from S3' }
+    it.only('returns the decision from s3', async () => {
+      // GIVEN
+      const expected = { decisionIntegre: 'some body from S3' }
 
-    //   const mockedGetObject = jest.fn().mockImplementation(() => {
-    //     return {
-    //       Body: `{"decisionIntegre":"some body from S3"}`
-    //     }
-    //   })
-    //   const content = { decisionIntegre : 'some body from S3' }
+      const stream = new Readable()
+      stream.push(expected)
+      const sdkStream = sdkStreamMixin(stream)
+      mockS3.on(GetObjectCommand).resolves({
+        Body: sdkStream
+      })
 
-    //   // const volume = memfs.Volume.fromJSON({ ['some/path.txt']: JSON.stringify(content)})
-    //   // const fs = memfs.createFsFromVolume(volume)
-
-    //   // mockS3.on(GetObjectCommand).resolves({
-    //   //   Body: fs.createReadStream('some/path.txt')
-    //   // })
-
-    //   const data = new Blob([JSON.stringify(content)], { type: 'application/json' })
-
-    //   mockS3.on(GetObjectCommand).resolves({
-    //     Body: data
-    //   })
-
-    //   expect(
-    //     // WHEN
-    //     await repository.getDecisionByFilename(filename)
-    //   )
-    //     // THEN
-    //     .toEqual(expected)
-    // })
+      expect(
+        // WHEN
+        await repository.getDecisionByFilename(filename)
+      )
+        // THEN
+        .toEqual(expected)
+    })
   })
 
   describe('getDecisionList', () => {
