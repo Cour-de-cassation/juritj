@@ -124,8 +124,10 @@ describe('DecisionS3Repository', () => {
       // GIVEN
       const expected = { decisionIntegre: 'some body from S3' }
 
+      // Following tutorial https://github.com/m-radzikowski/aws-sdk-client-mock#s3-getobjectcommand
       const stream = new Readable()
-      stream.push(expected)
+      stream.push(JSON.stringify(expected))
+      stream.push(null)
       const sdkStream = sdkStreamMixin(stream)
       mockS3.on(GetObjectCommand).resolves({
         Body: sdkStream
