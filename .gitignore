@@ -41,5 +41,3 @@ lerna-debug.log*
 
 # Wordperfect Documents
 *.wpd
-
-/secrets

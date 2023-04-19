@@ -24,7 +24,6 @@ export class SaveDecisionUsecase {
     const filename = decisionIntegre.originalname
       .replace(/[^a-zA-Z0-9.]/g, '')
       .replace(/\.(?=.*\.)/g, '')
-    console.log(filename)
 
     await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), filename)
   }
