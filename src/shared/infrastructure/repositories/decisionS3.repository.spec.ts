@@ -44,7 +44,6 @@ describe('DecisionS3Repository', () => {
 
     it('saves a normalized decision on S3', async () => {
       // GIVEN
-      console.log('process.env.S3_BUCKET_NAME_NORMALIZED', process.env.S3_BUCKET_NAME_NORMALIZED)
       const expectedReqParams = {
         Body: requestS3DtoJson,
         Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,

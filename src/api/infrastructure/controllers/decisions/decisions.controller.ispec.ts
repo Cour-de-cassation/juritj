@@ -1,36 +1,17 @@
 import * as request from 'supertest'
-import { INestApplication, ServiceUnavailableException, HttpStatus } from '@nestjs/common'
+import { INestApplication, HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { mockClient, AwsClientStub } from 'aws-sdk-client-mock'
 import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
 import { AppModule } from '../../../app.module'
 import { Context } from '../../../..//shared/infrastructure/utils/context'
 import { CustomLogger } from '../../../../shared/infrastructure/utils/customLogger.utils'
 import { RequestLoggerInterceptor } from '../../interceptors/request-logger.interceptor'
 
-// simule la création du client s3
-let mockedPutObject = jest.fn()
-jest.mock('@aws-sdk/client-s3', () => {
-  return class S3 {
-    putObject(params, cb) {
-      mockedPutObject(params, cb)
-      return {
-        /* afin de pouvoir afficher les logs */
-        promise: () => {
-          return {
-            httpRequest: {
-              method: 'PUT',
-              path: '/filename.wpd',
-              endpoint: { href: '' }
-            }
-          }
-        }
-      }
-    }
-  }
-})
-
 describe('Decisions Module - Integration Test', () => {
   let app: INestApplication
+  const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -48,6 +29,10 @@ describe('Decisions Module - Integration Test', () => {
     app.useGlobalInterceptors(new RequestLoggerInterceptor(apiContext))
 
     await app.init()
+  })
+
+  beforeEach(() => {
+    mockS3.reset()
   })
 
   it('POST /decisions returns 400 when there is no file attached', async () => {
@@ -118,6 +103,8 @@ describe('Decisions Module - Integration Test', () => {
     const wordperfectFilename = 'filename.wpd'
     const metadata = new MockUtils().mandatoryMetadonneesDtoMock
 
+    mockS3.on(PutObjectCommand).resolves({})
+
     // WHEN
     const res = await request(app.getHttpServer())
       .post('/decisions')
@@ -134,6 +121,8 @@ describe('Decisions Module - Integration Test', () => {
     const wordperfectFilename = 'filename.wpd'
     const metadata = new MockUtils().mandatoryMetadonneesDtoMock
     const providedCorrelationId = 'some id'
+
+    mockS3.on(PutObjectCommand).resolves({})
 
     // WHEN
     const res = await request(app.getHttpServer())
@@ -153,6 +142,8 @@ describe('Decisions Module - Integration Test', () => {
     const wordperfectFilename = 'filename.wpd'
     const metadata = new MockUtils().mandatoryMetadonneesDtoMock
 
+    mockS3.on(PutObjectCommand).resolves({})
+
     // WHEN
     const res = await request(app.getHttpServer())
       .post('/decisions')
@@ -169,9 +160,8 @@ describe('Decisions Module - Integration Test', () => {
     const myBufferedFile = Buffer.from('some data')
     const wordperfectFilename = 'filename.wpd'
     const metadata = new MockUtils().mandatoryMetadonneesDtoMock
-    mockedPutObject = jest.fn(() => {
-      throw new ServiceUnavailableException()
-    })
+
+    mockS3.on(PutObjectCommand).rejects(new Error('Some S3 error'))
 
     // WHEN
     const res = await request(app.getHttpServer())
