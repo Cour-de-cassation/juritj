@@ -16,14 +16,16 @@ export class SaveDecisionUsecase {
    *
    * En cas d'évolution du contexte, nous créerons les interfaces et entities du domaine
    */
+  cleanFileName(filename: string): string {
+    return filename.replace(/[^a-zA-Z0-9.]/g, '').replace(/\.(?=.*\.)/g, '')
+  }
+
   async execute(decisionIntegre: Express.Multer.File, metadonnees: MetadonneesDto): Promise<void> {
     const requestDto = {
       decisionIntegre,
       metadonnees
     }
-    const filename = decisionIntegre.originalname
-      .replace(/[^a-zA-Z0-9.]/g, '')
-      .replace(/\.(?=.*\.)/g, '')
+    const filename = this.cleanFileName(decisionIntegre.originalname)
 
     await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), filename)
   }

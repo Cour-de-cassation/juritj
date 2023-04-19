@@ -85,4 +85,16 @@ describe('SaveDecisionUsecase', () => {
     // THEN
     expect(mockDecisionRepository.saveDecisionIntegre).toBeCalledWith(expectedRequestDto, fileName)
   })
+
+  it('remove special characters with regex from filename', () => {
+    // GIVEN
+    const filenameBeforeClean = 'test!-_.wpd'
+    const expectedFilename = 'test.wpd'
+
+    // WHEN
+    const cleanFilename = usecase.cleanFileName(filenameBeforeClean)
+
+    // THEN
+    expect(cleanFilename).toEqual(expectedFilename)
+  })
 })
