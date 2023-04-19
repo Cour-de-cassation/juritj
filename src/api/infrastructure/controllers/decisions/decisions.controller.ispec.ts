@@ -6,7 +6,6 @@ import { mockClient, AwsClientStub } from 'aws-sdk-client-mock'
 import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
 import { AppModule } from '../../../app.module'
 import { Context } from '../../../..//shared/infrastructure/utils/context'
-import { CustomLogger } from '../../../../shared/infrastructure/utils/customLogger.utils'
 import { RequestLoggerInterceptor } from '../../interceptors/request-logger.interceptor'
 
 describe('Decisions Module - Integration Test', () => {
@@ -18,15 +17,9 @@ describe('Decisions Module - Integration Test', () => {
       imports: [AppModule]
     }).compile()
 
-    app = moduleFixture.createNestApplication()
-
-    // Create a global store with AsyncLocalStorage and provide it to the logger
-    const apiContext = new Context()
-    apiContext.start()
-    const customLogger = new CustomLogger(apiContext)
-
-    app.useLogger(customLogger)
-    app.useGlobalInterceptors(new RequestLoggerInterceptor(apiContext))
+    // Disable logs for Integration tests
+    app = moduleFixture.createNestApplication({ logger: false })
+    app.useGlobalInterceptors(new RequestLoggerInterceptor(new Context()))
 
     await app.init()
   })
