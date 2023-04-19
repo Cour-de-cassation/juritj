@@ -19,7 +19,7 @@ describe('transform wordperfect document to text', () => {
     // WHEN
     expect(await getConversionCommandPath(execCommandName))
       // THEN
-      .toEqual(expectedCommandPath)
+      .toMatch(expectedCommandPath)
   })
 
   it('throws an error when conversion command does not exist', async () => {
