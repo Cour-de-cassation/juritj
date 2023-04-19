@@ -120,7 +120,7 @@ describe('DecisionS3Repository', () => {
         .rejects.toThrow(S3ErrorMessage)
     })
 
-    it.only('returns the decision from s3', async () => {
+    it('returns the decision from s3', async () => {
       // GIVEN
       const expected = { decisionIntegre: 'some body from S3' }
 
@@ -155,31 +155,21 @@ describe('DecisionS3Repository', () => {
         .rejects.toThrow(S3ErrorMessage)
     })
 
-    //   it('returns the decision list from s3', async () => {
-    //     // GIVEN
-    //     const expected = [{ Key: 'filename' }, { Key: 'filename2' }]
+    it('returns the decision list from s3', async () => {
+      // GIVEN
+      const expected = [{ Key: 'filename' }, { Key: 'filename2' }]
+      const contentToResolve = {
+        Contents: expected
+      }
 
-    //     const mockedGetListDecisions = jest.fn().mockImplementation(() => {
-    //       return {
-    //         Contents: [
-    //           {
-    //             Key: 'filename'
-    //           },
-    //           {
-    //             Key: 'filename2'
-    //           }
-    //         ]
-    //       }
-    //     })
-    //     mockS3.listObjectsV2.mockImplementation(mockedGetListDecisions)
-    //     const repository = new DecisionS3Repository(mockS3)
+      mockS3.on(ListObjectsV2Command).resolves(contentToResolve)
 
-    //     expect(
-    //       // WHEN
-    //       await repository.getDecisionList()
-    //     )
-    //       // THEN
-    //       .toEqual(expected)
-    //   })
+      expect(
+        // WHEN
+        await repository.getDecisionList()
+      )
+        // THEN
+        .toEqual(expected)
+    })
   })
 })
