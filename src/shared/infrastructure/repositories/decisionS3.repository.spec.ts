@@ -1,98 +1,108 @@
-import * as S3 from 'aws-sdk/clients/s3'
-import { MockProxy, mockDeep } from 'jest-mock-extended'
-import { ServiceUnavailableException } from '@nestjs/common'
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client
+} from '@aws-sdk/client-s3'
+import { mockClient, AwsClientStub } from 'aws-sdk-client-mock'
+import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
+import 'aws-sdk-client-mock-jest'
 import { DecisionS3Repository } from './decisionS3.repository'
+import { Readable } from 'stream'
+
+const someFakeUuid = '123456789'
+jest.mock('uuid', () => ({ v4: () => someFakeUuid }))
 
 describe('DecisionS3Repository', () => {
-  const fakeBucketName = 'fake-bucket-name'
   let repository: DecisionS3Repository
-  let mockS3: MockProxy<S3>
+  const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
+  const S3ErrorMessage = 'Error from S3 API'
+  const fakeBucketName = 'fake-bucket-name'
+  const filename = 'test.wpd'
 
   beforeEach(() => {
-    mockS3 = mockDeep<S3>()
-    repository = new DecisionS3Repository(mockS3)
+    mockS3.reset()
+    repository = new DecisionS3Repository()
   })
 
   describe('saveDecision', () => {
+    const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
+    const requestS3DtoJson = JSON.stringify(requestS3Dto)
+
     it('throws error when S3 called failed', async () => {
       // GIVEN
-      const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
-      const requestS3DtoJson = JSON.stringify(requestS3Dto)
-
-      mockS3.putObject.mockImplementation(() => {
-        throw new ServiceUnavailableException('Error from S3 API')
-      })
+      mockS3.on(PutObjectCommand).rejects(new Error('Some S3 error'))
 
       await expect(
         // WHEN
-        async () => await repository.saveDecision(requestS3DtoJson)
+        repository.saveDecision(requestS3DtoJson)
       )
         // THEN
-        .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
+        .rejects.toThrow(S3ErrorMessage)
     })
 
-    it('saves the decision on S3', async () => {
+    it('saves a normalized decision on S3', async () => {
       // GIVEN
-      const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
-      const requestS3DtoJson = JSON.stringify(requestS3Dto)
+      const expectedReqParams = {
+        Body: requestS3DtoJson,
+        Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,
+        Key: filename
+      }
 
-      const mockedPutObject = jest.fn().mockImplementation(() => {
-        return {
-          /* afin de pouvoir afficher les logs */
-          httpRequest: {
-            method: 'PUT',
-            path: '/filename.wpd',
-            endpoint: { href: '' }
-          }
-        }
-      })
-      const mockS3: MockProxy<S3> = mockDeep<S3>({
-        putObject: mockedPutObject
-      })
-      const repository = new DecisionS3Repository(mockS3)
+      mockS3.on(PutObjectCommand).resolves({})
 
       // WHEN
-      const mockedSaveDecision = jest.spyOn(repository, 'saveDecision').mockResolvedValueOnce()
-      await repository.saveDecision(requestS3DtoJson)
+      await repository.saveDecisionNormalisee(requestS3DtoJson, filename)
 
       // THEN
-      expect(mockedSaveDecision).toHaveBeenCalledWith(requestS3DtoJson)
-      expect(mockedSaveDecision).toBeTruthy()
+      expect(mockS3).toHaveReceivedCommandWith(PutObjectCommand, expectedReqParams)
+    })
+
+    it('saves an integre decision on S3', async () => {
+      // GIVEN
+      const expectedReqParams = {
+        Body: requestS3DtoJson,
+        Bucket: process.env.S3_BUCKET_NAME_RAW,
+        Key: someFakeUuid + '-' + filename
+      }
+
+      mockS3.on(PutObjectCommand).resolves({})
+
+      // WHEN
+      await repository.saveDecisionIntegre(requestS3DtoJson, filename)
+
+      // THEN
+      expect(mockS3).toHaveReceivedCommandWith(PutObjectCommand, expectedReqParams)
     })
   })
 
   describe('deleteDecision', () => {
     it('throws error when S3 called failed', async () => {
       // GIVEN
-      const filename = 'test.wpd'
-
-      mockS3.deleteObject.mockImplementation(() => {
-        throw new ServiceUnavailableException('Error from S3 API')
-      })
+      mockS3.on(DeleteObjectCommand).rejects(new Error('Some S3 error'))
 
       await expect(
         // WHEN
-        async () => await repository.deleteDecision(filename, fakeBucketName)
+        repository.deleteDecision(filename, fakeBucketName)
       )
         // THEN
-        .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
+        .rejects.toThrow(S3ErrorMessage)
     })
 
     it('deletes the decision on S3', async () => {
       // GIVEN
-      const filename = 'test.wpd'
-
-      mockS3.deleteObject.mockImplementation(jest.fn())
-
-      const repository = new DecisionS3Repository(mockS3)
+      const expectedReqParams = {
+        Bucket: fakeBucketName,
+        Key: filename
+      }
+      mockS3.on(DeleteObjectCommand).resolves({})
 
       //WHEN
-      const mockedDeleteDecision = jest.spyOn(repository, 'deleteDecision').mockResolvedValueOnce()
       await repository.deleteDecision(filename, fakeBucketName)
 
       // THEN
-      expect(mockedDeleteDecision).toHaveBeenCalledWith(filename, fakeBucketName)
-      expect(mockedDeleteDecision).toBeTruthy()
+      expect(mockS3).toHaveReceivedCommandWith(DeleteObjectCommand, expectedReqParams)
     })
   })
 
@@ -100,36 +110,31 @@ describe('DecisionS3Repository', () => {
     it('throws an error when the S3 could not be called', async () => {
       // GIVEN
       const filename = 'file.wpd'
-      mockS3.getObject.mockImplementation(() => {
-        throw new ServiceUnavailableException('Error from S3 API')
-      })
+      mockS3.on(GetObjectCommand).rejects(new Error('Some S3 error'))
 
       await expect(
         // WHEN
-        async () => await repository.getDecisionByFilename(filename)
+        repository.getDecisionByFilename(filename)
       )
         // THEN
-        .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
+        .rejects.toThrow(S3ErrorMessage)
     })
 
     it('returns the decision from s3', async () => {
       // GIVEN
-      const filename = 'file.wpd'
       const expected = { decisionIntegre: 'some body from S3' }
 
-      const mockedGetObject = jest.fn().mockImplementation(() => {
-        return {
-          promise: () =>
-            Promise.resolve({
-              Body: `{"decisionIntegre":"some body from S3"}`
-            })
-        }
+      // Following tutorial https://github.com/m-radzikowski/aws-sdk-client-mock#s3-getobjectcommand
+      const stream = new Readable()
+      stream.push(JSON.stringify(expected))
+      stream.push(null)
+      const sdkStream = sdkStreamMixin(stream)
+      mockS3.on(GetObjectCommand).resolves({
+        Body: sdkStream
       })
-      mockS3.getObject.mockImplementation(mockedGetObject)
-      const repository = new DecisionS3Repository(mockS3)
 
       expect(
-        //WHEN
+        // WHEN
         await repository.getDecisionByFilename(filename)
       )
         // THEN
@@ -140,42 +145,27 @@ describe('DecisionS3Repository', () => {
   describe('getDecisionList', () => {
     it('throws an error when the S3 could not be called', async () => {
       // GIVEN
-      mockS3.listObjectsV2.mockImplementation(() => {
-        throw new ServiceUnavailableException('Error from S3 API')
-      })
+      mockS3.on(ListObjectsV2Command).rejects(new Error('Some S3 error'))
 
       await expect(
         // WHEN
-        async () => await repository.getDecisionList()
+        repository.getDecisionList()
       )
         // THEN
-        .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
+        .rejects.toThrow(S3ErrorMessage)
     })
 
     it('returns the decision list from s3', async () => {
       // GIVEN
       const expected = [{ Key: 'filename' }, { Key: 'filename2' }]
+      const contentToResolve = {
+        Contents: expected
+      }
 
-      const mockedGetListDecisions = jest.fn().mockImplementation(() => {
-        return {
-          promise: () =>
-            Promise.resolve({
-              Contents: [
-                {
-                  Key: 'filename'
-                },
-                {
-                  Key: 'filename2'
-                }
-              ]
-            })
-        }
-      })
-      mockS3.listObjectsV2.mockImplementation(mockedGetListDecisions)
-      const repository = new DecisionS3Repository(mockS3)
+      mockS3.on(ListObjectsV2Command).resolves(contentToResolve)
 
       expect(
-        //WHEN
+        // WHEN
         await repository.getDecisionList()
       )
         // THEN
