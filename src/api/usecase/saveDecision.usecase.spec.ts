@@ -88,8 +88,8 @@ describe('SaveDecisionUsecase', () => {
 
   it('remove special characters with regex from filename', () => {
     // GIVEN
-    const filenameBeforeClean = 'test!-_.wpd'
-    const expectedFilename = 'test.wpd'
+    const filenameBeforeClean = '--àté-st-!.wpd'
+    const expectedFilename = 'atest.wpd'
 
     // WHEN
     const cleanFilename = usecase.cleanFileName(filenameBeforeClean)
