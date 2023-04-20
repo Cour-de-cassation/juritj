@@ -15,6 +15,7 @@ export class ClientCertStrategy extends PassportStrategy(Strategy) {
     super()
     // TO DO : Refacto du CC dans le ||
     this.whitelistedCns.push(process.env.WHITELIST_CN || 'CC')
+    this.whitelistedCns.push('MJ TMA CHAINES CIVILES')
   }
 
   async validate(clientCert: PeerCertificate): Promise<any> {

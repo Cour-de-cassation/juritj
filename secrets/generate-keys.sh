@@ -33,3 +33,10 @@ openssl x509 -in client-cert.pem -noout -text
 
 # 10. Verifying validity of server certificate
 openssl verify -CAfile ca-cert.pem client-cert.pem
+
+# 11. Generate another CA's private key and self-signed certificate 
+openssl req -x509 -sha256 -newkey rsa:4096 -days 365 -nodes -keyout ca2-key.pem -out ca2-cert.pem -subj "/C=FR/ST=Paris/L=Paris/O=MinJu2/OU=Cour de cassation2/CN=CC2/emailAddress=some@mail.com"
+
+# 12. Generate client CA / private key with the other CA certificate 
+openssl req -newkey rsa:4096 -nodes -keyout client2-key.pem -out client2-req.pem -subj "/C=FR/ST=Paris/L=Paris/O=MinJu2/OU=Judilibre Postman2/CN=CC2/emailAddress=some@mail.com"
+openssl x509 -sha256 -req -in client2-req.pem -days 365 -CA ca2-cert.pem -CAkey ca2-key.pem -CAcreateserial -out client2-cert.pem

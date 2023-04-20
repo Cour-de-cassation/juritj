@@ -12,13 +12,14 @@ async function bootstrap() {
   const serverPrivateKey = readFileSync('./secrets/server-key.pem')
   const serverCertificate = readFileSync('./secrets/server-cert.pem')
   const authorityCertificate = readFileSync('./secrets/ca-cert.pem')
+  const winciAuthorityCertificate = readFileSync('./secrets/winci-ca-cert.pem')
 
   const httpsOptions: HttpsOptions = {
     key: serverPrivateKey,
     cert: serverCertificate,
     requestCert: true,
     rejectUnauthorized: false,
-    ca: authorityCertificate
+    ca: [authorityCertificate, winciAuthorityCertificate]
   }
 
   const app = await NestFactory.create(AppModule, {
