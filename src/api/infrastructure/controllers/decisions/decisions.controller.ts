@@ -10,7 +10,9 @@ import {
   UseInterceptors,
   UsePipes,
   Logger,
-  UseGuards
+  UseGuards,
+  Res,
+  UnauthorizedException
 } from '@nestjs/common'
 import {
   ApiTags,
@@ -55,15 +57,16 @@ export class DecisionsController {
     description: "Une erreur inattendue liée à une dépendance de l'API a été rencontrée. "
   })
   @HttpCode(HttpStatus.ACCEPTED)
-  @UseGuards(AuthGuard('client-cert'))
   @UseInterceptors(FileInterceptor('decisionIntegre'), LoggingInterceptor)
   @UsePipes()
   async collectDecisions(
     @UploadedFile() decisionIntegre: Express.Multer.File,
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto,
-    @Req() request: Request
-  ): Promise<string> {
+    @Req() request: Request,
+    @Res() response: any
+  ): Promise<void> {
+    isClientAuthorized(response)
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
       throw new BadRequestException(errorMessage)
@@ -83,7 +86,7 @@ export class DecisionsController {
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )
 
-    return 'Nous avons bien reçu la décision intègre et ses métadonnées.'
+    response.send('Nous avons bien reçu la décision intègre et ses métadonnées.')
   }
 }
 
@@ -94,4 +97,13 @@ function isWordperfectFileType(decisionIntegre: Express.Multer.File): boolean {
     decisionIntegre.mimetype === wordperfectMimeType &&
     wpdExtensionRegex.test(decisionIntegre.originalname)
   )
+}
+
+function isClientAuthorized(response: any): boolean {
+  console.log('-------------RESPONSE SOCKET-------------------', response.socket)
+  if (!response.socket.authorized) {
+    throw new UnauthorizedException(response.socket.authorizationError)
+  }
+  console.log('CLIENT IS AUTHORIZED')
+  return response.socket.authorized
 }

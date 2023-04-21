@@ -19,6 +19,7 @@ export class ClientCertStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(clientCert: PeerCertificate): Promise<any> {
+    console.log(clientCert)
     const cn = clientCert && clientCert.subject && clientCert.subject.CN
     if (!this.whitelistedCns.includes(cn)) {
       this.logger.error(`[AUTH] Unauthorized: Client cert cn: ${cn} is not whitelisted`)
