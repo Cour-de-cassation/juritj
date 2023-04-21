@@ -2,6 +2,8 @@
 
 ### Following https://dev.to/techschoolguru/how-to-create-sign-ssl-tls-certificates-2aai 
 ### Caution : use -nodes only in dev environment 
+
+## NOTE :  openssl ecrase les fichiers deja existants donc peut etre pas beson de rm
 ## rm *.pem *.srl
 
 # 1. Generate CA's private key and self-signed certificate 
