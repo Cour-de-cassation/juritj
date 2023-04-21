@@ -45,3 +45,4 @@ lerna-debug.log*
 # Secrets
 /secrets/*
 !/secrets/generate-keys.sh
+!/secrets/winci-ca-cert.pem
