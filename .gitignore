@@ -41,3 +41,8 @@ lerna-debug.log*
 
 # Wordperfect Documents
 *.wpd
+
+# Secrets
+/secrets/*
+!/secrets/generate-keys.sh
+!/secrets/winci-ca-cert.pem

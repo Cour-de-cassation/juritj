@@ -15,6 +15,11 @@ Pour installer les packages nécessaires au bon fonctionnement de l'application,
 ```bash
 npm install
 ```  
+N'oubliez pas d'installer **husky** pour obtenir les hooks de commit/push
+```bash
+npx husky install
+```
+
 ### Démarrer l'application
 
 Pour démarrer l'application, écrire dans un terminal : 
