@@ -10,7 +10,6 @@ import {
   UseInterceptors,
   UsePipes,
   Logger,
-  Res,
   UnauthorizedException
 } from '@nestjs/common'
 import {
@@ -24,6 +23,7 @@ import {
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Request } from 'express'
+import { TLSSocket } from 'tls'
 import { SaveDecisionUsecase } from '../../../../api/usecase/saveDecision.usecase'
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
@@ -61,10 +61,9 @@ export class DecisionsController {
     @UploadedFile() decisionIntegre: Express.Multer.File,
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto,
-    @Req() request: Request,
-    @Res() response: any
-  ): Promise<void> {
-    checkClientAuthorized(response)
+    @Req() request: Request
+  ): Promise<string> {
+    validateClientCertificate(request)
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
       throw new BadRequestException(errorMessage)
@@ -84,7 +83,7 @@ export class DecisionsController {
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )
 
-    response.send('Nous avons bien reçu la décision intègre et ses métadonnées.')
+    return 'Nous avons bien reçu la décision intègre et ses métadonnées.'
   }
 }
 
@@ -97,10 +96,9 @@ function isWordperfectFileType(decisionIntegre: Express.Multer.File): boolean {
   )
 }
 
-function checkClientAuthorized(response: any): void {
-  //FIXME : le socket.authorized est toujours présent lorsqu'un client l'appelle
-  // mais via les tests jest cette valeur est undefined d'ou le strictement egal a false
-  if (response.socket.authorized === false) {
-    throw new UnauthorizedException(response.socket.authorizationError)
+function validateClientCertificate(request: Request): void {
+  const socket = request.socket as TLSSocket
+  if (socket.authorized === false) {
+    throw new UnauthorizedException(socket.authorizationError)
   }
 }

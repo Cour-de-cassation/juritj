@@ -18,7 +18,7 @@ async function bootstrap() {
     key: serverPrivateKey,
     cert: serverCertificate,
     requestCert: true,
-    rejectUnauthorized: false,
+    rejectUnauthorized: true,
     ca: [authorityCertificate, winciAuthorityCertificate]
   }
 
