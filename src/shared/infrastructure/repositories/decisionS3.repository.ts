@@ -20,6 +20,7 @@ export class DecisionS3Repository implements DecisionRepository {
     } else {
       this.s3Client = new S3Client({
         endpoint: process.env.S3_URL,
+        forcePathStyle: true,
         region: process.env.S3_REGION,
         credentials: {
           accessKeyId: process.env.S3_ACCESS_KEY,

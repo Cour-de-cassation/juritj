@@ -1,0 +1,82 @@
+version: "3.7"
+
+services:
+
+  db:
+    image: mongo:4.4
+    command: mongod --port 55431
+    volumes:
+      - mongo-storage:/data/db
+    expose:
+      - 55431
+    ports:
+      - 55431:55431
+
+  bucket:
+    image: minio/minio:RELEASE.2023-02-27T18-10-45Z
+    command: minio server /data --console-address :9001
+    volumes:
+      - bucket-storage:/data
+    expose: 
+      - 9001
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=root1234
+
+  api:
+    build:
+      context: ./
+      target: api
+    environment: 
+      - DOC_LOGIN=root
+      - DOC_PASSWORD=root
+      - MINIO_USER=root
+      - MINIO_PASSWORD=root1234
+      - S3_ACCESS_KEY=90K0WRFk3pFIMpk7
+      - S3_SECRET_KEY=WWHmvAp6ZfxKIkFlSNVX8oUXq0bQstiT
+      - S3_URL=bucket
+      - S3_PORT=9000
+      - S3_REGION=eu-west-paris-1
+      - S3_BUCKET_NAME=juritj-test-bucket
+      - S3_BUCKET_NAME_RAW=juritj-test-bucket
+      - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
+      - MONGODB_URL=db:55431
+    expose: 
+      - 3009
+    ports:
+      - 3009:3000
+
+  batch: 
+    build:
+      context: ./
+      target: debug
+    environment: 
+      - DOC_LOGIN=root
+      - DOC_PASSWORD=root
+      - MINIO_USER=root
+      - MINIO_PASSWORD=root1234
+      - S3_ACCESS_KEY=90K0WRFk3pFIMpk7
+      - S3_SECRET_KEY=WWHmvAp6ZfxKIkFlSNVX8oUXq0bQstiT
+      - S3_URL=http://bucket:9000
+      - S3_REGION=eu-west-paris-1
+      - S3_BUCKET_NAME=juritj-test-bucket
+      - S3_BUCKET_NAME_RAW=juritj-test-bucket
+      - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
+      - MONGODB_URL=db:55431
+
+networks:
+  default:
+    name: juritj-network
+
+volumes:
+  mongo-storage:
+    driver: local
+    name: label-mongo-storage
+  bucket-storage:
+    driver: local
+    name: juritj-bucket-storage
+
+

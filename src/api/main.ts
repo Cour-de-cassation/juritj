@@ -5,14 +5,13 @@ import { AppModule } from './app.module'
 import { Context } from '../shared/infrastructure/utils/context'
 import { CustomLogger } from '../shared/infrastructure/utils/customLogger.utils'
 import { RequestLoggerInterceptor } from './infrastructure/interceptors/request-logger.interceptor'
-import { readFileSync } from 'fs'
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
 
 async function bootstrap() {
-  const serverPrivateKey = readFileSync('./secrets/server-key.pem')
-  const serverCertificate = readFileSync('./secrets/server-cert.pem')
-  const authorityCertificate = readFileSync('./secrets/ca-cert.pem')
-  const winciAuthorityCertificate = readFileSync('./secrets/winci-ca-cert.pem')
+  const serverPrivateKey = process.env.SERVER_KEY
+  const serverCertificate = process.env.SERVER_CERT
+  const authorityCertificate = process.env.SERVER_CA_CERT
+  const winciAuthorityCertificate = process.env.WINCI_CA_CERT
 
   const httpsOptions: HttpsOptions = {
     key: serverPrivateKey,

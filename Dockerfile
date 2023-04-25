@@ -31,7 +31,6 @@ RUN npm run build && npm prune --production
 # --- Base final image with only shared dist content --- #
 FROM node:18-alpine as shared
 
-
 ENV NODE_ENV production
 
 USER node
@@ -57,6 +56,30 @@ RUN apk add cmd:wpd2text
 
 USER node
 COPY --from=prod --chown=node:node /home/node/dist/batch ./dist/batch
-COPY batch_docker_entrypoint.sh batch_docker_entrypoint.sh
+COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
 
 CMD ["/bin/sh", "batch_docker_entrypoint.sh"]
+
+
+# DEBUG / TESTING PURPOSE
+FROM node:18-bullseye as debug 
+
+ENV NODE_ENV production
+
+USER node
+WORKDIR /home/node
+
+COPY --from=prod --chown=node:node /home/node/package*.json ./
+COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
+
+COPY --from=prod --chown=node:node /home/node/dist ./dist
+
+COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
+RUN chmod +x batch_docker_entrypoint.sh
+
+USER root
+RUN apt update
+RUN apt install libwpd-tools -y
+
+USER node
+CMD ["node", "dist/api/main"]
