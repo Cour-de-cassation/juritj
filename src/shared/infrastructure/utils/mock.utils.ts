@@ -73,7 +73,7 @@ export class MockUtils {
     chamberId: null,
     chamberName: null,
     dateCreation: TODAY,
-    dateDecision: new Date().toISOString(),
+    dateDecision: TODAY,
     jurisdictionCode: 'this.metadonneesDtoMock.codeJuridiction',
     jurisdictionId: this.allAttributesMetadonneesDtoMock.idJuridiction,
     jurisdictionName: this.allAttributesMetadonneesDtoMock.nomJuridiction,

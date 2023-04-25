@@ -125,7 +125,7 @@ export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): D
     chamberId: null,
     chamberName: null,
     dateCreation: TODAY,
-    dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
+    dateDecision: TODAY,
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,
     jurisdictionName: decision.metadonnees.nomJuridiction,
