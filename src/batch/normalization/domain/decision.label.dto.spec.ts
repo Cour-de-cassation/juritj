@@ -1,6 +1,6 @@
 import { LabelStatus } from '../../../shared/domain/enums'
-import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
-import { DecisionLabelDTO, mapDecisionNormaliseeToLabelDecision, TODAY } from './decision.label.dto'
+import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
+import { DecisionLabelDTO, mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
 
 jest.mock('../index', () => ({
   logger: {

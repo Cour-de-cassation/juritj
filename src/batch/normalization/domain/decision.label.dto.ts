@@ -1,8 +1,8 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { LabelStatus } from '../../../shared/domain/enums'
 import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
+import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 
-export const TODAY = new Date().toISOString()
 @Schema()
 export class DecisionLabelDTO {
   @Prop()

@@ -1,5 +1,7 @@
 import { LabelStatus, Occultation, TypePartie } from '../../domain/enums'
 
+export const TODAY = new Date().toISOString()
+
 export class MockUtils {
   uniqueDecisionId = `TJ75011A01/1234520221121`
   uniqueDecisionIdWithoutNumeroMesureInstruction = `TJ75011A01/1234520221121`
@@ -70,7 +72,7 @@ export class MockUtils {
     appeals: [],
     chamberId: null,
     chamberName: null,
-    dateCreation: new Date().toISOString(),
+    dateCreation: TODAY,
     dateDecision: new Date().toISOString(),
     jurisdictionCode: 'this.metadonneesDtoMock.codeJuridiction',
     jurisdictionId: this.allAttributesMetadonneesDtoMock.idJuridiction,
