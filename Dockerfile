@@ -61,7 +61,7 @@ COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
 CMD ["/bin/sh", "batch_docker_entrypoint.sh"]
 
 
-#TODELETE, DEBUG TESTING PURPOSE
+# DEBUG / TESTING PURPOSE
 FROM node:18-bullseye as debug 
 
 ENV NODE_ENV production

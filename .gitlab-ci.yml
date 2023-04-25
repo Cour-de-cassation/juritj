@@ -133,7 +133,6 @@ deploy_batch:
     JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
     JURITJ_MONGODB_URL: $JURITJ_MONGODB_URL
     DOLLAR: $$
-
   script:
     - envsubst < .deploys/deploy_batch.yaml | kubectl apply -f -
   only:

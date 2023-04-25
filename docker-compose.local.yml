@@ -30,8 +30,6 @@ services:
     build:
       context: ./
       target: api
-    # volumes:
-    #   - ./src/api/:/home/node/dist/api
     environment: 
       - DOC_LOGIN=root
       - DOC_PASSWORD=root
@@ -55,8 +53,6 @@ services:
     build:
       context: ./
       target: debug
-    # volumes:
-    #   - ../src/batch/:/home/node/dist/batch
     environment: 
       - DOC_LOGIN=root
       - DOC_PASSWORD=root
@@ -71,11 +67,9 @@ services:
       - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
       - MONGODB_URL=db:55431
 
-
 networks:
   default:
     name: juritj-network
-
 
 volumes:
   mongo-storage:
