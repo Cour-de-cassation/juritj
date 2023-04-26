@@ -60,7 +60,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
           publication: []
         }
       },
-      filenameSource: 'test.json'
+      filenameSource: filename
     }
 
     // WHEN
