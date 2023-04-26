@@ -27,7 +27,6 @@ export class SaveDecisionUsecase {
     }
     const fileExtension = '.json'
     const filename = uuidv4() + fileExtension
-    console.log(requestDto, filename)
 
     await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), filename)
     return filename
