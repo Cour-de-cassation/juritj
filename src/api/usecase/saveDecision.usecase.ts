@@ -25,7 +25,8 @@ export class SaveDecisionUsecase {
       decisionIntegre,
       metadonnees
     }
-    const filename = uuidv4() + '.wpd'
+    const fileExtension = '.json'
+    const filename = uuidv4() + fileExtension
 
     await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), filename)
     return filename

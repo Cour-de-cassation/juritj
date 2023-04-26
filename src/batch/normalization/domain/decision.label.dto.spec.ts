@@ -12,7 +12,7 @@ jest.mock('../index', () => ({
 describe('mapDecisionNormaliseeToDecisionLabel', () => {
   it('returns the correct object', async () => {
     // GIVEN
-    const filename = 'test.wpd'
+    const filename = 'test.json'
     const mockDecision = new MockUtils().dbSderDecisionMock
     const expectedDecisionLabel: DecisionLabelDTO = {
       NACCode: '88F',
@@ -60,7 +60,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
           publication: []
         }
       },
-      filenameSource: 'test.wpd'
+      filenameSource: 'test.json'
     }
 
     // WHEN

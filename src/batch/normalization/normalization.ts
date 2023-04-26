@@ -26,12 +26,14 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   const decisionList = await fetchDecisionListFromS3()
 
   if (decisionList.length > 0) {
-    for (const decisionName of decisionList) {
+    for (const decisionFilename of decisionList) {
       try {
-        const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionName)
+        const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionFilename)
         const metadonnees = decision.metadonnees
 
-        logger.log('[NORMALIZATION JOB] Normalization job starting for decision ' + decisionName)
+        logger.log(
+          '[NORMALIZATION JOB] Normalization job starting for decision ' + decisionFilename
+        )
 
         const idDecision = generateUniqueId(metadonnees)
         logger.log('[NORMALIZATION JOB] Decision ID generated', idDecision)
@@ -62,7 +64,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
 
         const decisionToSave = mapDecisionNormaliseeToLabelDecision(
           transformedDecision,
-          decisionName
+          decisionFilename
         )
 
         const decisionToSaveDateChecked = updateLabelStatusIfDateDecisionIsInFuture(decisionToSave)
@@ -71,14 +73,14 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         logger.log('[NORMALIZATION JOB] Decision saved in database.', idDecision)
 
         decision.metadonnees = transformedMetadonnees
-        await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionName)
+        await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionFilename)
         logger.log('[NORMALIZATION JOB] Decision saved in normalized bucket.', idDecision)
 
-        await s3Repository.deleteDecision(decisionName, bucketNameIntegre)
+        await s3Repository.deleteDecision(decisionFilename, bucketNameIntegre)
         logger.log('[NORMALIZATION JOB] Decision deleted in raw bucket.', idDecision)
 
         logger.log(
-          '[NORMALIZATION JOB] End of normalization job for decision ' + decisionName,
+          '[NORMALIZATION JOB] End of normalization job for decision ' + decisionFilename,
           idDecision
         )
         listConvertedDecision.push({
@@ -86,7 +88,9 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           decisionNormalisee: cleanedDecision
         })
       } catch (error) {
-        logger.error('[NORMALIZATION JOB] Failed to normalize the decision ' + decisionName + '.')
+        logger.error(
+          '[NORMALIZATION JOB] Failed to normalize the decision ' + decisionFilename + '.'
+        )
         continue
       }
     }

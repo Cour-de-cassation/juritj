@@ -15,7 +15,8 @@ describe('SaveDecisionUsecase', () => {
   })
   it('calls the repository with valid parameters', async () => {
     // GIVEN
-    const fullFilename = fakeFilename + '.wpd'
+    const extensionName = '.json'
+    const fullFilename = fakeFilename + extensionName
     const decisionIntegre: Express.Multer.File = {
       fieldname: '',
       originalname: fullFilename,
@@ -37,7 +38,7 @@ describe('SaveDecisionUsecase', () => {
     const expectedRequestDto = JSON.stringify({
       decisionIntegre: {
         fieldname: '',
-        originalname: 'test.wpd',
+        originalname: 'test.json',
         encoding: '',
         mimetype: '',
         size: 0,
@@ -77,7 +78,7 @@ describe('SaveDecisionUsecase', () => {
           _eventsCount: 0
         },
         destination: '',
-        filename: 'test.wpd',
+        filename: 'test.json',
         path: '',
         buffer: { type: 'Buffer', data: [116, 101, 120, 116] }
       },
@@ -90,7 +91,7 @@ describe('SaveDecisionUsecase', () => {
     // THEN
     expect(mockDecisionRepository.saveDecisionIntegre).toBeCalledWith(
       expectedRequestDto,
-      fakeFilename + '.wpd'
+      fullFilename
     )
   })
 })
