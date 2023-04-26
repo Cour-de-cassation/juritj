@@ -34,7 +34,7 @@ export class DecisionS3Repository implements DecisionRepository {
     const reqParams = {
       Body: requestToS3Dto,
       Bucket: process.env.S3_BUCKET_NAME_RAW,
-      Key: uuidv4() + '-' + filename
+      Key: filename
     }
 
     await this.saveDecision(reqParams)
