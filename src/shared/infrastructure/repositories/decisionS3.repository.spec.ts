@@ -11,9 +11,6 @@ import 'aws-sdk-client-mock-jest'
 import { DecisionS3Repository } from './decisionS3.repository'
 import { Readable } from 'stream'
 
-const someFakeUuid = '123456789'
-jest.mock('uuid', () => ({ v4: () => someFakeUuid }))
-
 describe('DecisionS3Repository', () => {
   let repository: DecisionS3Repository
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
@@ -64,7 +61,7 @@ describe('DecisionS3Repository', () => {
       const expectedReqParams = {
         Body: requestS3DtoJson,
         Bucket: process.env.S3_BUCKET_NAME_RAW,
-        Key: someFakeUuid + '-' + filename
+        Key: filename
       }
 
       mockS3.on(PutObjectCommand).resolves({})

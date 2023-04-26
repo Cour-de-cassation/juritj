@@ -4,12 +4,15 @@ import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { SaveDecisionUsecase } from './saveDecision.usecase'
 import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
 
-const fakeFilename = 'test'
 jest.mock('uuid', () => ({ v4: () => fakeFilename }))
+const fakeFilename = 'test'
 describe('SaveDecisionUsecase', () => {
   const mockDecisionRepository: MockProxy<DecisionRepository> = mock<DecisionRepository>()
   const usecase = new SaveDecisionUsecase(mockDecisionRepository)
 
+  afterAll(() => {
+    jest.clearAllMocks()
+  })
   it('calls the repository with valid parameters', async () => {
     // GIVEN
     const fullFilename = fakeFilename + '.wpd'
