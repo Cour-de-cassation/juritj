@@ -41,7 +41,8 @@ test:
     - echo 'ok'
   only:
     - master
-    - tech-179-deploy-normalization-dev-env
+    - re7
+    - dev
   tags:
     - docker
 
@@ -60,7 +61,8 @@ build_api:
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
   only:
     - master
-    - tech-179-deploy-normalization-dev-env
+    - re7
+    - dev
   tags:
     - docker
 
@@ -85,7 +87,8 @@ build_batch:
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-debug
   only:
     - master
-    - tech-179-deploy-normalization-dev-env
+    - re7
+    - dev
   tags:
     - docker
 
@@ -110,12 +113,13 @@ deploy_api:
     JURITJ_WINCI_CA_CERT: $JURITJ_WINCI_CA_CERT
     DOLLAR: $$
   script:
-    - envsubst < .deploys/deploy_api.yaml | kubectl apply -f -
-    - envsubst < .deploys/deploy_bucket.yaml | kubectl apply -f -
-    - envsubst < .deploys/deploy_database.yaml | kubectl apply -f -
+    - envsubst < .deploys/deploy_api.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
+    - envsubst < .deploys/deploy_bucket.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
+    - envsubst < .deploys/deploy_database.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
   only:
     - master
-    - tech-179-deploy-normalization-dev-env
+    - re7
+    - dev
   tags:
     - shell
   dependencies:
@@ -138,10 +142,11 @@ deploy_batch:
     JURITJ_MONGODB_URL: $JURITJ_MONGODB_URL
     DOLLAR: $$
   script:
-    - envsubst < .deploys/deploy_batch.yaml | kubectl apply -f -
+    - envsubst < .deploys/deploy_batch.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
   only:
     - master
-    - tech-179-deploy-normalization-dev-env
+    - re7
+    - dev
   tags:
     - shell
   dependencies:
