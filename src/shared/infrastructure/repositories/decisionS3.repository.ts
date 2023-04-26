@@ -5,7 +5,6 @@ import {
   GetObjectCommand,
   ListObjectsV2Command
 } from '@aws-sdk/client-s3'
-import { v4 as uuidv4 } from 'uuid'
 import { ServiceUnavailableException, Logger } from '@nestjs/common'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 import { CollectDto } from '../dto/collect.dto'

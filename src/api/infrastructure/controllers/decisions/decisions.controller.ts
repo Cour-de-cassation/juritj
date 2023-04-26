@@ -86,6 +86,7 @@ export class DecisionsController {
         throw error
       })
 
+    this.logger.log(filename + ' created in s3')
     this.logger.log(
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )

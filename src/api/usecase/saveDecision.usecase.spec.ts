@@ -4,22 +4,24 @@ import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { SaveDecisionUsecase } from './saveDecision.usecase'
 import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
 
+const fakeFilename = 'test'
+jest.mock('uuid', () => ({ v4: () => fakeFilename }))
 describe('SaveDecisionUsecase', () => {
   const mockDecisionRepository: MockProxy<DecisionRepository> = mock<DecisionRepository>()
   const usecase = new SaveDecisionUsecase(mockDecisionRepository)
 
   it('calls the repository with valid parameters', async () => {
     // GIVEN
-    const fileName = 'test.wpd'
+    const fullFilename = fakeFilename + '.wpd'
     const decisionIntegre: Express.Multer.File = {
       fieldname: '',
-      originalname: fileName,
+      originalname: fullFilename,
       encoding: '',
       mimetype: '',
       size: 0,
       stream: new Readable(),
       destination: '',
-      filename: fileName,
+      filename: fullFilename,
       path: '',
       buffer: Buffer.from('text')
     }
@@ -83,6 +85,9 @@ describe('SaveDecisionUsecase', () => {
     usecase.execute(decisionIntegre, metadonnees)
 
     // THEN
-    expect(mockDecisionRepository.saveDecisionIntegre).toBeCalledWith(expectedRequestDto, fileName)
+    expect(mockDecisionRepository.saveDecisionIntegre).toBeCalledWith(
+      expectedRequestDto,
+      fakeFilename + '.wpd'
+    )
   })
 })

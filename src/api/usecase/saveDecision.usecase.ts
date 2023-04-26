@@ -1,6 +1,6 @@
 import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
-import { MetadonneesDto } from '../../shared/infrastructure/dto/metadonnees.dto'
 import { v4 as uuidv4 } from 'uuid'
+import { MetadonneesDto } from '../../shared/infrastructure/dto/metadonnees.dto'
 
 export class SaveDecisionUsecase {
   constructor(private decisionsRepository: DecisionRepository) {}
