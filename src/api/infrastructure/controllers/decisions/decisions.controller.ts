@@ -32,6 +32,11 @@ import { DecisionS3Repository } from '../../../../shared/infrastructure/reposito
 import { CollectDto } from '../../../../shared/infrastructure/dto/collect.dto'
 import { MetadonneesDto } from '../../../../shared/infrastructure/dto/metadonnees.dto'
 
+export interface CollecteDecisionResponse {
+  filename: string | void
+  body: string
+}
+
 @ApiTags('Collect')
 @Controller('decisions')
 export class DecisionsController {
@@ -62,7 +67,7 @@ export class DecisionsController {
     @Body('metadonnees', new StringToJsonPipe(), new ValidateDtoPipe())
     metadonneesDto: MetadonneesDto,
     @Req() request: Request
-  ): Promise<string> {
+  ): Promise<CollecteDecisionResponse> {
     validateClientCertificate(request)
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
@@ -72,18 +77,20 @@ export class DecisionsController {
 
     this.logger.log(routePath + ' received with: ' + JSON.stringify(metadonneesDto))
     const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
-    await decisionUseCase.execute(decisionIntegre, metadonneesDto).catch((error) => {
-      this.logger.error(
-        routePath + ' returns ' + error.getStatus() + ': ' + error.response.message.toString()
-      )
-      throw error
-    })
+    const filename = await decisionUseCase
+      .execute(decisionIntegre, metadonneesDto)
+      .catch((error) => {
+        this.logger.error(
+          routePath + ' returns ' + error.getStatus() + ': ' + error.response.message.toString()
+        )
+        throw error
+      })
 
+    this.logger.log(filename + ' created in s3')
     this.logger.log(
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )
-
-    return 'Nous avons bien reçu la décision intègre et ses métadonnées.'
+    return { filename, body: 'Nous avons bien reçu la décision intègre et ses métadonnées.' }
   }
 }
 

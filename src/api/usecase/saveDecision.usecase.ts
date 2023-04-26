@@ -1,4 +1,5 @@
 import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
+import { v4 as uuidv4 } from 'uuid'
 import { MetadonneesDto } from '../../shared/infrastructure/dto/metadonnees.dto'
 
 export class SaveDecisionUsecase {
@@ -16,13 +17,18 @@ export class SaveDecisionUsecase {
    *
    * En cas d'évolution du contexte, nous créerons les interfaces et entities du domaine
    */
-  async execute(decisionIntegre: Express.Multer.File, metadonnees: MetadonneesDto): Promise<void> {
+  async execute(
+    decisionIntegre: Express.Multer.File,
+    metadonnees: MetadonneesDto
+  ): Promise<string> {
     const requestDto = {
       decisionIntegre,
       metadonnees
     }
-    const filename = decisionIntegre.originalname
+    const fileExtension = '.json'
+    const filename = uuidv4() + fileExtension
 
     await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), filename)
+    return filename
   }
 }

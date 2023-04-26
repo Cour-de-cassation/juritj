@@ -4,22 +4,28 @@ import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { SaveDecisionUsecase } from './saveDecision.usecase'
 import { DecisionRepository } from '../domain/decisions/repositories/decision.repository'
 
+jest.mock('uuid', () => ({ v4: () => fakeFilename }))
+const fakeFilename = 'test'
 describe('SaveDecisionUsecase', () => {
   const mockDecisionRepository: MockProxy<DecisionRepository> = mock<DecisionRepository>()
   const usecase = new SaveDecisionUsecase(mockDecisionRepository)
 
+  afterAll(() => {
+    jest.clearAllMocks()
+  })
   it('calls the repository with valid parameters', async () => {
     // GIVEN
-    const fileName = 'test.wpd'
+    const originalName = 'test.wpd'
+    const generatedFilename = fakeFilename + '.json'
     const decisionIntegre: Express.Multer.File = {
       fieldname: '',
-      originalname: fileName,
+      originalname: originalName,
       encoding: '',
       mimetype: '',
       size: 0,
       stream: new Readable(),
       destination: '',
-      filename: fileName,
+      filename: originalName,
       path: '',
       buffer: Buffer.from('text')
     }
@@ -32,7 +38,7 @@ describe('SaveDecisionUsecase', () => {
     const expectedRequestDto = JSON.stringify({
       decisionIntegre: {
         fieldname: '',
-        originalname: 'test.wpd',
+        originalname: originalName,
         encoding: '',
         mimetype: '',
         size: 0,
@@ -72,7 +78,7 @@ describe('SaveDecisionUsecase', () => {
           _eventsCount: 0
         },
         destination: '',
-        filename: 'test.wpd',
+        filename: originalName,
         path: '',
         buffer: { type: 'Buffer', data: [116, 101, 120, 116] }
       },
@@ -83,6 +89,9 @@ describe('SaveDecisionUsecase', () => {
     usecase.execute(decisionIntegre, metadonnees)
 
     // THEN
-    expect(mockDecisionRepository.saveDecisionIntegre).toBeCalledWith(expectedRequestDto, fileName)
+    expect(mockDecisionRepository.saveDecisionIntegre).toBeCalledWith(
+      expectedRequestDto,
+      generatedFilename
+    )
   })
 })
