@@ -59,8 +59,11 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           decision: cleanedDecision,
           metadonnees: transformedMetadonnees
         }
-        // on transforme la donnee en modele lisible pour label puis on le sauvegarde
-        const decisionToSave = mapDecisionNormaliseeToLabelDecision(transformedDecision)
+
+        const decisionToSave = mapDecisionNormaliseeToLabelDecision(
+          transformedDecision,
+          decisionName
+        )
 
         const decisionToSaveDateChecked = updateLabelStatusIfDateDecisionIsInFuture(decisionToSave)
 

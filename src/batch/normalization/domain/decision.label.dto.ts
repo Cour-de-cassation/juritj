@@ -104,6 +104,9 @@ export class DecisionLabelDTO {
 
   @Prop()
   endCaseCode?: string
+
+  @Prop()
+  filenameSource: string
 }
 
 type labelTreatmentsType = Array<{
@@ -119,7 +122,10 @@ type labelTreatmentsType = Array<{
 
 export const DecisionSchema = SchemaFactory.createForClass(DecisionLabelDTO)
 
-export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): DecisionLabelDTO {
+export function mapDecisionNormaliseeToLabelDecision(
+  decision: DecisionModel,
+  decisionName: string
+): DecisionLabelDTO {
   return {
     appeals: [],
     chamberId: null,
@@ -155,7 +161,8 @@ export function mapDecisionNormaliseeToLabelDecision(decision: DecisionModel): D
     natureAffairePenal: null,
     codeMatiereCivil: decision.metadonnees.codeNature,
     NACCode: decision.metadonnees.codeNAC,
-    endCaseCode: null
+    endCaseCode: null,
+    filenameSource: decisionName
   }
 }
 

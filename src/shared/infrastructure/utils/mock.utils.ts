@@ -55,7 +55,8 @@ export class MockUtils {
     idDecision: this.uniqueDecisionId,
     labelStatus: LabelStatus.TOBETREATED,
     numeroMesureInstruction: ['AZERTYUIOP'],
-    decisionAssociee: this.decisionDtoMock
+    decisionAssociee: this.decisionDtoMock,
+    filenameSource: 'test.wpd'
   }
 
   decisionContent =
@@ -103,6 +104,7 @@ export class MockUtils {
     natureAffairePenal: null,
     codeMatiereCivil: this.allAttributesMetadonneesDtoMock.codeNature,
     NACCode: this.allAttributesMetadonneesDtoMock.codeNAC,
-    endCaseCode: null
+    endCaseCode: null,
+    filenameSource: this.decisionName
   }
 }
