@@ -44,6 +44,9 @@ services:
       - S3_BUCKET_NAME_RAW=juritj-test-bucket
       - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
       - MONGODB_URL=db:55431
+      - SERVER_KEY=./secrets/server-key.pem
+      - SERVER_CERT=./secrets/server-cert.pem
+      - SERVER_CA_CERT=./secrets/ca-cert.pem
     expose: 
       - 3009
     ports:
@@ -66,6 +69,9 @@ services:
       - S3_BUCKET_NAME_RAW=juritj-test-bucket
       - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
       - MONGODB_URL=db:55431
+      - SERVER_KEY=./secrets/server-key.pem
+      - SERVER_CERT=./secrets/server-cert.pem
+      - SERVER_CA_CERT=./secrets/ca-cert.pem
 
 networks:
   default:

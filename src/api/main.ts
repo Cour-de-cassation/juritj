@@ -6,19 +6,21 @@ import { Context } from '../shared/infrastructure/utils/context'
 import { CustomLogger } from '../shared/infrastructure/utils/customLogger.utils'
 import { RequestLoggerInterceptor } from './infrastructure/interceptors/request-logger.interceptor'
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
+import { readFileSync } from 'fs'
 
 async function bootstrap() {
-  const serverPrivateKey = process.env.SERVER_KEY
-  const serverCertificate = process.env.SERVER_CERT
-  const authorityCertificate = process.env.SERVER_CA_CERT
-  const winciAuthorityCertificate = process.env.WINCI_CA_CERT
+  const serverPrivateKey = readFileSync(process.env.SERVER_KEY)
+  const serverCertificate = readFileSync(process.env.SERVER_CERT)
+  const authorityCertificate = readFileSync(process.env.SERVER_CA_CERT)
+  //const winciAuthorityCertificate = process.env.WINCI_CA_CERT
 
   const httpsOptions: HttpsOptions = {
     key: serverPrivateKey,
     cert: serverCertificate,
     requestCert: true,
     rejectUnauthorized: true,
-    ca: [authorityCertificate, winciAuthorityCertificate]
+    //ca: [authorityCertificate, winciAuthorityCertificate]
+    ca: [authorityCertificate]
   }
 
   const app = await NestFactory.create(AppModule, {
