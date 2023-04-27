@@ -58,7 +58,7 @@ USER node
 COPY --from=prod --chown=node:node /home/node/dist/batch ./dist/batch
 COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
 
-CMD ["/bin/sh", "batch_docker_entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "batch_docker_entrypoint.sh"]
 
 
 # DEBUG / TESTING PURPOSE
