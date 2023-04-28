@@ -131,7 +131,7 @@ export function mapDecisionNormaliseeToLabelDecision(
     chamberId: null,
     chamberName: null,
     dateCreation: TODAY,
-    dateDecision: TODAY,
+    dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,
     jurisdictionName: decision.metadonnees.nomJuridiction,
@@ -167,8 +167,9 @@ export function mapDecisionNormaliseeToLabelDecision(
 }
 
 function parseDate(dateDecision: string) {
-  const y = dateDecision.substring(0, 4),
-    m = dateDecision.substring(4, 6),
-    d = dateDecision.substring(6, 8)
-  return new Date(parseInt(y), parseInt(m), parseInt(d))
+  const year = dateDecision.substring(0, 4),
+    month = dateDecision.substring(4, 6),
+    date = dateDecision.substring(6, 8)
+
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(date))
 }

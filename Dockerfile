@@ -41,7 +41,19 @@ COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=prod --chown=node:node /home/node/dist/shared ./dist/shared
 COPY --from=prod --chown=node:node /home/node/secrets/dev ./secrets/dev
 
+# --- Base final image with batch dist content --- #
+FROM shared as batch 
 
+USER root
+RUN apk add cmd:wpd2text
+
+USER node
+COPY --from=prod --chown=node:node /home/node/dist/batch ./dist/batch
+COPY --from=prod --chown=node:node /home/node/secrets/dev ./secrets/dev
+COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
+
+
+CMD ["/bin/sh", "batch_docker_entrypoint.sh"]
 
 # --- Base final image with api dist content --- #
 FROM shared as api
@@ -52,39 +64,26 @@ COPY --from=prod --chown=node:node /home/node/dist/api ./dist/api
 CMD ["node", "dist/api/main"]
 
 
-# --- Base final image with batch dist content --- #
-FROM shared as batch 
 
-USER root
-RUN apk add cmd:wpd2text
+# # DEBUG / TESTING PURPOSE
+# FROM node:18-bullseye as debug 
 
-USER node
-COPY --from=prod --chown=node:node /home/node/dist/batch ./dist/batch
-COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
+# ENV NODE_ENV production
 
+# USER node
+# WORKDIR /home/node
 
-CMD ["/bin/sh", "batch_docker_entrypoint.sh"]
+# COPY --from=prod --chown=node:node /home/node/package*.json ./
+# COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
 
+# COPY --from=prod --chown=node:node /home/node/dist ./dist
 
-# DEBUG / TESTING PURPOSE
-FROM node:18-bullseye as debug 
+# COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
+# RUN chmod +x batch_docker_entrypoint.sh
 
-ENV NODE_ENV production
+# USER root
+# RUN apt update
+# RUN apt install libwpd-tools -y
 
-USER node
-WORKDIR /home/node
-
-COPY --from=prod --chown=node:node /home/node/package*.json ./
-COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
-
-COPY --from=prod --chown=node:node /home/node/dist ./dist
-
-COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
-RUN chmod +x batch_docker_entrypoint.sh
-
-USER root
-RUN apt update
-RUN apt install libwpd-tools -y
-
-USER node
-CMD ["node", "dist/api/main"]
+# USER node
+# CMD ["node", "dist/api/main"]

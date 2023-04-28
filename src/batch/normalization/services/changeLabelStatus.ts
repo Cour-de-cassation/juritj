@@ -7,6 +7,10 @@ export function updateLabelStatusIfDateDecisionIsInFuture(
 ): DecisionLabelDTO {
   // Hypothèse : le cas d'égalité est exclus car les décisions ne sont pas
   // transmises en temps réel
+
+  console.log(decisionLabelDTO.dateCreation, 'dateCreation')
+  console.log(decisionLabelDTO.dateDecision, 'dateDecision')
+
   if (decisionLabelDTO.dateCreation > decisionLabelDTO.dateDecision) {
     return decisionLabelDTO
   } else {
