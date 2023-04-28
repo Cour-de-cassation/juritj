@@ -76,28 +76,48 @@ Le dossier `/documentation` contient :
 
 #### Configuration des certificats
 
-Afin d'avoir des certificats de dev,il nous faut d'abord les générer pour qu'ils soient envoyé sur le container de l'api
+Afin d'avoir des certificats de dev, il nous faut d'abord les générer pour qu'ils soient envoyés sur le container de l'api
 
-1. se rendre dans `/secrets/dev`
+1. Se rendre dans `/secrets/dev`
 
-2. Lancer la commande `./generate-keys.sh` ( s'assurer d'avor les droits d'éxecution `chmod +x generate-keys.sh`)
+2. Lancer la commande `./generate-keys.sh` (s'assurer d'avor les droits d'éxecution `chmod +x generate-keys.sh`)
 
-3. Sur Postman, insérer les ceritificats
+3. Revenir sur le dossier racine de l'api ( `cd ../..` depuis `secrets/dev`)
+
+4. Sur Postman, [insérer les certificats](https://learning.postman.com/docs/sending-requests/certificates/) `client-*.pem` (uniquement CERT et KEY) ety ajouter le `ca-cert.pem`
 
 #### Configuration de minio
 
 1. Lancer un premier build de docker 
 
-    ```docker-compose -f docker-compose.local.yml build```
+```bash
+docker-compose -f docker-compose.local.yml build
+```
 
 2. Lancer les containers (l'API ne se lancera pas )
 
-    ```docker-compose -f docker-compose.local.yml up -d```
+```bash
+docker-compose -f docker-compose.local.yml up -d
+```
 
-3. Se connecter au [minio s3](http://localhost:9001)
+3. Recupérer l'URL interne de minio
+    -  Sur Docker Desktop , dans `Containers` cliquer sur `bucket`
+    - Aller dans la sections `Logs`, et récupérer le dernier `API: http://XXXX.X.X.X` 
+    - Le copier dans `S3_URL` présent dans le `docker-compose.local.yml` 
+
+
+4. Se connecter au [minio s3](http://localhost:9001)
 
     - s'identifier (les identifiants se trouvent dans `docker-compose.local.yaml` > `MINIO_USER` et `MINIO_PASSWORD`)
 
-    - creer les clés d'accès (Barre latérale > Users > Access Keys) puis les rentrer dans les variables `S3_ACCESS_KEY` et `S3_SECRET_KEY`
+    - creer les clés d'accès (Barre latérale > Users > Access Keys) puis les rentrer dans les variables `S3_ACCESS_KEY` et `S3_SECRET_KEY` se trouvant dans `docker-compose.local.yaml`
+
+Puis lancer l'application à nouveau (l'api devrait se recréer):
+
+```bash
+docker-compose -f docker-compose.local.yml up -d
+ ```
+
+
 
      

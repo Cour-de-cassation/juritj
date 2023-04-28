@@ -37,8 +37,8 @@ services:
       - MINIO_PASSWORD=root1234
       - S3_ACCESS_KEY=oxyd9hTLDr0P107A #TOEDIT
       - S3_SECRET_KEY=1LS6qgtCrQXLoGoKLO6skwMwT9Gyi9GV #TOEDIT
-      - S3_URL=http://172.19.0.5:9000 #TOEDIT
-      - S3_REGION=eu
+      - S3_URL=http://172.19.0.4:9000 #TOEDIT
+      - S3_REGION=eu-west-paris-1
       - S3_BUCKET_NAME=juritj-test-bucket
       - S3_BUCKET_NAME_RAW=juritj-test-bucket
       - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
