@@ -70,3 +70,34 @@ Le dossier `/documentation` contient :
 - `conventions.md` qui liste les choix de l'équipe concernant la base de code 
 - Le dossier `adr` qui historise les choix structurant de l'équipe 
 - Les requêtes Postman et comment les installer [lien](documentation/postman/README.md)
+
+
+### Docker en local
+
+#### Configuration des certificats
+
+Afin d'avoir des certificats de dev,il nous faut d'abord les générer pour qu'ils soient envoyé sur le container de l'api
+
+1. se rendre dans `/secrets/dev`
+
+2. Lancer la commande `./generate-keys.sh` ( s'assurer d'avor les droits d'éxecution `chmod +x generate-keys.sh`)
+
+3. Sur Postman, insérer les ceritificats
+
+#### Configuration de minio
+
+1. Lancer un premier build de docker 
+
+    ```docker-compose -f docker-compose.local.yml build```
+
+2. Lancer les containers (l'API ne se lancera pas )
+
+    ```docker-compose -f docker-compose.local.yml up -d```
+
+3. Se connecter au [minio s3](http://localhost:9001)
+
+    - s'identifier (les identifiants se trouvent dans `docker-compose.local.yaml` > `MINIO_USER` et `MINIO_PASSWORD`)
+
+    - creer les clés d'accès (Barre latérale > Users > Access Keys) puis les rentrer dans les variables `S3_ACCESS_KEY` et `S3_SECRET_KEY`
+
+     
