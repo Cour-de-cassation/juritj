@@ -76,15 +76,17 @@ Le dossier `/documentation` contient :
 
 #### Configuration des certificats
 
-Afin d'avoir des certificats de dev, il nous faut d'abord les générer pour qu'ils soient envoyés sur le container de l'api
+Afin de disposer de certificats pour l'environnement de développement local, il nous faut d'abord les générer pour qu'ils soient envoyés sur le container de l'api
 
 1. Se rendre dans `/secrets/dev`
 
-2. Lancer la commande `./generate-keys.sh` (s'assurer d'avor les droits d'éxecution `chmod +x generate-keys.sh`)
+2. Lancer la commande `./generate-keys.sh` (s'assurer d'avoir les droits d'exécution `chmod +x generate-keys.sh`) afin de générer l'autorité de certification autosignée et les certificats qui en dépendent
 
 3. Revenir sur le dossier racine de l'api ( `cd ../..` depuis `secrets/dev`)
 
-4. Sur Postman, [insérer les certificats](https://learning.postman.com/docs/sending-requests/certificates/) `client-*.pem` (uniquement CERT et KEY) ety ajouter le `ca-cert.pem`
+4. Sur Postman, [insérer les certificats](https://learning.postman.com/docs/sending-requests/certificates/) client : `client-cert.pem`, `client-key.pem` pour le host http://localhost:3009 (comme définis pour l'API dans le fichier docker-compose.local.yml)
+
+5. Sur Postman toujours, ajouter le certificat de l'autorité de certification autosignée `ca-cert.pem`
 
 #### Configuration de minio
 
@@ -94,30 +96,42 @@ Afin d'avoir des certificats de dev, il nous faut d'abord les générer pour qu'
 docker-compose -f docker-compose.local.yml build
 ```
 
-2. Lancer les containers (l'API ne se lancera pas )
+2. Lancer les containers (l'API ne se lancera pas)
 
 ```bash
 docker-compose -f docker-compose.local.yml up -d
 ```
 
 3. Recupérer l'URL interne de minio
-    -  Sur Docker Desktop , dans `Containers` cliquer sur `bucket`
+    - Sur Docker Desktop, dans `Containers`, cliquer sur `bucket`
     - Aller dans la sections `Logs`, et récupérer le dernier `API: http://XXXX.X.X.X` 
     - Le copier dans `S3_URL` présent dans le `docker-compose.local.yml` 
 
-
 4. Se connecter au [minio s3](http://localhost:9001)
+    - S'identifier (les identifiants se trouvent dans `docker-compose.local.yaml` > `MINIO_USER` et `MINIO_PASSWORD`)
+    - Creer les clés d'accès (Barre latérale > User > Access Keys) puis les rentrer dans les variables `S3_ACCESS_KEY` et `S3_SECRET_KEY` se trouvant dans `docker-compose.local.yaml`
+    - Créer les buckets (Administrator > Buckets) en reprenant les noms de `S3_BUCKET_NAME_RAW` et `S3_BUCKET_NAME_NORMALIZED` 
 
-    - s'identifier (les identifiants se trouvent dans `docker-compose.local.yaml` > `MINIO_USER` et `MINIO_PASSWORD`)
-
-    - creer les clés d'accès (Barre latérale > Users > Access Keys) puis les rentrer dans les variables `S3_ACCESS_KEY` et `S3_SECRET_KEY` se trouvant dans `docker-compose.local.yaml`
-
-Puis lancer l'application à nouveau (l'api devrait se recréer):
+5. Puis lancer l'application à nouveau (l'API devrait se recréer):
 
 ```bash
 docker-compose -f docker-compose.local.yml up -d
  ```
 
+6. En cas d'arrêt des conteneurs, refaire l'étape 3
 
+#### Configuration de mongoDB
 
-     
+1. Récupérer l'URL interne de mongoDB
+    - Dans le terminal, tapez `docker ps` et récupérer l'ID du conteneur mongoDB 
+    - Tapez `docker inspect MONGODB_CONTAINER_ID | grep "IPAddress"`
+    - L'advdresse IP du conteneur MongoDB s'affiche sous la forme suivante : 
+        - `"IPAddress": "172.18.0.3",`
+
+2. Remplacez l'addresse IP dans `MONGODB_URL` en conservant le port et le format : `mongodb://XX.XX.XX.XX:55431/`
+
+3. Relancer l'application
+
+```bash
+docker-compose -f docker-compose.local.yml up -d
+ ```
