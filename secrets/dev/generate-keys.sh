@@ -36,9 +36,9 @@ openssl x509 -in client-cert.pem -noout -text
 # 10. Verifying validity of server certificate
 openssl verify -CAfile ca-cert.pem client-cert.pem
 
-# 11. Generate another CA's private key and self-signed certificate 
-openssl req -x509 -sha256 -newkey rsa:4096 -days 365 -nodes -keyout another-ca-key.pem -out another-ca-cert.pem -subj "/C=FR/ST=Paris/L=Paris/O=MinJu/OU=Cour de cassation/CN=CC2/emailAddress=some@mail.com"
+# 11. Generate fake winci CA's private key and self-signed certificate 
+openssl req -x509 -sha256 -newkey rsa:4096 -days 365 -nodes -keyout winci-ca-key.pem -out winci-ca-cert.pem -subj "/C=FR/ST=Paris/L=Paris/O=MinJu/OU=Cour de cassation/CN=CC2/emailAddress=some@mail.com"
 
-# 12. Generate another client private key and certificate signing request (CSR)
-openssl req -newkey rsa:4096 -nodes -keyout another-client-key.pem -out another-client-req.pem -subj "/C=FR/ST=Paris/L=Paris/O=MinJu/OU=Judilibre Postman/CN=CC2/emailAddress=some@mail.com"
-openssl x509 -sha256 -req -in another-client-req.pem -days 365 -CA another-ca-cert.pem -CAkey another-ca-key.pem -CAcreateserial -out another-client-cert.pem
+# 12. Generate fake winci client private key and certificate signing request (CSR)
+openssl req -newkey rsa:4096 -nodes -keyout winci-client-key.pem -out winci-client-req.pem -subj "/C=FR/ST=Paris/L=Paris/O=MinJu/OU=Judilibre Postman/CN=CC2/emailAddress=some@mail.com"
+openssl x509 -sha256 -req -in winci-client-req.pem -days 365 -CA winci-ca-cert.pem -CAkey winci-ca-key.pem -CAcreateserial -out winci-client-cert.pem

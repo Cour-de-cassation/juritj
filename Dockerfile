@@ -39,23 +39,17 @@ WORKDIR /home/node
 COPY --from=prod --chown=node:node /home/node/package*.json ./
 COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=prod --chown=node:node /home/node/dist/shared ./dist/shared
-COPY --from=prod --chown=node:node /home/node/secrets ./secrets
-COPY --chown=node:node api_docker_entrypoint.sh api_docker_entrypoint.sh
+COPY --from=prod --chown=node:node /home/node/secrets/dev ./secrets/dev
 
 
 
 # --- Base final image with api dist content --- #
 FROM shared as api
 
-USER root
-RUN apk add cmd:openssl
-
 USER node
-
 COPY --from=prod --chown=node:node /home/node/dist/api ./dist/api
 
-ENTRYPOINT ["/bin/sh", "api_docker_entrypoint.sh"]
-#CMD ["node", "dist/api/main"]
+CMD ["node", "dist/api/main"]
 
 
 # --- Base final image with batch dist content --- #

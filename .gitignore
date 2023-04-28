@@ -43,6 +43,6 @@ lerna-debug.log*
 *.wpd
 
 # Secrets
-/secrets/*
-!/secrets/generate-keys.sh
-!/secrets/winci-ca-cert.pem
+/secrets/dev/*
+!/secrets/dev/generate-keys.sh
+#!/secrets/dev/winci-ca-cert.pem

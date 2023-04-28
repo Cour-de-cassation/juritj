@@ -35,18 +35,18 @@ services:
       - DOC_PASSWORD=root
       - MINIO_USER=root
       - MINIO_PASSWORD=root1234
-      - S3_ACCESS_KEY=90K0WRFk3pFIMpk7
-      - S3_SECRET_KEY=WWHmvAp6ZfxKIkFlSNVX8oUXq0bQstiT
-      - S3_URL=bucket
-      - S3_PORT=9000
-      - S3_REGION=eu-west-paris-1
+      - S3_ACCESS_KEY=oxyd9hTLDr0P107A
+      - S3_SECRET_KEY=1LS6qgtCrQXLoGoKLO6skwMwT9Gyi9GV
+      - S3_URL=http://localhost:9000
+      - S3_REGION=eu
       - S3_BUCKET_NAME=juritj-test-bucket
       - S3_BUCKET_NAME_RAW=juritj-test-bucket
       - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
       - MONGODB_URL=db:55431
-      - SERVER_KEY=./secrets/server-key.pem
-      - SERVER_CERT=./secrets/server-cert.pem
-      - SERVER_CA_CERT=./secrets/ca-cert.pem
+      - SERVER_KEY=./secrets/dev/server-key.pem
+      - SERVER_CERT=./secrets/dev/server-cert.pem
+      - SERVER_CA_CERT=./secrets/dev/ca-cert.pem
+      - WINCI_CA_CERT=./secrets/dev/winci-ca-cert.pem
     expose: 
       - 3009
     ports:
