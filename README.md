@@ -51,17 +51,23 @@ Créer un fichier `.env` à la racine du dossier avec les variables suivantes :
 DOC_LOGIN=loginDoc
 DOC_PASSWORD=motDePasseDoc
 
-### S3 Keys 
-S3_ACCESS_KEY=CleAccesS3Scaleway
-S3_SECRET_KEY=CleSecreteS3Scaleway
-S3_URL=urlDuS3Scaleway
-S3_REGION=region
+### Minio 
 S3_BUCKET_NAME_RAW=nomDuBucket
 S3_BUCKET_NAME_NORMALIZED=nomDuBucket
+S3_URL=urlDuS3Scaleway
+S3_ACCESS_KEY=CleAccesS3Scaleway
+S3_SECRET_KEY=CleSecreteS3Scaleway
+S3_REGION=region
 
-# DB
-
+### DB
 MONGODB_URL=mongodb://url-du-mongo/
+
+### mTLS Certificates
+SERVER_KEY="multiline server private key"
+SERVER_CERT="multiline server certificate"
+SERVER_CA_CERT="multiline CA certificate"
+SERVER_CA_KEY="multiline CA private key"
+WINCI_CA_CERT="multiline Winci CA certificate"
 ```
 
 ### Documentation complémentaire 

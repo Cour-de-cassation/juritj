@@ -13,13 +13,6 @@ async function bootstrap() {
   const authorityCertificate = process.env.SERVER_CA_CERT
   const winciAuthorityCertificate = process.env.WINCI_CA_CERT
 
-  console.log({
-    serverPrivateKey: serverPrivateKey,
-    serverCertificate,
-    authorityCertificate,
-    winciAuthorityCertificate
-  })
-
   const httpsOptions: HttpsOptions = {
     key: serverPrivateKey,
     cert: serverCertificate,
