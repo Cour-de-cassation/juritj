@@ -45,7 +45,7 @@ services:
       context: ./
       target: api
     env_file:
-      - ./.deploys/local/api.env
+      - .env
     expose: 
       - 3009
     ports:
@@ -56,7 +56,7 @@ services:
       context: ./
       target: batch
     env_file:
-      - ./.deploys/local/batch.env
+      - .env
 
 networks:
   default:
