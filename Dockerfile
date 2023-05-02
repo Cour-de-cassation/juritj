@@ -39,7 +39,6 @@ WORKDIR /home/node
 COPY --from=prod --chown=node:node /home/node/package*.json ./
 COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=prod --chown=node:node /home/node/dist/shared ./dist/shared
-COPY --from=prod --chown=node:node /home/node/secrets/dev ./secrets/dev
 
 # --- Base final image with batch dist content --- #
 FROM shared as batch 
@@ -49,9 +48,7 @@ RUN apk add cmd:wpd2text
 
 USER node
 COPY --from=prod --chown=node:node /home/node/dist/batch ./dist/batch
-COPY --from=prod --chown=node:node /home/node/secrets/dev ./secrets/dev
 COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
-
 
 CMD ["/bin/sh", "batch_docker_entrypoint.sh"]
 
@@ -60,6 +57,7 @@ FROM shared as api
 
 USER node
 COPY --from=prod --chown=node:node /home/node/dist/api ./dist/api
+COPY --from=prod --chown=node:node /home/node/secrets/dev ./secrets/dev
 
 CMD ["node", "dist/api/main"]
 

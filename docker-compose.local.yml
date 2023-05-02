@@ -44,19 +44,8 @@ services:
     build:
       context: ./
       target: api
-    environment: 
-      - DOC_LOGIN=root
-      - DOC_PASSWORD=root
-      - S3_ACCESS_KEY=local_access_key
-      - S3_SECRET_KEY=local_secret_key
-      - S3_URL=http://bucket:9000 
-      - S3_REGION=eu-west-paris-1
-      - S3_BUCKET_NAME_RAW=juritj-test-bucket
-      - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
-      - SERVER_KEY=./secrets/dev/server-key.pem
-      - SERVER_CERT=./secrets/dev/server-cert.pem
-      - SERVER_CA_CERT=./secrets/dev/ca-cert.pem
-      - WINCI_CA_CERT=./secrets/dev/winci-ca-cert.pem
+    env_file:
+      - ./.deploys/local/api.env
     expose: 
       - 3009
     ports:
@@ -66,17 +55,8 @@ services:
     build:
       context: ./
       target: batch
-    environment:
-      - S3_ACCESS_KEY=local_access_key
-      - S3_SECRET_KEY=local_secret_key
-      - S3_URL=http://bucket:9000 
-      - S3_REGION=eu-west-paris-1
-      - S3_BUCKET_NAME_RAW=juritj-test-bucket
-      - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
-      - MONGODB_URL=mongodb://db:55431/
-      - SERVER_KEY=./secrets/dev/server-key.pem
-      - SERVER_CERT=./secrets/dev/server-cert.pem
-      - SERVER_CA_CERT=./secrets/dev/ca-cert.pem
+    env_file:
+      - ./.deploys/local/batch.env
 
 networks:
   default:
