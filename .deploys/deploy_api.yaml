@@ -32,8 +32,6 @@ spec:
               value: "http://${DOLLAR}(BUCKET_SERVICE_SERVICE_HOST):${DOLLAR}(BUCKET_SERVICE_SERVICE_PORT)"
             - name: S3_REGION
               value: $JURITJ_S3_REGION
-            - name: S3_BUCKET_NAME
-              value: $JURITJ_S3_BUCKET_NAME
             - name: S3_BUCKET_NAME_RAW
               value: $JURITJ_S3_BUCKET_NAME_RAW
             - name: S3_BUCKET_NAME_NORMALIZED
