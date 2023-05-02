@@ -17,6 +17,20 @@ describe('fetchDecisionListFromS3', () => {
       .rejects.toEqual(new ServiceUnavailableException('Error from S3 API'))
   })
 
+  it('returns an empty list if no decisions are found', async () => {
+    // GIVEN
+    const expected = []
+    jest.spyOn(DecisionS3Repository.prototype, 'getDecisionList').mockImplementationOnce(() => {
+      return Promise.resolve([])
+    })
+
+    expect(
+      // WHEN
+      await fetchDecisionListFromS3()
+      // THEN
+    ).toEqual(expected)
+  })
+
   it('return list of decisions from s3 adn fetch the 10 first', async () => {
     // GIVEN
     const expected = [

@@ -152,6 +152,19 @@ describe('DecisionS3Repository', () => {
         .rejects.toThrow(S3ErrorMessage)
     })
 
+    it('returns an undefined list from S3 (empty case)', async () => {
+      // GIVEN
+      const expected = []
+      mockS3.on(ListObjectsV2Command).resolves({})
+
+      expect(
+        // WHEN
+        await repository.getDecisionList()
+      )
+        // THEN
+        .toEqual(expected)
+    })
+
     it('returns the decision list from s3', async () => {
       // GIVEN
       const expected = [{ Key: 'filename' }, { Key: 'filename2' }]

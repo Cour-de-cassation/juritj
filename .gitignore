@@ -46,6 +46,3 @@ lerna-debug.log*
 /secrets/dev/*
 !/secrets/dev/generate-keys.sh
 #!/secrets/dev/winci-ca-cert.pem
-
-# Docker
-docker-compose.local.yml

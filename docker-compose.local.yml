@@ -1,7 +1,6 @@
 version: "3.7"
 
 services:
-
   db:
     image: mongo:4.4
     command: mongod --port 55431
@@ -26,6 +25,23 @@ services:
       - MINIO_ROOT_USER=root
       - MINIO_ROOT_PASSWORD=root1234
 
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - bucket
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add myminio http://bucket:9000 root root1234;
+      /usr/bin/mc rm -r --force myminio/juritj-test-bucket;
+      /usr/bin/mc mb myminio/juritj-test-bucket;
+      /usr/bin/mc policy download myminio/juritj-test-bucket;
+      /usr/bin/mc rm -r --force myminio/juritj-test-bucket-normalized;
+      /usr/bin/mc mb myminio/juritj-test-bucket-normalized;
+      /usr/bin/mc policy download myminio/juritj-test-bucket-normalized;
+      /usr/bin/mc admin user svcacct add --access-key "local_access_key" --secret-key "local_secret_key" myminio root;
+      exit 0;
+      "
+
   api:
     build:
       context: ./
@@ -33,13 +49,10 @@ services:
     environment: 
       - DOC_LOGIN=root
       - DOC_PASSWORD=root
-      - MINIO_USER=root
-      - MINIO_PASSWORD=root1234
-      - S3_ACCESS_KEY=pVPLwIFuizHjwZj7 #TOEDIT
-      - S3_SECRET_KEY=arw2ZHDOKdPrrBYS4hUArFx1YhLPwgK6 #TOEDIT
-      - S3_URL=http://172.18.0.5:9000 #TOEDIT
+      - S3_ACCESS_KEY=local_access_key
+      - S3_SECRET_KEY=local_secret_key
+      - S3_URL=http://bucket:9000 
       - S3_REGION=eu-west-paris-1
-      - S3_BUCKET_NAME=juritj-test-bucket
       - S3_BUCKET_NAME_RAW=juritj-test-bucket
       - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
       - SERVER_KEY=./secrets/dev/server-key.pem
@@ -56,14 +69,13 @@ services:
       context: ./
       target: batch
     environment:
-      - S3_ACCESS_KEY=pVPLwIFuizHjwZj7 #TOEDIT
-      - S3_SECRET_KEY=arw2ZHDOKdPrrBYS4hUArFx1YhLPwgK6 #TOEDIT
-      - S3_URL=http://172.18.0.5:9000 #TOEDIT
+      - S3_ACCESS_KEY=local_access_key
+      - S3_SECRET_KEY=local_secret_key
+      - S3_URL=http://bucket:9000 
       - S3_REGION=eu-west-paris-1
-      - S3_BUCKET_NAME=juritj-test-bucket
       - S3_BUCKET_NAME_RAW=juritj-test-bucket
       - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
-      - MONGODB_URL=mongodb://172.18.0.3:55431/
+      - MONGODB_URL=mongodb://db:55431/
       - SERVER_KEY=./secrets/dev/server-key.pem
       - SERVER_CERT=./secrets/dev/server-cert.pem
       - SERVER_CA_CERT=./secrets/dev/ca-cert.pem
