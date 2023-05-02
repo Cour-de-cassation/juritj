@@ -23,8 +23,8 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
 
   normalizationContext.start()
   normalizationContext.setCorrelationId(uuidv4())
+
   const decisionList = await fetchDecisionListFromS3()
-  console.log({ decisionList })
   if (decisionList.length > 0) {
     for (const decisionFilename of decisionList) {
       try {

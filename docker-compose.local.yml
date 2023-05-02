@@ -29,15 +29,13 @@ services:
     image: minio/mc
     depends_on:
       - bucket
-    entrypoint: >
+    entrypoint: > # source: https://github.com/minio/minio/issues/4769 
       /bin/sh -c "
       /usr/bin/mc config host add myminio http://bucket:9000 root root1234;
-      /usr/bin/mc rm -r --force myminio/juritj-test-bucket;
-      /usr/bin/mc mb myminio/juritj-test-bucket;
-      /usr/bin/mc policy download myminio/juritj-test-bucket;
-      /usr/bin/mc rm -r --force myminio/juritj-test-bucket-normalized;
-      /usr/bin/mc mb myminio/juritj-test-bucket-normalized;
-      /usr/bin/mc policy download myminio/juritj-test-bucket-normalized;
+      /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket &&
+      /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket-normalized &&
+      /usr/bin/mc policy download myminio/juritj-test-bucket &&
+      /usr/bin/mc policy download myminio/juritj-test-bucket-normalized &&
       /usr/bin/mc admin user svcacct add --access-key "local_access_key" --secret-key "local_secret_key" myminio root;
       exit 0;
       "
