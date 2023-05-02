@@ -52,11 +52,11 @@ DOC_LOGIN=loginDoc
 DOC_PASSWORD=motDePasseDoc
 
 ### Minio 
-S3_BUCKET_NAME_RAW=nomDuBucket
-S3_BUCKET_NAME_NORMALIZED=nomDuBucket
-S3_URL=urlDuS3Scaleway
-S3_ACCESS_KEY=CleAccesS3Scaleway
-S3_SECRET_KEY=CleSecreteS3Scaleway
+S3_BUCKET_NAME_RAW=bucketName
+S3_BUCKET_NAME_NORMALIZED=bucketName
+S3_URL=accessUrl
+S3_ACCESS_KEY=accessKey
+S3_SECRET_KEY=secretKey
 S3_REGION=region
 
 ### DB
