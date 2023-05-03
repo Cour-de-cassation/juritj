@@ -3,6 +3,7 @@ import { LabelStatus, Occultation, TypePartie } from '../../domain/enums'
 export const TODAY = new Date().toISOString()
 
 export class MockUtils {
+  // Shared context
   uniqueDecisionId = `TJ75011A01/1234520221121`
   uniqueDecisionIdWithoutNumeroMesureInstruction = `TJ75011A01/1234520221121`
 
@@ -13,6 +14,17 @@ export class MockUtils {
     civilite: 'Mme.'
   }
 
+  partieDtoMock = {
+    type: TypePartie.PP,
+    nom: 'nom Partie'
+  }
+
+  decisionContent =
+    '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t'
+
+  decisionName = 'decisionName.wpd'
+
+  // JuriTJ Collect context
   decisionDtoMock = {
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
@@ -20,12 +32,6 @@ export class MockUtils {
     date: '20221121'
   }
 
-  partieDtoMock = {
-    type: TypePartie.PP,
-    nom: 'nom Partie'
-  }
-
-  mockDate = new Date().toISOString()
   mandatoryMetadonneesDtoMock = {
     nomJuridiction: 'Juridictions civiles de première instance',
     idJuridiction: 'TJ75011',
@@ -50,6 +56,7 @@ export class MockUtils {
     debatPublic: true
   }
 
+  // JuriTJ Normalization context
   allAttributesMetadonneesDtoMock = {
     ...this.mandatoryMetadonneesDtoMock,
     idDecision: this.uniqueDecisionId,
@@ -59,12 +66,7 @@ export class MockUtils {
     filenameSource: 'test.wpd'
   }
 
-  decisionContent =
-    '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t'
-
-  decisionName = 'decisionName.wpd'
-
-  dbSderDecisionMock = {
+  toNormalizeDecisionMock = {
     decision: this.decisionContent,
     metadonnees: this.allAttributesMetadonneesDtoMock
   }
@@ -84,7 +86,7 @@ export class MockUtils {
       additionalTerms: 'this.metadonneesDtoMock.occultationComplementaire',
       categoriesToOmit: []
     },
-    originalText: this.dbSderDecisionMock.decision,
+    originalText: this.decisionContent,
     parties: this.allAttributesMetadonneesDtoMock.parties,
     pseudoStatus: null,
     pseudoText: null,

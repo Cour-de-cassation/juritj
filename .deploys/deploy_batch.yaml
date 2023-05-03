@@ -18,10 +18,6 @@ spec:
         - name: batch
           image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-debug
           env:
-            - name: DOC_LOGIN
-              value: $JURITJ_DOC_LOGIN
-            - name: DOC_PASSWORD
-              value: $JURITJ_DOC_PASSWORD
             - name: S3_ACCESS_KEY
               value: $JURITJ_S3_ACCESS_KEY
             - name: S3_SECRET_KEY
