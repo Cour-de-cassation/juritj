@@ -13,7 +13,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
   it('returns the correct object', async () => {
     // GIVEN
     const filename = 'test.json'
-    const mockDecision = new MockUtils().dbSderDecisionMock
+    const mockDecision = new MockUtils().toNormalizeDecisionMock
     const expectedDecisionLabel: DecisionLabelDTO = {
       NACCode: '88F',
       appeals: [],
