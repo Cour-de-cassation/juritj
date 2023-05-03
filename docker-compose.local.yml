@@ -1,7 +1,6 @@
 version: "3.7"
 
 services:
-
   db:
     image: mongo:4.4
     command: mongod --port 55431
@@ -26,24 +25,27 @@ services:
       - MINIO_ROOT_USER=root
       - MINIO_ROOT_PASSWORD=root1234
 
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - bucket
+    entrypoint: > # source: https://github.com/minio/minio/issues/4769 
+      /bin/sh -c "
+      /usr/bin/mc config host add myminio http://bucket:9000 root root1234;
+      /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket &&
+      /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket-normalized &&
+      /usr/bin/mc policy download myminio/juritj-test-bucket &&
+      /usr/bin/mc policy download myminio/juritj-test-bucket-normalized &&
+      /usr/bin/mc admin user svcacct add --access-key "local_access_key" --secret-key "local_secret_key" myminio root;
+      exit 0;
+      "
+
   api:
     build:
       context: ./
       target: api
-    environment: 
-      - DOC_LOGIN=root
-      - DOC_PASSWORD=root
-      - MINIO_USER=root
-      - MINIO_PASSWORD=root1234
-      - S3_ACCESS_KEY=90K0WRFk3pFIMpk7
-      - S3_SECRET_KEY=WWHmvAp6ZfxKIkFlSNVX8oUXq0bQstiT
-      - S3_URL=bucket
-      - S3_PORT=9000
-      - S3_REGION=eu-west-paris-1
-      - S3_BUCKET_NAME=juritj-test-bucket
-      - S3_BUCKET_NAME_RAW=juritj-test-bucket
-      - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
-      - MONGODB_URL=db:55431
+    env_file:
+      - .env
     expose: 
       - 3009
     ports:
@@ -52,20 +54,9 @@ services:
   batch: 
     build:
       context: ./
-      target: debug
-    environment: 
-      - DOC_LOGIN=root
-      - DOC_PASSWORD=root
-      - MINIO_USER=root
-      - MINIO_PASSWORD=root1234
-      - S3_ACCESS_KEY=90K0WRFk3pFIMpk7
-      - S3_SECRET_KEY=WWHmvAp6ZfxKIkFlSNVX8oUXq0bQstiT
-      - S3_URL=http://bucket:9000
-      - S3_REGION=eu-west-paris-1
-      - S3_BUCKET_NAME=juritj-test-bucket
-      - S3_BUCKET_NAME_RAW=juritj-test-bucket
-      - S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
-      - MONGODB_URL=db:55431
+      target: batch
+    env_file:
+      - .env
 
 networks:
   default:

@@ -51,17 +51,23 @@ Créer un fichier `.env` à la racine du dossier avec les variables suivantes :
 DOC_LOGIN=loginDoc
 DOC_PASSWORD=motDePasseDoc
 
-### S3 Keys 
-S3_ACCESS_KEY=CleAccesS3Scaleway
-S3_SECRET_KEY=CleSecreteS3Scaleway
-S3_URL=urlDuS3Scaleway
+### Minio 
+S3_BUCKET_NAME_RAW=bucketName
+S3_BUCKET_NAME_NORMALIZED=bucketName
+S3_URL=accessUrl
+S3_ACCESS_KEY=accessKey
+S3_SECRET_KEY=secretKey
 S3_REGION=region
-S3_BUCKET_NAME_RAW=nomDuBucket
-S3_BUCKET_NAME_NORMALIZED=nomDuBucket
 
-# DB
-
+### DB
 MONGODB_URL=mongodb://url-du-mongo/
+
+### mTLS Certificates
+SERVER_KEY="multiline server private key"
+SERVER_CERT="multiline server certificate"
+SERVER_CA_CERT="multiline CA certificate"
+SERVER_CA_KEY="multiline CA private key"
+WINCI_CA_CERT="multiline Winci CA certificate"
 ```
 
 ### Documentation complémentaire 
@@ -70,3 +76,48 @@ Le dossier `/documentation` contient :
 - `conventions.md` qui liste les choix de l'équipe concernant la base de code 
 - Le dossier `adr` qui historise les choix structurant de l'équipe 
 - Les requêtes Postman et comment les installer [lien](documentation/postman/README.md)
+
+
+### Docker en local
+
+#### Configuration des certificats
+
+Afin de disposer de certificats pour l'environnement de développement local, il nous faut d'abord les générer pour qu'ils soient envoyés sur le container de l'api
+
+1. Se rendre dans `/secrets/dev`
+
+2. Lancer la commande `./generate-keys.sh` (s'assurer d'avoir les droits d'exécution `chmod +x generate-keys.sh`) afin de générer l'autorité de certification autosignée et les certificats qui en dépendent
+
+3. Revenir sur le dossier racine de l'api ( `cd ../..` depuis `secrets/dev`)
+
+4. Sur Postman, [insérer les certificats](https://learning.postman.com/docs/sending-requests/certificates/) client : `client-cert.pem`, `client-key.pem` pour le host http://localhost:3009 (comme définis pour l'API dans le fichier docker-compose.local.yml)
+
+5. Sur Postman toujours, ajouter le certificat de l'autorité de certification autosignée `ca-cert.pem`
+
+6. Alimenter le fichier `.env` avec la valeurs des clés nécessaires (`SERVER_KEY`, `SERVER_CERT`, `SERVER_CA_CERT`, `SERVER_CA_KEY`, `WINCI_CA_CERT`)
+
+#### Lancer l'application
+
+1. Lancer le build de docker 
+
+```bash
+docker-compose -f docker-compose.local.yml build
+```
+
+ou 
+
+```bash
+npm run docker:build
+```
+
+2. Lancer les containers (l'API ne se lancera pas)
+
+```bash
+docker-compose -f docker-compose.local.yml up -d
+```
+
+ou 
+
+```bash
+npm run docker:start
+```

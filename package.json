@@ -13,6 +13,8 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/api/main",
+    "docker:build": "docker-compose -f docker-compose.local.yml build",
+    "docker:start": "docker-compose -f docker-compose.local.yml up -d",
     "batch:start": "npx ts-node -r dotenv/config src/batch/normalization/index.ts",
     "batch:start:prod": "npx ts-node -r dotenv/config dist/batch/normalization/index.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

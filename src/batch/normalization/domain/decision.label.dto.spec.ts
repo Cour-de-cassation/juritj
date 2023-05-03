@@ -22,7 +22,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       chamberName: null,
       codeMatiereCivil: '6C',
       dateCreation: TODAY,
-      dateDecision: TODAY,
+      dateDecision: '2022-11-20T23:00:00.000Z',
       endCaseCode: null,
       formation: null,
       jurisdictionCode: undefined,
