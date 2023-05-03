@@ -41,6 +41,7 @@ test:
     - master
     - re7
     - dev
+    - tech-fix-tests-for-the-cicd
   tags:
     - docker
 
