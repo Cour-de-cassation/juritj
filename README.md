@@ -121,3 +121,19 @@ ou
 ```bash
 npm run docker:start
 ```
+
+## CI
+
+### Lancer un job depuis une branche spécifique
+
+Sur le `gitlab-ci.yml`, il est possible de spécifier une branche dans un des différents jobs afin de le lancer sur la CI
+Il suffit d'ajouter à la catégorie `only:` du job désiré, en dernière position, le nom de la branche : 
+```yml
+test: # job
+    ...
+    only:
+        - master # branche principale où le job se lance
+        - <nomDeLaBranche>
+```
+
+ Une fois cette branche poussée, la CI lancera le job automatiquement (compter 5 mns de délai environ)
