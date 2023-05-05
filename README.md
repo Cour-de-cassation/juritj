@@ -92,7 +92,7 @@ Afin de disposer de certificats pour l'environnement de développement local, il
 
 5. Sur Postman toujours, ajouter le certificat de l'autorité de certification autosignée `ca-cert.pem`
 
-6. Alimenter le fichier `.env` avec la valeurs des clés nécessaires (`SERVER_KEY`, `SERVER_CERT`, `SERVER_CA_CERT`, `SERVER_CA_KEY`, `WINCI_CA_CERT`)
+6. Alimenter le fichier `.env` avec la valeurs des clés nécessaires (`SERVER_KEY`, `SERVER_CERT`, `WINCI_CA_CERT`)
 
 #### Lancer l'application
 

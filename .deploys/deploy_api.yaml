@@ -40,8 +40,6 @@ spec:
               value: $JURITJ_SERVER_KEY
             - name: SERVER_CERT
               value: $JURITJ_SERVER_CERT
-            - name: SERVER_CA_CERT
-              value: $JURITJ_SERVER_CA_CERT
             - name: WINCI_CA_CERT
               value: $JURITJ_S3_WINCI_CA_CERT
 
