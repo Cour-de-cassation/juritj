@@ -11,11 +11,11 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
       metadonnees.numeroRoleGeneral +
       metadonnees.dateDecision
 
-    logger.log('[NORMALIZATION JOB] Unique ID generated.', uniqueId)
+    logger.log('Unique ID generated.', uniqueId)
     return uniqueId
   } else {
     logger.error(
-      '[NORMALIZATION JOB] Could not generate unique ID based on metadata: ' +
+      'Could not generate unique ID based on metadata: ' +
         JSON.stringify({
           idJuridiction: metadonnees.idJuridiction,
           numeroRegistre: metadonnees.numeroRegistre,
