@@ -10,7 +10,6 @@ import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.i
 async function bootstrap() {
   const serverPrivateKey = process.env.SERVER_KEY
   const serverCertificate = process.env.SERVER_CERT
-  const authorityCertificate = process.env.SERVER_CA_CERT
   const winciAuthorityCertificate = process.env.WINCI_CA_CERT
 
   const httpsOptions: HttpsOptions = {
@@ -18,7 +17,7 @@ async function bootstrap() {
     cert: serverCertificate,
     requestCert: true,
     rejectUnauthorized: true,
-    ca: [authorityCertificate, winciAuthorityCertificate]
+    ca: [winciAuthorityCertificate]
   }
 
   const app = await NestFactory.create(AppModule, {

@@ -65,9 +65,7 @@ MONGODB_URL=mongodb://url-du-mongo/
 ### mTLS Certificates
 SERVER_KEY="multiline server private key"
 SERVER_CERT="multiline server certificate"
-SERVER_CA_CERT="multiline CA certificate"
-SERVER_CA_KEY="multiline CA private key"
-WINCI_CA_CERT="multiline Winci CA certificate"
+WINCI_CA_CERT="multiline Winci CA certificate or auto-signed authority certificate in local environment" 
 ```
 
 ### Documentation complémentaire 

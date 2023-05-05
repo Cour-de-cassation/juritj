@@ -1,5 +1,6 @@
 #!/bin/sh
 
+### This file must be used only in local environment for test purpose
 ### Following https://dev.to/techschoolguru/how-to-create-sign-ssl-tls-certificates-2aai 
 ### Caution : use -nodes only in dev environment 
 

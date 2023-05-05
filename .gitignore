@@ -43,5 +43,5 @@ lerna-debug.log*
 *.wpd
 
 # Secrets
-/secrets/dev/*
+/secrets/
 !/secrets/dev/generate-keys.sh
