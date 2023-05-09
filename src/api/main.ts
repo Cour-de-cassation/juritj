@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core'
 import * as basicAuth from 'express-basic-auth'
+import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { Context } from '../shared/infrastructure/utils/context'
 import { CustomLogger } from '../shared/infrastructure/utils/customLogger.utils'
 import { RequestLoggerInterceptor } from './infrastructure/interceptors/request-logger.interceptor'
-import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
 
 async function bootstrap() {
   const serverPrivateKey = process.env.SERVER_KEY
@@ -24,6 +24,8 @@ async function bootstrap() {
     logger: ['log', 'error', 'warn'],
     httpsOptions
   })
+
+  app.setGlobalPrefix('v1')
 
   // Create a global store with AsyncLocalStorage and provide it to the logger
   const apiContext = new Context()
