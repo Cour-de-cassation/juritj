@@ -76,7 +76,7 @@ export class DecisionsController {
     const routePath = request.method + ' ' + request.path
 
     // this.logger.log(routePath + ' received with: ' + JSON.stringify(metadonneesDto))
-    const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository())
+    const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository(this.logger))
     const filename = await decisionUseCase
       .execute(decisionIntegre, metadonneesDto)
       .catch((error) => {

@@ -10,6 +10,7 @@ import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
 import 'aws-sdk-client-mock-jest'
 import { DecisionS3Repository } from './decisionS3.repository'
 import { Readable } from 'stream'
+import { Logger } from '@nestjs/common'
 
 describe('DecisionS3Repository', () => {
   let repository: DecisionS3Repository
@@ -20,7 +21,7 @@ describe('DecisionS3Repository', () => {
 
   beforeEach(() => {
     mockS3.reset()
-    repository = new DecisionS3Repository()
+    repository = new DecisionS3Repository(new Logger())
   })
 
   describe('saveDecision', () => {

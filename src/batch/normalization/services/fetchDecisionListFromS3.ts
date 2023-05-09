@@ -1,9 +1,10 @@
 import { ServiceUnavailableException } from '@nestjs/common'
 import { DecisionS3Repository } from '../../../shared/infrastructure/repositories/decisionS3.repository'
+import { logger } from '../index'
 
 const NUMBER_OF_DECISION_TO_RETURN = 10
 export async function fetchDecisionListFromS3() {
-  const repository = new DecisionS3Repository()
+  const repository = new DecisionS3Repository(logger)
   try {
     const rawDecisionList = await repository.getDecisionList()
     const numberOfDecisionToFetch =
