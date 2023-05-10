@@ -1,17 +1,27 @@
-import { ServiceUnavailableException } from '@nestjs/common'
+import { Logger, ServiceUnavailableException } from '@nestjs/common'
 import { DecisionS3Repository } from '../../../shared/infrastructure/repositories/decisionS3.repository'
 import { fetchDecisionListFromS3 } from './fetchDecisionListFromS3'
 
+let repository: DecisionS3Repository
+
 describe('fetchDecisionListFromS3', () => {
-  it('throws error if call to S3 failed', async () => {
+  beforeEach(() => {
+    repository = new DecisionS3Repository(new Logger())
+  })
+  it.only('throws error if call to S3 failed', async () => {
     // GIVEN
-    jest.spyOn(DecisionS3Repository.prototype, 'getDecisionList').mockImplementationOnce(() => {
+
+    // DecisionS3Repository.prototype.getDecisionList = () => {
+    //   throw new ServiceUnavailableException('Error from S3 API'),
+    //     return Promise.resolve()
+    // }
+    jest.spyOn(repository, 'getDecisionList').mockImplementationOnce(() => {
       throw new ServiceUnavailableException('Error from S3 API')
     })
 
-    expect(
+    await expect(
       // WHEN
-      fetchDecisionListFromS3()
+      fetchDecisionListFromS3(repository)
     )
       // THEN
       .rejects.toEqual(new ServiceUnavailableException('Error from S3 API'))
@@ -26,7 +36,7 @@ describe('fetchDecisionListFromS3', () => {
 
     expect(
       // WHEN
-      await fetchDecisionListFromS3()
+      await fetchDecisionListFromS3(repository)
       // THEN
     ).toEqual(expected)
   })
@@ -85,7 +95,7 @@ describe('fetchDecisionListFromS3', () => {
 
     expect(
       // WHEN
-      await fetchDecisionListFromS3()
+      await fetchDecisionListFromS3(repository)
       // THEN
     ).toEqual(expected)
   })
@@ -118,7 +128,7 @@ describe('fetchDecisionListFromS3', () => {
 
     expect(
       // WHEN
-      await fetchDecisionListFromS3()
+      await fetchDecisionListFromS3(repository)
       // THEN
     ).toEqual(expected)
   })
