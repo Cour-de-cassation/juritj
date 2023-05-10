@@ -35,11 +35,7 @@ describe('saveDecision', () => {
         model: jest.fn()
       } as any
     })
-    const insertDataMock = jest
-      .spyOn(mongoRepository, 'insertMetadonnees')
-      .mockImplementation(async () => {
-        return mockDecision
-      })
+    const insertDataMock = jest.spyOn(mongoRepository, 'saveDecision').mockImplementation()
 
     // WHEN
     await mongoRepository.saveDecision(mockDecision)
