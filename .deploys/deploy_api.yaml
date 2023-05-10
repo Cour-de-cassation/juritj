@@ -41,7 +41,7 @@ spec:
             - name: SERVER_CERT
               value: $JURITJ_SERVER_CERT
             - name: WINCI_CA_CERT
-              value: $JURITJ_S3_WINCI_CA_CERT
+              value: $JURITJ_WINCI_CA_CERT
 
 ---
 apiVersion: v1
