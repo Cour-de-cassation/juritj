@@ -25,7 +25,6 @@ export async function readWordperfectDocument(filename: string) {
 export async function getConversionCommandPath(commandName: string): Promise<string> {
   return await execPromise('which ' + commandName)
     .then((response) => {
-      logger.log('Command to convert found !')
       return response.stdout.replace(/\n/g, '')
     })
     .catch(() => {

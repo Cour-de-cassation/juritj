@@ -5,7 +5,7 @@ import {
   GetObjectCommand,
   ListObjectsV2Command
 } from '@aws-sdk/client-s3'
-import { Logger, ServiceUnavailableException } from '@nestjs/common'
+import { Logger, LoggerService, ServiceUnavailableException } from '@nestjs/common'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 import { CollectDto } from '../dto/collect.dto'
 
@@ -13,7 +13,7 @@ export class DecisionS3Repository implements DecisionRepository {
   private s3Client: S3Client
   private logger
 
-  constructor(logger, providedS3Client?: S3Client) {
+  constructor(logger: LoggerService, providedS3Client?: S3Client) {
     if (providedS3Client) {
       this.s3Client = providedS3Client
     } else {
@@ -27,7 +27,7 @@ export class DecisionS3Repository implements DecisionRepository {
         }
       })
     }
-    this.logger = logger ?? new Logger()
+    this.logger = logger
   }
 
   async saveDecisionIntegre(requestToS3Dto: string, filename: string) {

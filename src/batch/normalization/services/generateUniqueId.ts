@@ -11,7 +11,6 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
       metadonnees.numeroRoleGeneral +
       metadonnees.dateDecision
 
-    logger.log('Unique ID generated.', uniqueId)
     return uniqueId
   } else {
     logger.error(
