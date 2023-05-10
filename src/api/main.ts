@@ -9,6 +9,7 @@ import { RequestLoggerInterceptor } from './infrastructure/interceptors/request-
 
 async function bootstrap() {
   const serverPrivateKey = process.env.SERVER_KEY
+  const serverPrivateKeyPassphrase = process.env.SERVER_KEY_PASSPHRASE
   const serverCertificate = process.env.SERVER_CERT
   const winciAuthorityCertificate = process.env.WINCI_CA_CERT
 
@@ -19,6 +20,7 @@ async function bootstrap() {
     rejectUnauthorized: true,
     ca: [winciAuthorityCertificate]
   }
+  serverPrivateKeyPassphrase ? (httpsOptions.passphrase = serverPrivateKeyPassphrase) : null
 
   const app = await NestFactory.create(AppModule, {
     logger: ['log', 'error', 'warn'],
