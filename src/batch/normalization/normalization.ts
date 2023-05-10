@@ -15,41 +15,33 @@ import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { updateLabelStatusIfDateDecisionIsInFuture } from './services/changeLabelStatus'
 
 const decisionMongoRepository = new DecisionMongoRepository()
-const s3Repository = new DecisionS3Repository()
 const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW
 
 export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonneesDto[]> {
   const listConvertedDecision: ConvertedDecisionWithMetadonneesDto[] = []
+  const s3Repository = new DecisionS3Repository(logger)
 
   normalizationContext.start()
   normalizationContext.setCorrelationId(uuidv4())
 
-  const decisionList = await fetchDecisionListFromS3()
+  const decisionList = await fetchDecisionListFromS3(s3Repository)
   if (decisionList.length > 0) {
     for (const decisionFilename of decisionList) {
       try {
         const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionFilename)
         const metadonnees = decision.metadonnees
 
-        logger.log(
-          '[NORMALIZATION JOB] Normalization job starting for decision ' + decisionFilename
-        )
+        logger.log('Normalization job starting for decision ' + decisionFilename)
 
         const idDecision = generateUniqueId(metadonnees)
-        logger.log('[NORMALIZATION JOB] Decision ID generated', idDecision)
-
-        logger.log(
-          '[NORMALIZATION JOB] Starting the decision conversion from WPD to text.',
-          idDecision
-        )
+        logger.log('Decision ID generated. Starting Wpd to text conversion ', idDecision)
 
         const decisionContent = await transformDecisionIntegreFromWPDToText(
           decision.decisionIntegre
         )
-        logger.log('[NORMALIZATION JOB] Decision conversion finished.', idDecision)
+        logger.log('Decision conversion finished. Removing unnecessary characters', idDecision)
 
         const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
-        logger.log('[NORMALIZATION JOB] Unnecessary characters removed from decision.', idDecision)
 
         const transformedMetadonnees: MetadonneesNormalisee = {
           idDecision: idDecision,
@@ -70,27 +62,25 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         const decisionToSaveDateChecked = updateLabelStatusIfDateDecisionIsInFuture(decisionToSave)
 
         await decisionMongoRepository.saveDecision(decisionToSaveDateChecked)
-        logger.log('[NORMALIZATION JOB] Decision saved in database.', idDecision)
+        logger.log('Decision saved in database.', idDecision)
 
         decision.metadonnees = transformedMetadonnees
         await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionFilename)
-        logger.log('[NORMALIZATION JOB] Decision saved in normalized bucket.', idDecision)
-
-        await s3Repository.deleteDecision(decisionFilename, bucketNameIntegre)
-        logger.log('[NORMALIZATION JOB] Decision deleted in raw bucket.', idDecision)
-
         logger.log(
-          '[NORMALIZATION JOB] End of normalization job for decision ' + decisionFilename,
+          'Decision saved in normalized bucket. Deleting decision in raw bucket',
           idDecision
         )
+
+        await s3Repository.deleteDecision(decisionFilename, bucketNameIntegre)
+
+        logger.log('Successful normalization of ' + decisionFilename, idDecision)
         listConvertedDecision.push({
           metadonnees: transformedMetadonnees,
           decisionNormalisee: cleanedDecision
         })
       } catch (error) {
-        logger.error(
-          '[NORMALIZATION JOB] Failed to normalize the decision ' + decisionFilename + '.'
-        )
+        logger.error(error)
+        logger.error('Failed to normalize the decision ' + decisionFilename + '.')
         continue
       }
     }

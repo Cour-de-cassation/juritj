@@ -28,7 +28,7 @@ async function bootstrap() {
   // Create a global store with AsyncLocalStorage and provide it to the logger
   const apiContext = new Context()
   apiContext.start()
-  const customLogger = new CustomLogger(apiContext)
+  const customLogger = new CustomLogger(apiContext, 'JuriTJ-Collect')
 
   app.useLogger(customLogger)
   app.useGlobalInterceptors(new RequestLoggerInterceptor(apiContext))

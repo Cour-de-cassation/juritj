@@ -7,14 +7,14 @@ const EXIT_ERROR_CODE = 1
 const CRON_EVERY_HOUR = '0 * * * *'
 
 export const normalizationContext = new Context()
-export const logger = new CustomLogger(normalizationContext)
+export const logger = new CustomLogger(normalizationContext, 'Normalization')
 
 async function startNormalization() {
   try {
     await normalizationJob()
   } catch (error) {
     logger.error(error)
-    logger.log('[NORMALIZATION JOB] Leaving due to an error...')
+    logger.log('Leaving due to an error...')
     process.exit(EXIT_ERROR_CODE)
   }
 }
@@ -24,7 +24,7 @@ function startJob() {
     const cron = new CronJob({
       cronTime: CRON_EVERY_HOUR,
       onTick() {
-        logger.log('[NORMALIZATION JOB] Starting normalization...')
+        logger.log('Starting normalization...')
         startNormalization()
       },
       timeZone: 'Europe/Paris'
