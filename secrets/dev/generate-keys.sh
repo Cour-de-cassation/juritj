@@ -2,10 +2,7 @@
 
 ### This file must be used only in local environment for test purpose
 ### Following https://dev.to/techschoolguru/how-to-create-sign-ssl-tls-certificates-2aai 
-### Caution : use -nodes only in dev environment 
-
-## NOTE :  openssl ecrase les fichiers deja existants donc peut etre pas beson de rm
-## rm *.pem *.srl
+### Caution : use -nodes only in dev environment, it deactivate the encryption of the private key
 
 # 1. Generate CA's private key and self-signed certificate 
 openssl req -x509 -sha256 -newkey rsa:4096 -days 365 -nodes -keyout ca-key.pem -out ca-cert.pem -subj "/C=FR/ST=Paris/L=Paris/O=MinJu/OU=Cour de cassation/CN=CC/emailAddress=some@mail.com"

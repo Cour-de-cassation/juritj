@@ -4,7 +4,11 @@ JuriTJ est une brique applicative du projet [Judilibre](https://www.courdecassat
 
 ## JuriTJ-Collect
 
-JuriTJ Collect est une API qui a pour objectif de collecter les décisions de justice de tribunaux judiciaires, afin de leur appliquer le traitement Judilibre (pseudonymisation et publication en Open Data). 
+JuriTJ-Collect est une API qui a pour objectif de collecter les décisions de justice de tribunaux judiciaires, afin de leur appliquer le traitement Judilibre (pseudonymisation et publication en Open Data). 
+
+## Batch de normalisation 
+
+Le batch de Normalisation est un programme qui a pour objectif de récupérer, traiter et stocker en base de données les décisions reçues au préalable par JuriTJ-Collect. 
 
 ### Pré-requis
 - Installer [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) 
@@ -20,18 +24,10 @@ N'oubliez pas d'installer **husky** pour obtenir les hooks de commit/push
 npx husky install
 ```
 
-### Démarrer l'application
-
-Pour démarrer l'application, écrire dans un terminal : 
-
- ```bash
-npm run start:dev # for the dev environment
- ```
-
-Pour lancer l'application avec Docker, écrire dans un terminal : 
-```bash
-docker build . -t juritj:1.0.0
-docker run -p 8005:3000 --env-file=.env juritj:1.0.0
+Il est également nécessaire d'installer `libwpd` en local afin d'exécuter le batch. 
+Sur macOS : 
+```
+brew install libwpd
 ```
 
 ### Tests
@@ -42,33 +38,80 @@ Pour lancer les tests, écrire dans un terminal :
 npm run test
  ```
 
-### Variables d'environnement : 
+ Il est également possible de ne lancer que les tests d'API (`npm run test:api`), de batch (npm run test:batch`) ou d'intégration (`npm run test:integration`). 
+
+### Variables d'environnement en local
+
+JuriTJ a besoin de deux fichiers de variables d'environnements : 
+- `.env` dédié à l'exécution sans docker
+- `docker.env` dédié à l'exécution par docker 
 
 Créer un fichier `.env` à la racine du dossier avec les variables suivantes :
 
 ```.env
+CURRENT_ENV=local
+
 ### API DOCUMENTATION
-DOC_LOGIN=loginDoc
-DOC_PASSWORD=motDePasseDoc
+DOC_LOGIN=root
+DOC_PASSWORD=root
 
 ### Minio 
-S3_BUCKET_NAME_RAW=bucketName
-S3_BUCKET_NAME_NORMALIZED=bucketName
-S3_URL=accessUrl
-S3_ACCESS_KEY=accessKey
-S3_SECRET_KEY=secretKey
-S3_REGION=region
+S3_BUCKET_NAME_RAW=juritj-test-bucket
+S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
+S3_URL=http://localhost:9000 
+S3_ACCESS_KEY=local_access_key
+S3_SECRET_KEY=local_secret_key
+S3_REGION=eu-west-paris-1
 
 ### DB
-MONGODB_URL=mongodb://url-du-mongo/
+MONGODB_URL=mongodb://localhost:55431/
 
 ### mTLS Certificates
-SERVER_KEY="multiline server private key"
-SERVER_CERT="multiline server certificate"
-WINCI_CA_CERT="multiline Winci CA certificate or auto-signed authority certificate in local environment" 
+SERVER_KEY="valeur de la clé privé du serveur"
+SERVER_CERT="valeur du certificat du serveur"
+WINCI_CA_CERT="valeur du certificat de l'autorité de certification WINCI"  
+AUTO_SIGNED_CA_CERT="valeur du certificat de l'autorité de certification auto-signée"
 ```
 
-### Documentation complémentaire 
+Une fois le `.env` créé, le dupliquer et renommer le fichier nouvellement créé en `docker.env`. Adapter les valeurs des deux variables suivantes : 
+```docker.env
+MONGODB_URL=mongodb://db:55431/
+S3_URL=http://bucket:9000 
+```
+
+### Zoom sur le CURRENT_ENV
+
+La variable d'environnement `CURRENT_ENV` permet de faire varier le comportement de l'application selon son environnement :
+- local : exécution de l'application sur les machines des développeurs
+- dev : exécution de l'application en environnement de développement
+
+### Démarrer l'application en local
+
+Démarrer l'application nécessite au préalable d'initaliser les fichiers de variables d'environnement. 
+
+Pour lancer l'ensemble de JuriTJ avec Docker, écrire dans un terminal : 
+```bash
+npm run docker:build
+npm run docker:start
+```
+
+Pour lancer l'API en phase de développement et afin de disposer d'une mise à jour à chaud du serveur à chaque changement, écrire dans un terminal : 
+```bash
+npm run docker:build
+npm run docker:start:db
+npm run docker:start:s3
+npm start:dev
+```
+
+Pour lancer le batch manuellement, écrire dans un terminal : 
+```bash
+npm run docker:build
+npm run docker:start:db
+npm run docker:start:s3
+npm run batch:start
+```
+
+### Documentation JuriTJ 
 
 Le dossier `/documentation` contient : 
 - `conventions.md` qui liste les choix de l'équipe concernant la base de code 
@@ -76,9 +119,7 @@ Le dossier `/documentation` contient :
 - Les requêtes Postman et comment les installer [lien](documentation/postman/README.md)
 
 
-### Docker en local
-
-#### Configuration des certificats
+### Configuration des certificats
 
 Afin de disposer de certificats pour l'environnement de développement local, il nous faut d'abord les générer pour qu'ils soient envoyés sur le container de l'api
 
@@ -92,33 +133,7 @@ Afin de disposer de certificats pour l'environnement de développement local, il
 
 5. Sur Postman toujours, ajouter le certificat de l'autorité de certification autosignée `ca-cert.pem`
 
-6. Alimenter le fichier `.env` avec la valeurs des clés nécessaires (`SERVER_KEY`, `SERVER_CERT`, `WINCI_CA_CERT`)
-
-#### Lancer l'application
-
-1. Lancer le build de docker 
-
-```bash
-docker-compose -f docker-compose.local.yml build
-```
-
-ou 
-
-```bash
-npm run docker:build
-```
-
-2. Lancer les containers (l'API ne se lancera pas)
-
-```bash
-docker-compose -f docker-compose.local.yml up -d
-```
-
-ou 
-
-```bash
-npm run docker:start
-```
+6. Alimenter le fichier `.env` avec la valeurs des clés nécessaires (`SERVER_KEY`, `SERVER_CERT`, `WINCI_CA_CERT`, `AUTO_SIGNED_CA_CERT`)
 
 ### CI
 

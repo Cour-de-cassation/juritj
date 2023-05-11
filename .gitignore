@@ -38,6 +38,7 @@ lerna-debug.log*
 
 # Environement 
 .env
+docker.env
 
 # Wordperfect Documents
 *.wpd
