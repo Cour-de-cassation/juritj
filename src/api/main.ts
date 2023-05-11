@@ -20,7 +20,11 @@ async function bootstrap() {
     rejectUnauthorized: true,
     ca: [winciAuthorityCertificate]
   }
-  serverPrivateKeyPassphrase ? (httpsOptions.passphrase = serverPrivateKeyPassphrase) : null
+  httpsOptions.passphrase = serverPrivateKeyPassphrase ?? null
+
+  if (process.env.CURRENT_ENV === 'local' || process.env.CURRENT_ENV === 'dev') {
+    httpsOptions.ca.push(process.env.AUTO_SIGNED_CA_CERT)
+  }
 
   const app = await NestFactory.create(AppModule, {
     logger: ['log', 'error', 'warn'],

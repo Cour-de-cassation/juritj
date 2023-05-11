@@ -102,6 +102,8 @@ deploy_api:
     JURITJ_SERVER_CERT: $JURITJ_SERVER_CERT
     JURITJ_SERVER_CA_CERT: $JURITJ_SERVER_CA_CERT
     JURITJ_WINCI_CA_CERT: $JURITJ_WINCI_CA_CERT
+    JURITJ_AUTO_SIGNED_CA_CERT: $JURITJ_AUTO_SIGNED_CA_CERT
+    JURITJ_CURRENT_ENV: $JURITJ_CURRENT_ENV
     DOLLAR: $$
   script:
     - envsubst < .deploys/deploy_api.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -

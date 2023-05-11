@@ -44,6 +44,10 @@ spec:
               value: $JURITJ_SERVER_CERT
             - name: WINCI_CA_CERT
               value: $JURITJ_WINCI_CA_CERT
+            - name: AUTO_SIGNED_CA_CERT
+              value: $JURITJ_AUTO_SIGNED_CA_CERT
+            - name: CURRENT_ENV
+              value: $JURITJ_CURRENT_ENV
 
 ---
 apiVersion: v1
