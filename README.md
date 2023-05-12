@@ -11,7 +11,10 @@ JuriTJ-Collect est une API qui a pour objectif de collecter les décisions de ju
 Le batch de Normalisation est un programme qui a pour objectif de récupérer, traiter et stocker en base de données les décisions reçues au préalable par JuriTJ-Collect. 
 
 ### Pré-requis
-- Installer [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) 
+- Installer [nvm](https://github.com/nvm-sh/nvm) afin d'avoir la version utilisée pour cette application et lancer la commande :
+```bash
+nvm install
+```
 
 ### Installation 
 
@@ -85,40 +88,6 @@ La variable d'environnement `CURRENT_ENV` permet de faire varier le comportement
 - local : exécution de l'application sur les machines des développeurs
 - dev : exécution de l'application en environnement de développement
 
-### Démarrer l'application en local
-
-Démarrer l'application nécessite au préalable d'initaliser les fichiers de variables d'environnement. 
-
-Pour lancer l'ensemble de JuriTJ avec Docker, écrire dans un terminal : 
-```bash
-npm run docker:build
-npm run docker:start
-```
-
-Pour lancer l'API en phase de développement et afin de disposer d'une mise à jour à chaud du serveur à chaque changement, écrire dans un terminal : 
-```bash
-npm run docker:build
-npm run docker:start:db
-npm run docker:start:s3
-npm start:dev
-```
-
-Pour lancer le batch manuellement, écrire dans un terminal : 
-```bash
-npm run docker:build
-npm run docker:start:db
-npm run docker:start:s3
-npm run batch:start
-```
-
-### Documentation JuriTJ 
-
-Le dossier `/documentation` contient : 
-- `conventions.md` qui liste les choix de l'équipe concernant la base de code 
-- Le dossier `adr` qui historise les choix structurant de l'équipe 
-- Les requêtes Postman et comment les installer [lien](documentation/postman/README.md)
-
-
 ### Configuration des certificats
 
 Afin de disposer de certificats pour l'environnement de développement local, il nous faut d'abord les générer pour qu'ils soient envoyés sur le container de l'api
@@ -134,6 +103,38 @@ Afin de disposer de certificats pour l'environnement de développement local, il
 5. Sur Postman toujours, ajouter le certificat de l'autorité de certification autosignée `ca-cert.pem`
 
 6. Alimenter le fichier `.env` avec la valeurs des clés nécessaires (`SERVER_KEY`, `SERVER_CERT`, `WINCI_CA_CERT`, `AUTO_SIGNED_CA_CERT`)
+
+### Démarrer l'application en local
+
+Démarrer l'application nécessite au préalable d'initaliser les fichiers de variables d'environnement. 
+
+Pour lancer l'ensemble de JuriTJ avec Docker, écrire dans un terminal : 
+```bash
+npm run docker:build
+npm run docker:start
+```
+
+Pour lancer l'API en phase de développement et afin de disposer d'une mise à jour à chaud du serveur à chaque changement, écrire dans un terminal : 
+```bash
+npm run docker:build
+npm run docker:start:s3
+npm run start:dev
+```
+
+Pour lancer le batch de normalisation manuellement, écrire dans un terminal : 
+```bash
+npm run docker:build
+npm run docker:start:db
+npm run docker:start:s3
+npm run batch:start
+```
+
+### Documentation JuriTJ 
+
+Le dossier `/documentation` contient : 
+- `conventions.md` qui liste les choix de l'équipe concernant la base de code 
+- Le dossier `adr` qui historise les choix structurant de l'équipe 
+- Les requêtes Postman et comment les installer [lien](documentation/postman/README.md)
 
 ### CI
 
