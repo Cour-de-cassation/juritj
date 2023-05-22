@@ -36,18 +36,6 @@ spec:
               value: $JURITJ_S3_BUCKET_NAME_RAW
             - name: S3_BUCKET_NAME_NORMALIZED
               value: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-            - name: SERVER_KEY
-              value: $JURITJ_SERVER_KEY
-            - name: SERVER_KEY_PASSPHRASE
-              value: $JURITJ_SERVER_KEY_PASSPHRASE
-            - name: SERVER_CERT
-              value: $JURITJ_SERVER_CERT
-            - name: WINCI_CA_CERT
-              value: $JURITJ_WINCI_CA_CERT
-            - name: AUTO_SIGNED_CA_CERT
-              value: $JURITJ_AUTO_SIGNED_CA_CERT
-            - name: CURRENT_ENV
-              value: $JURITJ_CURRENT_ENV
 
 ---
 apiVersion: v1
