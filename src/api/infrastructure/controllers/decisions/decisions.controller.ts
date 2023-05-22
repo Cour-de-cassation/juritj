@@ -9,8 +9,7 @@ import {
   UploadedFile,
   UseInterceptors,
   UsePipes,
-  Logger,
-  UnauthorizedException
+  Logger
 } from '@nestjs/common'
 import {
   ApiTags,
@@ -23,7 +22,6 @@ import {
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Request } from 'express'
-import { TLSSocket } from 'tls'
 import { SaveDecisionUsecase } from '../../../../api/usecase/saveDecision.usecase'
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
@@ -68,7 +66,6 @@ export class DecisionsController {
     metadonneesDto: MetadonneesDto,
     @Req() request: Request
   ): Promise<CollecteDecisionResponse> {
-    validateClientCertificate(request)
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
       throw new BadRequestException(errorMessage)
@@ -100,11 +97,4 @@ function isWordperfectFileType(decisionIntegre: Express.Multer.File): boolean {
     decisionIntegre.mimetype === wordperfectMimeType &&
     wpdExtensionRegex.test(decisionIntegre.originalname)
   )
-}
-
-function validateClientCertificate(request: Request): void {
-  const socket = request.socket as TLSSocket
-  if (socket.authorized === false) {
-    throw new UnauthorizedException(socket.authorizationError)
-  }
 }

@@ -52,8 +52,6 @@ JuriTJ a besoin de deux fichiers de variables d'environnements :
 Créer un fichier `.env` à la racine du dossier avec les variables suivantes :
 
 ```.env
-CURRENT_ENV=local
-
 ### API DOCUMENTATION
 DOC_LOGIN=root
 DOC_PASSWORD=root
@@ -68,12 +66,6 @@ S3_REGION=eu-west-paris-1
 
 ### DB
 MONGODB_URL=mongodb://localhost:55431/
-
-### mTLS Certificates
-SERVER_KEY="valeur de la clé privé du serveur"
-SERVER_CERT="valeur du certificat du serveur"
-WINCI_CA_CERT="valeur du certificat de l'autorité de certification WINCI"  
-AUTO_SIGNED_CA_CERT="valeur du certificat de l'autorité de certification auto-signée"
 ```
 
 Une fois le `.env` créé, le dupliquer et renommer le fichier nouvellement créé en `docker.env`. Adapter les valeurs des deux variables suivantes : 
@@ -82,27 +74,24 @@ MONGODB_URL=mongodb://db:55431/
 S3_URL=http://bucket:9000 
 ```
 
-### Zoom sur le CURRENT_ENV
-
-La variable d'environnement `CURRENT_ENV` permet de faire varier le comportement de l'application selon son environnement :
-- local : exécution de l'application sur les machines des développeurs
-- dev : exécution de l'application en environnement de développement
-
 ### Configuration des certificats
 
-Afin de disposer de certificats pour l'environnement de développement local, il nous faut d'abord les générer pour qu'ils soient envoyés sur le container de l'api
+Les certificats étant gérés par l'infrastructure, nous n'avons pas de configuration à effectuer en local. 
 
-1. Se rendre dans `/secrets/dev`
+Pour l'environnement de développement :  
+- La gestion des certificats est gérée par l'infrastructure 
+- Elle dispose des éléments suivants : 
+    - Certificat de l'autorité de certification WINCI, signé par PEKIN, afin d'autoriser les appels effectués par des clients disposant d'un certificat PEKIN
+    - Certificat de l'autorité de certification auto-signée, afin d'autoriser les appels effectués par des clients disposant d'un certificat auto-signé (pour permettre les tests en environnement de développement)
+    - Certificat serveur signé par PEKIN 
+    - Clé privée serveur 
+    - Mot de passe de la clé privée serveur 
 
-2. Lancer la commande `./generate-keys.sh` (s'assurer d'avoir les droits d'exécution `chmod +x generate-keys.sh`) afin de générer l'autorité de certification autosignée et les certificats qui en dépendent
-
-3. Revenir sur le dossier racine de l'api ( `cd ../..` depuis `secrets/dev`)
-
-4. Sur Postman, [insérer les certificats](https://learning.postman.com/docs/sending-requests/certificates/) client : `client-cert.pem`, `client-key.pem` pour le host http://localhost:3009 (comme définis pour l'API dans le fichier docker-compose.local.yml)
-
-5. Sur Postman toujours, ajouter le certificat de l'autorité de certification autosignée `ca-cert.pem`
-
-6. Alimenter le fichier `.env` avec la valeurs des clés nécessaires (`SERVER_KEY`, `SERVER_CERT`, `WINCI_CA_CERT`, `AUTO_SIGNED_CA_CERT`)
+Pour effectuer des tests Postman sur l'environnement de développement : 
+ 1. Récupérer le certificat client, la clé privée client et le certificat d'autorité de certification auto-signé 
+ 2. [Insérer la clé privée client et certificats](https://learning.postman.com/docs/sending-requests/certificates/) sur Postman
+ 3. Récupérer les collections et les configurations d'environnements Postman dans le [dossier de documentation](./documentation/postman/)
+ 4. Les importer dans Postman
 
 ### Démarrer l'application en local
 
