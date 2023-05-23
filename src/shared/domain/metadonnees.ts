@@ -36,7 +36,7 @@ export class Metadonnees {
   libelleCodeDecision: string
   president?: President
   decisionAssociee?: DecisionAssociee
-  parties: Partie[]
+  parties?: Partie[]
   sommaire?: string
   codeNAC: string
   libelleNAC: string

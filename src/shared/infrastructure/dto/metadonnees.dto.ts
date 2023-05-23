@@ -278,9 +278,10 @@ export class MetadonneesDto {
     example: metadonneesDtoExample.parties
   })
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => PartieDto)
-  parties: PartieDto[]
+  parties?: PartieDto[]
 
   @ApiPropertyOptional({
     description: 'Résumé de la décision intègre',

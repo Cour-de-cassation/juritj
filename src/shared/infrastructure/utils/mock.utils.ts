@@ -42,7 +42,6 @@ export class MockUtils {
     libelleService: 'Libelle de service',
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
-    parties: [this.partieDtoMock, this.partieDtoMock],
     codeNAC: '88F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
     codeNature: '6C',
@@ -59,6 +58,7 @@ export class MockUtils {
   // JuriTJ Normalization context
   allAttributesMetadonneesDtoMock = {
     ...this.mandatoryMetadonneesDtoMock,
+    parties: [this.partieDtoMock, this.partieDtoMock],
     idDecision: this.uniqueDecisionId,
     labelStatus: LabelStatus.TOBETREATED,
     numeroMesureInstruction: ['AZERTYUIOP'],
