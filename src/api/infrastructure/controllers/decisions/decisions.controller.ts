@@ -90,11 +90,11 @@ export class DecisionsController {
   }
 }
 
-function isWordperfectFileType(decisionIntegre: Express.Multer.File): boolean {
-  const wordperfectMimeType = 'application/vnd.wordperfect'
+export function isWordperfectFileType(decisionIntegre: Express.Multer.File): boolean {
+  const wordperfectMimeTypeValidValues = ['application/vnd.wordperfect', 'application/wordperfect']
   const wpdExtensionRegex = /\.wpd/gi
   return (
-    decisionIntegre.mimetype === wordperfectMimeType &&
+    wordperfectMimeTypeValidValues.includes(decisionIntegre.mimetype) &&
     wpdExtensionRegex.test(decisionIntegre.originalname)
   )
 }
