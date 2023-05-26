@@ -36,6 +36,8 @@ spec:
               value: $JURITJ_S3_BUCKET_NAME_RAW
             - name: S3_BUCKET_NAME_NORMALIZED
               value: $JURITJ_S3_BUCKET_NAME_NORMALIZED
+            - name: NO_COLOR
+              value: $JURITJ_NO_COLOR
 
 ---
 apiVersion: v1

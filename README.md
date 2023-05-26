@@ -52,6 +52,9 @@ JuriTJ a besoin de deux fichiers de variables d'environnements :
 Créer un fichier `.env` à la racine du dossier avec les variables suivantes :
 
 ```.env
+### Pour désactiver la coloration des logs
+NO_COLOR=true 
+
 ### API DOCUMENTATION
 DOC_LOGIN=root
 DOC_PASSWORD=root
