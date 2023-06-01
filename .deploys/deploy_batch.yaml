@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: batch
-          image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-debug
+          image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
           env:
             - name: S3_ACCESS_KEY
               value: $JURITJ_S3_ACCESS_KEY
