@@ -2,7 +2,6 @@ import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
 import { normalizationJob } from './normalization'
 import * as fetchDecisionListFromS3 from './services/fetchDecisionListFromS3'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
-import { DecisionMongoRepository } from './repositories/decisionMongo.repository'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
 import * as transformDecisionIntegreFromWPDToText from './services/transformDecisionIntegreContent'
 import { Readable } from 'stream'
@@ -46,7 +45,6 @@ describe('Normalization job', () => {
     .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
     .mockImplementation(() => Promise.resolve([decisionName]))
 
-  jest.spyOn(DecisionMongoRepository.prototype, 'saveDecision').mockImplementation(jest.fn())
   jest
     .spyOn(DecisionS3Repository.prototype, 'getDecisionByFilename')
     .mockImplementation(() => Promise.resolve(mockDecision))

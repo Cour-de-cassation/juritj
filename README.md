@@ -69,6 +69,12 @@ S3_REGION=eu-west-paris-1
 
 ### DB
 MONGODB_URL=mongodb://localhost:55431/
+
+
+### DbSder API
+DBSDER_API_URL=http://URL
+DBSDER_API_KEY=API_KEY
+
 ```
 
 Une fois le `.env` créé, le dupliquer et renommer le fichier nouvellement créé en `docker.env`. Adapter les valeurs des deux variables suivantes : 

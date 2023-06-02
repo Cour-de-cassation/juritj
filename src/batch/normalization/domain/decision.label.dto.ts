@@ -1,111 +1,102 @@
-import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { LabelStatus } from '../../../shared/domain/enums'
 import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
 import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 
-@Schema()
+export class DecisionAnalyse {
+  analyse: string[]
+
+  doctrine: string
+
+  link: string
+
+  reference: string[]
+
+  source: string
+
+  summary: string
+
+  target: string
+
+  title: string[]
+}
+
 export class DecisionLabelDTO {
-  @Prop()
+  // publication, formation, blocOccultation, natureAffairePenal.
+  id: string
+
+  analysis: DecisionAnalyse
+
   appeals: Array<string>
 
-  @Prop()
   chamberId: string
 
-  @Prop()
   chamberName: string
 
-  @Prop()
   dateCreation?: string
 
-  @Prop()
   dateDecision?: string
 
-  @Prop()
+  iddecision: string
+
+  decatt: number[]
+
   jurisdictionCode: string
 
-  @Prop()
   jurisdictionId: string
 
-  @Prop()
   jurisdictionName: string
 
-  @Prop()
   labelStatus: LabelStatus
 
-  @Prop()
   labelTreatments: labelTreatmentsType
 
-  @Prop(
-    raw({
-      additionalTerms: { type: String },
-      categoriesToOmit: [{ type: String }]
-    })
-  )
   occultation: {
     additionalTerms: string
     categoriesToOmit: string[]
   }
 
-  @Prop()
   originalText: string
 
-  @Prop()
   parties: Array<any>
 
-  @Prop()
   pseudoStatus: string
 
-  @Prop()
   pseudoText: string
 
-  @Prop()
   pubCategory: string
 
-  @Prop()
+  publication: string[]
+
   registerNumber: string
 
-  @Prop()
   solution: string
 
-  @Prop()
   sourceId: number
 
-  @Prop()
   sourceName: string
 
-  @Prop(
-    raw({
-      introduction_subzonage: { type: Object }
-    })
-  )
   zoning?: {
     introduction_subzonage: {
       publication: string[]
     }
   }
 
-  @Prop()
-  formation?: string
+  formation: string
 
-  @Prop()
-  blocOccultation?: number
+  blocOccultation: number
 
-  @Prop()
   natureAffaireCivil?: string
 
-  @Prop()
-  natureAffairePenal?: string
+  natureAffairePenal: string
 
-  @Prop()
   codeMatiereCivil?: string
 
-  @Prop()
+  NAOCode: string
+
   NACCode?: string
 
-  @Prop()
   endCaseCode?: string
 
-  @Prop()
   filenameSource: string
 }
 
@@ -120,16 +111,29 @@ type labelTreatmentsType = Array<{
   order: number
 }>
 
-export const DecisionSchema = SchemaFactory.createForClass(DecisionLabelDTO)
-
 export function mapDecisionNormaliseeToLabelDecision(
   decision: DecisionModel,
   decisionName: string
 ): DecisionLabelDTO {
   return {
+    publication: [],
+    analysis: {
+      analyse: [''],
+      doctrine: '',
+      link: '',
+      reference: [],
+      source: '',
+      summary: '',
+      target: '',
+      title: ['test']
+    },
+    id: 'someId',
+    decatt: [1],
     appeals: [],
-    chamberId: null,
-    chamberName: null,
+    iddecision: 'test',
+    NAOCode: 'NaoCode',
+    chamberId: 'null',
+    chamberName: 'null',
     dateCreation: TODAY,
     dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
     jurisdictionCode: decision.metadonnees.codeJuridiction,
@@ -147,18 +151,18 @@ export function mapDecisionNormaliseeToLabelDecision(
     pseudoText: null,
     pubCategory: null,
     registerNumber: decision.metadonnees.numeroRegistre,
-    solution: null,
-    sourceId: null,
-    sourceName: null,
+    solution: 'null',
+    sourceId: 0,
+    sourceName: 'juriTJ',
     zoning: {
       introduction_subzonage: {
         publication: []
       }
     },
-    formation: null,
-    blocOccultation: null,
+    formation: 'null',
+    blocOccultation: 0,
     natureAffaireCivil: decision.metadonnees.libelleNature,
-    natureAffairePenal: null,
+    natureAffairePenal: 'null',
     codeMatiereCivil: decision.metadonnees.codeNature,
     NACCode: decision.metadonnees.codeNAC,
     endCaseCode: null,
