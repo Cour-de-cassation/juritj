@@ -16,7 +16,7 @@
     "docker:build": "docker-compose -f docker-compose.local.yml build",
     "docker:start": "docker-compose -f docker-compose.local.yml up -d",
     "batch:start": "npx ts-node -r dotenv/config src/batch/normalization/index.ts",
-    "batch:start:prod": "npx ts-node -r dotenv/config dist/batch/normalization/index.js",
+    "batch:start:prod": "node -r dotenv/config dist/batch/normalization/index.js",
     "docker:start:db": "docker-compose -f docker-compose.local.yml up -d db",
     "docker:start:s3": "docker-compose -f docker-compose.local.yml up -d bucket && docker-compose -f docker-compose.local.yml up -d createbuckets",
     "docker:stop:db": "docker-compose -f docker-compose.local.yml stop db",
