@@ -5,6 +5,7 @@ import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
 import * as transformDecisionIntegreFromWPDToText from './services/transformDecisionIntegreContent'
 import { Readable } from 'stream'
+import { DbSderApiGateway } from './repositories/gateways/dbsderApi'
 
 jest.mock('./index', () => ({
   logger: {
@@ -50,6 +51,7 @@ describe('Normalization job', () => {
     .mockImplementation(() => Promise.resolve(mockDecision))
   jest.spyOn(DecisionS3Repository.prototype, 'saveDecisionNormalisee').mockImplementation(jest.fn())
   jest.spyOn(DecisionS3Repository.prototype, 'deleteDecision').mockImplementation(jest.fn())
+  jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockImplementation(jest.fn())
 
   const decisionIntegreMock = mockUtils.decisionContent
   const getDecisionIntegreMock = jest
