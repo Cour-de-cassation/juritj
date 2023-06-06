@@ -4,7 +4,7 @@ import {
   ServiceUnavailableException,
   UnauthorizedException
 } from '@nestjs/common'
-import { DbSderApiGateway } from './dbsderApi'
+import { DbSderApiGateway } from './dbsderApi.gateway'
 import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
 import axios from 'axios'
 
@@ -24,7 +24,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>
 describe('DbSderApi', () => {
   const mockUtils = new MockUtils()
   const gateway = new DbSderApiGateway()
-  it('Returns 201 - if  dbSder API is called with valid parameters', async () => {
+  it('Returns the decision saved if dbSder API is called with valid parameters', async () => {
     // GIVEN
     const decisionToSave = mockUtils.decisionLabelMock
     mockedAxios.post.mockResolvedValueOnce(mockUtils.decisionLabelMock)
@@ -36,7 +36,7 @@ describe('DbSderApi', () => {
     expect(result).toEqual(decisionToSave)
   })
 
-  it('Returns 400 if  dbSder API is called with invalid parameters', async () => {
+  it('Returns a bad request error when dbSder API is called with missing parameters', async () => {
     // GIVEN
     const incorrectDecisionToSave = mockUtils.decisionLabelMock
     delete incorrectDecisionToSave.sourceId
@@ -56,7 +56,7 @@ describe('DbSderApi', () => {
       .rejects.toThrow(BadRequestException)
   })
 
-  it('Returns 401 if normalization is not allowed to call dbSder API', async () => {
+  it('Returns an unauthorized error when normalization is not allowed to call dbSder API', async () => {
     // GIVEN
     const decisionToSave = mockUtils.decisionLabelMock
     mockedAxios.post.mockRejectedValueOnce({
@@ -74,7 +74,7 @@ describe('DbSderApi', () => {
       .rejects.toThrow(UnauthorizedException)
   })
 
-  it('Throws 503 if  dbSder API is unavailable', async () => {
+  it('Throws an unavailable error when dbSder API is unavailable', async () => {
     // GIVEN
     const decisionToSave = mockUtils.decisionLabelMock
     mockedAxios.post.mockRejectedValueOnce({})

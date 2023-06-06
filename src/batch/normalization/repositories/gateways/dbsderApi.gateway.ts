@@ -5,11 +5,11 @@ import {
   UnauthorizedException
 } from '@nestjs/common'
 import axios from 'axios'
-import { DecisionLabelDTO } from 'src/batch/normalization/domain/decision.label.dto'
+import { DecisionDTO } from '../../infrastructure/decision.label.dto'
 import { logger } from '../..'
 
 export class DbSderApiGateway {
-  async saveDecision(decisionToSave: DecisionLabelDTO) {
+  async saveDecision(decisionToSave: DecisionDTO) {
     const result = await axios
       .post(
         process.env.DBSDER_API_URL + '/decisions',

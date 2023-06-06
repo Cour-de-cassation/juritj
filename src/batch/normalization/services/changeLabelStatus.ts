@@ -1,10 +1,10 @@
 import { LabelStatus } from '../../../shared/domain/enums'
-import { DecisionLabelDTO } from '../domain/decision.label.dto'
+import { DecisionDTO } from '../infrastructure/decision.label.dto'
 import { logger } from '../index'
 
 export function updateLabelStatusIfDateDecisionIsInFuture(
-  decisionLabelDTO: DecisionLabelDTO
-): DecisionLabelDTO {
+  decisionLabelDTO: DecisionDTO
+): DecisionDTO {
   // Hypothèse : le cas d'égalité est exclus car les décisions ne sont pas
   // transmises en temps réel
 

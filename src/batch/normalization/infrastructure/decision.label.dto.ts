@@ -20,8 +20,7 @@ export class DecisionAnalyse {
   title: string[]
 }
 
-export class DecisionLabelDTO {
-  // publication, formation, blocOccultation, natureAffairePenal.
+export class DecisionDTO {
   id: string
 
   analysis: DecisionAnalyse
@@ -114,7 +113,7 @@ type labelTreatmentsType = Array<{
 export function mapDecisionNormaliseeToLabelDecision(
   decision: DecisionModel,
   decisionName: string
-): DecisionLabelDTO {
+): DecisionDTO {
   return {
     publication: [],
     analysis: {

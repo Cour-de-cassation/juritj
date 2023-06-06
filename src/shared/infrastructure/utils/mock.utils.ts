@@ -1,4 +1,4 @@
-import { DecisionLabelDTO } from 'src/batch/normalization/domain/decision.label.dto'
+import { DecisionDTO } from '../../../batch/normalization/infrastructure/decision.label.dto'
 import { LabelStatus, Occultation, TypePartie } from '../../domain/enums'
 
 export const TODAY = new Date().toISOString()
@@ -72,7 +72,7 @@ export class MockUtils {
     metadonnees: this.allAttributesMetadonneesDtoMock
   }
 
-  decisionLabelMock: DecisionLabelDTO = {
+  decisionLabelMock: DecisionDTO = {
     appeals: [],
     chamberId: null,
     chamberName: null,

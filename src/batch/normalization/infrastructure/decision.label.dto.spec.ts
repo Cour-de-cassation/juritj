@@ -1,6 +1,6 @@
 import { LabelStatus } from '../../../shared/domain/enums'
 import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
-import { DecisionLabelDTO, mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
+import { DecisionDTO, mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
 
 jest.mock('../index', () => ({
   logger: {
@@ -14,7 +14,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     // GIVEN
     const filename = 'test.json'
     const mockDecision = new MockUtils().toNormalizeDecisionMock
-    const expectedDecisionLabel: DecisionLabelDTO = {
+    const expectedDecisionLabel: DecisionDTO = {
       analysis: {
         analyse: [''],
         doctrine: '',

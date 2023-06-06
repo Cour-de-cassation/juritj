@@ -8,11 +8,11 @@ import { fetchDecisionListFromS3 } from './services/fetchDecisionListFromS3'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
 import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
 import { LabelStatus } from '../../shared/domain/enums'
-import { mapDecisionNormaliseeToLabelDecision } from './domain/decision.label.dto'
+import { mapDecisionNormaliseeToLabelDecision } from './infrastructure/decision.label.dto'
 import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { updateLabelStatusIfDateDecisionIsInFuture } from './services/changeLabelStatus'
-import { DbSderApiGateway } from './repositories/gateways/dbsderApi'
+import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 
 const dbSderApiGateway = new DbSderApiGateway()
 const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW

@@ -5,7 +5,7 @@ import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
 import * as transformDecisionIntegreFromWPDToText from './services/transformDecisionIntegreContent'
 import { Readable } from 'stream'
-import { DbSderApiGateway } from './repositories/gateways/dbsderApi'
+import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 
 jest.mock('./index', () => ({
   logger: {
