@@ -24,7 +24,9 @@ test:
     JURITJ_S3_REGION: $JURITJ_S3_REGION
     JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
     JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-    JURITJ_MONGODB_URL: $JURITJ_MONGODB_URL
+    JURITJ_DBSDER_API_KEY: $JURITJ_DBSDER_API_KEY
+    JURITJ_DBSDER_API_URL: $JURITJ_DBSDER_API_URL
+
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build 
@@ -109,7 +111,6 @@ deploy_api:
     - envsubst < .deploys/deploy_namespace.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_api.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_bucket.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-    - envsubst < .deploys/deploy_database.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_batch.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_ingress.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
   only:
@@ -132,7 +133,9 @@ deploy_batch:
     JURITJ_S3_REGION: $JURITJ_S3_REGION
     JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
     JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-    JURITJ_MONGODB_URL: $JURITJ_MONGODB_URL
+    JURITJ_DBSDER_API_KEY: $JURITJ_DBSDER_API_KEY
+    JURITJ_DBSDER_API_URL: $JURITJ_DBSDER_API_URL
+
     DOLLAR: $$
   script:
     - envsubst < .deploys/deploy_batch.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -

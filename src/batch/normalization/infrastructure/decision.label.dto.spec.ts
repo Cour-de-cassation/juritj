@@ -1,6 +1,6 @@
 import { LabelStatus } from '../../../shared/domain/enums'
 import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
-import { DecisionLabelDTO, mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
+import { DecisionDTO, mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
 
 jest.mock('../index', () => ({
   logger: {
@@ -14,24 +14,40 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     // GIVEN
     const filename = 'test.json'
     const mockDecision = new MockUtils().toNormalizeDecisionMock
-    const expectedDecisionLabel: DecisionLabelDTO = {
-      NACCode: '88F',
+    const expectedDecisionLabel: DecisionDTO = {
+      analysis: {
+        analyse: [''],
+        doctrine: '',
+        link: '',
+        reference: [],
+        source: '',
+        summary: '',
+        target: '',
+        title: ['test']
+      },
       appeals: [],
-      blocOccultation: null,
-      chamberId: null,
-      chamberName: null,
+      blocOccultation: 0,
+      chamberId: 'null',
+      chamberName: 'null',
       codeMatiereCivil: '6C',
       dateCreation: TODAY,
       dateDecision: new Date(2022, 11 - 1, 21).toISOString(),
+      decatt: [1],
       endCaseCode: null,
-      formation: null,
+      filenameSource: filename,
+      formation: 'null',
+      id: 'someId',
+      iddecision: 'test',
       jurisdictionCode: undefined,
       jurisdictionId: 'TJ75011',
       jurisdictionName: 'Juridictions civiles de première instance',
       labelStatus: LabelStatus.TOBETREATED,
       labelTreatments: null,
+      NACCode: '88F',
       natureAffaireCivil: 'Autres demandes en matière de frais et dépens',
-      natureAffairePenal: null,
+      natureAffairePenal: 'null',
+
+      NAOCode: 'NaoCode',
       occultation: {
         additionalTerms: undefined,
         categoriesToOmit: []
@@ -51,16 +67,16 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       pseudoStatus: null,
       pseudoText: null,
       pubCategory: null,
+      publication: [],
       registerNumber: 'A',
-      solution: null,
-      sourceId: null,
-      sourceName: null,
+      solution: 'null',
+      sourceId: 0,
+      sourceName: 'juriTJ',
       zoning: {
         introduction_subzonage: {
           publication: []
         }
-      },
-      filenameSource: filename
+      }
     }
 
     // WHEN

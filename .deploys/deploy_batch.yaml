@@ -31,5 +31,7 @@ spec:
               value: $JURITJ_S3_BUCKET_NAME_RAW
             - name: S3_BUCKET_NAME_NORMALIZED
               value: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-            - name: MONGODB_URL
-              value: $JURITJ_MONGODB_URL
+            - name: DBSDER_API_KEY
+              value: $JURITJ_DBSDER_API_KEY
+            - name: DBSDER_API_URL
+              value: $JURITJ_DBSDER_API_URL
