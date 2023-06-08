@@ -13,10 +13,12 @@ import { Readable } from 'stream'
 import { sdkStreamMixin } from '@aws-sdk/util-stream-node'
 import * as transformDecisionIntegreFromWPDToText from './services/transformDecisionIntegreContent'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
+import { LabelStatus } from '../../shared/domain/enums'
 
 jest.mock('./index', () => ({
   logger: {
     log: jest.fn(),
+    //error: (error)=> { console.error(error)}
     error: jest.fn()
   },
   normalizationContext: {
@@ -31,22 +33,9 @@ describe('Normalization integration tests', () => {
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
   const fakeWithMandatoryMetadonnees = mockUtils.mandatoryMetadonneesDtoMock
 
-  /**
-   * Usecases :
-   * 1. When no decision are present => empty list returned
-   * 2. When S3 is not available => Service not available
-   * 3. When dbSder API doesnt reply => emplty list
-   * 4. When all is ok => decisions list returned
-   */
-  /**
-   * Dependencies :
-   * S3
-   * libwpd
-   * dbSder Api Http call
-   */
-
   beforeEach(() => {
     mockS3.reset()
+    jest.resetAllMocks()
   })
 
   it('When no decisions are present returns an empty list', async () => {
@@ -84,7 +73,6 @@ describe('Normalization integration tests', () => {
     stream.push(JSON.stringify(transformExpected))
     stream.push(null)
     const sdkStream = sdkStreamMixin(stream)
-    const expected = []
 
     mockS3.on(ListObjectsV2Command).resolves(s3ListContent)
     mockS3.on(GetObjectCommand).resolves({
@@ -108,12 +96,26 @@ describe('Normalization integration tests', () => {
   it('When decisions are present returns a list of decisions normalized', async () => {
     // GIVEN
     const s3ListContent = {
-      Contents: [{ Key: 'filename' }, { Key: 'filename2' }]
+      Contents: [{ Key: 'filename' }]
     }
-    const transformExpected = { decisionIntegre: 'some body from S3' }
+    const decisionFromS3 = {
+      decisionIntegre: 'some body from S3',
+      metadonnees: fakeWithMandatoryMetadonnees
+    }
+    const expected = [
+      {
+        decisionNormalisee: decisionFromS3.decisionIntegre,
+        metadonnees: {
+          ...decisionFromS3.metadonnees,
+          idDecision: 'TJ75011A01/1234520221121',
+          labelStatus: LabelStatus.TOBETREATED
+        }
+      }
+    ]
+
     const stream = new Readable()
-    stream.push(JSON.stringify(transformExpected))
-    stream.push({ decisionNormalisee: fakeWithMandatoryMetadonnees })
+    stream.push(JSON.stringify(decisionFromS3))
+    stream.push(null)
     const sdkStream = sdkStreamMixin(stream)
 
     mockS3.on(ListObjectsV2Command).resolves(s3ListContent)
@@ -121,17 +123,17 @@ describe('Normalization integration tests', () => {
       Body: sdkStream
     })
     mockS3.on(PutObjectCommand).resolves({})
-    mockS3.on(DeleteObjectCommand).rejects({})
+    mockS3.on(DeleteObjectCommand).resolves({})
 
     jest
       .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
-      .mockResolvedValue('content')
+      .mockResolvedValue(decisionFromS3.decisionIntegre)
     jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue()
-    // WHEN
 
+    // WHEN
     const result = await normalizationJob()
 
     // THEN
-    expect(result).toEqual(['test'])
+    expect(result).toEqual(expected)
   })
 })

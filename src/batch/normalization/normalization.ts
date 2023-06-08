@@ -29,6 +29,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
     for (const decisionFilename of decisionList) {
       try {
         const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionFilename)
+
         const metadonnees = decision.metadonnees
 
         logger.log('Normalization job starting for decision ' + decisionFilename)
