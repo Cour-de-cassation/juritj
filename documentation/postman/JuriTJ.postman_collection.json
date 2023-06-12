@@ -181,6 +181,9 @@
 				},
 				{
 					"name": "Accède à la documentation",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -199,6 +202,10 @@
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
 						"url": {
 							"raw": "{{HOSTNAME}}/doc-json",
 							"host": [
@@ -206,6 +213,46 @@
 							],
 							"path": [
 								"doc-json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulte l'état de l'API",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{pwd_doc}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{login_doc}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/{{VERSION}}/health",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"{{VERSION}}",
+								"health"
 							]
 						}
 					},
