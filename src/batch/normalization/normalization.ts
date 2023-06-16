@@ -24,6 +24,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   normalizationContext.start()
   normalizationContext.setCorrelationId(uuidv4())
 
+  // Appeler cette fonction tant qu'elle renvoie des décisions
   const decisionList = await fetchDecisionListFromS3(s3Repository)
   if (decisionList.length > 0) {
     for (const decisionFilename of decisionList) {

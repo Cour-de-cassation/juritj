@@ -93,6 +93,7 @@ export class DecisionS3Repository implements DecisionRepository {
   async getDecisionList(): Promise<any> {
     const reqParams = {
       Bucket: process.env.S3_BUCKET_NAME_RAW
+      // Ajouter la clé "MaxKeys" pour spécifier le nb d'éléments à récupérer
     }
 
     try {
