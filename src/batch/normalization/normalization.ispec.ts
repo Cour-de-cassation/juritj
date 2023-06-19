@@ -97,7 +97,7 @@ describe('Normalization integration tests', () => {
       expect(result).toEqual(expected)
     })
 
-    it.only('returns 3 normalized decisions when 3 decisions are available on S3 (restarts until all decisions from S3 are treated)', async () => {
+    it('returns 3 normalized decisions when 3 decisions are available on S3 (restarts until all decisions from S3 are treated)', async () => {
       // GIVEN
       // S3 will be called 3 times to return 2 + 1 decision filename
       const twoDecisionsFromS3 = {
@@ -113,48 +113,22 @@ describe('Normalization integration tests', () => {
         .resolves({})
 
       // S3 will be called 3 times to retrieve decisions content
-      const decisionFromS3 = {
-        decisionIntegre: 'some body from S3',
-        metadonnees: mockUtils.mandatoryMetadonneesDtoMock
-      }
+      const decisionIntegre = 'données de la décision intègre'
+      const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
       const firstDecisionIdJuridiction = 'TJ00001'
-      const firstStream = new Readable()
-      firstStream.push(
-        JSON.stringify({
-          ...decisionFromS3,
-          metadonnees: { idJuridiction: firstDecisionIdJuridiction }
-        })
-      )
-      firstStream.push(null)
-      const firstFakeDocument = sdkStreamMixin(firstStream)
-
       const secondDecisionIdJuridiction = 'TJ00002'
-      const secondStream = new Readable()
-      secondStream.push(
-        JSON.stringify({
-          ...decisionFromS3,
-          metadonnees: { idJuridiction: secondDecisionIdJuridiction }
-        })
-      )
-      secondStream.push(null)
-      const secondFakeDocument = sdkStreamMixin(secondStream)
-
       const thirdDecisionIdJuridiction = 'TJ00003'
-      const thirdStream = new Readable()
-      thirdStream.push(
-        JSON.stringify({
-          ...decisionFromS3,
-          metadonnees: { idJuridiction: thirdDecisionIdJuridiction }
-        })
-      )
-      thirdStream.push(null)
-      const thirdFakeDocument = sdkStreamMixin(thirdStream)
-
       mockS3
         .on(GetObjectCommand)
-        .resolvesOnce({ Body: firstFakeDocument })
-        .resolvesOnce({ Body: secondFakeDocument })
-        .resolvesOnce({ Body: thirdFakeDocument })
+        .resolvesOnce({
+          Body: createFakeDocument(decisionIntegre, metadonnees, firstDecisionIdJuridiction)
+        })
+        .resolvesOnce({
+          Body: createFakeDocument(decisionIntegre, metadonnees, secondDecisionIdJuridiction)
+        })
+        .resolvesOnce({
+          Body: createFakeDocument(decisionIntegre, metadonnees, thirdDecisionIdJuridiction)
+        })
         .resolves({})
 
       mockS3.on(PutObjectCommand).resolves({})
@@ -162,32 +136,32 @@ describe('Normalization integration tests', () => {
 
       jest
         .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
-        .mockResolvedValue(decisionFromS3.decisionIntegre)
+        .mockResolvedValue(decisionIntegre)
       jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue()
 
       const expected = [
         {
-          decisionNormalisee: decisionFromS3.decisionIntegre,
+          decisionNormalisee: decisionIntegre,
           metadonnees: {
-            ...decisionFromS3.metadonnees,
+            ...metadonnees,
             idJuridiction: firstDecisionIdJuridiction,
             idDecision: firstDecisionIdJuridiction + 'A01/1234520221121',
             labelStatus: LabelStatus.TOBETREATED
           }
         },
         {
-          decisionNormalisee: decisionFromS3.decisionIntegre,
+          decisionNormalisee: decisionIntegre,
           metadonnees: {
-            ...decisionFromS3.metadonnees,
+            ...metadonnees,
             idJuridiction: secondDecisionIdJuridiction,
             idDecision: secondDecisionIdJuridiction + 'A01/1234520221121',
             labelStatus: LabelStatus.TOBETREATED
           }
         },
         {
-          decisionNormalisee: decisionFromS3.decisionIntegre,
+          decisionNormalisee: decisionIntegre,
           metadonnees: {
-            ...decisionFromS3.metadonnees,
+            ...metadonnees,
             idJuridiction: thirdDecisionIdJuridiction,
             idDecision: thirdDecisionIdJuridiction + 'A01/1234520221121',
             labelStatus: LabelStatus.TOBETREATED
@@ -205,7 +179,7 @@ describe('Normalization integration tests', () => {
   })
 
   describe('Fail Cases', () => {
-    it('When s3 is unavailable returns an exception', async () => {
+    it('when S3 is unavailable returns an exception', async () => {
       // GIVEN
       mockS3.on(ListObjectsV2Command).rejects(new ServiceUnavailableException())
 
@@ -215,7 +189,7 @@ describe('Normalization integration tests', () => {
         .rejects.toThrow(ServiceUnavailableException)
     })
 
-    it('When s3 is available but dbSder API is unavailable returns an empty list', async () => {
+    it('when S3 is available but dbSder API is unavailable returns an empty list', async () => {
       // GIVEN
       const s3ListContent = {
         Contents: [{ Key: 'filename' }, { Key: 'filename2' }]
@@ -246,3 +220,18 @@ describe('Normalization integration tests', () => {
     })
   })
 })
+
+function createFakeDocument(
+  decisionIntegre: string,
+  metadonnees: any,
+  decisionIdJuridiction: string
+) {
+  const decision = {
+    decisionIntegre,
+    metadonnees: { ...metadonnees, idJuridiction: decisionIdJuridiction }
+  }
+  const stream = new Readable()
+  stream.push(JSON.stringify(decision))
+  stream.push(null)
+  return sdkStreamMixin(stream)
+}
