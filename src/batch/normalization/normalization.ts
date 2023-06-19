@@ -24,23 +24,27 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   normalizationContext.start()
   normalizationContext.setCorrelationId(uuidv4())
 
-  // Appeler cette fonction tant qu'elle renvoie des décisions
-  const decisionList = await fetchDecisionListFromS3(s3Repository)
-  if (decisionList.length > 0) {
+  let decisionList = await fetchDecisionListFromS3(s3Repository)
+  console.log({ decisionList })
+  while (decisionList.length > 0) {
     for (const decisionFilename of decisionList) {
+      console.log({ decisionFilename })
       try {
         const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionFilename)
+        console.log({ decision })
 
         const metadonnees = decision.metadonnees
 
         logger.log('Normalization job starting for decision ' + decisionFilename)
 
         const idDecision = generateUniqueId(metadonnees)
+        console.log({ idDecision })
         logger.log('Decision ID generated. Starting Wpd to text conversion ', idDecision)
 
         const decisionContent = await transformDecisionIntegreFromWPDToText(
           decision.decisionIntegre
         )
+        console.log({ decisionContent })
         logger.log('Decision conversion finished. Removing unnecessary characters', idDecision)
 
         const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
@@ -87,9 +91,14 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
       }
     }
 
-    return listConvertedDecision
-  } else {
+    decisionList = await fetchDecisionListFromS3(s3Repository)
+    console.log({ decisionList })
+  }
+
+  if (listConvertedDecision.length == 0) {
     logger.log('No decisions found, will try again later.')
     return []
   }
+
+  return listConvertedDecision
 }
