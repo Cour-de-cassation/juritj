@@ -91,12 +91,12 @@ export class DecisionS3Repository implements DecisionRepository {
     }
   }
 
-  async getDecisionList(max?: number): Promise<any> {
+  async getDecisionList(maxNumberOfDecisionsToRetrieve?): Promise<any> {
     const reqParams: ListObjectsV2CommandInput = {
       Bucket: process.env.S3_BUCKET_NAME_RAW
     }
-    if (max > 1 && max < 1000) {
-      reqParams.MaxKeys = max
+    if (maxNumberOfDecisionsToRetrieve >= 1 && maxNumberOfDecisionsToRetrieve <= 1000) {
+      reqParams.MaxKeys = maxNumberOfDecisionsToRetrieve
     }
 
     try {

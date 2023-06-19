@@ -183,7 +183,21 @@ describe('DecisionS3Repository', () => {
         .toEqual(expected)
     })
 
-    it('calls S3 without max when max = 0 (default : 1000 elements)', async () => {
+    it('calls S3 without maxNumberOfDecisionsToRetrieve when maxNumberOfDecisionsToRetrieve is not provided', async () => {
+      // GIVEN
+      const expected = {
+        Bucket: process.env.S3_BUCKET_NAME_RAW
+      }
+      mockS3.on(ListObjectsV2Command).resolves({})
+
+      // WHEN
+      await repository.getDecisionList()
+
+      // THEN
+      expect(mockS3.commandCalls(ListObjectsV2Command, expected, true)).toHaveLength(1)
+    })
+
+    it('calls S3 without maxNumberOfDecisionsToRetrieve when maxNumberOfDecisionsToRetrieve = 0 (default : 1000 elements)', async () => {
       // GIVEN
       const invalidMax = 0
       const expected = {
@@ -198,7 +212,7 @@ describe('DecisionS3Repository', () => {
       expect(mockS3.commandCalls(ListObjectsV2Command, expected, true)).toHaveLength(1)
     })
 
-    it('calls S3 without max when max > 1000 (default : 1000 elements)', async () => {
+    it('calls S3 without maxNumberOfDecisionsToRetrieve when maxNumberOfDecisionsToRetrieve > 1000 (default : 1000 elements)', async () => {
       // GIVEN
       const invalidMax = 9999
       const expected = {
@@ -213,7 +227,39 @@ describe('DecisionS3Repository', () => {
       expect(mockS3.commandCalls(ListObjectsV2Command, expected, true)).toHaveLength(1)
     })
 
-    it('calls S3 with max when max > 0 && max < 1000', async () => {
+    it('calls S3 with maxNumberOfDecisionsToRetrieve when maxNumberOfDecisionsToRetrieve = 1', async () => {
+      // GIVEN
+      const validMax = 1
+      const expected = {
+        Bucket: process.env.S3_BUCKET_NAME_RAW,
+        MaxKeys: validMax
+      }
+      mockS3.on(ListObjectsV2Command).resolves({})
+
+      // WHEN
+      await repository.getDecisionList(validMax)
+
+      // THEN
+      expect(mockS3.commandCalls(ListObjectsV2Command, expected, true)).toHaveLength(1)
+    })
+
+    it('calls S3 with maxNumberOfDecisionsToRetrieve when maxNumberOfDecisionsToRetrieve = 1000', async () => {
+      // GIVEN
+      const validMax = 1000
+      const expected = {
+        Bucket: process.env.S3_BUCKET_NAME_RAW,
+        MaxKeys: validMax
+      }
+      mockS3.on(ListObjectsV2Command).resolves({})
+
+      // WHEN
+      await repository.getDecisionList(validMax)
+
+      // THEN
+      expect(mockS3.commandCalls(ListObjectsV2Command, expected, true)).toHaveLength(1)
+    })
+
+    it('calls S3 with maxNumberOfDecisionsToRetrieve when maxNumberOfDecisionsToRetrieve is between 1 and 1000', async () => {
       // GIVEN
       const validMax = 500
       const expected = {
