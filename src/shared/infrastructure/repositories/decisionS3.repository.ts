@@ -3,7 +3,8 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
-  ListObjectsV2Command
+  ListObjectsV2Command,
+  ListObjectsV2CommandInput
 } from '@aws-sdk/client-s3'
 import { LoggerService, ServiceUnavailableException } from '@nestjs/common'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
@@ -90,10 +91,12 @@ export class DecisionS3Repository implements DecisionRepository {
     }
   }
 
-  async getDecisionList(): Promise<any> {
-    const reqParams = {
+  async getDecisionList(max?: number): Promise<any> {
+    const reqParams: ListObjectsV2CommandInput = {
       Bucket: process.env.S3_BUCKET_NAME_RAW
-      // Ajouter la clé "MaxKeys" pour spécifier le nb d'éléments à récupérer
+    }
+    if (max > 1 && max < 1000) {
+      reqParams.MaxKeys = max
     }
 
     try {

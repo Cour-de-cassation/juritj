@@ -153,7 +153,7 @@ describe('DecisionS3Repository', () => {
         .rejects.toThrow(S3ErrorMessage)
     })
 
-    it('returns an undefined list from S3 (empty case)', async () => {
+    it('returns an empty list when S3 returns nothing', async () => {
       // GIVEN
       const expected = []
       mockS3.on(ListObjectsV2Command).resolves({})
@@ -166,7 +166,7 @@ describe('DecisionS3Repository', () => {
         .toEqual(expected)
     })
 
-    it('returns the decision list from s3', async () => {
+    it('returns a decision list when S3 returns a list of elements', async () => {
       // GIVEN
       const expected = [{ Key: 'filename' }, { Key: 'filename2' }]
       const contentToResolve = {
@@ -181,6 +181,52 @@ describe('DecisionS3Repository', () => {
       )
         // THEN
         .toEqual(expected)
+    })
+
+    it('calls S3 without max when max = 0 (default : 1000 elements)', async () => {
+      // GIVEN
+      const invalidMax = 0
+      const expected = {
+        Bucket: process.env.S3_BUCKET_NAME_RAW
+      }
+      mockS3.on(ListObjectsV2Command).resolves({})
+
+      // WHEN
+      await repository.getDecisionList(invalidMax)
+
+      // THEN
+      expect(mockS3.commandCalls(ListObjectsV2Command, expected, true)).toHaveLength(1)
+    })
+
+    it('calls S3 without max when max > 1000 (default : 1000 elements)', async () => {
+      // GIVEN
+      const invalidMax = 9999
+      const expected = {
+        Bucket: process.env.S3_BUCKET_NAME_RAW
+      }
+      mockS3.on(ListObjectsV2Command).resolves({})
+
+      // WHEN
+      await repository.getDecisionList(invalidMax)
+
+      // THEN
+      expect(mockS3.commandCalls(ListObjectsV2Command, expected, true)).toHaveLength(1)
+    })
+
+    it('calls S3 with max when max > 0 && max < 1000', async () => {
+      // GIVEN
+      const validMax = 500
+      const expected = {
+        Bucket: process.env.S3_BUCKET_NAME_RAW,
+        MaxKeys: validMax
+      }
+      mockS3.on(ListObjectsV2Command).resolves({})
+
+      // WHEN
+      await repository.getDecisionList(validMax)
+
+      // THEN
+      expect(mockS3.commandCalls(ListObjectsV2Command, expected, true)).toHaveLength(1)
     })
   })
 })
