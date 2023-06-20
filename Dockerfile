@@ -60,3 +60,28 @@ COPY --from=prod --chown=node:node /home/node/dist/api ./dist/api
 COPY --from=prod --chown=node:node /home/node/secrets/dev ./secrets/dev
 
 CMD ["node", "dist/api/main"]
+
+
+# DEBUG / TESTING PURPOSE
+FROM node:18-bullseye as debug 
+
+ENV NODE_ENV production
+
+USER node
+WORKDIR /home/node
+
+CMD ["/bin/sh", "batch_docker_entrypoint.sh"]
+COPY --from=prod --chown=node:node /home/node/package*.json ./
+COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
+
+COPY --from=prod --chown=node:node /home/node/dist ./dist
+
+COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
+RUN chmod +x batch_docker_entrypoint.sh
+
+USER root
+RUN apt update
+RUN apt install libwpd-tools -y
+
+USER node
+CMD ["node", "dist/api/main"]
