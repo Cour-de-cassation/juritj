@@ -38,7 +38,7 @@ describe('Normalization integration tests', () => {
     jest.resetAllMocks()
   })
   describe('Success Cases', () => {
-    it('When no decisions are present returns an empty list', async () => {
+    it('when no decisions are present returns an empty list', async () => {
       // GIVEN
       const expected = []
       const s3ListContent = {
@@ -53,7 +53,7 @@ describe('Normalization integration tests', () => {
       expect(response).toEqual(expected)
     })
 
-    it('When decisions are present returns a list of decisions normalized', async () => {
+    it('when decisions are present returns a list of decisions normalized', async () => {
       // GIVEN
       const s3ListContent = {
         Contents: [{ Key: 'filename' }]
@@ -88,7 +88,7 @@ describe('Normalization integration tests', () => {
       jest
         .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
         .mockResolvedValue(decisionFromS3.decisionIntegre)
-      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue()
+      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue({})
 
       // WHEN
       const result = await normalizationJob()
@@ -137,7 +137,7 @@ describe('Normalization integration tests', () => {
       jest
         .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
         .mockResolvedValue(decisionIntegre)
-      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue()
+      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue({})
 
       const expected = [
         {
