@@ -10,9 +10,6 @@ import { logger } from '../..'
 
 export class DbSderApiGateway {
   async saveDecision(decisionToSave: DecisionDTO) {
-
-console.log({DBSDER_API: process.env.DBSDER_API_URL})
-
     const result = await axios
       .post(
         process.env.DBSDER_API_URL + '/v1/decisions',
@@ -35,7 +32,6 @@ console.log({DBSDER_API: process.env.DBSDER_API_URL})
             throw new UnauthorizedException('You are not authorized to call this route')
           }
         } else {
-          console.log({error})
           throw new ServiceUnavailableException('DbSder API is unavailable')
         }
       })

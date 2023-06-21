@@ -3,9 +3,15 @@ import { DecisionS3Repository } from '../../../shared/infrastructure/repositorie
 
 const MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE = 2
 
-export async function fetchDecisionListFromS3(repository: DecisionS3Repository, key?: string): Promise<string[]> {
+export async function fetchDecisionListFromS3(
+  repository: DecisionS3Repository,
+  filename?: string
+): Promise<string[]> {
   try {
-    const rawDecisionList = await repository.getDecisionList(MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE, key)
+    const rawDecisionList = await repository.getDecisionList(
+      MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE,
+      filename
+    )
     return rawDecisionList.splice(0, rawDecisionList.length).map((decision) => decision.Key)
   } catch (error) {
     throw new ServiceUnavailableException('Error from S3 API')

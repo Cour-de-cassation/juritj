@@ -97,7 +97,7 @@ describe('Normalization integration tests', () => {
       expect(result).toEqual(expected)
     })
 
-    it.only('returns 3 normalized decisions when 3 decisions are available on S3 (restarts until all decisions from S3 are treated)', async () => {
+    it('returns 3 normalized decisions when 3 decisions are available on S3 (restarts until all decisions from S3 are treated)', async () => {
       // GIVEN
       // S3 will be called 3 times to return 2 + 1 decision filename
       const twoDecisionsFromS3 = {

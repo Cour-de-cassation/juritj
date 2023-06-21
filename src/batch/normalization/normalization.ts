@@ -24,13 +24,9 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   normalizationContext.start()
   normalizationContext.setCorrelationId(uuidv4())
 
-const totalDecisions = await s3Repository.getDecisionList(100)
-console.log({totalDecisions})
-
   let decisionList = await fetchDecisionListFromS3(s3Repository)
   while (decisionList.length > 0) {
     for (const decisionFilename of decisionList) {
-      console.log({decisionFilename})
       try {
         const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionFilename)
 
@@ -89,13 +85,8 @@ console.log({totalDecisions})
         continue
       }
     }
-
-    // Problème : le batch tourne en boucle tant que des éléments sont à traiter
-    // Ex : DBSDER API non dispo, décisions non traité => boucle infinie
-    // Autre contrainte : si on récup 2 éléments et que le premier échoue, on souhaite continuer à traiter le 2e => en fetch suivant, on récup l'élément non traité
-
-    console.log({key: decisionList[decisionList.length -1]})
-    decisionList = await fetchDecisionListFromS3(s3Repository, decisionList[decisionList.length -1])
+    const lastTreatedDecisionFileName = decisionList[decisionList.length - 1]
+    decisionList = await fetchDecisionListFromS3(s3Repository, lastTreatedDecisionFileName)
   }
 
   if (listConvertedDecision.length == 0) {
