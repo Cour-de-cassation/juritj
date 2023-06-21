@@ -1,16 +1,6 @@
 version: "3.7"
 
 services:
-  db:
-    image: mongo:4.4
-    command: mongod --port 55431
-    volumes:
-      - mongo-storage:/data/db
-    expose:
-      - 55431
-    ports:
-      - 55431:55431
-
   bucket:
     image: minio/minio:RELEASE.2023-02-27T18-10-45Z
     command: minio server /data --console-address :9001

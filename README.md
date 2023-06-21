@@ -67,18 +67,17 @@ S3_ACCESS_KEY=local_access_key
 S3_SECRET_KEY=local_secret_key
 S3_REGION=eu-west-paris-1
 
-
 ### DbSder API
-DBSDER_API_URL=http://URL
-DBSDER_API_KEY=API_KEY
+DBSDER_API_URL=http://dbsder-api:3000
+DBSDER_API_KEY=normalization_api_key
 
 ```
 
-Une fois le `.env` créé, le dupliquer et renommer le fichier nouvellement créé en `docker.env`. Adapter les valeurs des deux variables suivantes : 
+Une fois le `.env` créé, le dupliquer et renommer le fichier nouvellement créé en `docker.env`. Adapter les valeurs des variables suivantes : 
 ```docker.env
 S3_URL=http://bucket:9000 
-DBSDER_API_URL=http://URL
-DBSDER_API_KEY=API_KEY
+DBSDER_API_URL=http://dbsder-api:3000
+DBSDER_API_KEY=normalization_api_key
 ```
 
 ### Configuration des certificats
@@ -120,10 +119,10 @@ npm run start:dev
 Pour lancer le batch de normalisation manuellement, écrire dans un terminal : 
 ```bash
 npm run docker:build
-npm run docker:start:db
 npm run docker:start:s3
 npm run batch:start
 ```
+Attention, pour que le batch fonctionne, préciser l'url de l'API DBSDER dans le docker.env. 
 
 ### Documentation JuriTJ 
 
