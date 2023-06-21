@@ -22,7 +22,6 @@ export class DbSderApiGateway {
       )
       .catch((error) => {
         if (error.response) {
-          console.log({ error: error.response })
           if (error.response.data.statusCode === HttpStatus.BAD_REQUEST) {
             logger.error(error.response.data.message)
             throw new BadRequestException(
