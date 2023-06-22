@@ -77,6 +77,9 @@
     "tsconfig-paths": "4.2.0",
     "typescript": "5.0.4"
   },
+  "overrides": {
+    "fast-xml-parser": "4.2.5"
+  },
   "jest": {
     "moduleFileExtensions": [
       "js",
