@@ -1,15 +1,18 @@
 import { ServiceUnavailableException } from '@nestjs/common'
 import { DecisionS3Repository } from '../../../shared/infrastructure/repositories/decisionS3.repository'
 
-const NUMBER_OF_DECISION_TO_RETURN = 10
-export async function fetchDecisionListFromS3(repository: DecisionS3Repository) {
+const MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE = 2
+
+export async function fetchDecisionListFromS3(
+  repository: DecisionS3Repository,
+  filename?: string
+): Promise<string[]> {
   try {
-    const rawDecisionList = await repository.getDecisionList()
-    const numberOfDecisionToFetch =
-      rawDecisionList.length >= NUMBER_OF_DECISION_TO_RETURN
-        ? NUMBER_OF_DECISION_TO_RETURN
-        : rawDecisionList.length
-    return rawDecisionList.splice(0, numberOfDecisionToFetch).map((decision) => decision.Key)
+    const rawDecisionList = await repository.getDecisionList(
+      MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE,
+      filename
+    )
+    return rawDecisionList.splice(0, rawDecisionList.length).map((decision) => decision.Key)
   } catch (error) {
     throw new ServiceUnavailableException('Error from S3 API')
   }

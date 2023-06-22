@@ -3,7 +3,9 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
-  ListObjectsV2Command
+  ListObjectsV2Command,
+  ListObjectsV2CommandInput,
+  _Object
 } from '@aws-sdk/client-s3'
 import { LoggerService, ServiceUnavailableException } from '@nestjs/common'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
@@ -90,10 +92,17 @@ export class DecisionS3Repository implements DecisionRepository {
     }
   }
 
-  async getDecisionList(): Promise<any> {
-    const reqParams = {
+  async getDecisionList(
+    maxNumberOfDecisionsToRetrieve?: number,
+    startAfterFileName?: string
+  ): Promise<_Object[]> {
+    const reqParams: ListObjectsV2CommandInput = {
       Bucket: process.env.S3_BUCKET_NAME_RAW
     }
+    if (maxNumberOfDecisionsToRetrieve >= 1 && maxNumberOfDecisionsToRetrieve <= 1000) {
+      reqParams.MaxKeys = maxNumberOfDecisionsToRetrieve
+    }
+    if (startAfterFileName) reqParams.StartAfter = startAfterFileName
 
     try {
       const decisionListFromS3 = await this.s3Client.send(new ListObjectsV2Command(reqParams))

@@ -24,10 +24,11 @@ const mockedAxios = axios as jest.Mocked<typeof axios>
 describe('DbSderApi', () => {
   const mockUtils = new MockUtils()
   const gateway = new DbSderApiGateway()
-  it('Returns the decision saved if dbSder API is called with valid parameters', async () => {
+
+  it('returns the decision saved if dbSder API is called with valid parameters', async () => {
     // GIVEN
     const decisionToSave = mockUtils.decisionLabelMock
-    mockedAxios.post.mockResolvedValueOnce(mockUtils.decisionLabelMock)
+    mockedAxios.post.mockResolvedValueOnce({ data: mockUtils.decisionLabelMock })
 
     // WHEN
     const result = await gateway.saveDecision(decisionToSave)
@@ -36,7 +37,7 @@ describe('DbSderApi', () => {
     expect(result).toEqual(decisionToSave)
   })
 
-  it('Returns a bad request error when dbSder API is called with missing parameters', async () => {
+  it('throws a 400 Bad Request error when dbSder API is called with missing parameters', async () => {
     // GIVEN
     const incorrectDecisionToSave = mockUtils.decisionLabelMock
     delete incorrectDecisionToSave.sourceId
@@ -56,7 +57,7 @@ describe('DbSderApi', () => {
       .rejects.toThrow(BadRequestException)
   })
 
-  it('Returns an unauthorized error when normalization is not allowed to call dbSder API', async () => {
+  it('throws a 401 Unauthorized error when normalization is not allowed to call dbSder API', async () => {
     // GIVEN
     const decisionToSave = mockUtils.decisionLabelMock
     mockedAxios.post.mockRejectedValueOnce({
@@ -74,10 +75,17 @@ describe('DbSderApi', () => {
       .rejects.toThrow(UnauthorizedException)
   })
 
-  it('Throws an unavailable error when dbSder API is unavailable', async () => {
+  it('throws a 503 Unavailable error when dbSder API is unavailable', async () => {
     // GIVEN
     const decisionToSave = mockUtils.decisionLabelMock
-    mockedAxios.post.mockRejectedValueOnce({})
+    mockedAxios.post.mockRejectedValueOnce({
+      response: {
+        data: {
+          statusCode: HttpStatus.SERVICE_UNAVAILABLE,
+          message: ''
+        }
+      }
+    })
 
     // WHEN
     expect(async () => await gateway.saveDecision(decisionToSave))

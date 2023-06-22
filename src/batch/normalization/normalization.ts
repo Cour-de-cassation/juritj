@@ -24,8 +24,8 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   normalizationContext.start()
   normalizationContext.setCorrelationId(uuidv4())
 
-  const decisionList = await fetchDecisionListFromS3(s3Repository)
-  if (decisionList.length > 0) {
+  let decisionList = await fetchDecisionListFromS3(s3Repository)
+  while (decisionList.length > 0) {
     for (const decisionFilename of decisionList) {
       try {
         const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionFilename)
@@ -85,10 +85,14 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         continue
       }
     }
+    const lastTreatedDecisionFileName = decisionList[decisionList.length - 1]
+    decisionList = await fetchDecisionListFromS3(s3Repository, lastTreatedDecisionFileName)
+  }
 
-    return listConvertedDecision
-  } else {
+  if (listConvertedDecision.length == 0) {
     logger.log('No decisions found, will try again later.')
     return []
   }
+
+  return listConvertedDecision
 }

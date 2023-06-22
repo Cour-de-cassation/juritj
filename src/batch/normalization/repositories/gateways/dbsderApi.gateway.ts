@@ -12,7 +12,7 @@ export class DbSderApiGateway {
   async saveDecision(decisionToSave: DecisionDTO) {
     const result = await axios
       .post(
-        process.env.DBSDER_API_URL + '/decisions',
+        process.env.DBSDER_API_URL + '/v1/decisions',
         { decision: decisionToSave },
         {
           headers: {
@@ -30,12 +30,13 @@ export class DbSderApiGateway {
           } else if (error.response.data.statusCode === HttpStatus.UNAUTHORIZED) {
             logger.error(error.response.data.message)
             throw new UnauthorizedException('You are not authorized to call this route')
+          } else {
+            logger.error(error.response.data.message)
           }
-        } else {
-          throw new ServiceUnavailableException('DbSder API is unavailable')
         }
+        throw new ServiceUnavailableException('DbSder API is unavailable')
       })
 
-    return result
+    return result.data
   }
 }

@@ -42,21 +42,23 @@ describe('Normalization job', () => {
     metadonnees: fakeWithMandatoryMetadonnees
   }
 
-  jest
-    .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
-    .mockImplementation(() => Promise.resolve([decisionName]))
+  beforeEach(() => {
+    jest.resetAllMocks()
 
-  jest
-    .spyOn(DecisionS3Repository.prototype, 'getDecisionByFilename')
-    .mockImplementation(() => Promise.resolve(mockDecision))
-  jest.spyOn(DecisionS3Repository.prototype, 'saveDecisionNormalisee').mockImplementation(jest.fn())
-  jest.spyOn(DecisionS3Repository.prototype, 'deleteDecision').mockImplementation(jest.fn())
-  jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockImplementation(jest.fn())
+    jest
+      .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
+      .mockImplementationOnce(() => Promise.resolve([decisionName]))
+      .mockImplementation(() => Promise.resolve([]))
 
-  const decisionIntegreMock = mockUtils.decisionContent
-  const getDecisionIntegreMock = jest
-    .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
-    .mockImplementation(() => Promise.resolve(decisionIntegreMock))
+    jest
+      .spyOn(DecisionS3Repository.prototype, 'getDecisionByFilename')
+      .mockImplementation(() => Promise.resolve(mockDecision))
+    jest
+      .spyOn(DecisionS3Repository.prototype, 'saveDecisionNormalisee')
+      .mockImplementation(jest.fn())
+    jest.spyOn(DecisionS3Repository.prototype, 'deleteDecision').mockImplementation(jest.fn())
+    jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockImplementation(jest.fn())
+  })
 
   describe('For one unique decision', () => {
     it('returns metadonnees with uniqueDecisionId', async () => {
@@ -72,6 +74,9 @@ describe('Normalization job', () => {
             'Le contenu de ma décision avec des espaces et des backslash multiples \n '
         }
       ]
+      jest
+        .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
+        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContent))
 
       expect(
         // WHEN
@@ -97,7 +102,9 @@ describe('Normalization job', () => {
           decisionNormalisee: expectedDecision
         }
       ]
-      getDecisionIntegreMock.mockImplementationOnce(() => Promise.resolve(fakeDecision))
+      jest
+        .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
+        .mockImplementationOnce(() => Promise.resolve(fakeDecision))
 
       expect(
         // WHEN
@@ -138,6 +145,12 @@ describe('Normalization job', () => {
       jest
         .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
         .mockImplementationOnce(() => Promise.resolve([firstDecisionName, secondDecisionName]))
+        .mockImplementation(() => Promise.resolve([]))
+
+      jest
+        .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
+        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContent))
+        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContent))
 
       expect(
         // WHEN

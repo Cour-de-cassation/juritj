@@ -30,7 +30,7 @@ services:
       exit 0;
       "
 
-  api:
+  juritj-api:
     build:
       context: ./
       target: api
@@ -47,10 +47,15 @@ services:
       target: batch
     env_file:
       - docker.env
+    networks:
+      - default
+      - dbsder-external-network
 
 networks:
   default:
     name: juritj-network
+  dbsder-external-network:
+    external: true
 
 volumes:
   mongo-storage:
