@@ -1,6 +1,6 @@
+import { existsSync } from 'fs'
 import { promisify } from 'util'
 import { exec } from 'child_process'
-import { existsSync } from 'fs'
 import { logger } from '../index'
 
 const execPromise = promisify(exec)

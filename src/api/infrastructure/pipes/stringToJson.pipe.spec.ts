@@ -4,7 +4,7 @@ import { StringToJsonPipe } from './stringToJson.pipe'
 describe('convert a string to json', () => {
   const target = new StringToJsonPipe()
 
-  it('should throw an error if the string is not converted to a json', () => {
+  it('throws an error when the string is not converted to a json', () => {
     // GIVEN
     const incorrectJson = 'something'
 
@@ -14,7 +14,7 @@ describe('convert a string to json', () => {
       .toThrow(BadRequestException)
   })
 
-  it('should return a valid json', () => {
+  it('returns a valid json', () => {
     // GIVEN
     const correctString = '{"juridictionName": "my title"}'
     const correctJson = { juridictionName: 'my title' }

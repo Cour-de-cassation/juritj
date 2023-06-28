@@ -9,25 +9,21 @@ jest.mock('../index', () => ({
   }
 }))
 
-describe('filter date function', () => {
-  const mockDateDecision = new Date()
-  const mockPastDateDecision = new Date(
-    mockDateDecision.getFullYear() - 1,
-    mockDateDecision.getMonth(),
-    mockDateDecision.getDate()
-  )
-  const mockFutureDateDecision = new Date(
-    mockDateDecision.getFullYear() + 1,
-    mockDateDecision.getMonth(),
-    mockDateDecision.getDate()
-  )
+describe('updateLabelStatusIfDateDecisionIsInFuture', () => {
+  const dateNow = new Date()
+  const dateInThePast = new Date(dateNow.getFullYear() - 1, dateNow.getMonth(), dateNow.getDate())
+  const dateInTheFuture = new Date(dateNow.getFullYear() + 1, dateNow.getMonth(), dateNow.getDate())
 
-  it('changes labelStatus to ignore when dateDecision is after dateCreation', () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('changes labelStatus to "ignore" when dateDecision is in the future compared to dateCreation', () => {
     // GIVEN
     const mockDecisionLabel = {
       ...new MockUtils().decisionLabelMock,
-      dateCreation: mockDateDecision.toISOString(),
-      dateDecision: mockFutureDateDecision.toISOString()
+      dateCreation: dateNow.toISOString(),
+      dateDecision: dateInTheFuture.toISOString()
     }
 
     const expectedDecision = { ...mockDecisionLabel, labelStatus: LabelStatus.TOIGNORE }
@@ -39,12 +35,12 @@ describe('filter date function', () => {
     expect(checkedMappedDecision).toEqual(expectedDecision)
   })
 
-  it('does not change labelStatus when dateDecision is before dateCreation', () => {
+  it('does not change labelStatus when dateDecision is in the past compared to dateCreation', () => {
     // GIVEN
     const mockDecisionLabel = {
       ...new MockUtils().decisionLabelMock,
-      dateCreation: mockDateDecision.toISOString(),
-      dateDecision: mockPastDateDecision.toISOString()
+      dateCreation: dateNow.toISOString(),
+      dateDecision: dateInThePast.toISOString()
     }
     const expectedDecision = mockDecisionLabel
 

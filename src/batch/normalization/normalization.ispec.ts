@@ -27,24 +27,34 @@ jest.mock('./index', () => ({
   }
 }))
 
-describe('Normalization integration tests', () => {
-  const mockUtils = new MockUtils()
-
+describe('Normalization', () => {
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
-  const fakeWithMandatoryMetadonnees = mockUtils.mandatoryMetadonneesDtoMock
+
+  const decisionIntegre = 'données de la décision intègre'
+  const mockUtils = new MockUtils()
+  const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
 
   beforeEach(() => {
     mockS3.reset()
     jest.resetAllMocks()
+
+    mockS3.on(PutObjectCommand).resolves({})
+    mockS3.on(DeleteObjectCommand).resolves({})
+
+    jest
+      .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
+      .mockResolvedValue(decisionIntegre)
   })
+
   describe('Success Cases', () => {
-    it('when no decisions are present returns an empty list', async () => {
+    it('returns an empty list when no decisions are present', async () => {
       // GIVEN
-      const expected = []
-      const s3ListContent = {
+      const emptyListFromS3 = {
         Contents: []
       }
-      mockS3.on(ListObjectsV2Command).resolves(s3ListContent)
+      mockS3.on(ListObjectsV2Command).resolves(emptyListFromS3)
+
+      const expected = []
 
       // WHEN
       const response = await normalizationJob()
@@ -53,42 +63,31 @@ describe('Normalization integration tests', () => {
       expect(response).toEqual(expected)
     })
 
-    it('when decisions are present returns a list of decisions normalized', async () => {
+    it('returns a list of normalized decisions when decisions are present', async () => {
       // GIVEN
-      const s3ListContent = {
+      const listWithOneElementFromS3 = {
         Contents: [{ Key: 'filename' }]
       }
-      const decisionFromS3 = {
-        decisionIntegre: 'some body from S3',
-        metadonnees: fakeWithMandatoryMetadonnees
-      }
+      mockS3.on(ListObjectsV2Command).resolves(listWithOneElementFromS3)
+
+      const decisionIdJuridiction = 'TJ00001'
+      mockS3.on(GetObjectCommand).resolves({
+        Body: createFakeDocument(decisionIntegre, metadonnees, decisionIdJuridiction)
+      })
+
+      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue({})
+
       const expected = [
         {
-          decisionNormalisee: decisionFromS3.decisionIntegre,
+          decisionNormalisee: decisionIntegre,
           metadonnees: {
-            ...decisionFromS3.metadonnees,
-            idDecision: 'TJ75011A01/1234520221121',
+            ...metadonnees,
+            idJuridiction: decisionIdJuridiction,
+            idDecision: decisionIdJuridiction + 'A01/1234520221121',
             labelStatus: LabelStatus.TOBETREATED
           }
         }
       ]
-
-      const stream = new Readable()
-      stream.push(JSON.stringify(decisionFromS3))
-      stream.push(null)
-      const sdkStream = sdkStreamMixin(stream)
-
-      mockS3.on(ListObjectsV2Command).resolves(s3ListContent)
-      mockS3.on(GetObjectCommand).resolves({
-        Body: sdkStream
-      })
-      mockS3.on(PutObjectCommand).resolves({})
-      mockS3.on(DeleteObjectCommand).resolves({})
-
-      jest
-        .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
-        .mockResolvedValue(decisionFromS3.decisionIntegre)
-      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue({})
 
       // WHEN
       const result = await normalizationJob()
@@ -99,22 +98,20 @@ describe('Normalization integration tests', () => {
 
     it('returns 3 normalized decisions when 3 decisions are available on S3 (restarts until all decisions from S3 are treated)', async () => {
       // GIVEN
-      // S3 will be called 3 times to return 2 + 1 decision filename
-      const twoDecisionsFromS3 = {
+      // S3 must be called 3 times to return 2 + 1 decision filename
+      const listWithTwoElementsFromS3 = {
         Contents: [{ Key: 'firstFilename' }, { Key: 'secondFilename' }]
       }
-      const oneDecisionFromS3 = {
+      const listWithOneElementFromS3 = {
         Contents: [{ Key: 'thirdFilename' }]
       }
       mockS3
         .on(ListObjectsV2Command)
-        .resolvesOnce(twoDecisionsFromS3)
-        .resolvesOnce(oneDecisionFromS3)
+        .resolvesOnce(listWithTwoElementsFromS3)
+        .resolvesOnce(listWithOneElementFromS3)
         .resolves({})
 
-      // S3 will be called 3 times to retrieve decisions content
-      const decisionIntegre = 'données de la décision intègre'
-      const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
+      // S3 must be called 3 times to retrieve decisions content
       const firstDecisionIdJuridiction = 'TJ00001'
       const secondDecisionIdJuridiction = 'TJ00002'
       const thirdDecisionIdJuridiction = 'TJ00003'
@@ -131,12 +128,6 @@ describe('Normalization integration tests', () => {
         })
         .resolves({})
 
-      mockS3.on(PutObjectCommand).resolves({})
-      mockS3.on(DeleteObjectCommand).resolves({})
-
-      jest
-        .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
-        .mockResolvedValue(decisionIntegre)
       jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue({})
 
       const expected = [
@@ -178,10 +169,10 @@ describe('Normalization integration tests', () => {
     })
   })
 
-  describe('Fail Cases', () => {
-    it('when S3 is unavailable returns an exception', async () => {
+  describe('Failing Cases', () => {
+    it('returns an exception when S3 is unavailable', async () => {
       // GIVEN
-      mockS3.on(ListObjectsV2Command).rejects(new ServiceUnavailableException())
+      mockS3.on(ListObjectsV2Command).rejects(new Error())
 
       // WHEN
       expect(async () => await normalizationJob())
@@ -189,25 +180,18 @@ describe('Normalization integration tests', () => {
         .rejects.toThrow(ServiceUnavailableException)
     })
 
-    it('when S3 is available but dbSder API is unavailable returns an empty list', async () => {
+    it('returns an empty list when S3 is available but dbSder API is unavailable', async () => {
       // GIVEN
-      const s3ListContent = {
-        Contents: [{ Key: 'filename' }, { Key: 'filename2' }]
+      const listWithOneElementFromS3 = {
+        Contents: [{ Key: 'filename' }]
       }
-      const transformExpected = { decisionIntegre: 'some body from S3' }
-      const stream = new Readable()
-      stream.push(JSON.stringify(transformExpected))
-      stream.push(null)
-      const sdkStream = sdkStreamMixin(stream)
+      mockS3.on(ListObjectsV2Command).resolves(listWithOneElementFromS3)
 
-      mockS3.on(ListObjectsV2Command).resolves(s3ListContent)
+      const decisionIdJuridiction = 'TJ00001'
       mockS3.on(GetObjectCommand).resolves({
-        Body: sdkStream
+        Body: createFakeDocument(decisionIntegre, metadonnees, decisionIdJuridiction)
       })
 
-      jest
-        .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
-        .mockResolvedValue(Promise.resolve('content'))
       jest
         .spyOn(DbSderApiGateway.prototype, 'saveDecision')
         .mockRejectedValueOnce(new ServiceUnavailableException())

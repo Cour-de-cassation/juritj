@@ -4,9 +4,14 @@ import { fetchDecisionListFromS3 } from './fetchDecisionListFromS3'
 
 describe('fetchDecisionListFromS3', () => {
   const repository: DecisionS3Repository = new DecisionS3Repository(new Logger())
-  it('throws error if call to S3 failed', async () => {
+
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('throws error when call to S3 failed', async () => {
     jest.spyOn(repository, 'getDecisionList').mockImplementationOnce(() => {
-      throw new ServiceUnavailableException('Error from S3 API')
+      throw new Error()
     })
 
     expect(
@@ -17,12 +22,12 @@ describe('fetchDecisionListFromS3', () => {
       .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
   })
 
-  it('returns an empty list if no decisions are found', async () => {
+  it('returns an empty list when no decisions are found', async () => {
     // GIVEN
-    const expected = []
     jest.spyOn(repository, 'getDecisionList').mockImplementationOnce(() => {
       return Promise.resolve([])
     })
+    const expected = []
 
     expect(
       // WHEN
@@ -33,7 +38,6 @@ describe('fetchDecisionListFromS3', () => {
 
   it('return list of decisions from S3', async () => {
     // GIVEN
-    const expected = ['filename', 'filename2']
     jest.spyOn(repository, 'getDecisionList').mockImplementationOnce(() => {
       return Promise.resolve([
         {
@@ -44,6 +48,7 @@ describe('fetchDecisionListFromS3', () => {
         }
       ])
     })
+    const expected = ['filename', 'filename2']
 
     expect(
       // WHEN

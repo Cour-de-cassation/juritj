@@ -1,5 +1,5 @@
-import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { generateUniqueId } from './generateUniqueId'
+import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 
 jest.mock('../index', () => ({
   logger: {
@@ -8,10 +8,14 @@ jest.mock('../index', () => ({
   }
 }))
 
-const mockUtils = new MockUtils()
-const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
-
 describe('Generates a unique ID based on metadata', () => {
+  const mockUtils = new MockUtils()
+  const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
+
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
   it('adds a unique ID as a idDecision property to metadata when required properties are provided', () => {
     // GIVEN
     const someMetadonnees = { ...metadonnees }
@@ -32,6 +36,6 @@ describe('Generates a unique ID based on metadata', () => {
     // WHEN
     expect(() => generateUniqueId(metadonneesWithEmptyIdJuridiction))
       // THEN
-      .toThrow(Error)
+      .toThrow(new Error('Could not generate unique ID based on metadata.'))
   })
 })
