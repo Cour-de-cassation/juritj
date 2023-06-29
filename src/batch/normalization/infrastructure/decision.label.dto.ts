@@ -1,6 +1,6 @@
 import { LabelStatus } from '../../../shared/domain/enums'
-import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
 import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
+import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
 
 export class DecisionAnalyse {
   analyse: string[]

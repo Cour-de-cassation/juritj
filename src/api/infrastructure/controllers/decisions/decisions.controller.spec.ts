@@ -1,7 +1,7 @@
 import { Readable } from 'stream'
 import { isWordperfectFileType } from './decisions.controller'
 
-describe('Decision Controller - Unit tests', () => {
+describe('Decision Controller', () => {
   describe('isWordperfectFileType', () => {
     const file: Express.Multer.File = {
       buffer: Buffer.from('text'),
@@ -16,7 +16,7 @@ describe('Decision Controller - Unit tests', () => {
       stream: new Readable()
     }
 
-    it('returns false if the file does not have .wpd extension', () => {
+    it('returns false when the file does not have .wpd extension', () => {
       // GIVEN
       const wrongFile = { ...file, originalname: 'wrongFile.txt' }
       // WHEN
@@ -26,7 +26,7 @@ describe('Decision Controller - Unit tests', () => {
       expect(result).toEqual(false)
     })
 
-    it('returns false if the file does not have a valid wordperfect mimeType', () => {
+    it('returns false when the file does not have a valid wordperfect mimeType', () => {
       // GIVEN
       const wrongMimeTypeFile = {
         ...file,
@@ -41,7 +41,7 @@ describe('Decision Controller - Unit tests', () => {
       expect(result).toEqual(false)
     })
 
-    it('return true if the file is a wpd file and has the good mimetype', () => {
+    it('returns true when the file is a wpd file and has the good mimetype', () => {
       // GIVEN
       const validFile = {
         ...file,

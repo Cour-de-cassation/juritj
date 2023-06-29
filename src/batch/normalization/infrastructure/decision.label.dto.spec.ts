@@ -2,15 +2,8 @@ import { LabelStatus } from '../../../shared/domain/enums'
 import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { DecisionDTO, mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
 
-jest.mock('../index', () => ({
-  logger: {
-    log: jest.fn(),
-    error: jest.fn()
-  }
-}))
-
 describe('mapDecisionNormaliseeToDecisionLabel', () => {
-  it('returns the correct object', async () => {
+  it('returns an object mapping normalized decision to Label decision', async () => {
     // GIVEN
     const filename = 'test.json'
     const mockDecision = new MockUtils().toNormalizeDecisionMock

@@ -73,6 +73,11 @@ import * as nomDuFichier from '/chemin/du/fichier'
 jest.spyOn(nomDuFichier, 'methodeASpy')
 ```
 
+La rédaction de la documentation des tests prend la forme suivante : 
+```js
+it('returns XXX when YYY')
+```
+
 # IDE <a name="IDE">
 Le développement de ce projet est réalisé à l'aide de [VSCode](https://code.visualstudio.com/) avec les extensions suivantes :
  - ESLint

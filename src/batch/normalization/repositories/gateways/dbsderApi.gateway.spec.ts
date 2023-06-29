@@ -4,28 +4,28 @@ import {
   ServiceUnavailableException,
   UnauthorizedException
 } from '@nestjs/common'
+import axios from 'axios'
 import { DbSderApiGateway } from './dbsderApi.gateway'
 import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
-import axios from 'axios'
 
 jest.mock('../../index', () => ({
   logger: {
     log: jest.fn(),
     error: jest.fn()
-  },
-  normalizationContext: {
-    start: jest.fn(),
-    setCorrelationId: jest.fn()
   }
 }))
 jest.mock('axios')
-const mockedAxios = axios as jest.Mocked<typeof axios>
 
-describe('DbSderApi', () => {
+describe('DbSderApi Gateway', () => {
+  const mockedAxios = axios as jest.Mocked<typeof axios>
   const mockUtils = new MockUtils()
   const gateway = new DbSderApiGateway()
 
-  it('returns the decision saved if dbSder API is called with valid parameters', async () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('returns the saved decision when dbSder API is called with valid parameters', async () => {
     // GIVEN
     const decisionToSave = mockUtils.decisionLabelMock
     mockedAxios.post.mockResolvedValueOnce({ data: mockUtils.decisionLabelMock })
