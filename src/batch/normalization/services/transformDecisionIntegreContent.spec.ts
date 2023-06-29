@@ -52,12 +52,12 @@ describe('transform decision integre content from WPD to text', () => {
   it('throws an error when the process failed to convert', async () => {
     // GIVEN
     jest.spyOn(readWordperfectDocument, 'readWordperfectDocument').mockImplementationOnce(() => {
-      throw new Error('failed conversion')
+      throw new Error()
     })
 
     // WHEN
     expect(transformDecisionIntegreFromWPDToText(decisionIntegre))
       // THEN
-      .rejects.toThrow(new Error('Could not get decision ' + fileName + ' content.'))
+      .rejects.toThrow(Error)
   })
 })

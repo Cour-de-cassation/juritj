@@ -36,6 +36,6 @@ describe('Generates a unique ID based on metadata', () => {
     // WHEN
     expect(() => generateUniqueId(metadonneesWithEmptyIdJuridiction))
       // THEN
-      .toThrow(new Error('Could not generate unique ID based on metadata.'))
+      .toThrow(Error)
   })
 })

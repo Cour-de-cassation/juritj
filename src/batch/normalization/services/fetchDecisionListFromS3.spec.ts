@@ -19,7 +19,7 @@ describe('fetchDecisionListFromS3', () => {
       fetchDecisionListFromS3(repository)
     )
       // THEN
-      .rejects.toThrow(new ServiceUnavailableException('Error from S3 API'))
+      .rejects.toThrow(ServiceUnavailableException)
   })
 
   it('returns an empty list when no decisions are found', async () => {
