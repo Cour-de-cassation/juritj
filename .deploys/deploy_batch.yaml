@@ -20,18 +20,18 @@ spec:
           image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
           env:
             - name: S3_ACCESS_KEY
-              value: $JURITJ_S3_ACCESS_KEY
+              value: "${JURITJ_S3_ACCESS_KEY}"
             - name: S3_SECRET_KEY
-              value: $JURITJ_S3_SECRET_KEY
+              value: "${JURITJ_S3_SECRET_KEY}"
             - name: S3_URL
               value: "http://${DOLLAR}(BUCKET_SERVICE_SERVICE_HOST):${DOLLAR}(BUCKET_SERVICE_SERVICE_PORT)"
             - name: S3_REGION
-              value: $JURITJ_S3_REGION
+              value: "${JURITJ_S3_REGION}"
             - name: S3_BUCKET_NAME_RAW
-              value: $JURITJ_S3_BUCKET_NAME_RAW
+              value: "${JURITJ_S3_BUCKET_NAME_RAW}"
             - name: S3_BUCKET_NAME_NORMALIZED
-              value: $JURITJ_S3_BUCKET_NAME_NORMALIZED
+              value: "${JURITJ_S3_BUCKET_NAME_NORMALIZED}"
             - name: DBSDER_API_KEY
-              value: $JURITJ_DBSDER_API_KEY
+              value: "${JURITJ_DBSDER_API_KEY}"
             - name: DBSDER_API_URL
-              value: $JURITJ_DBSDER_API_URL
+              value: "${JURITJ_DBSDER_API_URL}"
