@@ -1,7 +1,14 @@
-import { Logger, ServiceUnavailableException } from '@nestjs/common'
+import { Logger } from '@nestjs/common'
 import { DecisionS3Repository } from '../../../shared/infrastructure/repositories/decisionS3.repository'
 import { fetchDecisionListFromS3 } from './fetchDecisionListFromS3'
+import { InfrastructureExpection } from '../../../shared/infrastructure/exceptions/infrastructure.exception'
 
+jest.mock('../index', () => ({
+  logger: {
+    log: jest.fn(),
+    error: jest.fn()
+  }
+}))
 describe('fetchDecisionListFromS3', () => {
   const repository: DecisionS3Repository = new DecisionS3Repository(new Logger())
 
@@ -19,7 +26,7 @@ describe('fetchDecisionListFromS3', () => {
       fetchDecisionListFromS3(repository)
     )
       // THEN
-      .rejects.toThrow(ServiceUnavailableException)
+      .rejects.toThrow(InfrastructureExpection)
   })
 
   it('returns an empty list when no decisions are found', async () => {

@@ -7,9 +7,10 @@ import {
   ListObjectsV2CommandInput,
   _Object
 } from '@aws-sdk/client-s3'
-import { LoggerService, ServiceUnavailableException } from '@nestjs/common'
+import { LoggerService } from '@nestjs/common'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 import { CollectDto } from '../dto/collect.dto'
+import { BucketError } from '../../domain/errors/bucket.error'
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3Client: S3Client
@@ -54,10 +55,9 @@ export class DecisionS3Repository implements DecisionRepository {
   async saveDecision(reqParams): Promise<void> {
     try {
       await this.s3Client.send(new PutObjectCommand(reqParams))
-      this.logger.log('S3 called successfully')
     } catch (error) {
-      this.logger.error(error + error.stack)
-      throw new ServiceUnavailableException('Error from S3 API')
+      this.logger.error(error)
+      throw new BucketError(error)
     }
   }
 
@@ -71,8 +71,8 @@ export class DecisionS3Repository implements DecisionRepository {
       await this.s3Client.send(new DeleteObjectCommand(reqParams))
       this.logger.log('S3 called successfully')
     } catch (error) {
-      this.logger.error(error + error.stack)
-      throw new ServiceUnavailableException('Error from S3 API')
+      this.logger.error(error)
+      throw new BucketError(error)
     }
   }
 
@@ -87,8 +87,8 @@ export class DecisionS3Repository implements DecisionRepository {
       const stringifiedDecision = await decisionFromS3.Body?.transformToString()
       return JSON.parse(stringifiedDecision)
     } catch (error) {
-      this.logger.error(error + error.stack)
-      throw new ServiceUnavailableException('Error from S3 API')
+      this.logger.error(error)
+      throw new BucketError(error)
     }
   }
 
@@ -108,8 +108,8 @@ export class DecisionS3Repository implements DecisionRepository {
       const decisionListFromS3 = await this.s3Client.send(new ListObjectsV2Command(reqParams))
       return decisionListFromS3.Contents ? decisionListFromS3.Contents : []
     } catch (error) {
-      this.logger.error(error + error.stack)
-      throw new ServiceUnavailableException('Error from S3 API')
+      this.logger.error(error)
+      throw new BucketError(error)
     }
   }
 }

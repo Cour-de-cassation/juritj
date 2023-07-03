@@ -1,15 +1,17 @@
-import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common'
+import { Injectable, PipeTransform } from '@nestjs/common'
+import { MissingFieldException } from '../exceptions/missingField.exception'
+import { BadFieldFormatException } from '../exceptions/badFieldFormat.exception'
 
 @Injectable()
 export class StringToJsonPipe implements PipeTransform {
   transform(value: string) {
     if (!value) {
-      throw new BadRequestException("Vous devez fournir le champ 'metadonnees'.")
+      throw new MissingFieldException('metadonnees')
     }
     try {
       return JSON.parse(value)
     } catch (error) {
-      throw new BadRequestException("Le format JSON du champ 'metadonnees' est invalide.")
+      throw new BadFieldFormatException('JSON', 'metadonnees')
     }
   }
 }
