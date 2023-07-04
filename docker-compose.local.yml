@@ -58,9 +58,6 @@ networks:
     external: true
 
 volumes:
-  mongo-storage:
-    driver: local
-    name: label-mongo-storage
   bucket-storage:
     driver: local
     name: juritj-bucket-storage
