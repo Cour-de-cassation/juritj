@@ -1,6 +1,7 @@
-import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common'
+import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common'
 import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
+import { BadPropertiesException } from '../exceptions/missingProperties.exception'
 
 @Injectable()
 export class ValidateDtoPipe implements PipeTransform {
@@ -12,11 +13,7 @@ export class ValidateDtoPipe implements PipeTransform {
     const errors: ValidationError[] = await validate(object)
     if (errors.length > 0) {
       const messages = errors.map((err) => this.findPropertyNameInErrorMessage(err.toString(false)))
-      throw new BadRequestException(
-        'Une ou plusieurs erreurs ont été trouvées sur les propriétés suivantes : ' +
-          messages.join(', ') +
-          '.'
-      )
+      throw new BadPropertiesException(messages.join(', '))
     }
     return value
   }

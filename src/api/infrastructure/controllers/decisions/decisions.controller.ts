@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   HttpCode,
@@ -29,6 +28,10 @@ import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
 import { DecisionS3Repository } from '../../../../shared/infrastructure/repositories/decisionS3.repository'
 import { CollectDto } from '../../../../shared/infrastructure/dto/collect.dto'
 import { MetadonneesDto } from '../../../../shared/infrastructure/dto/metadonnees.dto'
+import { BadFileFormatException } from '../../exceptions/badFileFormat.exception'
+import { BucketError } from '../../../../shared/domain/errors/bucket.error'
+import { InfrastructureExpection } from '../../../../shared/infrastructure/exceptions/infrastructure.exception'
+import { UnexpectedException } from '../../../../shared/infrastructure/exceptions/unexpected.exception'
 
 export interface CollecteDecisionResponse {
   filename: string | void
@@ -67,8 +70,7 @@ export class DecisionsController {
     @Req() request: Request
   ): Promise<CollecteDecisionResponse> {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
-      const errorMessage = "Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect."
-      throw new BadRequestException(errorMessage)
+      throw new BadFileFormatException()
     }
     const routePath = request.method + ' ' + request.path
 
@@ -76,13 +78,13 @@ export class DecisionsController {
     const filename = await decisionUseCase
       .execute(decisionIntegre, metadonneesDto)
       .catch((error) => {
-        this.logger.error(
-          routePath + ' returns ' + error.getStatus() + ': ' + error.response.message.toString()
-        )
-        throw error
+        this.logger.error(error.message)
+        if (error instanceof BucketError) {
+          throw new InfrastructureExpection(error.message)
+        }
+        throw new UnexpectedException(error)
       })
 
-    this.logger.log(filename + ' created in s3')
     this.logger.log(
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )

@@ -1,5 +1,6 @@
-import { ServiceUnavailableException } from '@nestjs/common'
 import { DecisionS3Repository } from '../../../shared/infrastructure/repositories/decisionS3.repository'
+import { InfrastructureExpection } from '../../../shared/infrastructure/exceptions/infrastructure.exception'
+import { logger } from '..'
 
 const MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE = 2
 
@@ -14,6 +15,7 @@ export async function fetchDecisionListFromS3(
     )
     return rawDecisionList.splice(0, rawDecisionList.length).map((decision) => decision.Key)
   } catch (error) {
-    throw new ServiceUnavailableException('Error from S3 API')
+    logger.error(error.message)
+    throw new InfrastructureExpection(error.message)
   }
 }

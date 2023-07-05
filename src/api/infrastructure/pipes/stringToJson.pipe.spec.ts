@@ -1,5 +1,5 @@
-import { BadRequestException } from '@nestjs/common'
 import { StringToJsonPipe } from './stringToJson.pipe'
+import { BadFieldFormatException } from '../exceptions/badFieldFormat.exception'
 
 describe('convert a string to json', () => {
   const target = new StringToJsonPipe()
@@ -11,7 +11,7 @@ describe('convert a string to json', () => {
     // WHEN
     expect(() => target.transform(incorrectJson))
       // THEN
-      .toThrow(BadRequestException)
+      .toThrow(BadFieldFormatException)
   })
 
   it('returns a valid json', () => {

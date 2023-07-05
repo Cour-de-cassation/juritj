@@ -9,12 +9,12 @@ import 'aws-sdk-client-mock-jest'
 import { AwsClientStub, mockClient } from 'aws-sdk-client-mock'
 import { normalizationJob } from './normalization'
 import { MockUtils } from '../../shared/infrastructure/utils/mock.utils'
-import { ServiceUnavailableException } from '@nestjs/common'
 import { Readable } from 'stream'
 import { sdkStreamMixin } from '@aws-sdk/util-stream'
 import * as transformDecisionIntegreFromWPDToText from './services/transformDecisionIntegreContent'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 import { LabelStatus } from '../../shared/domain/enums'
+import { InfrastructureExpection } from '../../shared/infrastructure/exceptions/infrastructure.exception'
 
 jest.mock('./index', () => ({
   logger: {
@@ -177,7 +177,7 @@ describe('Normalization', () => {
       // WHEN
       expect(async () => await normalizationJob())
         // THEN
-        .rejects.toThrow(ServiceUnavailableException)
+        .rejects.toThrow(InfrastructureExpection)
     })
 
     it('returns an empty list when S3 is available but dbSder API is unavailable', async () => {
@@ -192,9 +192,7 @@ describe('Normalization', () => {
         Body: createFakeDocument(decisionIntegre, metadonnees, decisionIdJuridiction)
       })
 
-      jest
-        .spyOn(DbSderApiGateway.prototype, 'saveDecision')
-        .mockRejectedValueOnce(new ServiceUnavailableException())
+      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockRejectedValueOnce(new Error())
 
       // WHEN
       const result = await normalizationJob()

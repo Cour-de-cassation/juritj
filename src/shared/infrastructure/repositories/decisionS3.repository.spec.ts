@@ -11,11 +11,11 @@ import 'aws-sdk-client-mock-jest'
 import { DecisionS3Repository } from './decisionS3.repository'
 import { Readable } from 'stream'
 import { Logger } from '@nestjs/common'
+import { BucketError } from '../../domain/errors/bucket.error'
 
 describe('DecisionS3Repository', () => {
   let repository: DecisionS3Repository
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
-  const S3ErrorMessage = 'Error from S3 API'
   const fakeBucketName = 'fake-bucket-name'
   const filename = 'test.wpd'
 
@@ -37,7 +37,7 @@ describe('DecisionS3Repository', () => {
         repository.saveDecision(requestS3DtoJson)
       )
         // THEN
-        .rejects.toThrow(S3ErrorMessage)
+        .rejects.toThrow(BucketError)
     })
 
     it('saves a normalized decision on S3', async () => {
@@ -85,7 +85,7 @@ describe('DecisionS3Repository', () => {
         repository.deleteDecision(filename, fakeBucketName)
       )
         // THEN
-        .rejects.toThrow(S3ErrorMessage)
+        .rejects.toThrow(BucketError)
     })
 
     it('deletes the decision on S3', async () => {
@@ -115,7 +115,7 @@ describe('DecisionS3Repository', () => {
         repository.getDecisionByFilename(filename)
       )
         // THEN
-        .rejects.toThrow(S3ErrorMessage)
+        .rejects.toThrow(BucketError)
     })
 
     it('returns the decision from s3', async () => {
@@ -150,7 +150,7 @@ describe('DecisionS3Repository', () => {
         repository.getDecisionList()
       )
         // THEN
-        .rejects.toThrow(S3ErrorMessage)
+        .rejects.toThrow(BucketError)
     })
 
     it('returns an empty list when S3 returns nothing', async () => {
