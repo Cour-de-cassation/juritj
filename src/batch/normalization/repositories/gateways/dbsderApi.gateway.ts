@@ -10,9 +10,11 @@ import { DecisionDTO } from '../../infrastructure/decision.label.dto'
 
 export class DbSderApiGateway {
   async saveDecision(decisionToSave: DecisionDTO) {
+    const urlToCall = process.env.DBSDER_API_URL + '/v1/decisions'
+
     const result = await axios
       .post(
-        process.env.DBSDER_API_URL + '/v1/decisions',
+        urlToCall,
         { decision: decisionToSave },
         {
           headers: {
