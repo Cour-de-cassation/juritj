@@ -8,10 +8,11 @@ import { CustomLogger } from '../shared/infrastructure/utils/customLogger.utils'
 import { HealthController } from './infrastructure/controllers/health/health.controller'
 import { DecisionsController } from './infrastructure/controllers/decisions/decisions.controller'
 import { BucketHealthIndicator } from './infrastructure/controllers/health/bucketHealthIndicator'
+import { envValidationConfig } from '../shared/infrastructure/dto/env.validation'
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot(envValidationConfig),
     HttpModule,
     TerminusModule.forRoot({
       logger: false
