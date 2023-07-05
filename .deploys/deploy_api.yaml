@@ -37,6 +37,10 @@ spec:
               value: "${JURITJ_S3_BUCKET_NAME_RAW}"
             - name: S3_BUCKET_NAME_NORMALIZED
               value: "${JURITJ_S3_BUCKET_NAME_NORMALIZED}"
+            - name: DBSDER_API_KEY
+              value: "${JURITJ_DBSDER_API_KEY}"
+            - name: DBSDER_API_URL
+              value: "${JURITJ_DBSDER_API_URL}"
             - name: NO_COLOR
               value: "${JURITJ_NO_COLOR}"
 
