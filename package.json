@@ -49,6 +49,7 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
+    "@aws-sdk/util-stream": "3.369.0",
     "@nestjs/cli": "10.1.8",
     "@nestjs/schematics": "10.0.1",
     "@nestjs/testing": "10.0.5",
