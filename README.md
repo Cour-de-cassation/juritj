@@ -80,6 +80,8 @@ DBSDER_API_URL=http://dbsder-api:3000
 DBSDER_API_KEY=normalization_api_key
 ```
 
+Un exemple de fichier `.env` est nommé `.env.example`
+
 ### Configuration des certificats
 
 Les certificats étant gérés par l'infrastructure, nous n'avons pas de configuration à effectuer en local. 
