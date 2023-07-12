@@ -5,7 +5,10 @@ export class CustomLogger extends ConsoleLogger {
   private readonly date = '[' + new Date().toISOString() + ']'
   private appName: string
 
-  constructor(private readonly requestContext: Context, appName: string) {
+  constructor(
+    private readonly requestContext: Context,
+    appName: string
+  ) {
     super()
     this.appName = '[' + appName + ']'
   }

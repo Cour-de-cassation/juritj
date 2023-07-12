@@ -16,6 +16,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "strictFunctionTypes": true // see: https://github.com/m-radzikowski/aws-sdk-client-mock/issues/167
   }
 }

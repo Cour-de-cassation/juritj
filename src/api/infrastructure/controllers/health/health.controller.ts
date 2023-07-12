@@ -4,7 +4,10 @@ import { BucketHealthIndicator } from './bucketHealthIndicator'
 
 @Controller('health')
 export class HealthController {
-  constructor(private health: HealthCheckService, private bucket: BucketHealthIndicator) {}
+  constructor(
+    private health: HealthCheckService,
+    private bucket: BucketHealthIndicator
+  ) {}
 
   @Get()
   @HealthCheck()
