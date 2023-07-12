@@ -1,6 +1,8 @@
 # Interface decisionType
 
-Cette interface représente de l'entité Decision dans notre base de données précédés des explication et des usages de celles-ci
+Cette interface représente de l'entité Decision dans notre base de données précédées des explications et des usages de celles-ci
+
+Le type est disponible via la librairie **decision-type** présent dans le **package.json**
 
 ```javascript
 class DecisionType {
