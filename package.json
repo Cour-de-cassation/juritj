@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@aws-sdk/util-stream": "3.369.0",
-    "@nestjs/cli": "10.1.8",
+    "@nestjs/cli": "10.1.9",
     "@nestjs/schematics": "10.0.1",
     "@nestjs/testing": "10.0.5",
     "@types/cron": "2.0.1",
