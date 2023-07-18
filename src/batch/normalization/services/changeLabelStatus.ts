@@ -1,6 +1,6 @@
 import { LabelStatus } from '../../../shared/domain/enums'
-import { DecisionDTO } from '../infrastructure/decision.label.dto'
 import { logger } from '../index'
+import { DecisionDTO } from 'dbsder-api-types/dist/dbsderApiTypes'
 
 export function updateLabelStatusIfDateDecisionIsInFuture(
   decisionLabelDTO: DecisionDTO

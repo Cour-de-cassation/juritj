@@ -1,5 +1,5 @@
-import { DecisionDTO } from '../../../batch/normalization/infrastructure/decision.label.dto'
 import { LabelStatus, Occultation, TypePartie } from '../../domain/enums'
+import { DecisionDTO } from 'dbsder-api-types/dist/dbsderApiTypes'
 
 export const TODAY = new Date().toISOString()
 
@@ -60,7 +60,7 @@ export class MockUtils {
   allAttributesMetadonneesDtoMock = {
     ...this.mandatoryMetadonneesDtoMock,
     parties: [this.partieDtoMock, this.partieDtoMock],
-    idDecision: this.uniqueDecisionId,
+    id: this.uniqueDecisionId,
     labelStatus: LabelStatus.TOBETREATED,
     numeroMesureInstruction: ['AZERTYUIOP'],
     decisionAssociee: this.decisionDtoMock,
@@ -120,7 +120,6 @@ export class MockUtils {
       target: '',
       title: []
     },
-    iddecision: '',
     decatt: [],
     publication: [],
     NAOCode: ''
