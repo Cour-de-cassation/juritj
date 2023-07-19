@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { logger } from '../../index'
-import { DecisionDTO } from 'dbsder-api-types/dist/dbsderApiTypes'
+import { DecisionDTO } from 'dbsder-api-types'
 
 export class DbSderApiGateway {
   async saveDecision(decisionToSave: DecisionDTO) {

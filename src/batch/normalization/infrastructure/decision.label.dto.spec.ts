@@ -1,6 +1,6 @@
 import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
-import { DecisionDTO, LabelStatus } from 'dbsder-api-types/dist/dbsderApiTypes'
+import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
 
 describe('mapDecisionNormaliseeToDecisionLabel', () => {
   it('returns an object mapping normalized decision to Label decision', async () => {

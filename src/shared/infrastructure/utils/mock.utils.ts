@@ -1,5 +1,5 @@
 import { LabelStatus, Occultation, TypePartie } from '../../domain/enums'
-import { DecisionDTO } from 'dbsder-api-types/dist/dbsderApiTypes'
+import { DecisionDTO } from 'dbsder-api-types'
 
 export const TODAY = new Date().toISOString()
 
