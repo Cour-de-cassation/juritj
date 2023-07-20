@@ -12,7 +12,7 @@ import { transformDecisionIntegreFromWPDToText } from './services/transformDecis
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { updateLabelStatusIfDateDecisionIsInFuture } from './services/changeLabelStatus'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
-import { LabelStatus } from 'dbsder-api-types/dist/dbsderApiTypes'
+import { LabelStatus } from 'dbsder-api-types'
 
 const dbSderApiGateway = new DbSderApiGateway()
 const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW

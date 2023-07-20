@@ -1,6 +1,6 @@
 import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
-import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
 import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
+import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
 
 export function mapDecisionNormaliseeToLabelDecision(
   decision: DecisionModel,
