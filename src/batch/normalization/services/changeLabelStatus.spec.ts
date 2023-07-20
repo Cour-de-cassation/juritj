@@ -1,6 +1,6 @@
-import { LabelStatus } from '../../../shared/domain/enums'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { updateLabelStatusIfDateDecisionIsInFuture } from './changeLabelStatus'
+import { LabelStatus } from 'dbsder-api-types'
 
 jest.mock('../index', () => ({
   logger: {

@@ -1,4 +1,5 @@
-import { LabelStatus, Occultation, QualitePartie, TypePartie } from './enums'
+import { Occultation, QualitePartie, TypePartie } from './enums'
+import { LabelStatus } from 'dbsder-api-types'
 
 export class President {
   fonction: string
