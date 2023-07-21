@@ -15,13 +15,6 @@ export enum QualitePartie {
   N = 'N'
 }
 
-export enum LabelStatus {
-  TOBETREATED = 'toBeTreated',
-  LOADED = 'loaded',
-  DONE = 'done',
-  TOIGNORE = 'toIgnore'
-}
-
 export enum Occultation {
   AUCUNE = 'aucune',
   CONFORME = 'conforme',

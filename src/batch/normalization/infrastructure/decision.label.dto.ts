@@ -1,171 +1,60 @@
-import { LabelStatus } from '../../../shared/domain/enums'
-import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
-
-export class DecisionAnalyse {
-  analyse: string[]
-
-  doctrine: string
-
-  link: string
-
-  reference: string[]
-
-  source: string
-
-  summary: string
-
-  target: string
-
-  title: string[]
-}
-
-export class DecisionDTO {
-  id: string
-
-  analysis: DecisionAnalyse
-
-  appeals: Array<string>
-
-  chamberId: string
-
-  chamberName: string
-
-  dateCreation?: string
-
-  dateDecision?: string
-
-  iddecision: string
-
-  decatt: number[]
-
-  jurisdictionCode: string
-
-  jurisdictionId: string
-
-  jurisdictionName: string
-
-  labelStatus: LabelStatus
-
-  labelTreatments: labelTreatmentsType
-
-  occultation: {
-    additionalTerms: string
-    categoriesToOmit: string[]
-  }
-
-  originalText: string
-
-  parties: Array<any>
-
-  pseudoStatus: string
-
-  pseudoText: string
-
-  pubCategory: string
-
-  publication: string[]
-
-  registerNumber: string
-
-  solution: string
-
-  sourceId: number
-
-  sourceName: string
-
-  zoning?: {
-    introduction_subzonage: {
-      publication: string[]
-    }
-  }
-
-  formation: string
-
-  blocOccultation: number
-
-  natureAffaireCivil?: string
-
-  natureAffairePenal: string
-
-  codeMatiereCivil?: string
-
-  NAOCode: string
-
-  NACCode?: string
-
-  endCaseCode?: string
-
-  filenameSource: string
-}
-
-type labelTreatmentsType = Array<{
-  annotations: Array<{
-    category: string
-    entityId: string
-    start: number
-    text: string
-  }>
-  source: string
-  order: number
-}>
+import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
+import { DecisionDTO, LabelStatus, Sources, TypePartie } from 'dbsder-api-types'
 
 export function mapDecisionNormaliseeToLabelDecision(
   decision: DecisionModel,
   decisionName: string
 ): DecisionDTO {
   return {
-    publication: [],
-    analysis: {
-      analyse: [''],
-      doctrine: '',
-      link: '',
-      reference: [],
-      source: '',
-      summary: '',
-      target: '',
-      title: ['test']
-    },
-    id: 'someId',
-    decatt: [1],
+    NACCode: decision.metadonnees.codeNAC,
+    NAOCode: '',
+    NPCode: '',
+    analysis: undefined,
     appeals: [],
-    iddecision: 'test',
-    NAOCode: 'NaoCode',
+    blocOccultation: 0,
     chamberId: 'null',
     chamberName: 'null',
+    codeMatiereCivil: '',
     dateCreation: TODAY,
     dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
+    decatt: [1],
+    endCaseCode: '',
+    formation: '',
+    id: 'someId',
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,
     jurisdictionName: decision.metadonnees.nomJuridiction,
-    labelStatus: decision.metadonnees.labelStatus,
-    labelTreatments: null,
+    labelStatus: LabelStatus.TOBETREATED,
+    natureAffaireCivil: decision.metadonnees.libelleNature,
+    natureAffairePenal: 'null',
     occultation: {
       additionalTerms: decision.metadonnees.occultationComplementaire,
       categoriesToOmit: []
     },
     originalText: decision.decision,
-    parties: decision.metadonnees.parties,
-    pseudoStatus: null,
-    pseudoText: null,
-    pubCategory: null,
+    pseudoStatus: '',
+    pseudoText: '',
+    public: false,
+    publication: [],
     registerNumber: decision.metadonnees.numeroRegistre,
-    solution: 'null',
+    solution: '',
     sourceId: 0,
-    sourceName: 'juriTJ',
-    zoning: {
-      introduction_subzonage: {
-        publication: []
+    sourceName: Sources.JURITJ,
+    zoning: undefined,
+    filenameSource: decisionName,
+    parties: [
+      {
+        nom: 'nom Partie',
+        type: TypePartie.PP
+      },
+      {
+        nom: 'nom Partie',
+        type: TypePartie.PP
       }
-    },
-    formation: 'null',
-    blocOccultation: 0,
-    natureAffaireCivil: decision.metadonnees.libelleNature,
-    natureAffairePenal: 'null',
-    codeMatiereCivil: decision.metadonnees.codeNature,
-    NACCode: decision.metadonnees.codeNAC,
-    endCaseCode: null,
-    filenameSource: decisionName
+    ],
+    labelTreatments: null,
+    pubCategory: null
   }
 }
 

@@ -1,4 +1,5 @@
-import { LabelStatus, Occultation, QualitePartie, TypePartie } from './enums'
+import { Occultation, QualitePartie, TypePartie } from './enums'
+import { LabelStatus } from 'dbsder-api-types'
 
 export class President {
   fonction: string
@@ -53,6 +54,6 @@ export class Metadonnees {
 }
 
 export class MetadonneesNormalisee extends Metadonnees {
-  idDecision: string
+  idDecision?: string
   labelStatus: LabelStatus
 }

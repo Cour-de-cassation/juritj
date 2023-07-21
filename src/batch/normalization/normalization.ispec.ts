@@ -13,8 +13,8 @@ import { Readable } from 'stream'
 import { sdkStreamMixin } from '@aws-sdk/util-stream'
 import * as transformDecisionIntegreFromWPDToText from './services/transformDecisionIntegreContent'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
-import { LabelStatus } from '../../shared/domain/enums'
 import { InfrastructureExpection } from '../../shared/infrastructure/exceptions/infrastructure.exception'
+import { LabelStatus } from 'dbsder-api-types'
 
 jest.mock('./index', () => ({
   logger: {
