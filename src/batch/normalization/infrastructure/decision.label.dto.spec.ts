@@ -17,7 +17,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       chamberName: 'null',
       codeMatiereCivil: '',
       dateCreation: TODAY,
-      dateDecision: '2022-11-20T23:00:00.000Z',
+      dateDecision: new Date(2022, 11 - 1, 21).toISOString(),
       decatt: [1],
       filenameSource: 'test.json',
       formation: '',
