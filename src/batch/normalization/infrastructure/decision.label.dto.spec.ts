@@ -1,6 +1,6 @@
 import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
-import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
+import { DecisionDTO, LabelStatus, Sources, TypePartie } from 'dbsder-api-types'
 
 describe('mapDecisionNormaliseeToDecisionLabel', () => {
   it('returns an object mapping normalized decision to Label decision', async () => {
@@ -9,13 +9,13 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     const mockDecision = new MockUtils().toNormalizeDecisionMock
     const expectedDecisionLabel: DecisionDTO = {
       NACCode: '88F',
-      NAOCode: 'NaoCode',
+      NAOCode: '',
       analysis: undefined,
       appeals: [],
       blocOccultation: 0,
       chamberId: 'null',
       chamberName: 'null',
-      codeMatiereCivil: '6C',
+      codeMatiereCivil: '',
       dateCreation: TODAY,
       dateDecision: '2022-11-20T23:00:00.000Z',
       decatt: [1],
@@ -38,21 +38,21 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       parties: [
         {
           nom: 'nom Partie',
-          type: 'PP'
+          type: TypePartie.PP
         },
         {
           nom: 'nom Partie',
-          type: 'PP'
+          type: TypePartie.PP
         }
       ],
-      pseudoStatus: null,
-      pseudoText: null,
+      pseudoStatus: '',
+      pseudoText: '',
       pubCategory: null,
       publication: [],
       registerNumber: 'A',
       solution: '',
       sourceId: 0,
-      sourceName: 'juriTJ'
+      sourceName: Sources.JURITJ
     }
 
     // WHEN

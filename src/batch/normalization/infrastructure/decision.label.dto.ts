@@ -1,6 +1,6 @@
 import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
 import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
-import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
+import { DecisionDTO, LabelStatus, Sources, TypePartie } from 'dbsder-api-types'
 
 export function mapDecisionNormaliseeToLabelDecision(
   decision: DecisionModel,
@@ -8,40 +8,53 @@ export function mapDecisionNormaliseeToLabelDecision(
 ): DecisionDTO {
   return {
     NACCode: decision.metadonnees.codeNAC,
-    NAOCode: 'NaoCode',
+    NAOCode: '',
+    NPCode: '',
     analysis: undefined,
     appeals: [],
     blocOccultation: 0,
     chamberId: 'null',
     chamberName: 'null',
+    codeMatiereCivil: '',
     dateCreation: TODAY,
     dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
     decatt: [1],
-    filenameSource: decisionName,
+    endCaseCode: '',
     formation: '',
     id: 'someId',
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,
     jurisdictionName: decision.metadonnees.nomJuridiction,
     labelStatus: LabelStatus.TOBETREATED,
-    labelTreatments: null,
     natureAffaireCivil: decision.metadonnees.libelleNature,
     natureAffairePenal: 'null',
-    codeMatiereCivil: decision.metadonnees.codeNature,
     occultation: {
       additionalTerms: decision.metadonnees.occultationComplementaire,
       categoriesToOmit: []
     },
     originalText: decision.decision,
-    parties: decision.metadonnees.parties,
-    pseudoStatus: null,
-    pseudoText: null,
-    pubCategory: null,
+    pseudoStatus: '',
+    pseudoText: '',
+    public: false,
     publication: [],
     registerNumber: decision.metadonnees.numeroRegistre,
     solution: '',
     sourceId: 0,
-    sourceName: 'juriTJ'
+    sourceName: Sources.JURITJ,
+    zoning: undefined,
+    filenameSource: decisionName,
+    parties: [
+      {
+        nom: 'nom Partie',
+        type: TypePartie.PP
+      },
+      {
+        nom: 'nom Partie',
+        type: TypePartie.PP
+      }
+    ],
+    labelTreatments: null,
+    pubCategory: null
   }
 }
 
