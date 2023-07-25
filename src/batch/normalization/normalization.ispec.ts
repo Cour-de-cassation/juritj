@@ -83,7 +83,7 @@ describe('Normalization', () => {
           metadonnees: {
             ...metadonnees,
             idJuridiction: decisionIdJuridiction,
-            idDecision: decisionIdJuridiction + 'A01/1234520221121',
+            id: decisionIdJuridiction + 'A01/1234520221121',
             labelStatus: LabelStatus.TOBETREATED
           }
         }
@@ -136,7 +136,7 @@ describe('Normalization', () => {
           metadonnees: {
             ...metadonnees,
             idJuridiction: firstDecisionIdJuridiction,
-            idDecision: firstDecisionIdJuridiction + 'A01/1234520221121',
+            id: firstDecisionIdJuridiction + 'A01/1234520221121',
             labelStatus: LabelStatus.TOBETREATED
           }
         },
@@ -145,7 +145,7 @@ describe('Normalization', () => {
           metadonnees: {
             ...metadonnees,
             idJuridiction: secondDecisionIdJuridiction,
-            idDecision: secondDecisionIdJuridiction + 'A01/1234520221121',
+            id: secondDecisionIdJuridiction + 'A01/1234520221121',
             labelStatus: LabelStatus.TOBETREATED
           }
         },
@@ -154,7 +154,7 @@ describe('Normalization', () => {
           metadonnees: {
             ...metadonnees,
             idJuridiction: thirdDecisionIdJuridiction,
-            idDecision: thirdDecisionIdJuridiction + 'A01/1234520221121',
+            id: thirdDecisionIdJuridiction + 'A01/1234520221121',
             labelStatus: LabelStatus.TOBETREATED
           }
         }
