@@ -45,7 +45,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
 
         const transformedMetadonnees: MetadonneesNormalisee = {
-          id: id,
+          id,
           labelStatus: LabelStatus.TOBETREATED,
           ...metadonnees
         }
