@@ -21,7 +21,7 @@ export function mapDecisionNormaliseeToLabelDecision(
     decatt: [1],
     endCaseCode: '',
     formation: '',
-    id: 'someId',
+    id: decision.metadonnees.id,
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,
     jurisdictionName: decision.metadonnees.nomJuridiction,
