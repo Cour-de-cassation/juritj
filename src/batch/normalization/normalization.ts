@@ -34,18 +34,18 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
 
         logger.log('Normalization job starting for decision ' + decisionFilename)
 
-        const id = generateUniqueId(metadonnees)
-        logger.log('Decision ID generated. Starting Wpd to text conversion ', id)
+        const _id = generateUniqueId(metadonnees)
+        logger.log('Decision ID generated. Starting Wpd to text conversion ', _id)
 
         const decisionContent = await transformDecisionIntegreFromWPDToText(
           decision.decisionIntegre
         )
-        logger.log('Decision conversion finished. Removing unnecessary characters', id)
+        logger.log('Decision conversion finished. Removing unnecessary characters', _id)
 
         const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
 
         const transformedMetadonnees: MetadonneesNormalisee = {
-          id,
+          _id,
           labelStatus: LabelStatus.TOBETREATED,
           ...metadonnees
         }
@@ -63,15 +63,15 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         const decisionToSaveDateChecked = updateLabelStatusIfDateDecisionIsInFuture(decisionToSave)
 
         await dbSderApiGateway.saveDecision(decisionToSaveDateChecked)
-        logger.log('Decision saved in database.', id)
+        logger.log('Decision saved in database.', _id)
 
         decision.metadonnees = transformedMetadonnees
         await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionFilename)
-        logger.log('Decision saved in normalized bucket. Deleting decision in raw bucket', id)
+        logger.log('Decision saved in normalized bucket. Deleting decision in raw bucket', _id)
 
         await s3Repository.deleteDecision(decisionFilename, bucketNameIntegre)
 
-        logger.log('Successful normalization of ' + decisionFilename, id)
+        logger.log('Successful normalization of ' + decisionFilename, _id)
         listConvertedDecision.push({
           metadonnees: transformedMetadonnees,
           decisionNormalisee: cleanedDecision

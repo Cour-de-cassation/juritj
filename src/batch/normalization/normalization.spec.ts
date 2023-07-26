@@ -70,7 +70,7 @@ describe('Normalization', () => {
         {
           metadonnees: {
             ...fakeWithMandatoryMetadonnees,
-            id: mockUtils.uniqueDecisionId,
+            _id: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
           },
           decisionNormalisee:
@@ -100,7 +100,7 @@ describe('Normalization', () => {
         {
           metadonnees: {
             ...fakeWithMandatoryMetadonnees,
-            id: mockUtils.uniqueDecisionId,
+            _id: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
           },
           decisionNormalisee: expectedDecision
@@ -136,7 +136,7 @@ describe('Normalization', () => {
         {
           metadonnees: {
             ...fakeWithMandatoryMetadonnees,
-            id: mockUtils.uniqueDecisionId,
+            _id: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
           },
           decisionNormalisee:
@@ -145,7 +145,7 @@ describe('Normalization', () => {
         {
           metadonnees: {
             ...fakeWithMandatoryMetadonnees,
-            id: mockUtils.uniqueDecisionId,
+            _id: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
           },
           decisionNormalisee:

@@ -54,6 +54,6 @@ export class Metadonnees {
 }
 
 export class MetadonneesNormalisee extends Metadonnees {
-  id?: string
+  _id?: string
   labelStatus: LabelStatus
 }
