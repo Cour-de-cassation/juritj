@@ -60,7 +60,7 @@ export class MockUtils {
   allAttributesMetadonneesDtoMock = {
     ...this.mandatoryMetadonneesDtoMock,
     parties: [this.partieDtoMock, this.partieDtoMock],
-    id: this.uniqueDecisionId,
+    _id: this.uniqueDecisionId,
     labelStatus: LabelStatus.TOBETREATED,
     numeroMesureInstruction: ['AZERTYUIOP'],
     decisionAssociee: this.decisionDtoMock,
@@ -109,7 +109,7 @@ export class MockUtils {
     NACCode: this.allAttributesMetadonneesDtoMock.codeNAC,
     endCaseCode: null,
     filenameSource: this.decisionName,
-    id: '',
+    _id: '',
     analysis: {
       analyse: [''],
       doctrine: 'string',
