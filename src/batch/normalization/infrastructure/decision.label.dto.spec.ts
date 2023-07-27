@@ -10,7 +10,16 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     const expectedDecisionLabel: DecisionDTO = {
       NACCode: '88F',
       NAOCode: '',
-      analysis: undefined,
+      analysis: {
+        analyse: [],
+        doctrine: '',
+        link: '',
+        reference: [],
+        source: '',
+        summary: '',
+        target: '',
+        title: []
+      },
       appeals: [],
       blocOccultation: 0,
       chamberId: 'null',

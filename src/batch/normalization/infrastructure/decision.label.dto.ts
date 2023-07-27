@@ -10,7 +10,16 @@ export function mapDecisionNormaliseeToLabelDecision(
     NACCode: decision.metadonnees.codeNAC,
     NAOCode: '',
     NPCode: '',
-    analysis: undefined,
+    analysis: {
+      analyse: [],
+      doctrine: '',
+      link: '',
+      reference: [],
+      source: '',
+      summary: '',
+      target: '',
+      title: []
+    },
     appeals: [],
     blocOccultation: 0,
     chamberId: 'null',
