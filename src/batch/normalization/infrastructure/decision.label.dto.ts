@@ -49,7 +49,7 @@ export function mapDecisionNormaliseeToLabelDecision(
     registerNumber: decision.metadonnees.numeroRegistre,
     solution: '',
     sourceId: 0,
-    sourceName: Sources.JURITJ,
+    sourceName: Sources.TJ,
     zoning: undefined,
     filenameSource: decisionName,
     parties: [

@@ -61,7 +61,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       registerNumber: 'A',
       solution: '',
       sourceId: 0,
-      sourceName: Sources.JURITJ
+      sourceName: Sources.TJ
     }
 
     // WHEN
