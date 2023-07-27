@@ -1,10 +1,8 @@
 {
 	"info": {
-		"_postman_id": "19e194ca-974e-4ade-a5e1-89675da4d91c",
+		"_postman_id": "b5e70b1e-0bd4-4ed3-8cda-d00fefd04b2d",
 		"name": "JuriTJ",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "13592912",
-		"_collection_link": "https://grey-spaceship-298416.postman.co/workspace/Judilibre~828b28c6-eaba-44c4-b963-f6155ff2c3e8/collection/13592912-19e194ca-974e-4ade-a5e1-89675da4d91c?action=share&creator=13592912&source=collection_link"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -24,7 +22,7 @@
 							"formdata": [
 								{
 									"key": "metadonnees",
-									"value": "{   \"idJuridiction\": \"TJ75011\",  \"nomJuridiction\": \"toto\", \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20221121\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"88F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": false,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true, \"analysis\": {\"analyse\": [], \"doctrine\": \"\", \"link\": \"\", \"reference\": [], \"source\": \"\", \"summary\": \"\", \"target\": \"\", \"title\": []}}",
+									"value": "{   \"idJuridiction\": \"TJ75011\",  \"nomJuridiction\": \"toto\", \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20221121\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"88F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": false,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
 									"type": "text"
 								},
 								{
