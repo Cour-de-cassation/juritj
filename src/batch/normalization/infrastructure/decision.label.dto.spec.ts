@@ -30,7 +30,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
       decatt: [1],
       filenameSource: 'test.json',
       formation: '',
-      _id: 'TJ75011A01/1234520221121',
+      _id: 'TJ75011A01-1234520221121',
       jurisdictionCode: undefined,
       jurisdictionId: 'TJ75011',
       jurisdictionName: 'Juridictions civiles de première instance',

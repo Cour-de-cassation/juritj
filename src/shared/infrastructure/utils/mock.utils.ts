@@ -5,8 +5,7 @@ export const TODAY = new Date().toISOString()
 
 export class MockUtils {
   // Shared context
-  uniqueDecisionId = `TJ75011A01/1234520221121`
-  uniqueDecisionIdWithoutNumeroMesureInstruction = `TJ75011A01/1234520221121`
+  uniqueDecisionId = `TJ75011A01-1234520221121`
 
   presidentDtoMock = {
     fonction: 'president',
