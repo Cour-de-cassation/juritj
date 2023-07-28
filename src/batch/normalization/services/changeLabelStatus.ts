@@ -24,3 +24,20 @@ export function updateLabelStatusIfDecisionIsNotPublic(decisionLabelDTO: Decisio
   }
   return decisionLabelDTO
 }
+
+export function updateLabelStatusIfDateDecisionIsOlderThan6Months(decisionLabelDTO: DecisionDTO) {
+  const dateNow = new Date()
+  const dateSixMonthsFromNow = new Date(
+    dateNow.getFullYear(),
+    dateNow.getMonth() - 6,
+    dateNow.getDate()
+  )
+  if (decisionLabelDTO.dateDecision > dateSixMonthsFromNow.toISOString()) {
+    return decisionLabelDTO
+  } else {
+    logger.error(
+      'Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ignored.'
+    )
+    return { ...decisionLabelDTO, labelStatus: LabelStatus.IGNORED_DATEDECISIONINCOHERENTE }
+  }
+}
