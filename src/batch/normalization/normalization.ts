@@ -10,7 +10,10 @@ import { DecisionModel } from '../../shared/infrastructure/repositories/decision
 import { mapDecisionNormaliseeToLabelDecision } from './infrastructure/decision.label.dto'
 import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
-import { updateLabelStatusIfDateDecisionIsInFuture } from './services/changeLabelStatus'
+import {
+  updateLabelStatusIfDateDecisionIsInFuture,
+  updateLabelStatusIfDecisionIsNotPublic
+} from './services/changeLabelStatus'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 import { LabelStatus } from 'dbsder-api-types'
 
@@ -59,10 +62,13 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           transformedDecision,
           decisionFilename
         )
+        let decisionChecked = updateLabelStatusIfDecisionIsNotPublic(decisionToSave)
 
-        const decisionToSaveDateChecked = updateLabelStatusIfDateDecisionIsInFuture(decisionToSave)
+        if (decisionChecked.labelStatus !== LabelStatus.IGNORED_DECISIONNONPUBLIQUE) {
+          decisionChecked = updateLabelStatusIfDateDecisionIsInFuture(decisionChecked)
+        }
 
-        await dbSderApiGateway.saveDecision(decisionToSaveDateChecked)
+        await dbSderApiGateway.saveDecision(decisionChecked)
         logger.log('Decision saved in database.', _id)
 
         decision.metadonnees = transformedMetadonnees

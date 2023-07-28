@@ -1,5 +1,8 @@
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
-import { updateLabelStatusIfDateDecisionIsInFuture } from './changeLabelStatus'
+import {
+  updateLabelStatusIfDateDecisionIsInFuture,
+  updateLabelStatusIfDecisionIsNotPublic
+} from './changeLabelStatus'
 import { LabelStatus } from 'dbsder-api-types'
 
 jest.mock('../index', () => ({
@@ -54,7 +57,27 @@ describe('updateLabelStatusIfDateDecisionIsInFuture', () => {
 describe('updateLabelStatusIfDecisionIsNotPublic', () => {
   it('changes labelStatus to ignored_decisionNonPublique when decision is not public', () => {
     // GIVEN
+    const expectedLabelStatus = LabelStatus.IGNORED_DECISIONNONPUBLIQUE
+    const mockDecisionLabel = {
+      ...new MockUtils().decisionLabelMock,
+      public: false
+    }
     // WHEN
+    const checkedMappedDecision = updateLabelStatusIfDecisionIsNotPublic(mockDecisionLabel)
     // THEN
+    expect(checkedMappedDecision.labelStatus).toEqual(expectedLabelStatus)
+  })
+
+  it('does not change labelStatus when decision is public', () => {
+    // GIVEN
+    const expectedLabelStatus = LabelStatus.TOBETREATED
+    const mockDecisionLabel = {
+      ...new MockUtils().decisionLabelMock,
+      public: true
+    }
+    // WHEN
+    const checkedMappedDecision = updateLabelStatusIfDecisionIsNotPublic(mockDecisionLabel)
+    // THEN
+    expect(checkedMappedDecision.labelStatus).toEqual(expectedLabelStatus)
   })
 })
