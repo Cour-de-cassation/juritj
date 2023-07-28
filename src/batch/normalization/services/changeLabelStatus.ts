@@ -16,3 +16,11 @@ export function updateLabelStatusIfDateDecisionIsInFuture(
     return { ...decisionLabelDTO, labelStatus: LabelStatus.TOIGNORE }
   }
 }
+
+export function updateLabelStatusIfDecisionIsNotPublic(decisionLabelDTO: DecisionDTO): DecisionDTO {
+  if (!decisionLabelDTO.public) {
+    logger.error('Decision is not public, changing LabelStatus to ignored_decisionNonPublique.')
+    return { ...decisionLabelDTO, labelStatus: LabelStatus.IGNORED_DECISIONNONPUBLIQUE }
+  }
+  return decisionLabelDTO
+}
