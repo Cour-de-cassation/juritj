@@ -11,7 +11,7 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
       metadonnees.numeroRoleGeneral +
       metadonnees.dateDecision
 
-    return uniqueId
+    return uniqueId.replaceAll('/', '-')
   } else {
     logger.error(
       'Could not generate unique ID based on metadata: ' +

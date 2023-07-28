@@ -16,7 +16,7 @@ describe('Generates a unique ID based on metadata', () => {
     jest.resetAllMocks()
   })
 
-  it('adds a unique ID property to metadata when required properties are provided', () => {
+  it('returns a unique ID without "/" character when required properties are provided', () => {
     // GIVEN
     const someMetadonnees = { ...metadonnees }
     const expected = mockUtils.uniqueDecisionId
@@ -26,6 +26,7 @@ describe('Generates a unique ID based on metadata', () => {
 
     // THEN
     expect(actual).toEqual(expected)
+    expect(actual).not.toContain('/')
   })
 
   it('throws an error when required properties are not provided', () => {
