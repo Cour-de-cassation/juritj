@@ -51,3 +51,10 @@ describe('updateLabelStatusIfDateDecisionIsInFuture', () => {
     expect(checkedMappedDecision).toEqual(expectedDecision)
   })
 })
+describe('updateLabelStatusIfDecisionIsNotPublic', () => {
+  it('changes labelStatus to ignored_decisionNonPublique when decision is not public', () => {
+    // GIVEN
+    // WHEN
+    // THEN
+  })
+})
