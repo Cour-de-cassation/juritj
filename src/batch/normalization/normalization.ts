@@ -10,7 +10,7 @@ import { DecisionModel } from '../../shared/infrastructure/repositories/decision
 import { mapDecisionNormaliseeToLabelDecision } from './infrastructure/decision.label.dto'
 import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
-import { updateLabelStatus } from './services/changeLabelStatus'
+import { computeLabelStatus } from './services/computeLabelStatus'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 import { LabelStatus } from 'dbsder-api-types'
 
@@ -59,7 +59,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           transformedDecision,
           decisionFilename
         )
-        decisionToSave.labelStatus = updateLabelStatus(decisionToSave)
+        decisionToSave.labelStatus = computeLabelStatus(decisionToSave)
 
         await dbSderApiGateway.saveDecision(decisionToSave)
         logger.log('Decision saved in database.', _id)
