@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   HttpStatus,
   ServiceUnavailableException,
   UnauthorizedException
@@ -73,6 +74,24 @@ describe('DbSderApi Gateway', () => {
     expect(async () => await gateway.saveDecision(decisionToSave))
       // THEN
       .rejects.toThrow(UnauthorizedException)
+  })
+
+  it('throws a 409 Conflict error when decision ID already exist in DBSDER API', async () => {
+    // GIVEN
+    const decisionToSave = mockUtils.decisionLabelMock
+    mockedAxios.post.mockRejectedValueOnce({
+      response: {
+        data: {
+          statusCode: HttpStatus.CONFLICT,
+          message: ''
+        }
+      }
+    })
+
+    // WHEN
+    expect(async () => await gateway.saveDecision(decisionToSave))
+      // THEN
+      .rejects.toThrow(ConflictException)
   })
 
   it('throws a 503 Unavailable error when dbSder API is unavailable', async () => {

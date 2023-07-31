@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   HttpStatus,
   ServiceUnavailableException,
   UnauthorizedException
@@ -32,6 +33,9 @@ export class DbSderApiGateway {
           } else if (error.response.data.statusCode === HttpStatus.UNAUTHORIZED) {
             logger.error(error.response.data.message)
             throw new UnauthorizedException('You are not authorized to call this route')
+          } else if (error.response.data.statusCode === HttpStatus.CONFLICT) {
+            logger.error(error.response.data.message)
+            throw new ConflictException('DbSderAPI error: ' + error.response.data.message)
           } else {
             logger.error(error.response.data.message)
           }
