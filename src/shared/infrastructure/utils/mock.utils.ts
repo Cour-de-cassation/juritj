@@ -42,7 +42,7 @@ export class MockUtils {
     libelleService: 'Libelle de service',
     codeDecision: '0aA',
     libelleCodeDecision: 'some libelle code decision',
-    codeNAC: '88F',
+    codeNAC: '11E',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
     codeNature: '6C',
     libelleNature: 'Autres demandes en matière de frais et dépens',
@@ -121,6 +121,7 @@ export class MockUtils {
     },
     decatt: [],
     publication: [],
-    NAOCode: ''
+    NAOCode: '',
+    public: true
   }
 }

@@ -22,6 +22,15 @@ export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
     )
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
+
+  // We don't check if NACCode is provided because it is a mandatory field for TJ decisions (but optional for DBSDER API)
+  if (!isDecisionFromTJTransmissibleToCC(decisionDto.NACCode)) {
+    logger.error(
+      'Decision can not be treated by Judilibre because NACCode is not in authorized NACCode list, changing LabelStatus to ignored_codeNACnonTransmisCC.'
+    )
+    return LabelStatus.IGNORED_CODE_NAC_NON_TRANSMIS_CC
+  }
+
   return decisionDto.labelStatus
 }
 
@@ -36,4 +45,60 @@ function isDecisionOlderThanSixMonths(dateCreation: Date, dateDecision: Date): b
     dateCreation.getMonth() - 6
   ).toISOString()
   return monthDecision < sixMonthsBeforeMonthCreation
+}
+
+function isDecisionFromTJTransmissibleToCC(codeNAC: string): boolean {
+  const codeNACListTransmissibleToCC = [
+    '11E',
+    '11F',
+    '22A',
+    '22B',
+    '22C',
+    '22D',
+    '22E',
+    '22F',
+    '22G',
+    '22H',
+    '22I',
+    '22J',
+    '22K',
+    '22L',
+    '22O',
+    '22P',
+    '33A',
+    '33B',
+    '33C',
+    '33D',
+    '33E',
+    '33F',
+    '448',
+    '449',
+    '44A',
+    '44B',
+    '44C',
+    '44D',
+    '44E',
+    '44F',
+    '44G',
+    '44H',
+    '44I',
+    '44J',
+    '44K',
+    '44L',
+    '558',
+    '559',
+    '55A',
+    '55B',
+    '55C',
+    '55D',
+    '55E',
+    '55F',
+    '55G',
+    '55H',
+    '55I',
+    '55J',
+    '55K',
+    '55L'
+  ]
+  return codeNACListTransmissibleToCC.includes(codeNAC)
 }

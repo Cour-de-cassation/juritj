@@ -1,6 +1,6 @@
 import { LabelStatus } from 'dbsder-api-types'
-import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { computeLabelStatus } from './computeLabelStatus'
+import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 
 jest.mock('../index', () => ({
   logger: {
@@ -38,8 +38,7 @@ describe('updateLabelStatus', () => {
       const mockDecisionLabel = {
         ...mockUtils.decisionLabelMock,
         dateDecision: dateSeptember2022.toISOString(),
-        dateCreation: dateMarch2023.toISOString(),
-        public: true
+        dateCreation: dateMarch2023.toISOString()
       }
       const expectedLabelStatus = LabelStatus.TOBETREATED
 
@@ -57,8 +56,22 @@ describe('updateLabelStatus', () => {
       const mockDecisionLabel = {
         ...mockUtils.decisionLabelMock,
         dateDecision: dateJanuary2023.toISOString(),
-        dateCreation: dateJuly2023.toISOString(),
-        public: true
+        dateCreation: dateJuly2023.toISOString()
+      }
+      const expectedLabelStatus = LabelStatus.TOBETREATED
+
+      // WHEN
+      mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+      // THEN
+      expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+    })
+
+    it(`when decision codeNAC is in transmissible CodeNAC list`, () => {
+      // GIVEN
+      const mockDecisionLabel = {
+        ...mockUtils.decisionLabelMock,
+        NACCode: '22B'
       }
       const expectedLabelStatus = LabelStatus.TOBETREATED
 
@@ -118,6 +131,21 @@ describe('updateLabelStatus', () => {
         public: false
       }
       const expectedLabelStatus = LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
+
+      // WHEN
+      mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+      // THEN
+      expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+    })
+
+    it('returns ignored_codeNACnonTransmisCC when codeNAC is not in the list of codeNAC that needs to be transmitted to CC', () => {
+      // GIVEN
+      const mockDecisionLabel = {
+        ...new MockUtils().decisionLabelMock,
+        NACCode: '32A'
+      }
+      const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_NON_TRANSMIS_CC
 
       // WHEN
       mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
