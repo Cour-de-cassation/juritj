@@ -82,7 +82,7 @@ describe('updateLabelStatus', () => {
           dateCreation: dateCreation.toISOString(),
           public: true
         }
-        const expectedLabelStatus = LabelStatus.IGNORED_DATEDECISIONINCOHERENTE
+        const expectedLabelStatus = LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
 
         // WHEN
         mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
@@ -101,7 +101,7 @@ describe('updateLabelStatus', () => {
           dateCreation: dateCreation.toISOString(),
           public: true
         }
-        const expectedLabelStatus = LabelStatus.IGNORED_DATEDECISIONINCOHERENTE
+        const expectedLabelStatus = LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
 
         // WHEN
         mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
@@ -117,7 +117,7 @@ describe('updateLabelStatus', () => {
         ...new MockUtils().decisionLabelMock,
         public: false
       }
-      const expectedLabelStatus = LabelStatus.IGNORED_DECISIONNONPUBLIQUE
+      const expectedLabelStatus = LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
 
       // WHEN
       mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)

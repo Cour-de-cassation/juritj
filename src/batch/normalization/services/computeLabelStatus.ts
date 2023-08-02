@@ -8,19 +8,19 @@ export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
     logger.error(
       'Incorrect date, dateDecision must be before dateCreation. Changing LabelStatus to ignored_dateDecisionIncoherente.'
     )
-    return LabelStatus.IGNORED_DATEDECISIONINCOHERENTE
+    return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
 
   if (decisionDto.public === false) {
     logger.error('Decision is not public, changing LabelStatus to ignored_decisionNonPublique.')
-    return LabelStatus.IGNORED_DECISIONNONPUBLIQUE
+    return LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
   }
 
   if (isDecisionOlderThanSixMonths(dateCreation, dateDecision)) {
     logger.error(
       'Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ignored_dateDecisionIncoherente.'
     )
-    return LabelStatus.IGNORED_DATEDECISIONINCOHERENTE
+    return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
   return decisionDto.labelStatus
 }
