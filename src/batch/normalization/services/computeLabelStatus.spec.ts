@@ -1,6 +1,7 @@
 import { LabelStatus } from 'dbsder-api-types'
 import { computeLabelStatus } from './computeLabelStatus'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
+import { codeNACListNotPublic, codeNACListPartiallyPublic } from '../infrastructure/codeNACList'
 
 jest.mock('../index', () => ({
   logger: {
@@ -71,7 +72,7 @@ describe('updateLabelStatus', () => {
       // GIVEN
       const mockDecisionLabel = {
         ...mockUtils.decisionLabelMock,
-        NACCode: '22B'
+        NACCode: '22H'
       }
       const expectedLabelStatus = LabelStatus.TOBETREATED
 
@@ -152,6 +153,59 @@ describe('updateLabelStatus', () => {
 
       // THEN
       expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+    })
+
+    describe('returns ignored_codeNACdeDecisionNonPublique', () => {
+      codeNACListNotPublic.forEach((codeNAC) => {
+        it(`when decision has ${codeNAC} NACCode indicating that the decision can not be public`, () => {
+          // GIVEN
+          const mockDecisionLabel = {
+            ...new MockUtils().decisionLabelMock,
+            NACCode: codeNAC
+          }
+          const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
+
+          // WHEN
+          mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+          // THEN
+          expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+        })
+      })
+
+      it('when decision has a transmissible NACCode that is also not public', () => {
+        // GIVEN
+        const mockDecisionLabel = {
+          ...new MockUtils().decisionLabelMock,
+          NACCode: '11E'
+        }
+        const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
+
+        // WHEN
+        mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+        // THEN
+        expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+      })
+    })
+
+    describe('returns ignored_codeNACdeDecisionPartiellementPublique', () => {
+      codeNACListPartiallyPublic.forEach((codeNAC) => {
+        it(`when decision has ${codeNAC} NACCode indicating that the decision is partially public`, () => {
+          // GIVEN
+          const mockDecisionLabel = {
+            ...new MockUtils().decisionLabelMock,
+            NACCode: codeNAC
+          }
+          const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_DECISION_PARTIELLEMENT_PUBLIQUE
+
+          // WHEN
+          mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+          // THEN
+          expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+        })
+      })
     })
   })
 })
