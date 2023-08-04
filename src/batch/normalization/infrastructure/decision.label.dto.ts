@@ -44,7 +44,7 @@ export function mapDecisionNormaliseeToLabelDecision(
     originalText: decision.decision,
     pseudoStatus: '',
     pseudoText: '',
-    public: decision.metadonnees.debatPublic,
+    public: decision.metadonnees.decisionPublique,
     publication: [],
     registerNumber: decision.metadonnees.numeroRegistre,
     solution: '',
