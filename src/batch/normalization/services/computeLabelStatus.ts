@@ -1,5 +1,6 @@
 import { logger } from '../index'
 import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
+import { codeNACListTransmissibleToCC } from '../infrastructure/codeNACList'
 
 export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
   const dateCreation = new Date(decisionDto.dateCreation)
@@ -22,6 +23,15 @@ export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
     )
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
+
+  // We don't check if NACCode is provided because it is a mandatory field for TJ decisions (but optional for DBSDER API)
+  if (!isDecisionFromTJTransmissibleToCC(decisionDto.NACCode)) {
+    logger.error(
+      'Decision can not be treated by Judilibre because NACCode is not in authorized NACCode list, changing LabelStatus to ignored_codeNACnonTransmisCC.'
+    )
+    return LabelStatus.IGNORED_CODE_NAC_NON_TRANSMIS_CC
+  }
+
   return decisionDto.labelStatus
 }
 
@@ -36,4 +46,8 @@ function isDecisionOlderThanSixMonths(dateCreation: Date, dateDecision: Date): b
     dateCreation.getMonth() - 6
   ).toISOString()
   return monthDecision < sixMonthsBeforeMonthCreation
+}
+
+function isDecisionFromTJTransmissibleToCC(codeNAC: string): boolean {
+  return codeNACListTransmissibleToCC.includes(codeNAC)
 }

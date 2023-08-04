@@ -8,7 +8,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     const filename = 'test.json'
     const mockDecision = new MockUtils().toNormalizeDecisionMock
     const expectedDecisionLabel: DecisionDTO = {
-      NACCode: '88F',
+      NACCode: '11E',
       NAOCode: '',
       analysis: {
         analyse: [],
