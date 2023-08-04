@@ -1,6 +1,10 @@
-import { logger } from '../index'
 import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
-import { codeNACListTransmissibleToCC } from '../infrastructure/codeNACList'
+import { logger } from '../index'
+import {
+  codeNACListNotPublic,
+  codeNACListPartiallyPublic,
+  codeNACListTransmissibleToCC
+} from '../infrastructure/codeNACList'
 
 export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
   const dateCreation = new Date(decisionDto.dateCreation)
@@ -25,6 +29,20 @@ export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
   }
 
   // We don't check if NACCode is provided because it is a mandatory field for TJ decisions (but optional for DBSDER API)
+  if (isDecisionPartiallyPublic(decisionDto.NACCode)) {
+    logger.error(
+      'Decision can not be treated by Judilibre because NACCode indicates that the decision is partially public, changing LabelStatus to ignored_codeNACdeDecisionPartiellementPublique.'
+    )
+    return LabelStatus.IGNORED_CODE_NAC_DECISION_PARTIELLEMENT_PUBLIQUE
+  }
+
+  if (isDecisionNotPublic(decisionDto.NACCode)) {
+    logger.error(
+      'Decision can not be treated by Judilibre because NACCode indicates that the decision can not be public, changing LabelStatus to ignored_codeNACdeDecisionNonPublique.'
+    )
+    return LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
+  }
+
   if (!isDecisionFromTJTransmissibleToCC(decisionDto.NACCode)) {
     logger.error(
       'Decision can not be treated by Judilibre because NACCode is not in authorized NACCode list, changing LabelStatus to ignored_codeNACnonTransmisCC.'
@@ -50,4 +68,12 @@ function isDecisionOlderThanSixMonths(dateCreation: Date, dateDecision: Date): b
 
 function isDecisionFromTJTransmissibleToCC(codeNAC: string): boolean {
   return codeNACListTransmissibleToCC.includes(codeNAC)
+}
+
+function isDecisionNotPublic(codeNAC: string): boolean {
+  return codeNACListNotPublic.includes(codeNAC)
+}
+
+function isDecisionPartiallyPublic(codeNAC: string): boolean {
+  return codeNACListPartiallyPublic.includes(codeNAC)
 }
