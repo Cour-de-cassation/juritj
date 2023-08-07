@@ -6,7 +6,7 @@ import {
   S3Client
 } from '@aws-sdk/client-s3'
 import { mockClient, AwsClientStub } from 'aws-sdk-client-mock'
-import { sdkStreamMixin } from '@aws-sdk/util-stream'
+import { sdkStreamMixin } from '@smithy/util-stream'
 import 'aws-sdk-client-mock-jest'
 import { DecisionS3Repository } from './decisionS3.repository'
 import { Readable } from 'stream'
