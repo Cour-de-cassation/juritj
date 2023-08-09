@@ -1,52 +1,73 @@
-import { ConsoleLogger } from '@nestjs/common'
 import { Context } from './context'
+import pino from 'pino'
+import { pinoConfig } from './pinoConfig.utils'
 
-export class CustomLogger extends ConsoleLogger {
-  private readonly date = '[' + new Date().toISOString() + ']'
-  private appName: string
+export class CustomLogger {
+  private logger: pino.Logger
+  private readonly requestContext?: Context
 
-  constructor(
-    private readonly requestContext: Context,
-    appName: string
-  ) {
-    super()
-    this.appName = '[' + appName + ']'
+  constructor(appName: string, requestContext?: Context) {
+    this.logger = pino({
+      ...pinoConfig.pinoHttp,
+      base: { appName: appName ? appName : 'JuriTJ' }
+    })
+    this.requestContext = requestContext
   }
 
-  error(message: string, decisionId?: string): void {
-    const prefix =
-      '[ERROR]' +
-      this.date +
-      formatDecisionIdInLog(decisionId) +
-      formatCorrelationIdInLog(this.requestContext) +
-      this.appName
-    super.error(prefix + ' ' + message)
+  error(operationName: string, message: string, data?: object): void {
+    const prefix = {
+      correlationId: this.formatCorrelationIdInLog(),
+      operationName: operationName,
+      data
+    }
+    this.logger.error(prefix, message)
   }
-  log(message: string, decisionId?: string): void {
-    const prefix =
-      '[LOG]' +
-      this.date +
-      formatDecisionIdInLog(decisionId) +
-      formatCorrelationIdInLog(this.requestContext) +
-      this.appName
-    super.log(prefix + ' ' + message)
-  }
-  warn(message: string, decisionId?: string): void {
-    const prefix =
-      '[WARN]' +
-      this.date +
-      formatDecisionIdInLog(decisionId) +
-      formatCorrelationIdInLog(this.requestContext) +
-      this.appName
-    super.warn(prefix + ' ' + message)
-  }
-}
 
-function formatCorrelationIdInLog(requestContext: Context): string {
-  const requestCorrelationId = requestContext.getCorrelationId()
-  return requestCorrelationId ? '[CorrelationId: ' + requestCorrelationId + ']' : ''
-}
+  log(operationName: string, message: string, data?: object): void {
+    const prefix = {
+      correlationId: this.formatCorrelationIdInLog(),
+      operationName: operationName,
+      data
+    }
+    this.logger.info(prefix, message)
+  }
 
-function formatDecisionIdInLog(id?: string): string {
-  return id ? '[' + id + ']' : ''
+  warn(operationName: string, message: string, data?: object): void {
+    const prefix = {
+      correlationId: this.formatCorrelationIdInLog(),
+      operationName: operationName,
+      data
+    }
+    this.logger.warn(prefix, message)
+  }
+
+  logHttp(operationName: string, req, message?: string, data?: object) {
+    this.logger.info(
+      {
+        operationName: operationName,
+        correlationId: req.headers['x-correlation-id'] ?? undefined,
+        data,
+        httpMethod: req.method,
+        path: req.url
+      },
+      message
+    )
+  }
+
+  errorHttp(operationName: string, req, message?: string, data?: object) {
+    this.logger.error(
+      {
+        operationName: operationName,
+        correlationId: req.headers['x-correlation-id'] ?? undefined,
+        data,
+        httpMethod: req.method,
+        path: req.url
+      },
+      message
+    )
+  }
+
+  formatCorrelationIdInLog(): string {
+    return this.requestContext?.getCorrelationId() ?? undefined
+  }
 }

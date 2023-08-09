@@ -56,7 +56,7 @@ export class DecisionS3Repository implements DecisionRepository {
     try {
       await this.s3Client.send(new PutObjectCommand(reqParams))
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error('saveDecision', error)
       throw new BucketError(error)
     }
   }
@@ -71,7 +71,7 @@ export class DecisionS3Repository implements DecisionRepository {
       await this.s3Client.send(new DeleteObjectCommand(reqParams))
       this.logger.log('S3 called successfully')
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error('deleteDecision', error)
       throw new BucketError(error)
     }
   }
@@ -87,7 +87,7 @@ export class DecisionS3Repository implements DecisionRepository {
       const stringifiedDecision = await decisionFromS3.Body?.transformToString()
       return JSON.parse(stringifiedDecision)
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error('getDecisionByFilename', error)
       throw new BucketError(error)
     }
   }
@@ -108,7 +108,7 @@ export class DecisionS3Repository implements DecisionRepository {
       const decisionListFromS3 = await this.s3Client.send(new ListObjectsV2Command(reqParams))
       return decisionListFromS3.Contents ? decisionListFromS3.Contents : []
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error('getDecisionList', error)
       throw new BucketError(error)
     }
   }

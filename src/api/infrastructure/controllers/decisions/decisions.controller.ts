@@ -7,8 +7,7 @@ import {
   Req,
   UploadedFile,
   UseInterceptors,
-  UsePipes,
-  Logger
+  UsePipes
 } from '@nestjs/common'
 import {
   ApiTags,
@@ -32,6 +31,7 @@ import { BadFileFormatException } from '../../exceptions/badFileFormat.exception
 import { BucketError } from '../../../../shared/domain/errors/bucket.error'
 import { InfrastructureExpection } from '../../../../shared/infrastructure/exceptions/infrastructure.exception'
 import { UnexpectedException } from '../../../../shared/infrastructure/exceptions/unexpected.exception'
+import { CustomLogger } from '../../../../shared/infrastructure/utils/customLogger.utils'
 
 export interface CollecteDecisionResponse {
   filename: string | void
@@ -41,7 +41,7 @@ export interface CollecteDecisionResponse {
 @ApiTags('Collect')
 @Controller('decisions')
 export class DecisionsController {
-  private readonly logger = new Logger()
+  private readonly logger = new CustomLogger('JuriTJ-Collect')
 
   @Post()
   @ApiConsumes('multipart/form-data')
@@ -78,14 +78,16 @@ export class DecisionsController {
     const filename = await decisionUseCase
       .execute(decisionIntegre, metadonneesDto)
       .catch((error) => {
-        this.logger.error(error.message)
+        this.logger.errorHttp('collectDecisions', request, error.message)
         if (error instanceof BucketError) {
           throw new InfrastructureExpection(error.message)
         }
         throw new UnexpectedException(error)
       })
 
-    this.logger.log(
+    this.logger.logHttp(
+      'collectDecisions',
+      request,
       routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
     )
     return { filename, body: 'Nous avons bien reçu la décision intègre et ses métadonnées.' }
