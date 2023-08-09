@@ -26,18 +26,18 @@ export class DbSderApiGateway {
       .catch((error) => {
         if (error.response) {
           if (error.response.data.statusCode === HttpStatus.BAD_REQUEST) {
-            logger.error(error.response.data.message)
+            logger.error('saveDecision', error.response.data.message, error.response.data)
             throw new BadRequestException(
               'DbSderAPI Bad request error : ' + error.response.data.message
             )
           } else if (error.response.data.statusCode === HttpStatus.UNAUTHORIZED) {
-            logger.error(error.response.data.message)
+            logger.error('saveDecision', error.response.data.message, error.response.data)
             throw new UnauthorizedException('You are not authorized to call this route')
           } else if (error.response.data.statusCode === HttpStatus.CONFLICT) {
-            logger.error(error.response.data.message)
+            logger.error('saveDecision', error.response.data.message, error.response.data)
             throw new ConflictException('DbSderAPI error: ' + error.response.data.message)
           } else {
-            logger.error(error.response.data.message)
+            logger.error('saveDecision', error.response.data.message, error.response.data)
           }
         }
         throw new ServiceUnavailableException('DbSder API is unavailable')

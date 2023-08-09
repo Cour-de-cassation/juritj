@@ -45,6 +45,8 @@
     "express-basic-auth": "1.2.1",
     "joi": "17.9.2",
     "reflect-metadata": "0.1.13",
+    "nestjs-pino": "3.3.0",
+    "pino-http": "8.3.3",
     "rimraf": "5.0.1",
     "rxjs": "7.8.1",
     "uuid": "9.0.0"

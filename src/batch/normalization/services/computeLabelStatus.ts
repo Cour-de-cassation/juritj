@@ -11,18 +11,23 @@ export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
   const dateDecision = new Date(decisionDto.dateDecision)
   if (isDecisionInTheFuture(dateCreation, dateDecision)) {
     logger.error(
+      'computeLabelStatus',
       'Incorrect date, dateDecision must be before dateCreation. Changing LabelStatus to ignored_dateDecisionIncoherente.'
     )
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
 
   if (decisionDto.public === false) {
-    logger.log('Decision is not public, changing LabelStatus to ignored_decisionNonPublique.')
+    logger.error(
+      'computeLabelStatus',
+      'Decision is not public, changing LabelStatus to ignored_decisionNonPublique.'
+    )
     return LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
   }
 
   if (isDecisionOlderThanSixMonths(dateCreation, dateDecision)) {
-    logger.log(
+    logger.error(
+      'computeLabelStatus',
       'Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ignored_dateDecisionIncoherente.'
     )
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
@@ -31,6 +36,7 @@ export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
   // We don't check if NACCode is provided because it is a mandatory field for TJ decisions (but optional for DBSDER API)
   if (isDecisionPartiallyPublic(decisionDto.NACCode)) {
     logger.log(
+      'computeLabelStatus',
       'Decision can not be treated by Judilibre because NACCode indicates that the decision is partially public, changing LabelStatus to ignored_codeNACdeDecisionPartiellementPublique.'
     )
     return LabelStatus.IGNORED_CODE_NAC_DECISION_PARTIELLEMENT_PUBLIQUE
@@ -38,13 +44,15 @@ export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
 
   if (isDecisionNotPublic(decisionDto.NACCode)) {
     logger.log(
+      'computeLabelStatus',
       'Decision can not be treated by Judilibre because NACCode indicates that the decision can not be public, changing LabelStatus to ignored_codeNACdeDecisionNonPublique.'
     )
     return LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
   }
 
   if (!isDecisionFromTJTransmissibleToCC(decisionDto.NACCode)) {
-    logger.log(
+    logger.error(
+      'computeLabelStatus',
       'Decision can not be treated by Judilibre because NACCode is not in authorized NACCode list, changing LabelStatus to ignored_codeNACnonTransmisCC.'
     )
     return LabelStatus.IGNORED_CODE_NAC_NON_TRANSMIS_CC

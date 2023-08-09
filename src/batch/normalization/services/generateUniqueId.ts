@@ -14,6 +14,7 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
     return uniqueId.replaceAll('/', '-')
   } else {
     logger.error(
+      'generateUniqueId',
       'Could not generate unique ID based on metadata: ' +
         JSON.stringify({
           idJuridiction: metadonnees.idJuridiction,
