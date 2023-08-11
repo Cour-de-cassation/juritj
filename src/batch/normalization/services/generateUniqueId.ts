@@ -13,16 +13,18 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
 
     return uniqueId.replaceAll('/', '-')
   } else {
-    logger.error(
-      'generateUniqueId',
-      'Could not generate unique ID based on metadata: ' +
+    logger.error({
+      operationName: 'generateUniqueId',
+      msg:
+        'Could not generate unique ID based on metadata: ' +
         JSON.stringify({
           idJuridiction: metadonnees.idJuridiction,
           numeroRegistre: metadonnees.numeroRegistre,
           numeroRoleGeneral: metadonnees.numeroRoleGeneral,
           dateDecision: metadonnees.dateDecision
         })
-    )
+    })
+
     throw new Error('Could not generate unique ID based on metadata.')
   }
 }

@@ -13,11 +13,14 @@ export async function readWordperfectDocument(filename: string) {
       const { stdout } = await execPromise('wpd2text ./' + filename)
       return stdout
     } catch (error) {
-      logger.error('readWordperfectDocument', 'Unable to execute the conversion command.')
+      logger.error({ operationName: 'readWordperfectDocument', msg: error.message, data: error })
       throw new Error(error)
     }
   } else {
-    logger.error('readWordperfectDocument', 'Unable to read Wordperfect document.')
+    logger.error({
+      operationName: 'readWordperfectDocument',
+      msg: 'Unable to read Wordperfect document.'
+    })
     throw new Error()
   }
 }
@@ -28,10 +31,10 @@ export async function getConversionCommandPath(commandName: string): Promise<str
       return response.stdout.replace(/\n/g, '')
     })
     .catch(() => {
-      logger.error(
-        'getConversionCommandPath',
-        'Unable to find the command to do the conversion... Skipping'
-      )
+      logger.error({
+        operationName: 'getConversionCommandPath',
+        msg: 'Unable to find the command to do the conversion... Skipping'
+      })
       throw new Error()
     })
 }

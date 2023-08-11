@@ -15,7 +15,7 @@ export async function fetchDecisionListFromS3(
     )
     return rawDecisionList.splice(0, rawDecisionList.length).map((decision) => decision.Key)
   } catch (error) {
-    logger.error('fetchDecisionListFromS3', error.message)
+    logger.error({ operationName: 'fetchDecisionListFromS3', msg: error.message })
     throw new InfrastructureExpection(error.message)
   }
 }

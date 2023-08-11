@@ -12,6 +12,7 @@ import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
 jest.mock('../../index', () => ({
   logger: {
     log: jest.fn(),
+    info: jest.fn(),
     error: jest.fn()
   }
 }))

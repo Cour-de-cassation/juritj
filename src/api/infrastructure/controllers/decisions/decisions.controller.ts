@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Logger,
   Post,
   Req,
   UploadedFile,
@@ -31,7 +32,7 @@ import { BadFileFormatException } from '../../exceptions/badFileFormat.exception
 import { BucketError } from '../../../../shared/domain/errors/bucket.error'
 import { InfrastructureExpection } from '../../../../shared/infrastructure/exceptions/infrastructure.exception'
 import { UnexpectedException } from '../../../../shared/infrastructure/exceptions/unexpected.exception'
-import { CustomLogger } from '../../../../shared/infrastructure/utils/customLogger.utils'
+import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.utils'
 
 export interface CollecteDecisionResponse {
   filename: string | void
@@ -41,7 +42,7 @@ export interface CollecteDecisionResponse {
 @ApiTags('Collect')
 @Controller('decisions')
 export class DecisionsController {
-  private readonly logger = new CustomLogger('JuriTJ-Collect')
+  private readonly logger = new Logger()
 
   @Post()
   @ApiConsumes('multipart/form-data')
@@ -75,21 +76,28 @@ export class DecisionsController {
     const routePath = request.method + ' ' + request.path
 
     const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository(this.logger))
+    const formatLogs: LogsFormat = {
+      operationName: 'collectDecisions',
+      httpMethod: request.method,
+      path: request.path,
+      msg: `Starting ${routePath}...`,
+      correlationId: request.headers['x-correlation-id']
+    }
     const filename = await decisionUseCase
       .execute(decisionIntegre, metadonneesDto)
       .catch((error) => {
-        this.logger.errorHttp('collectDecisions', request, error.message)
+        this.logger.error({ ...formatLogs, msg: error.message })
         if (error instanceof BucketError) {
           throw new InfrastructureExpection(error.message)
         }
         throw new UnexpectedException(error)
       })
 
-    this.logger.logHttp(
-      'collectDecisions',
-      request,
-      routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
-    )
+    this.logger.log({
+      ...formatLogs,
+      msg: routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
+    })
+
     return { filename, body: 'Nous avons bien reçu la décision intègre et ses métadonnées.' }
   }
 }

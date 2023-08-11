@@ -13,6 +13,7 @@ import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { computeLabelStatus } from './services/computeLabelStatus'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 import { LabelStatus } from 'dbsder-api-types'
+import { LogsFormat } from '../../shared/infrastructure/utils/logsFormat.utils'
 
 const dbSderApiGateway = new DbSderApiGateway()
 const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW
@@ -25,31 +26,32 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   normalizationContext.setCorrelationId(uuidv4())
 
   let decisionList = await fetchDecisionListFromS3(s3Repository)
+  const formatLogs: LogsFormat = {
+    operationName: 'normalizationJob',
+    msg: 'Starting normalization job...',
+    correlationId: normalizationContext.getCorrelationId()
+  }
+
   while (decisionList.length > 0) {
     for (const decisionFilename of decisionList) {
       try {
         const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionFilename)
 
         const metadonnees = decision.metadonnees
-
-        logger.log(
-          'normalizationJob',
-          'Normalization job starting for decision ' + decisionFilename
-        )
+        logger.info({ ...formatLogs, msg: 'Starting normalization of ' + decisionFilename })
 
         const _id = generateUniqueId(metadonnees)
-        logger.log('normalizationJob', 'Decision ID generated. Starting Wpd to text conversion ', {
-          decisionId: _id
-        })
+        logger.info({ ...formatLogs, msg: 'Generated unique id for decision', decisionId: _id })
 
         const decisionContent = await transformDecisionIntegreFromWPDToText(
           decision.decisionIntegre
         )
-        logger.log(
-          'normalizationJob',
-          'Decision conversion finished. Removing unnecessary characters',
-          { decisonId: _id }
-        )
+
+        logger.info({
+          ...formatLogs,
+          msg: 'Decision conversion finished. Removing unnecessary characters',
+          decisionId: _id
+        })
 
         const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
 
@@ -71,19 +73,22 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         decisionToSave.labelStatus = computeLabelStatus(decisionToSave)
 
         await dbSderApiGateway.saveDecision(decisionToSave)
-        logger.log('normalizationJob', 'Decision saved in database.', { decisionId: _id })
+        logger.info({ ...formatLogs, msg: 'Decision saved in database', decisionId: _id })
 
         decision.metadonnees = transformedMetadonnees
         await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionFilename)
-        logger.log(
-          'normalizationJob',
-          'Decision saved in normalized bucket. Deleting decision in raw bucket',
-          { decisionId: _id }
-        )
+
+        logger.info({
+          ...formatLogs,
+          msg: 'Decision saved in normalized bucket. Deleting decision in raw bucket',
+          decisionId: _id
+        })
 
         await s3Repository.deleteDecision(decisionFilename, bucketNameIntegre)
 
-        logger.log('normalizationJob', 'Successful normalization of ' + decisionFilename, {
+        logger.info({
+          ...formatLogs,
+          msg: 'Successful normalization of' + decisionFilename,
           decisionId: _id
         })
         listConvertedDecision.push({
@@ -91,11 +96,15 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           decisionNormalisee: cleanedDecision
         })
       } catch (error) {
-        logger.error('normalizationJob', error.message, error)
-        logger.error(
-          'normalizationJob',
-          'Failed to normalize the decision ' + decisionFilename + '.'
-        )
+        logger.error({
+          ...formatLogs,
+          msg: error.message,
+          data: error
+        })
+        logger.error({
+          ...formatLogs,
+          msg: 'Failed to normalize the decision ' + decisionFilename + '.'
+        })
         continue
       }
     }
@@ -104,7 +113,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   }
 
   if (listConvertedDecision.length == 0) {
-    logger.log('normalizationJob', 'No decisions found, will try again later.')
+    logger.info({ ...formatLogs, msg: 'No decision to normalize.' })
     return []
   }
 

@@ -5,6 +5,7 @@ import { transformDecisionIntegreFromWPDToText } from './transformDecisionIntegr
 jest.mock('../index', () => ({
   logger: {
     log: jest.fn(),
+    info: jest.fn(),
     error: jest.fn()
   }
 }))

@@ -7,16 +7,17 @@ import {
   ListObjectsV2CommandInput,
   _Object
 } from '@aws-sdk/client-s3'
-import { LoggerService } from '@nestjs/common'
+import { Logger } from '@nestjs/common'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 import { CollectDto } from '../dto/collect.dto'
 import { BucketError } from '../../domain/errors/bucket.error'
+import { PinoLogger } from 'nestjs-pino'
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3Client: S3Client
   private logger
 
-  constructor(logger: LoggerService, providedS3Client?: S3Client) {
+  constructor(logger: PinoLogger | Logger, providedS3Client?: S3Client) {
     if (providedS3Client) {
       this.s3Client = providedS3Client
     } else {
@@ -56,7 +57,7 @@ export class DecisionS3Repository implements DecisionRepository {
     try {
       await this.s3Client.send(new PutObjectCommand(reqParams))
     } catch (error) {
-      this.logger.error('saveDecision', error)
+      this.logger.error({ operationName: 'saveDecision', msg: error.message, data: error })
       throw new BucketError(error)
     }
   }
@@ -69,9 +70,8 @@ export class DecisionS3Repository implements DecisionRepository {
 
     try {
       await this.s3Client.send(new DeleteObjectCommand(reqParams))
-      this.logger.log('S3 called successfully')
     } catch (error) {
-      this.logger.error('deleteDecision', error)
+      this.logger.error({ operationName: 'deleteDecision', msg: error.message, data: error })
       throw new BucketError(error)
     }
   }
@@ -87,7 +87,7 @@ export class DecisionS3Repository implements DecisionRepository {
       const stringifiedDecision = await decisionFromS3.Body?.transformToString()
       return JSON.parse(stringifiedDecision)
     } catch (error) {
-      this.logger.error('getDecisionByFilename', error)
+      this.logger.error({ operationName: 'getDecisionByFilename', msg: error.message, data: error })
       throw new BucketError(error)
     }
   }
@@ -108,7 +108,7 @@ export class DecisionS3Repository implements DecisionRepository {
       const decisionListFromS3 = await this.s3Client.send(new ListObjectsV2Command(reqParams))
       return decisionListFromS3.Contents ? decisionListFromS3.Contents : []
     } catch (error) {
-      this.logger.error('getDecisionList', error)
+      this.logger.error({ operationName: 'getDecisionList', msg: error.message, data: error })
       throw new BucketError(error)
     }
   }
