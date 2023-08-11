@@ -6,11 +6,13 @@ import {
   codeNACListTransmissibleToCC
 } from '../infrastructure/codeNACList'
 import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
+import { normalizationFormatLogs } from '../normalization'
 
 export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
   const dateCreation = new Date(decisionDto.dateCreation)
   const dateDecision = new Date(decisionDto.dateDecision)
   const formatLogs: LogsFormat = {
+    ...normalizationFormatLogs,
     operationName: 'computeLabelStatus',
     msg: 'Starting computeLabelStatus...'
   }

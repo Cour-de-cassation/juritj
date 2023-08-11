@@ -14,9 +14,9 @@ const pinoPrettyConf = {
   }
 }
 
-export const pinoConfig = {
+export const normalizationPinoConfig = {
   pinoHttp: {
-    base: { appName: 'JuriTJ' },
+    base: { appName: 'JuriTJ-normalization' },
     formatters: {
       level: (label) => {
         return {
@@ -32,12 +32,6 @@ export const pinoConfig = {
     },
     transport: process.env.NODE_ENV === 'local' ? pinoPrettyConf : undefined
   }
-}
-
-export function getPinoConfigNormalization() {
-  const pinoConfigCopy = pinoConfig
-  pinoConfigCopy.pinoHttp.base.appName = 'JuriTJ-normalization'
-  return pinoConfigCopy
 }
 
 export const configureLoggerModule = (): DynamicModule =>
@@ -60,7 +54,6 @@ export const configureLoggerModule = (): DynamicModule =>
       transport: process.env.NODE_ENV === 'local' ? pinoPrettyConf : undefined,
       genReqId: (request: IncomingMessage, response: ServerResponse): ReqId => {
         const correlationId = request.headers['x-correlation-id'] ?? uuid.v4()
-        console.log({ correlationId })
         request.headers['x-correlation-id'] = correlationId
         response.setHeader('x-correlation-id', correlationId)
         return correlationId

@@ -9,6 +9,7 @@ import axios from 'axios'
 import { logger } from '../../index'
 import { DecisionDTO } from 'dbsder-api-types'
 import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.utils'
+import { normalizationFormatLogs } from '../../normalization'
 
 export class DbSderApiGateway {
   async saveDecision(decisionToSave: DecisionDTO) {
@@ -26,6 +27,7 @@ export class DbSderApiGateway {
       )
       .catch((error) => {
         const formatLogs: LogsFormat = {
+          ...normalizationFormatLogs,
           operationName: 'saveDecision',
           msg: 'Error while calling DbSder API'
         }

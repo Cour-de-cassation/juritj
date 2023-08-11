@@ -2,6 +2,8 @@ import { existsSync } from 'fs'
 import { promisify } from 'util'
 import { exec } from 'child_process'
 import { logger } from '../index'
+import { normalizationFormatLogs } from '../normalization'
+import { LogsFormat } from 'src/shared/infrastructure/utils/logsFormat.utils'
 
 const execPromise = promisify(exec)
 const CONVERSION_COMMAND = 'wpd2text'
@@ -17,10 +19,12 @@ export async function readWordperfectDocument(filename: string) {
       throw new Error(error)
     }
   } else {
-    logger.error({
+    const formatLogs: LogsFormat = {
+      ...normalizationFormatLogs,
       operationName: 'readWordperfectDocument',
       msg: 'Unable to read Wordperfect document.'
-    })
+    }
+    logger.error(formatLogs)
     throw new Error()
   }
 }

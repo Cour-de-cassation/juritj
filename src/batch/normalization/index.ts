@@ -1,15 +1,13 @@
 import { CronJob } from 'cron'
 import { PinoLogger } from 'nestjs-pino'
-import { Context } from '../../shared/infrastructure/utils/context'
 import { normalizationJob } from './normalization'
-import { getPinoConfigNormalization } from '../../shared/infrastructure/utils/pinoConfig.utils'
 import { LogsFormat } from '../../shared/infrastructure/utils/logsFormat.utils'
+import { normalizationPinoConfig } from '../../shared/infrastructure/utils/pinoConfig.utils'
 
 const EXIT_ERROR_CODE = 1
 const CRON_EVERY_HOUR = '0 * * * *'
 
-export const normalizationContext = new Context()
-export const logger = new PinoLogger(getPinoConfigNormalization())
+export const logger = new PinoLogger(normalizationPinoConfig)
 
 async function startNormalization() {
   try {

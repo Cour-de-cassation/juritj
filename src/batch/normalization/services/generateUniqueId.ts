@@ -1,5 +1,7 @@
 import { logger } from '../index'
 import { MetadonneesDto } from '../../../shared/infrastructure/dto/metadonnees.dto'
+import { normalizationFormatLogs } from '../normalization'
+import { LogsFormat } from 'src/shared/infrastructure/utils/logsFormat.utils'
 
 const requiredKeys = ['idJuridiction', 'numeroRegistre', 'numeroRoleGeneral', 'dateDecision']
 
@@ -13,7 +15,8 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
 
     return uniqueId.replaceAll('/', '-')
   } else {
-    logger.error({
+    const formatLogs: LogsFormat = {
+      ...normalizationFormatLogs,
       operationName: 'generateUniqueId',
       msg:
         'Could not generate unique ID based on metadata: ' +
@@ -23,7 +26,8 @@ export function generateUniqueId(metadonnees: MetadonneesDto): string {
           numeroRoleGeneral: metadonnees.numeroRoleGeneral,
           dateDecision: metadonnees.dateDecision
         })
-    })
+    }
+    logger.error(formatLogs)
 
     throw new Error('Could not generate unique ID based on metadata.')
   }

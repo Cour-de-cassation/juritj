@@ -8,10 +8,10 @@ import {
   _Object
 } from '@aws-sdk/client-s3'
 import { Logger } from '@nestjs/common'
-import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
+import { PinoLogger } from 'nestjs-pino'
 import { CollectDto } from '../dto/collect.dto'
 import { BucketError } from '../../domain/errors/bucket.error'
-import { PinoLogger } from 'nestjs-pino'
+import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3Client: S3Client
