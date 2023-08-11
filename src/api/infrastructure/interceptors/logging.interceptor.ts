@@ -15,7 +15,8 @@ export class LoggingInterceptor implements NestInterceptor {
       operationName: 'intercept',
       msg: routePath + ' received with ' + file + '.',
       httpMethod: request.method,
-      path: request.path
+      path: request.path,
+      correlationId: request.headers['x-correlation-id']
     }
 
     this.logger.log(formatLogs)
