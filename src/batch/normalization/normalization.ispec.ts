@@ -21,11 +21,6 @@ jest.mock('./index', () => ({
     log: jest.fn(),
     info: jest.fn(),
     error: jest.fn()
-  },
-  normalizationContext: {
-    start: jest.fn(),
-    setCorrelationId: jest.fn(),
-    getCorrelationId: jest.fn()
   }
 }))
 
