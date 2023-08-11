@@ -19,6 +19,8 @@ const dbSderApiGateway = new DbSderApiGateway()
 const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW
 
 // WARNING : using normalizationFormatLogs as a global variable to provide correlationId and decisionId in all services
+// Replace operationName and msg when using it outside of normalizationJob
+// correlationId and decisionId are provided for each normalized decision 
 export const normalizationFormatLogs: LogsFormat = {
   operationName: 'normalizationJob',
   msg: 'Starting normalization job...'
