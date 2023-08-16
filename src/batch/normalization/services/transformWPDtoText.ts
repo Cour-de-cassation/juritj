@@ -1,8 +1,7 @@
 import { existsSync } from 'fs'
 import { promisify } from 'util'
 import { exec } from 'child_process'
-import { logger } from '../index'
-import { normalizationFormatLogs } from '../normalization'
+import { logger, normalizationFormatLogs } from '../index'
 import { LogsFormat } from 'src/shared/infrastructure/utils/logsFormat.utils'
 
 const execPromise = promisify(exec)
@@ -11,7 +10,7 @@ const CONVERSION_COMMAND = 'wpd2text'
 export async function readWordperfectDocument(filename: string) {
   const formatLogs: LogsFormat = {
     ...normalizationFormatLogs,
-    operationName: 'readWordperfectDocument',
+    operationName: 'readWordperfectDocument'
   }
   const cmdPath = await getConversionCommandPath(CONVERSION_COMMAND)
   if (cmdPath && existsSync(filename)) {
@@ -19,10 +18,10 @@ export async function readWordperfectDocument(filename: string) {
       const { stdout } = await execPromise('wpd2text ./' + filename)
       return stdout
     } catch (error) {
-      logger.error({ 
-        ...formatLogs, 
-        msg: error.message, 
-        data: error 
+      logger.error({
+        ...formatLogs,
+        msg: error.message,
+        data: error
       })
       throw new Error(error)
     }

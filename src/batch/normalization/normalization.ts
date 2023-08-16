@@ -13,18 +13,10 @@ import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { computeLabelStatus } from './services/computeLabelStatus'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 import { LabelStatus } from 'dbsder-api-types'
-import { LogsFormat } from '../../shared/infrastructure/utils/logsFormat.utils'
+import { normalizationFormatLogs } from './index'
 
 const dbSderApiGateway = new DbSderApiGateway()
 const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW
-
-// WARNING : using normalizationFormatLogs as a global variable to provide correlationId and decisionId in all services
-// Replace operationName and msg when using it outside of normalizationJob
-// correlationId and decisionId are provided for each normalized decision 
-export const normalizationFormatLogs: LogsFormat = {
-  operationName: 'normalizationJob',
-  msg: 'Starting normalization job...'
-}
 
 export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonneesDto[]> {
   const listConvertedDecision: ConvertedDecisionWithMetadonneesDto[] = []

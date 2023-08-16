@@ -1,7 +1,6 @@
 import { DecisionS3Repository } from '../../../shared/infrastructure/repositories/decisionS3.repository'
 import { InfrastructureExpection } from '../../../shared/infrastructure/exceptions/infrastructure.exception'
-import { logger } from '..'
-import { normalizationFormatLogs } from '../normalization'
+import { logger, normalizationFormatLogs } from '..'
 import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
 
 const MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE = 2

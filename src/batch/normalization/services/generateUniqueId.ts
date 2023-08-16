@@ -1,6 +1,6 @@
 import { logger } from '../index'
 import { MetadonneesDto } from '../../../shared/infrastructure/dto/metadonnees.dto'
-import { normalizationFormatLogs } from '../normalization'
+import { normalizationFormatLogs } from '../index'
 import { LogsFormat } from 'src/shared/infrastructure/utils/logsFormat.utils'
 
 const requiredKeys = ['idJuridiction', 'numeroRegistre', 'numeroRoleGeneral', 'dateDecision']

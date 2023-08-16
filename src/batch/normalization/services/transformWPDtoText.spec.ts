@@ -5,6 +5,10 @@ jest.mock('../../normalization/index', () => ({
     log: jest.fn(),
     info: jest.fn(),
     error: jest.fn()
+  },
+  normalizationFormatLogs: {
+    operationName: 'normalizationJob',
+    msg: 'Starting normalization job...'
   }
 }))
 

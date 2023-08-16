@@ -6,10 +6,9 @@ import {
   UnauthorizedException
 } from '@nestjs/common'
 import axios from 'axios'
-import { logger } from '../../index'
+import { logger, normalizationFormatLogs } from '../../index'
 import { DecisionDTO } from 'dbsder-api-types'
 import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.utils'
-import { normalizationFormatLogs } from '../../normalization'
 
 export class DbSderApiGateway {
   async saveDecision(decisionToSave: DecisionDTO) {

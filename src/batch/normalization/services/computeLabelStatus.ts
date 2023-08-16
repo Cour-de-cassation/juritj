@@ -6,7 +6,7 @@ import {
   codeNACListTransmissibleToCC
 } from '../infrastructure/codeNACList'
 import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
-import { normalizationFormatLogs } from '../normalization'
+import { normalizationFormatLogs } from '../index'
 
 export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
   const dateCreation = new Date(decisionDto.dateCreation)
