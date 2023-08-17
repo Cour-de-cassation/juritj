@@ -6,6 +6,7 @@ import { codeNACListNotPublic, codeNACListPartiallyPublic } from '../infrastruct
 jest.mock('../index', () => ({
   logger: {
     error: jest.fn(),
+    info: jest.fn(),
     log: jest.fn()
   }
 }))

@@ -3,11 +3,12 @@ import { getConversionCommandPath } from './transformWPDtoText'
 jest.mock('../../normalization/index', () => ({
   logger: {
     log: jest.fn(),
+    info: jest.fn(),
     error: jest.fn()
   },
-  normalizationContext: {
-    start: jest.fn(),
-    setCorrelationId: jest.fn()
+  normalizationFormatLogs: {
+    operationName: 'normalizationJob',
+    msg: 'Starting normalization job...'
   }
 }))
 

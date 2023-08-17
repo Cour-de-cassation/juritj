@@ -6,6 +6,7 @@ import { InfrastructureExpection } from '../../../shared/infrastructure/exceptio
 jest.mock('../index', () => ({
   logger: {
     log: jest.fn(),
+    info: jest.fn(),
     error: jest.fn()
   }
 }))

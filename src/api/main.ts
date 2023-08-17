@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core'
 import * as basicAuth from 'express-basic-auth'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import { Logger } from 'nestjs-pino'
 import { AppModule } from './app.module'
 import { Context } from '../shared/infrastructure/utils/context'
-import { CustomLogger } from '../shared/infrastructure/utils/customLogger.utils'
 import { RequestLoggerInterceptor } from './infrastructure/interceptors/request-logger.interceptor'
 
 async function bootstrap() {
@@ -16,9 +16,10 @@ async function bootstrap() {
   // Create a global store with AsyncLocalStorage and provide it to the logger
   const apiContext = new Context()
   apiContext.start()
-  const customLogger = new CustomLogger('JuriTJ-Collect', apiContext)
 
-  app.useLogger(customLogger)
+  // Add logger
+  app.useLogger(app.get(Logger))
+
   app.useGlobalInterceptors(new RequestLoggerInterceptor(apiContext))
 
   // Add login/password to access to API Documentation

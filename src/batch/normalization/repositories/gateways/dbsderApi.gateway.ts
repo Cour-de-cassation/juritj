@@ -6,8 +6,9 @@ import {
   UnauthorizedException
 } from '@nestjs/common'
 import axios from 'axios'
-import { logger } from '../../index'
+import { logger, normalizationFormatLogs } from '../../index'
 import { DecisionDTO } from 'dbsder-api-types'
+import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.utils'
 
 export class DbSderApiGateway {
   async saveDecision(decisionToSave: DecisionDTO) {
@@ -24,20 +25,42 @@ export class DbSderApiGateway {
         }
       )
       .catch((error) => {
+        const formatLogs: LogsFormat = {
+          ...normalizationFormatLogs,
+          operationName: 'saveDecision',
+          msg: 'Error while calling DbSder API'
+        }
         if (error.response) {
           if (error.response.data.statusCode === HttpStatus.BAD_REQUEST) {
-            logger.error('saveDecision', error.response.data.message, error.response.data)
+            logger.error({
+              ...formatLogs,
+              msg: error.response.data.message,
+              data: error.response.data
+            })
             throw new BadRequestException(
               'DbSderAPI Bad request error : ' + error.response.data.message
             )
           } else if (error.response.data.statusCode === HttpStatus.UNAUTHORIZED) {
-            logger.error('saveDecision', error.response.data.message, error.response.data)
+            logger.error({
+              ...formatLogs,
+              msg: error.response.data.message,
+              data: error.response.data
+            })
+
             throw new UnauthorizedException('You are not authorized to call this route')
           } else if (error.response.data.statusCode === HttpStatus.CONFLICT) {
-            logger.error('saveDecision', error.response.data.message, error.response.data)
+            logger.error({
+              ...formatLogs,
+              msg: error.response.data.message,
+              data: error.response.data
+            })
             throw new ConflictException('DbSderAPI error: ' + error.response.data.message)
           } else {
-            logger.error('saveDecision', error.response.data.message, error.response.data)
+            logger.error({
+              ...formatLogs,
+              msg: error.response.data.message,
+              data: error.response.data
+            })
           }
         }
         throw new ServiceUnavailableException('DbSder API is unavailable')

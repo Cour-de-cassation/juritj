@@ -1,23 +1,35 @@
 import { existsSync } from 'fs'
 import { promisify } from 'util'
 import { exec } from 'child_process'
-import { logger } from '../index'
+import { logger, normalizationFormatLogs } from '../index'
+import { LogsFormat } from 'src/shared/infrastructure/utils/logsFormat.utils'
 
 const execPromise = promisify(exec)
 const CONVERSION_COMMAND = 'wpd2text'
 
 export async function readWordperfectDocument(filename: string) {
+  const formatLogs: LogsFormat = {
+    ...normalizationFormatLogs,
+    operationName: 'readWordperfectDocument'
+  }
   const cmdPath = await getConversionCommandPath(CONVERSION_COMMAND)
   if (cmdPath && existsSync(filename)) {
     try {
       const { stdout } = await execPromise('wpd2text ./' + filename)
       return stdout
     } catch (error) {
-      logger.error('readWordperfectDocument', 'Unable to execute the conversion command.')
+      logger.error({
+        ...formatLogs,
+        msg: error.message,
+        data: error
+      })
       throw new Error(error)
     }
   } else {
-    logger.error('readWordperfectDocument', 'Unable to read Wordperfect document.')
+    logger.error({
+      ...normalizationFormatLogs,
+      msg: 'Unable to read Wordperfect document.'
+    })
     throw new Error()
   }
 }
@@ -28,10 +40,10 @@ export async function getConversionCommandPath(commandName: string): Promise<str
       return response.stdout.replace(/\n/g, '')
     })
     .catch(() => {
-      logger.error(
-        'getConversionCommandPath',
-        'Unable to find the command to do the conversion... Skipping'
-      )
+      logger.error({
+        operationName: 'getConversionCommandPath',
+        msg: 'Unable to find the command to do the conversion... Skipping'
+      })
       throw new Error()
     })
 }

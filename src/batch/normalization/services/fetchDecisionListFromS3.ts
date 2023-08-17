@@ -1,6 +1,7 @@
 import { DecisionS3Repository } from '../../../shared/infrastructure/repositories/decisionS3.repository'
 import { InfrastructureExpection } from '../../../shared/infrastructure/exceptions/infrastructure.exception'
-import { logger } from '..'
+import { logger, normalizationFormatLogs } from '..'
+import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
 
 const MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE = 2
 
@@ -15,7 +16,12 @@ export async function fetchDecisionListFromS3(
     )
     return rawDecisionList.splice(0, rawDecisionList.length).map((decision) => decision.Key)
   } catch (error) {
-    logger.error('fetchDecisionListFromS3', error.message)
+    const formatLogs: LogsFormat = {
+      ...normalizationFormatLogs,
+      operationName: 'fetchDecisionListFromS3',
+      msg: error.message
+    }
+    logger.error(formatLogs)
     throw new InfrastructureExpection(error.message)
   }
 }
