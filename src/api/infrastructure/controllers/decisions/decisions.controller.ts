@@ -95,7 +95,8 @@ export class DecisionsController {
 
     this.logger.log({
       ...formatLogs,
-      msg: routePath + ' returns ' + HttpStatus.ACCEPTED + ': ' + JSON.stringify(metadonneesDto)
+      msg: routePath + ' returns ' + HttpStatus.ACCEPTED,
+      data: { decision: metadonneesDto }
     })
 
     return { filename, body: 'Nous avons bien reçu la décision intègre et ses métadonnées.' }
