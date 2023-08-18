@@ -5,4 +5,5 @@ export class LogsFormat {
   httpMethod?: string
   path?: string
   correlationId?: string | string[]
+  statusCode?: number
 }

@@ -86,17 +86,27 @@ export class DecisionsController {
     const filename = await decisionUseCase
       .execute(decisionIntegre, metadonneesDto)
       .catch((error) => {
-        this.logger.error({ ...formatLogs, msg: error.message })
         if (error instanceof BucketError) {
+          this.logger.error({
+            ...formatLogs,
+            msg: error.message,
+            statusCode: HttpStatus.SERVICE_UNAVAILABLE
+          })
           throw new InfrastructureExpection(error.message)
         }
+        this.logger.error({
+          ...formatLogs,
+          msg: error.message,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+        })
         throw new UnexpectedException(error)
       })
 
     this.logger.log({
       ...formatLogs,
       msg: routePath + ' returns ' + HttpStatus.ACCEPTED,
-      data: { decision: metadonneesDto }
+      data: { decision: metadonneesDto },
+      statusCode: HttpStatus.ACCEPTED
     })
 
     return { filename, body: 'Nous avons bien reçu la décision intègre et ses métadonnées.' }
