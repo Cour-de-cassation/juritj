@@ -2,6 +2,7 @@ import { DecisionS3Repository } from '../../../shared/infrastructure/repositorie
 import { InfrastructureExpection } from '../../../shared/infrastructure/exceptions/infrastructure.exception'
 import { logger, normalizationFormatLogs } from '..'
 import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
+import { HttpStatus } from '@nestjs/common'
 
 const MAX_NUMBER_OF_DECISIONS_TO_RETRIEVE = 2
 
@@ -19,7 +20,8 @@ export async function fetchDecisionListFromS3(
     const formatLogs: LogsFormat = {
       ...normalizationFormatLogs,
       operationName: 'fetchDecisionListFromS3',
-      msg: error.message
+      msg: error.message,
+      statusCode: HttpStatus.SERVICE_UNAVAILABLE
     }
     logger.error(formatLogs)
     throw new InfrastructureExpection(error.message)

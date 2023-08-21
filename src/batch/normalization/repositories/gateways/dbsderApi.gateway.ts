@@ -35,7 +35,8 @@ export class DbSderApiGateway {
             logger.error({
               ...formatLogs,
               msg: error.response.data.message,
-              data: error.response.data
+              data: error.response.data,
+              statusCode: HttpStatus.BAD_REQUEST
             })
             throw new BadRequestException(
               'DbSderAPI Bad request error : ' + error.response.data.message
@@ -44,7 +45,8 @@ export class DbSderApiGateway {
             logger.error({
               ...formatLogs,
               msg: error.response.data.message,
-              data: error.response.data
+              data: error.response.data,
+              statusCode: HttpStatus.UNAUTHORIZED
             })
 
             throw new UnauthorizedException('You are not authorized to call this route')
@@ -52,14 +54,16 @@ export class DbSderApiGateway {
             logger.error({
               ...formatLogs,
               msg: error.response.data.message,
-              data: error.response.data
+              data: error.response.data,
+              statusCode: HttpStatus.CONFLICT
             })
             throw new ConflictException('DbSderAPI error: ' + error.response.data.message)
           } else {
             logger.error({
               ...formatLogs,
               msg: error.response.data.message,
-              data: error.response.data
+              data: error.response.data,
+              statusCode: HttpStatus.SERVICE_UNAVAILABLE
             })
           }
         }

@@ -29,7 +29,8 @@ export class LoggingInterceptor implements NestInterceptor {
         const status = err.status || err
         this.logger.error({
           ...formatLogs,
-          msg: routePath + ' returns ' + status + ': ' + errorMessage
+          msg: routePath + ' returns ' + status + ': ' + errorMessage,
+          statusCode: err.status || undefined
         })
         return throwError(() => err)
       })
