@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b5e70b1e-0bd4-4ed3-8cda-d00fefd04b2d",
+		"_postman_id": "91a8091e-fe50-450c-8544-e62b08df35bd",
 		"name": "JuriTJ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,6 +10,22 @@
 			"item": [
 				{
 					"name": "Envoie d'une décision valide",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"statusCode\", function(){\r",
+									"    pm.response.to.have.status(202);\r",
+									"});\r",
+									"pm.test(\"body\", function(){\r",
+									"    pm.expect(pm.response.json().body).to.eql(\"Nous avons bien reçu la décision intègre et ses métadonnées.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {},
 						"strictSSL": false
@@ -28,7 +44,7 @@
 								{
 									"key": "decisionIntegre",
 									"type": "file",
-									"src": "./fichier-exemples/business_plan.wpd"
+									"src": "/C:/Users/ccm.Fabricio.Allegri/Documents/Decision_TJ_exemple1.wpd"
 								}
 							]
 						},
@@ -47,6 +63,22 @@
 				},
 				{
 					"name": "Envoie d'une décision sans fichier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"statusCode\", function(){\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"body\", function(){\r",
+									"    pm.expect(pm.response.json().message).to.eql(\"Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}
 					},
@@ -78,6 +110,22 @@
 				},
 				{
 					"name": "Envoie d'une décision avec un fichier au mauvais format",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"statusCode\", function(){\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"body\", function(){\r",
+									"    pm.expect(pm.response.json().message).to.eql(\"Vous devez fournir un fichier 'decisionIntegre' au format Wordperfect.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}
 					},
@@ -114,6 +162,22 @@
 				},
 				{
 					"name": "Envoie d'une décision sans métadonnées",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"statusCode\", function(){\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"body\", function(){\r",
+									"    pm.expect(pm.response.json().message).to.eql('Vous devez fournir le champ: metadonnees');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}
 					},
@@ -145,6 +209,22 @@
 				},
 				{
 					"name": "Envoie d'une décision avec métadonnées incomplètes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"statusCode\", function(){\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"body\", function(){\r",
+									"    pm.expect(pm.response.json().message).to.eql('Une ou plusieurs erreurs ont été trouvées sur les propriétés suivantes : idJuridiction');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disabledSystemHeaders": {}
 					},
@@ -181,8 +261,22 @@
 				},
 				{
 					"name": "Accède à la documentation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"statusCode\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
-						"disableBodyPruning": true
+						"disableBodyPruning": true,
+						"strictSSL": false
 					},
 					"request": {
 						"auth": {
@@ -220,6 +314,19 @@
 				},
 				{
 					"name": "Consulte l'état de l'API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"statusCode\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
