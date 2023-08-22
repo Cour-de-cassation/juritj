@@ -30,7 +30,8 @@ export const normalizationPinoConfig = {
       censor: '',
       remove: true
     },
-    transport: process.env.NODE_ENV === 'local' ? pinoPrettyConf : undefined
+    transport: process.env.NODE_ENV === 'local' ? pinoPrettyConf : undefined,
+    autoLogging: false
   }
 }
 
