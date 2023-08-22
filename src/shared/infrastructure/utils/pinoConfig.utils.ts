@@ -57,6 +57,7 @@ export const configureLoggerModule = (): DynamicModule =>
         request.headers['x-correlation-id'] = correlationId
         response.setHeader('x-correlation-id', correlationId)
         return correlationId
-      }
+      },
+      autoLogging: false
     }
   })
