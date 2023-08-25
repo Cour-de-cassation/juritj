@@ -1,15 +1,17 @@
 {
 	"info": {
-		"_postman_id": "91a8091e-fe50-450c-8544-e62b08df35bd",
+		"_postman_id": "5f40f175-4ddf-4f87-8af1-a2fab2a4faf8",
 		"name": "JuriTJ",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "13592912",
+		"_collection_link": "https://grey-spaceship-298416.postman.co/workspace/Judilibre~828b28c6-eaba-44c4-b963-f6155ff2c3e8/collection/13592912-5f40f175-4ddf-4f87-8af1-a2fab2a4faf8?action=share&creator=13592912&source=collection_link"
 	},
 	"item": [
 		{
 			"name": "Collecte",
 			"item": [
 				{
-					"name": "Envoie d'une décision valide",
+					"name": "202 - Envoie d'une décision valide",
 					"event": [
 						{
 							"listen": "test",
@@ -38,31 +40,22 @@
 							"formdata": [
 								{
 									"key": "metadonnees",
-									"value": "{   \"idJuridiction\": \"TJ75011\",  \"nomJuridiction\": \"toto\", \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20221121\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"11F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": true,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
+									"value": "{   \"idJuridiction\": \"TJ75011\",  \"nomJuridiction\": \"toto\", \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20230801\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"11F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": true,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
 									"type": "text"
 								},
 								{
 									"key": "decisionIntegre",
 									"type": "file",
-									"src": "/C:/Users/ccm.Fabricio.Allegri/Documents/Decision_TJ_exemple1.wpd"
+									"src": "/Users/ritchie.elloumi/Desktop/juritj/documentation/postman/fichier-exemples/business_plan.wpd"
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOSTNAME}}/{{VERSION}}/decisions",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"{{VERSION}}",
-								"decisions"
-							]
-						}
+						"url": "{{HOSTNAME}}/{{VERSION}}/decisions"
 					},
 					"response": []
 				},
 				{
-					"name": "Envoie d'une décision sans fichier",
+					"name": "400 - Envoie d'une décision sans fichier",
 					"event": [
 						{
 							"listen": "test",
@@ -90,26 +83,17 @@
 							"formdata": [
 								{
 									"key": "metadonnees",
-									"value": "{  \"nomJuridiction\": \"Juridictions civiles de première instance\",  \"idJuridiction\": \"TJ75011\",  \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20221121\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"11F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": true,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
+									"value": "{   \"idJuridiction\": \"TJ75011\",  \"nomJuridiction\": \"toto\", \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20230801\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"11F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": true,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
 									"type": "text"
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOSTNAME}}/{{VERSION}}/decisions",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"{{VERSION}}",
-								"decisions"
-							]
-						}
+						"url": "{{HOSTNAME}}/{{VERSION}}/decisions"
 					},
 					"response": []
 				},
 				{
-					"name": "Envoie d'une décision avec un fichier au mauvais format",
+					"name": "400 - Envoie d'une décision avec un fichier au mauvais format",
 					"event": [
 						{
 							"listen": "test",
@@ -137,7 +121,7 @@
 							"formdata": [
 								{
 									"key": "metadonnees",
-									"value": "{  \"nomJuridiction\": \"Juridictions civiles de première instance\",  \"idJuridiction\": \"TJ75011\",  \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20221121\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"11F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": true,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
+									"value": "{   \"idJuridiction\": \"TJ75011\",  \"nomJuridiction\": \"toto\", \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20230801\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"11F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": true,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
 									"type": "text"
 								},
 								{
@@ -147,21 +131,12 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOSTNAME}}/{{VERSION}}/decisions",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"{{VERSION}}",
-								"decisions"
-							]
-						}
+						"url": "{{HOSTNAME}}/{{VERSION}}/decisions"
 					},
 					"response": []
 				},
 				{
-					"name": "Envoie d'une décision sans métadonnées",
+					"name": "400 - Envoie d'une décision sans métadonnées",
 					"event": [
 						{
 							"listen": "test",
@@ -194,21 +169,12 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOSTNAME}}/{{VERSION}}/decisions",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"{{VERSION}}",
-								"decisions"
-							]
-						}
+						"url": "{{HOSTNAME}}/{{VERSION}}/decisions"
 					},
 					"response": []
 				},
 				{
-					"name": "Envoie d'une décision avec métadonnées incomplètes",
+					"name": "400 - Envoie d'une décision avec métadonnées incomplètes",
 					"event": [
 						{
 							"listen": "test",
@@ -236,7 +202,7 @@
 							"formdata": [
 								{
 									"key": "metadonnees",
-									"value": "{  \"nomJuridiction\": \"Juridictions civiles de première instance\",  \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20221121\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"11F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": true,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
+									"value": "{  \"nomJuridiction\": \"Juridictions civiles de première instance\",  \"codeJuridiction\": \"Code juridiction\",  \"numeroRegistre\": \"A\",  \"numeroRoleGeneral\": \"01/12345\",  \"numeroMesureInstruction\": [    \"AZERTYUIOP\"  ],  \"codeService\": \"0A\",  \"libelleService\": \"Libelle de service\",  \"dateDecision\": \"20230801\",  \"codeDecision\": \"0aA\",  \"libelleCodeDecision\": \"some libelle code decision\",  \"president\": {    \"fonction\": \"president\",    \"nom\": \"Nom Presidente\",    \"prenom\": \"Prenom Presidente\",    \"civilite\": \"Mme.\"  },  \"decisionAssociee\": {    \"numeroRegistre\": \"A\",    \"numeroRoleGeneral\": \"01/12345\",    \"idJuridiction\": \"TJ00000\",    \"date\": \"20221121\"  },  \"parties\": [    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    },    {      \"type\": \"PP\",      \"nom\": \"nom Partie\"    }  ],  \"sommaire\": \"Exemple de sommaire\",  \"codeNAC\": \"11F\",  \"libelleNAC\": \"Demande en dommages-intérêts contre un organisme\",  \"codeNature\": \"6C\",  \"libelleNature\": \"Autres demandes en matière de frais et dépens\",  \"decisionPublique\": true,  \"recommandationOccultation\": \"aucune\",  \"occultationComplementaire\": \"Exemple d'occultation complémentaire\",  \"selection\": false,  \"matiereDeterminee\": true,  \"pourvoiLocal\": false,  \"pourvoiCourDeCassation\": false,  \"debatPublic\": true}",
 									"type": "text"
 								},
 								{
@@ -246,16 +212,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOSTNAME}}/{{VERSION}}/decisions",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"{{VERSION}}",
-								"decisions"
-							]
-						}
+						"url": "{{HOSTNAME}}/{{VERSION}}/decisions"
 					},
 					"response": []
 				},
@@ -281,18 +238,10 @@
 					"request": {
 						"auth": {
 							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{pwd_doc}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{login_doc}}",
-									"type": "string"
-								}
-							]
+							"basic": {
+								"password": "{{pwd_doc}}",
+								"username": "{{login_doc}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
@@ -300,15 +249,7 @@
 							"mode": "formdata",
 							"formdata": []
 						},
-						"url": {
-							"raw": "{{HOSTNAME}}/doc-json",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"doc-json"
-							]
-						}
+						"url": "{{HOSTNAME}}/doc-json"
 					},
 					"response": []
 				},
@@ -333,18 +274,10 @@
 					"request": {
 						"auth": {
 							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{pwd_doc}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{login_doc}}",
-									"type": "string"
-								}
-							]
+							"basic": {
+								"password": "{{pwd_doc}}",
+								"username": "{{login_doc}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
@@ -352,16 +285,7 @@
 							"mode": "formdata",
 							"formdata": []
 						},
-						"url": {
-							"raw": "{{HOSTNAME}}/{{VERSION}}/health",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"{{VERSION}}",
-								"health"
-							]
-						}
+						"url": "{{HOSTNAME}}/{{VERSION}}/health"
 					},
 					"response": []
 				}
