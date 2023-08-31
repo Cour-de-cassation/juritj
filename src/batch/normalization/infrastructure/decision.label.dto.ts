@@ -1,12 +1,30 @@
 import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
 import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
-import { DecisionDTO, LabelStatus, Sources, TypePartie } from 'dbsder-api-types'
+import { LabelStatus, Sources, TypePartie } from 'dbsder-api-types'
+import { DecisionTJDTO } from 'dbsder-api-types/dist'
 
 export function mapDecisionNormaliseeToLabelDecision(
   decision: DecisionModel,
   decisionName: string
-): DecisionDTO {
+): DecisionTJDTO {
   return {
+    codeDecision: decision.metadonnees.codeDecision,
+    codeNature: decision.metadonnees.codeNature,
+    codeService: decision.metadonnees.codeService,
+    debatPublic: decision.metadonnees.debatPublic,
+    decisionAssociee: decision.metadonnees.decisionAssociee,
+    libelleCodeDecision: decision.metadonnees.libelleCodeDecision,
+    libelleNAC: decision.metadonnees.libelleNAC,
+    libelleNature: decision.metadonnees.libelleNature,
+    libelleService: decision.metadonnees.libelleService,
+    matiereDeterminee: decision.metadonnees.matiereDeterminee,
+    numeroRoleGeneral: decision.metadonnees.numeroRoleGeneral,
+    pourvoiCourDeCassation: decision.metadonnees.pourvoiCourDeCassation,
+    pourvoiLocal: decision.metadonnees.pourvoiLocal,
+    president: decision.metadonnees.president,
+    recommandationOccultation: decision.metadonnees.recommandationOccultation,
+    selection: decision.metadonnees.selection,
+    sommaire: decision.metadonnees.sommaire,
     NACCode: decision.metadonnees.codeNAC,
     NAOCode: '',
     NPCode: '',
@@ -20,7 +38,7 @@ export function mapDecisionNormaliseeToLabelDecision(
       target: '',
       title: []
     },
-    appeals: [],
+    appeals: decision.metadonnees.numeroMesureInstruction ?? [],
     blocOccultation: 0,
     chamberId: 'null',
     chamberName: 'null',

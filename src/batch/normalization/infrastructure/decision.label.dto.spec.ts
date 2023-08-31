@@ -1,13 +1,35 @@
 import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
-import { DecisionDTO, LabelStatus, Sources, TypePartie } from 'dbsder-api-types'
+import { LabelStatus, Sources, TypePartie } from 'dbsder-api-types'
+import { DecisionTJDTO } from 'dbsder-api-types/dist'
+import { Occultation } from '../../../shared/domain/enums'
 
 describe('mapDecisionNormaliseeToDecisionLabel', () => {
   it('returns an object mapping normalized decision to Label decision', async () => {
     // GIVEN
     const filename = 'test.json'
     const mockDecision = new MockUtils().toNormalizeDecisionMock
-    const expectedDecisionLabel: DecisionDTO = {
+    const expectedDecisionLabel: DecisionTJDTO = {
+      codeDecision: '0aA',
+      codeNature: '6C',
+      codeService: '0A',
+      debatPublic: true,
+      decisionAssociee: {
+        date: '20221121',
+        idJuridiction: 'TJ00000',
+        numeroRegistre: 'A',
+        numeroRoleGeneral: '01/12345'
+      },
+      libelleCodeDecision: 'some libelle code decision',
+      libelleNAC: 'Demande en dommages-intérêts contre un organisme',
+      libelleNature: 'Autres demandes en matière de frais et dépens',
+      libelleService: 'Libelle de service',
+      matiereDeterminee: true,
+      numeroRoleGeneral: '01/12345',
+      pourvoiCourDeCassation: false,
+      pourvoiLocal: false,
+      recommandationOccultation: Occultation.AUCUNE,
+      selection: false,
       NACCode: '11F',
       NAOCode: '',
       analysis: {
@@ -20,7 +42,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
         target: '',
         title: []
       },
-      appeals: [],
+      appeals: ['AZERTYUIOP'],
       blocOccultation: 0,
       chamberId: 'null',
       chamberName: 'null',
