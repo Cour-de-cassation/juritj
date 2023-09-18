@@ -63,7 +63,7 @@
     "@types/supertest": "2.0.12",
     "@types/uuid": "9.0.2",
     "@typescript-eslint/eslint-plugin": "6.2.1",
-    "@typescript-eslint/parser": "6.2.1",
+    "@typescript-eslint/parser": "6.7.0",
     "aws-sdk-client-mock": "3.0.0",
     "aws-sdk-client-mock-jest": "3.0.0",
     "eslint": "8.46.0",
