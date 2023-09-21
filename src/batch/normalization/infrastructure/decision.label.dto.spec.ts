@@ -1,7 +1,6 @@
 import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
-import { LabelStatus, Sources, TypePartie } from 'dbsder-api-types'
-import { DecisionTJDTO } from 'dbsder-api-types/dist'
+import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-types'
 import { Occultation } from '../../../shared/domain/enums'
 
 describe('mapDecisionNormaliseeToDecisionLabel', () => {
