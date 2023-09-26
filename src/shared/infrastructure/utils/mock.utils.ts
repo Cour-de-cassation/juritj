@@ -63,7 +63,8 @@ export class MockUtils {
     labelStatus: LabelStatus.TOBETREATED,
     numeroMesureInstruction: ['AZERTYUIOP'],
     decisionAssociee: this.decisionDtoMock,
-    filenameSource: 'test.wpd'
+    filenameSource: 'test.wpd',
+    indicateurQPC: true
   }
 
   toNormalizeDecisionMock = {
