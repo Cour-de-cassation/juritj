@@ -15,7 +15,7 @@ export class DbSderApiGateway {
     const urlToCall = process.env.DBSDER_API_URL + '/v1/decisions'
 
     const result = await axios
-      .post(
+      .put(
         urlToCall,
         { decision: decisionToSave },
         {
