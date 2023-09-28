@@ -51,6 +51,7 @@ export class Metadonnees {
   pourvoiLocal: boolean
   pourvoiCourDeCassation: boolean
   debatPublic: boolean
+  indicateurQPC?: boolean
 }
 
 export class MetadonneesNormalisee extends Metadonnees {

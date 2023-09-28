@@ -399,4 +399,13 @@ export class MetadonneesDto {
   @IsString()
   @IsOptional()
   idDecisionWinci?: string
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiPropertyOptional({
+    description: 'Indicateur QPC',
+    type: Boolean,
+    example: false
+  })
+  indicateurQPC?: boolean
 }

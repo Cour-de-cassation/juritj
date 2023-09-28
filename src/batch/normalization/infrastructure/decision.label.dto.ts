@@ -80,7 +80,8 @@ export function mapDecisionNormaliseeToLabelDecision(
       }
     ],
     labelTreatments: null,
-    pubCategory: null
+    pubCategory: null,
+    indicateurQPC: decision.metadonnees.indicateurQPC
   }
 }
 
