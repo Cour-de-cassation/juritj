@@ -30,7 +30,7 @@ spec:
             - name: S3_SECRET_KEY
               value: "${JURITJ_S3_SECRET_KEY}"
             - name: S3_URL
-              value: "http://${DOLLAR}(BUCKET_SERVICE_SERVICE_HOST):${DOLLAR}(BUCKET_SERVICE_SERVICE_PORT)"
+              value: "http://bucket-service:9000"
             - name: S3_REGION
               value: "${JURITJ_S3_REGION}"
             - name: S3_BUCKET_NAME_RAW
