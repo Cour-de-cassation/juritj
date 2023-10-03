@@ -18,6 +18,13 @@ spec:
       containers:
         - name: api
           image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
+          resources:
+            requests:
+              memory: "16Gi"
+              cpu: "10"
+            limits:
+              memory: "32Gi"
+              cpu: "20"
           ports:
             - containerPort: 3000
           env:
