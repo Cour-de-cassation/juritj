@@ -43,7 +43,6 @@ export function mapDecisionNormaliseeToLabelDecision(
       categoriesToOmit: []
     },
     originalText: decision.decision,
-    pseudoStatus: '',
     public: decision.metadonnees.decisionPublique,
     registerNumber: decision.metadonnees.numeroRegistre,
     sourceId: 0,
@@ -59,7 +58,8 @@ export function mapDecisionNormaliseeToLabelDecision(
         type: TypePartie.PP
       }
     ],
-    indicateurQPC: decision.metadonnees.indicateurQPC
+    indicateurQPC: decision.metadonnees.indicateurQPC,
+    idDecisionWinci: decision.metadonnees.idDecisionWinci
   }
 }
 

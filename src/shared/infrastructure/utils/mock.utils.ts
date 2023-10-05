@@ -89,7 +89,6 @@ export class MockUtils {
     },
     originalText: this.decisionContent,
     parties: this.allAttributesMetadonneesDtoMock.parties,
-    pseudoStatus: null,
     pseudoText: null,
     pubCategory: null,
     registerNumber: this.allAttributesMetadonneesDtoMock.numeroRegistre,

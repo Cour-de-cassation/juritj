@@ -52,6 +52,7 @@ export class Metadonnees {
   pourvoiCourDeCassation: boolean
   debatPublic: boolean
   indicateurQPC?: boolean
+  idDecisionWinci?: string
 }
 
 export class MetadonneesNormalisee extends Metadonnees {
