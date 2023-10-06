@@ -13,6 +13,7 @@ export class DecisionAssociee {
   numeroRoleGeneral: string
   idJuridiction: string
   date: string
+  idDecisionWinci?: string
 }
 
 export class Partie {
