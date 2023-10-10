@@ -13,6 +13,7 @@ export class DecisionAssociee {
   numeroRoleGeneral: string
   idJuridiction: string
   date: string
+  idDecisionWinci?: string
 }
 
 export class Partie {
@@ -52,6 +53,7 @@ export class Metadonnees {
   pourvoiCourDeCassation: boolean
   debatPublic: boolean
   indicateurQPC?: boolean
+  idDecisionWinci?: string
 }
 
 export class MetadonneesNormalisee extends Metadonnees {

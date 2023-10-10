@@ -14,7 +14,7 @@ export function mapDecisionNormaliseeToLabelDecision(
     decisionAssociee: decision.metadonnees.decisionAssociee,
     libelleCodeDecision: decision.metadonnees.libelleCodeDecision,
     libelleNAC: decision.metadonnees.libelleNAC,
-    libelleNature: decision.metadonnees.libelleNature,
+    libelleNatureParticuliere: decision.metadonnees.libelleNature,
     libelleService: decision.metadonnees.libelleService,
     matiereDeterminee: decision.metadonnees.matiereDeterminee,
     numeroRoleGeneral: decision.metadonnees.numeroRoleGeneral,
@@ -25,49 +25,26 @@ export function mapDecisionNormaliseeToLabelDecision(
     selection: decision.metadonnees.selection,
     sommaire: decision.metadonnees.sommaire,
     NACCode: decision.metadonnees.codeNAC,
-    NAOCode: '',
-    NPCode: '',
-    analysis: {
-      analyse: [],
-      doctrine: '',
-      link: '',
-      reference: [],
-      source: '',
-      summary: '',
-      target: '',
-      title: []
-    },
     appeals: decision.metadonnees.numeroMesureInstruction ?? [],
     blocOccultation: 0,
-    chamberId: 'null',
-    chamberName: 'null',
-    codeMatiereCivil: '',
+    chamberId: '',
+    chamberName: '',
     dateCreation: TODAY,
     dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
-    decatt: [1],
-    endCaseCode: '',
-    formation: '',
     _id: decision.metadonnees._id,
     jurisdictionCode: decision.metadonnees.codeJuridiction,
     jurisdictionId: decision.metadonnees.idJuridiction,
     jurisdictionName: decision.metadonnees.nomJuridiction,
     labelStatus: LabelStatus.TOBETREATED,
-    natureAffaireCivil: decision.metadonnees.libelleNature,
-    natureAffairePenal: 'null',
     occultation: {
       additionalTerms: decision.metadonnees.occultationComplementaire,
       categoriesToOmit: []
     },
     originalText: decision.decision,
-    pseudoStatus: '',
-    pseudoText: '',
     public: decision.metadonnees.decisionPublique,
-    publication: [],
     registerNumber: decision.metadonnees.numeroRegistre,
-    solution: '',
     sourceId: 0,
     sourceName: Sources.TJ,
-    zoning: undefined,
     filenameSource: decisionName,
     parties: [
       {
@@ -79,9 +56,8 @@ export function mapDecisionNormaliseeToLabelDecision(
         type: TypePartie.PP
       }
     ],
-    labelTreatments: null,
-    pubCategory: null,
-    indicateurQPC: decision.metadonnees.indicateurQPC
+    indicateurQPC: decision.metadonnees.indicateurQPC,
+    idDecisionWinci: decision.metadonnees.idDecisionWinci
   }
 }
 

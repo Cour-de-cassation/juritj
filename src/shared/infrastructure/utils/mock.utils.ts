@@ -29,7 +29,8 @@ export class MockUtils {
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
     idJuridiction: 'TJ00000',
-    date: '20221121'
+    date: '20221121',
+    idDecisionWinci: 'TJ00001'
   }
 
   mandatoryMetadonneesDtoMock = {
@@ -64,7 +65,8 @@ export class MockUtils {
     numeroMesureInstruction: ['AZERTYUIOP'],
     decisionAssociee: this.decisionDtoMock,
     filenameSource: 'test.wpd',
-    indicateurQPC: true
+    indicateurQPC: true,
+    idDecisionWinci: 'TJ00000'
   }
 
   toNormalizeDecisionMock = {
@@ -89,7 +91,6 @@ export class MockUtils {
     },
     originalText: this.decisionContent,
     parties: this.allAttributesMetadonneesDtoMock.parties,
-    pseudoStatus: null,
     pseudoText: null,
     pubCategory: null,
     registerNumber: this.allAttributesMetadonneesDtoMock.numeroRegistre,
