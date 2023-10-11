@@ -6,6 +6,7 @@ export const TODAY = new Date().toISOString()
 export class MockUtils {
   // Shared context
   uniqueDecisionId = `TJ75011A01-1234520221121`
+  uniqueDecisionIdHash = 1616441172
 
   presidentDtoMock = {
     fonction: 'president',
@@ -66,7 +67,8 @@ export class MockUtils {
     decisionAssociee: this.decisionDtoMock,
     filenameSource: 'test.wpd',
     indicateurQPC: true,
-    idDecisionWinci: 'TJ00000'
+    idDecisionWinci: 'TJ00000',
+    sourceId: this.uniqueDecisionIdHash
   }
 
   toNormalizeDecisionMock = {

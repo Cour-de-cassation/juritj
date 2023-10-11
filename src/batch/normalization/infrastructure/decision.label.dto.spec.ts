@@ -59,7 +59,7 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
         }
       ],
       registerNumber: 'A',
-      sourceId: 0,
+      sourceId: new MockUtils().uniqueDecisionIdHash,
       sourceName: Sources.TJ
     }
 

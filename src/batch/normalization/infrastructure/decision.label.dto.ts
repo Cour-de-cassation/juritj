@@ -1,4 +1,5 @@
 import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
+import { hashDecisionId } from '../../../shared/infrastructure/utils/hash.utils'
 import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-types'
 
@@ -43,7 +44,7 @@ export function mapDecisionNormaliseeToLabelDecision(
     originalText: decision.decision,
     public: decision.metadonnees.decisionPublique,
     registerNumber: decision.metadonnees.numeroRegistre,
-    sourceId: 0,
+    sourceId: hashDecisionId(decision.metadonnees._id),
     sourceName: Sources.TJ,
     filenameSource: decisionName,
     parties: [
