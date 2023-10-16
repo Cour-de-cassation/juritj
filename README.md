@@ -151,3 +151,21 @@ test: # job
 ```
 
  Une fois cette branche poussée, la CI lancera le job automatiquement (compter 5 mns de délai environ)
+
+## Configuration des buckets
+
+1) le bucket doit tourner
+2) executer 
+```bash 
+kubectl run -i --tty --rm --namespace juritj --image=minio/mc -- bash
+```
+3) executer ces commandes dans le conteneur
+JURITJ_S3_ACCESS_KEY et JURITJ_S3_SECRET_KEY sont à récuperer dans les variables ci/cd GITLAB
+
+*exemple pour un bucket*
+```BASH
+mc config host add myminio http://bucket-service:9000 $JURITJ_S3_ACCESS_KEY $JURITJ_S3_SECRET_KEY
+mc mb --ignore-existing myminio/juritj-test-bucket
+mc policy download myminio/juritj-test-bucket
+```
+
