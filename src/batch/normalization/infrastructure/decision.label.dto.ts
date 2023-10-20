@@ -9,7 +9,7 @@ export function mapDecisionNormaliseeToLabelDecision(
 ): DecisionTJDTO {
   return {
     codeDecision: decision.metadonnees.codeDecision,
-    codeNature: decision.metadonnees.codeNature,
+    NPCode: decision.metadonnees.codeNature,
     codeService: decision.metadonnees.codeService,
     debatPublic: decision.metadonnees.debatPublic,
     decisionAssociee: decision.metadonnees.decisionAssociee,
