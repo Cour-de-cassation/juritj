@@ -3,7 +3,7 @@ import { hashDecisionId } from '../../../shared/infrastructure/utils/hash.utils'
 import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-types'
 
-export function mapDecisionNormaliseeToLabelDecision(
+export function mapDecisionNormaliseeToDecisionDto(
   decision: DecisionModel,
   decisionName: string
 ): DecisionTJDTO {
