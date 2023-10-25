@@ -1,14 +1,14 @@
 import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
-import { mapDecisionNormaliseeToLabelDecision } from './decision.label.dto'
+import { mapDecisionNormaliseeToDecisionDto } from './decision.dto'
 import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-types'
 import { Occultation } from '../../../shared/domain/enums'
 
-describe('mapDecisionNormaliseeToDecisionLabel', () => {
-  it('returns an object mapping normalized decision to Label decision', async () => {
+describe('mapDecisionNormaliseeToDecisionDto', () => {
+  it('returns an object mapping normalized decision to decision DTO', async () => {
     // GIVEN
     const filename = 'test.json'
     const mockDecision = new MockUtils().toNormalizeDecisionMock
-    const expectedDecisionLabel: DecisionTJDTO = {
+    const expectedDecisionDto: DecisionTJDTO = {
       codeDecision: '0aA',
       codeNature: '6C',
       codeService: '0A',
@@ -64,9 +64,9 @@ describe('mapDecisionNormaliseeToDecisionLabel', () => {
     }
 
     // WHEN
-    const decisionLabel = mapDecisionNormaliseeToLabelDecision(mockDecision, filename)
+    const mappedDecision = mapDecisionNormaliseeToDecisionDto(mockDecision, filename)
 
     // THEN
-    expect(decisionLabel).toMatchObject(expectedDecisionLabel)
+    expect(mappedDecision).toMatchObject(expectedDecisionDto)
   })
 })

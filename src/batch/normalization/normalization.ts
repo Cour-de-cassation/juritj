@@ -7,7 +7,7 @@ import { logger } from './index'
 import { fetchDecisionListFromS3 } from './services/fetchDecisionListFromS3'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
 import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
-import { mapDecisionNormaliseeToLabelDecision } from './infrastructure/decision.label.dto'
+import { mapDecisionNormaliseeToDecisionDto } from './infrastructure/decision.dto'
 import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { computeLabelStatus } from './services/computeLabelStatus'
@@ -64,7 +64,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           metadonnees: transformedMetadonnees
         }
 
-        const decisionToSave = mapDecisionNormaliseeToLabelDecision(
+        const decisionToSave = mapDecisionNormaliseeToDecisionDto(
           transformedDecision,
           decisionFilename
         )
