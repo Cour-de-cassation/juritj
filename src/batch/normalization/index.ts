@@ -36,12 +36,15 @@ function startJob() {
     const cron = new CronJob({
       cronTime: CRON_EVERY_HOUR,
       onTick() {
-        const formatLogs: LogsFormat = {
-          operationName: 'startJob',
-          msg: 'Starting normalization...'
+        if (!this.running) {
+          const formatLogs: LogsFormat = {
+            operationName: 'startJob',
+            msg: 'Starting normalization...'
+          }
+          logger.info(formatLogs)
+          startNormalization()
         }
-        logger.info(formatLogs)
-        startNormalization()
+        logger.info('Normalization job already running...')
       },
       timeZone: 'Europe/Paris'
     })

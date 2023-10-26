@@ -35,4 +35,3 @@ spec:
               value: "${JURITJ_DBSDER_API_KEY}"
             - name: DBSDER_API_URL
               value: "${JURITJ_DBSDER_API_URL}"
-      concurrencyPolicy: Forbid
