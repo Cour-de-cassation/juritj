@@ -71,6 +71,9 @@ S3_REGION=eu-west-paris-1
 DBSDER_API_URL=http://dbsder-api:3000
 DBSDER_API_KEY=normalization_api_key
 
+### Batch
+NORMALIZATION_BATCH_SCHEDULE='* * * * *'  #lancer le batch toutes les minutes
+
 ```
 
 Une fois le `.env` créé, le dupliquer et renommer le fichier nouvellement créé en `docker.env`. Adapter les valeurs des variables suivantes : 

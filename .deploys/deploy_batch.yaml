@@ -35,3 +35,5 @@ spec:
               value: "${JURITJ_DBSDER_API_KEY}"
             - name: DBSDER_API_URL
               value: "${JURITJ_DBSDER_API_URL}"
+            - name: NORMALIZATION_BATCH_SCHEDULE
+              value: "${JURITJ_NORMALIZATION_BATCH_SCHEDULE}"
