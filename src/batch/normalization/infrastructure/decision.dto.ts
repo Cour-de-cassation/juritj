@@ -38,7 +38,7 @@ export function mapDecisionNormaliseeToDecisionDto(
     jurisdictionName: decision.metadonnees.nomJuridiction,
     labelStatus: LabelStatus.TOBETREATED,
     occultation: {
-      additionalTerms: decision.metadonnees.occultationComplementaire,
+      additionalTerms: decision.metadonnees.occultationComplementaire ?? '',
       categoriesToOmit: []
     },
     originalText: decision.decision,

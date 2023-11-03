@@ -43,7 +43,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       jurisdictionName: 'Juridictions civiles de première instance',
       labelStatus: LabelStatus.TOBETREATED,
       occultation: {
-        additionalTerms: undefined,
+        additionalTerms: '',
         categoriesToOmit: []
       },
       originalText:
