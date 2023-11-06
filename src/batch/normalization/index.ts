@@ -45,8 +45,8 @@ async function startJob() {
       }
     },
     timeZone: 'Europe/Paris',
-    runOnInit: true, // This attribute is set to launch the normalization batch once at the start of the application
-    start: true // This attribute is there to keep the cron job running after it has been executed
+    runOnInit: true, // This attribute is set to launch the normalization batch once at the start of the cronjob
+    start: true // This attribute starts the cron job after its instantiation (equivalent to cron.start())
   })
 }
 
