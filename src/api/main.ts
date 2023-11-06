@@ -3,7 +3,6 @@ import * as basicAuth from 'express-basic-auth'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { Logger } from 'nestjs-pino'
 import { AppModule } from './app.module'
-import { Context } from '../shared/infrastructure/utils/context'
 import { RequestLoggerInterceptor } from './infrastructure/interceptors/request-logger.interceptor'
 
 async function bootstrap() {
@@ -13,14 +12,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix('v1')
 
-  // Create a global store with AsyncLocalStorage and provide it to the logger
-  const apiContext = new Context()
-  apiContext.start()
-
   // Add logger
   app.useLogger(app.get(Logger))
 
-  app.useGlobalInterceptors(new RequestLoggerInterceptor(apiContext))
+  app.useGlobalInterceptors(new RequestLoggerInterceptor())
 
   // Add login/password to access to API Documentation
   const basicAuthOptions: basicAuth.IUsersOptions = {

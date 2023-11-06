@@ -3,7 +3,6 @@ import { HttpModule } from '@nestjs/axios'
 import { Module } from '@nestjs/common'
 import { TerminusModule } from '@nestjs/terminus'
 import { RedirectController } from './app.controller'
-import { Context } from '../shared/infrastructure/utils/context'
 import { configureLoggerModule } from '../shared/infrastructure/utils/pinoConfig.utils'
 import { HealthController } from './infrastructure/controllers/health/health.controller'
 import { DecisionsController } from './infrastructure/controllers/decisions/decisions.controller'
@@ -20,6 +19,6 @@ import { envValidationConfig } from '../shared/infrastructure/dto/env.validation
     configureLoggerModule()
   ],
   controllers: [RedirectController, DecisionsController, HealthController],
-  providers: [Context, BucketHealthIndicator]
+  providers: [BucketHealthIndicator]
 })
 export class AppModule {}
