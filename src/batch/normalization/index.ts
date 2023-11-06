@@ -4,7 +4,7 @@ import { normalizationJob } from './normalization'
 import { LogsFormat } from '../../shared/infrastructure/utils/logsFormat.utils'
 import { normalizationPinoConfig } from '../../shared/infrastructure/utils/pinoConfig.utils'
 
-const EXIT_ERROR_CODE = 1
+const CRON_EVERY_HOUR = '0 * * * *'
 
 export const logger = new PinoLogger(normalizationPinoConfig)
 // WARNING : using normalizationFormatLogs as a global variable to provide correlationId and decisionId in all services
@@ -15,41 +15,38 @@ export const normalizationFormatLogs: LogsFormat = {
   msg: 'Starting normalization job...'
 }
 
-async function startNormalization() {
-  try {
-    await normalizationJob()
-  } catch (error) {
-    const formatLogs: LogsFormat = {
-      operationName: 'startNormalization',
-      msg: error.message,
-      data: error
-    }
-    logger.error(formatLogs)
-    logger.info({ ...formatLogs, msg: 'Leaving due to an error...' })
-    process.exit(EXIT_ERROR_CODE)
+async function startJob() {
+  let isJobCompleted = true
+  let formatLogs: LogsFormat = {
+    operationName: 'startJob',
+    msg: 'Starting normalization...'
   }
-  return
-}
-
-function startJob() {
-  startNormalization().then(() => {
-    const cron = new CronJob({
-      cronTime: process.env.NORMALIZATION_BATCH_SCHEDULE || '0 * * * *',
-      onTick() {
-        // Commenté car le batch ne se lance plus : le job n'est jamais considéré fini (running à false)
-        // if (!this.running) {
-        const formatLogs: LogsFormat = {
-          operationName: 'startJob',
-          msg: 'Starting normalization...'
-        }
+  new CronJob({
+    cronTime: process.env.NORMALIZATION_BATCH_SCHEDULE || CRON_EVERY_HOUR,
+    async onTick() {
+      if (isJobCompleted) {
+        isJobCompleted = false
         logger.info(formatLogs)
-        startNormalization()
-        //    }
-        //  logger.info('Normalization job already running...')
-      },
-      timeZone: 'Europe/Paris'
-    })
-    cron.start()
+        try {
+          await normalizationJob()
+        } catch (error) {
+          formatLogs = {
+            ...formatLogs,
+            msg: error.message,
+            data: error
+          }
+          logger.error(formatLogs)
+          logger.info({ ...formatLogs, msg: 'Leaving due to an error...' })
+        } finally {
+          isJobCompleted = true
+        }
+      } else {
+        logger.info('Normalization job already running...')
+      }
+    },
+    timeZone: 'Europe/Paris',
+    runOnInit: true, // This attribute is set to launch the normalization batch once at the start of the application
+    start: true // This attribute is there to keep the cron job running after it has been executed
   })
 }
 
