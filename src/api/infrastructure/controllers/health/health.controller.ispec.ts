@@ -4,7 +4,6 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3'
 import { mockClient, AwsClientStub } from 'aws-sdk-client-mock'
 import { AppModule } from '../../../app.module'
-import { Context } from '../../../..//shared/infrastructure/utils/context'
 import { RequestLoggerInterceptor } from '../../interceptors/request-logger.interceptor'
 
 describe('HealthController', () => {
@@ -18,7 +17,7 @@ describe('HealthController', () => {
 
     // Disable logs for Integration tests
     app = moduleFixture.createNestApplication({ logger: false })
-    app.useGlobalInterceptors(new RequestLoggerInterceptor(new Context()))
+    app.useGlobalInterceptors(new RequestLoggerInterceptor())
 
     await app.init()
   })

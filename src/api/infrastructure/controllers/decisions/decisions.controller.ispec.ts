@@ -4,7 +4,6 @@ import { INestApplication, HttpStatus } from '@nestjs/common'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { mockClient, AwsClientStub } from 'aws-sdk-client-mock'
 import { AppModule } from '../../../app.module'
-import { Context } from '../../../..//shared/infrastructure/utils/context'
 import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
 import { RequestLoggerInterceptor } from '../../interceptors/request-logger.interceptor'
 
@@ -23,7 +22,7 @@ describe('Decisions Controller', () => {
 
     // Disable logs for Integration tests
     app = moduleFixture.createNestApplication({ logger: false })
-    app.useGlobalInterceptors(new RequestLoggerInterceptor(new Context()))
+    app.useGlobalInterceptors(new RequestLoggerInterceptor())
 
     await app.init()
   })
