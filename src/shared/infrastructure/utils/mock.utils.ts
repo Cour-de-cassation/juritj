@@ -108,7 +108,7 @@ export class MockUtils {
     blocOccultation: null,
     natureAffaireCivil: this.allAttributesMetadonneesDtoMock.libelleNature,
     natureAffairePenal: null,
-    codeMatiereCivil: this.allAttributesMetadonneesDtoMock.codeNature,
+    NPCode: this.allAttributesMetadonneesDtoMock.codeNature,
     NACCode: this.allAttributesMetadonneesDtoMock.codeNAC,
     endCaseCode: null,
     filenameSource: this.decisionName,
