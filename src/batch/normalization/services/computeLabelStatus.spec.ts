@@ -19,7 +19,7 @@ describe('updateLabelStatus', () => {
       const dateDecember2022 = new Date(2022, 11, 31)
       const dateMarch2023 = new Date(2023, 2, 31)
       const mockDecisionLabel = {
-        ...mockUtils.decisionLabelMock,
+        ...mockUtils.decisionTJLabelMock,
         dateDecision: dateDecember2022.toISOString(),
         dateCreation: dateMarch2023.toISOString(),
         public: true
@@ -38,7 +38,7 @@ describe('updateLabelStatus', () => {
       const dateSeptember2022 = new Date(2022, 8, 20)
       const dateMarch2023 = new Date(2023, 2, 25)
       const mockDecisionLabel = {
-        ...mockUtils.decisionLabelMock,
+        ...mockUtils.decisionTJLabelMock,
         dateDecision: dateSeptember2022.toISOString(),
         dateCreation: dateMarch2023.toISOString()
       }
@@ -56,7 +56,7 @@ describe('updateLabelStatus', () => {
       const dateJanuary2023 = new Date(2023, 0, 15)
       const dateJuly2023 = new Date(2023, 6, 20)
       const mockDecisionLabel = {
-        ...mockUtils.decisionLabelMock,
+        ...mockUtils.decisionTJLabelMock,
         dateDecision: dateJanuary2023.toISOString(),
         dateCreation: dateJuly2023.toISOString()
       }
@@ -72,7 +72,7 @@ describe('updateLabelStatus', () => {
     it(`when decision codeNAC is in transmissible CodeNAC list`, () => {
       // GIVEN
       const mockDecisionLabel = {
-        ...mockUtils.decisionLabelMock,
+        ...mockUtils.decisionTJLabelMock,
         NACCode: '22H'
       }
       const expectedLabelStatus = LabelStatus.TOBETREATED
@@ -92,7 +92,7 @@ describe('updateLabelStatus', () => {
         const dateDecisionSevenMonthsBefore = new Date(2022, 11, 15)
         const dateCreation = new Date(2023, 6, 20)
         const mockDecisionLabel = {
-          ...mockUtils.decisionLabelMock,
+          ...mockUtils.decisionTJLabelMock,
           dateDecision: dateDecisionSevenMonthsBefore.toISOString(),
           dateCreation: dateCreation.toISOString(),
           public: true
@@ -111,7 +111,7 @@ describe('updateLabelStatus', () => {
         const dateDecisionInTheFuture = new Date(2023, 7, 20)
         const dateCreation = new Date(2023, 6, 20)
         const mockDecisionLabel = {
-          ...mockUtils.decisionLabelMock,
+          ...mockUtils.decisionTJLabelMock,
           dateDecision: dateDecisionInTheFuture.toISOString(),
           dateCreation: dateCreation.toISOString(),
           public: true
@@ -129,7 +129,7 @@ describe('updateLabelStatus', () => {
     it('returns ignored_decisionNonPublique when decision is not public', () => {
       // GIVEN
       const mockDecisionLabel = {
-        ...new MockUtils().decisionLabelMock,
+        ...new MockUtils().decisionTJLabelMock,
         public: false
       }
       const expectedLabelStatus = LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
@@ -144,8 +144,8 @@ describe('updateLabelStatus', () => {
     it('returns ignored_codeNACnonTransmisCC when codeNAC is not in the list of codeNAC that needs to be transmitted to CC', () => {
       // GIVEN
       const mockDecisionLabel = {
-        ...new MockUtils().decisionLabelMock,
-        NACCode: '32A'
+        ...new MockUtils().decisionTJLabelMock,
+        codeDecision: '32A'
       }
       const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_NON_TRANSMIS_CC
 
@@ -161,7 +161,7 @@ describe('updateLabelStatus', () => {
         it(`when decision has ${codeNAC} NACCode indicating that the decision can not be public`, () => {
           // GIVEN
           const mockDecisionLabel = {
-            ...new MockUtils().decisionLabelMock,
+            ...new MockUtils().decisionTJLabelMock,
             NACCode: codeNAC
           }
           const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
@@ -177,7 +177,7 @@ describe('updateLabelStatus', () => {
       it('when decision has a transmissible NACCode that is also not public', () => {
         // GIVEN
         const mockDecisionLabel = {
-          ...new MockUtils().decisionLabelMock,
+          ...new MockUtils().decisionTJLabelMock,
           NACCode: '11E'
         }
         const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
@@ -195,7 +195,7 @@ describe('updateLabelStatus', () => {
         it(`when decision has ${codeNAC} NACCode indicating that the decision is partially public`, () => {
           // GIVEN
           const mockDecisionLabel = {
-            ...new MockUtils().decisionLabelMock,
+            ...new MockUtils().decisionTJLabelMock,
             NACCode: codeNAC
           }
           const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_DECISION_PARTIELLEMENT_PUBLIQUE
