@@ -10,7 +10,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     const mockDecision = new MockUtils().toNormalizeDecisionMock
     const expectedDecisionDto: DecisionTJDTO = {
       codeDecision: '0aA',
-      codeNature: '6C',
+      NPCode: '6C',
       codeService: '0A',
       debatPublic: true,
       decisionAssociee: {
