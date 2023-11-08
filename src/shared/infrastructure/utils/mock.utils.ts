@@ -76,7 +76,7 @@ export class MockUtils {
     metadonnees: this.allAttributesMetadonneesDtoMock
   }
 
-  decisionLabelMock: DecisionDTO = {
+  decisionMock: DecisionDTO = {
     appeals: [],
     chamberId: null,
     chamberName: null,
@@ -128,8 +128,8 @@ export class MockUtils {
     NAOCode: '',
     public: true
   }
-  decisionTJLabelMock: DecisionTJDTO = {
-    ...this.decisionLabelMock,
+  decisionTJMock: DecisionTJDTO = {
+    ...this.decisionMock,
     decisionAssociee: this.decisionDtoMock,
     filenameSource: 'test.wpd',
     indicateurQPC: true,
