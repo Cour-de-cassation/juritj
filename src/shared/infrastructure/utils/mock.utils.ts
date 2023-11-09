@@ -1,5 +1,5 @@
 import { Occultation, TypePartie } from '../../domain/enums'
-import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
+import { DecisionDTO, DecisionTJDTO, LabelStatus } from 'dbsder-api-types'
 
 export const TODAY = new Date().toISOString()
 
@@ -76,7 +76,7 @@ export class MockUtils {
     metadonnees: this.allAttributesMetadonneesDtoMock
   }
 
-  decisionLabelMock: DecisionDTO = {
+  decisionMock: DecisionDTO = {
     appeals: [],
     chamberId: null,
     chamberName: null,
@@ -127,5 +127,26 @@ export class MockUtils {
     publication: [],
     NAOCode: '',
     public: true
+  }
+  decisionTJMock: DecisionTJDTO = {
+    ...this.decisionMock,
+    decisionAssociee: this.decisionDtoMock,
+    filenameSource: 'test.wpd',
+    indicateurQPC: true,
+    idDecisionWinci: 'TJ00000',
+    codeDecision: '55D',
+    codeNature: '6C',
+    codeService: '0A',
+    debatPublic: false,
+    libelleCodeDecision: '',
+    libelleNAC: '',
+    libelleNatureParticuliere: '',
+    libelleService: '',
+    matiereDeterminee: false,
+    numeroRoleGeneral: '01/12345',
+    pourvoiCourDeCassation: false,
+    pourvoiLocal: false,
+    recommandationOccultation: Occultation.AUCUNE,
+    selection: false
   }
 }

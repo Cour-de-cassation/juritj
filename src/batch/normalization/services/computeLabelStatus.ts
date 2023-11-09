@@ -1,14 +1,11 @@
-import { DecisionDTO, LabelStatus } from 'dbsder-api-types'
+import { DecisionTJDTO, LabelStatus } from 'dbsder-api-types'
 import { logger } from '../index'
-import {
-  codeNACListNotPublic,
-  codeNACListPartiallyPublic,
-  codeNACListTransmissibleToCC
-} from '../infrastructure/codeNACList'
+import { codeNACListNotPublic, codeNACListPartiallyPublic } from '../infrastructure/codeNACList'
 import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
 import { normalizationFormatLogs } from '../index'
+import { codeDecisionListTransmissibleToCC } from '../infrastructure/codeDecisionList'
 
-export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
+export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   const dateCreation = new Date(decisionDto.dateCreation)
   const dateDecision = new Date(decisionDto.dateDecision)
   const formatLogs: LogsFormat = {
@@ -61,12 +58,12 @@ export function computeLabelStatus(decisionDto: DecisionDTO): LabelStatus {
     return LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
   }
 
-  if (!isDecisionFromTJTransmissibleToCC(decisionDto.NACCode)) {
+  if (!isDecisionFromTJTransmissibleToCC(decisionDto.codeDecision)) {
     logger.error({
       ...formatLogs,
       msg: 'Decision can not be treated by Judilibre because NACCode is not in authorized NACCode list, changing LabelStatus to ignored_codeNACnonTransmisCC.'
     })
-    return LabelStatus.IGNORED_CODE_NAC_NON_TRANSMIS_CC
+    return LabelStatus.IGNORED_CODE_DECISION_NON_TRANSMIS_CC
   }
 
   return decisionDto.labelStatus
@@ -86,7 +83,7 @@ function isDecisionOlderThanSixMonths(dateCreation: Date, dateDecision: Date): b
 }
 
 function isDecisionFromTJTransmissibleToCC(codeNAC: string): boolean {
-  return codeNACListTransmissibleToCC.includes(codeNAC)
+  return codeDecisionListTransmissibleToCC.includes(codeNAC)
 }
 
 function isDecisionNotPublic(codeNAC: string): boolean {

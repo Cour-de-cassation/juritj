@@ -35,8 +35,8 @@ describe('DbSderApi Gateway', () => {
 
   it('returns the saved decision when dbSder API is called with valid parameters', async () => {
     // GIVEN
-    const decisionToSave = mockUtils.decisionLabelMock
-    mockedAxios.put.mockResolvedValueOnce({ data: mockUtils.decisionLabelMock })
+    const decisionToSave = mockUtils.decisionMock
+    mockedAxios.put.mockResolvedValueOnce({ data: mockUtils.decisionMock })
 
     // WHEN
     const result = await gateway.saveDecision(decisionToSave)
@@ -47,7 +47,7 @@ describe('DbSderApi Gateway', () => {
 
   it('throws a 400 Bad Request error when dbSder API is called with missing parameters', async () => {
     // GIVEN
-    const incorrectDecisionToSave = mockUtils.decisionLabelMock
+    const incorrectDecisionToSave = mockUtils.decisionMock
     delete incorrectDecisionToSave.sourceId
 
     mockedAxios.put.mockRejectedValueOnce({
@@ -67,7 +67,7 @@ describe('DbSderApi Gateway', () => {
 
   it('throws a 401 Unauthorized error when normalization is not allowed to call dbSder API', async () => {
     // GIVEN
-    const decisionToSave = mockUtils.decisionLabelMock
+    const decisionToSave = mockUtils.decisionMock
     mockedAxios.put.mockRejectedValueOnce({
       response: {
         data: {
@@ -85,7 +85,7 @@ describe('DbSderApi Gateway', () => {
 
   it('throws a 409 Conflict error when decision ID already exist in DBSDER API', async () => {
     // GIVEN
-    const decisionToSave = mockUtils.decisionLabelMock
+    const decisionToSave = mockUtils.decisionMock
     mockedAxios.put.mockRejectedValueOnce({
       response: {
         data: {
@@ -103,7 +103,7 @@ describe('DbSderApi Gateway', () => {
 
   it('throws a 503 Unavailable error when dbSder API is unavailable', async () => {
     // GIVEN
-    const decisionToSave = mockUtils.decisionLabelMock
+    const decisionToSave = mockUtils.decisionMock
     mockedAxios.put.mockRejectedValueOnce({
       response: {
         data: {
