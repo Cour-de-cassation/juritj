@@ -128,6 +128,7 @@ export class MockUtils {
     NAOCode: '',
     public: true
   }
+
   decisionTJMock: DecisionTJDTO = {
     ...this.decisionMock,
     decisionAssociee: this.decisionDtoMock,
@@ -135,7 +136,7 @@ export class MockUtils {
     indicateurQPC: true,
     idDecisionWinci: 'TJ00000',
     codeDecision: '55D',
-    codeNature: '6C',
+    NPCode: '6C',
     codeService: '0A',
     debatPublic: false,
     libelleCodeDecision: '',
