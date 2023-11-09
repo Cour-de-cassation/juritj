@@ -63,7 +63,7 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
       ...formatLogs,
       msg: 'Decision can not be treated by Judilibre because NACCode is not in authorized NACCode list, changing LabelStatus to ignored_codeNACnonTransmisCC.'
     })
-    return LabelStatus.IGNORED_CODE_NAC_NON_TRANSMIS_CC
+    return LabelStatus.IGNORED_CODE_DECISION_NON_TRANSMIS_CC
   }
 
   return decisionDto.labelStatus

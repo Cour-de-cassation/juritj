@@ -147,7 +147,7 @@ describe('updateLabelStatus', () => {
         ...new MockUtils().decisionTJMock,
         codeDecision: '32A'
       }
-      const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_NON_TRANSMIS_CC
+      const expectedLabelStatus = LabelStatus.IGNORED_CODE_DECISION_NON_TRANSMIS_CC
 
       // WHEN
       mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
