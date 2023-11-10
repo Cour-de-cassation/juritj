@@ -75,7 +75,7 @@ export class MockUtils {
     decisionAssociee: this.decisionDtoMock,
     filenameSource: this.decisionName,
     indicateurQPC: true,
-    idDecisionWinci: 'TJ00000',
+    idDecision: 'TJ00000',
     sourceId: this.uniqueDecisionIdHash
   }
 

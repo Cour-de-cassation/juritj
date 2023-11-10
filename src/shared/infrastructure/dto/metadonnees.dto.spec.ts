@@ -1014,13 +1014,13 @@ describe('Validate MetadonneeDTO format', () => {
     })
   })
 
-  describe('idDecisionWinci property', () => {
-    it('throws an error when idDecisionWinci is not a string', async () => {
+  describe('idDecision property', () => {
+    it('throws an error when idDecision is not a string', async () => {
       // GIVEN
-      const invalidIdDecisionWinci = 2345
+      const invalidIdDecision = 2345
       const invalidMetadonnee = {
         ...someValidMetaDonneeDto,
-        idDecisionWinci: invalidIdDecisionWinci
+        idDecision: invalidIdDecision
       }
 
       // WHEN

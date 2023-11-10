@@ -398,7 +398,7 @@ export class MetadonneesDto {
   })
   @IsString()
   @IsOptional()
-  idDecisionWinci?: string
+  idDecision?: string
 
   @IsBoolean()
   @IsOptional()
