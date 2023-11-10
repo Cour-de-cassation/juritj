@@ -88,7 +88,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           msg: 'Successful normalization of' + decisionFilename
         })
         listConvertedDecision.push({
-          metadonnees: transformedMetadonnees,
+          metadonnees: decisionToSave,
           decisionNormalisee: cleanedDecision
         })
       } catch (error) {

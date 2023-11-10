@@ -34,6 +34,7 @@ describe('Normalization', () => {
   const decisionIntegre = 'données de la décision intègre'
   const mockUtils = new MockUtils()
   const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
+  const normalizedMetadonnees = mockUtils.decisionTJMock
 
   beforeEach(() => {
     mockS3.reset()
@@ -82,7 +83,7 @@ describe('Normalization', () => {
         {
           decisionNormalisee: decisionIntegre,
           metadonnees: {
-            ...metadonnees,
+            ...normalizedMetadonnees,
             idJuridiction: decisionIdJuridiction,
             _id: decisionIdJuridiction + 'A01-1234520221121',
             labelStatus: LabelStatus.TOBETREATED
@@ -135,7 +136,7 @@ describe('Normalization', () => {
         {
           decisionNormalisee: decisionIntegre,
           metadonnees: {
-            ...metadonnees,
+            normalizedMetadonnees,
             idJuridiction: firstDecisionIdJuridiction,
             _id: firstDecisionIdJuridiction + 'A01-1234520221121',
             labelStatus: LabelStatus.TOBETREATED
@@ -144,7 +145,7 @@ describe('Normalization', () => {
         {
           decisionNormalisee: decisionIntegre,
           metadonnees: {
-            ...metadonnees,
+            normalizedMetadonnees,
             idJuridiction: secondDecisionIdJuridiction,
             _id: secondDecisionIdJuridiction + 'A01-1234520221121',
             labelStatus: LabelStatus.TOBETREATED
@@ -153,7 +154,7 @@ describe('Normalization', () => {
         {
           decisionNormalisee: decisionIntegre,
           metadonnees: {
-            ...metadonnees,
+            normalizedMetadonnees,
             idJuridiction: thirdDecisionIdJuridiction,
             _id: thirdDecisionIdJuridiction + 'A01-1234520221121',
             labelStatus: LabelStatus.TOBETREATED
@@ -167,6 +168,38 @@ describe('Normalization', () => {
       // THEN
       expect(mockS3).toHaveReceivedCommandTimes(ListObjectsV2Command, 3)
       expect(result).toEqual(expected)
+    })
+
+    it('returns 2 normalized decisions with different creationDate when 2 decisions are available on S3 and treating in the same batch', async () => {
+      // GIVEN
+      // S3 must be called 2 times to return 2 decision filename
+      const listWithTwoElementsFromS3 = {
+        Contents: [{ Key: 'firstFilename' }, { Key: 'secondFilename' }]
+      }
+      mockS3.on(ListObjectsV2Command).resolvesOnce(listWithTwoElementsFromS3).resolves({})
+
+      // S3 must be called 2 times to retrieve decisions content
+      const firstDecisionIdJuridiction = 'TJ00001'
+      const secondDecisionIdJuridiction = 'TJ00002'
+      mockS3
+        .on(GetObjectCommand)
+        .resolvesOnce({
+          Body: createFakeDocument(decisionIntegre, metadonnees, firstDecisionIdJuridiction)
+        })
+        .resolvesOnce({
+          Body: createFakeDocument(decisionIntegre, metadonnees, secondDecisionIdJuridiction)
+        })
+        .resolves({})
+
+      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue({})
+
+      // WHEN
+      const result = await normalizationJob()
+      console.log({ result })
+
+      // THEN
+      expect(mockS3).toHaveReceivedCommandTimes(ListObjectsV2Command, 2)
+      expect(result[0].metadonnees.dateCreation).not.toEqual(result[1].metadonnees.dateCreation)
     })
   })
 

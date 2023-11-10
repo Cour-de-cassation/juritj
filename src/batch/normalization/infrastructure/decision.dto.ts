@@ -1,7 +1,6 @@
-import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
-import { hashDecisionId } from '../../../shared/infrastructure/utils/hash.utils'
-import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
 import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-types'
+import { hashDecisionId } from '../../../shared/infrastructure/utils/hash.utils'
+import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
 
 export function mapDecisionNormaliseeToDecisionDto(
   decision: DecisionModel,
@@ -30,7 +29,7 @@ export function mapDecisionNormaliseeToDecisionDto(
     blocOccultation: 0,
     chamberId: '',
     chamberName: '',
-    dateCreation: TODAY,
+    dateCreation: new Date().toISOString(),
     dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
     _id: decision.metadonnees._id,
     jurisdictionCode: decision.metadonnees.codeJuridiction,

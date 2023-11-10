@@ -1,8 +1,6 @@
 import { Occultation, TypePartie } from '../../domain/enums'
 import { DecisionDTO, DecisionTJDTO, LabelStatus } from 'dbsder-api-types'
 
-export const TODAY = new Date().toISOString()
-
 export class MockUtils {
   // Shared context
   uniqueDecisionId = `TJ75011A01-1234520221121`
@@ -80,8 +78,8 @@ export class MockUtils {
     appeals: [],
     chamberId: null,
     chamberName: null,
-    dateCreation: TODAY,
-    dateDecision: TODAY,
+    dateCreation: '2020-11-10T11:01:32.180Z',
+    dateDecision: '2020-11-09T11:01:32.180Z',
     jurisdictionCode: 'this.metadonneesDtoMock.codeJuridiction',
     jurisdictionId: this.allAttributesMetadonneesDtoMock.idJuridiction,
     jurisdictionName: this.allAttributesMetadonneesDtoMock.nomJuridiction,

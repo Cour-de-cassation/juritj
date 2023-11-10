@@ -1,6 +1,6 @@
-import { Metadonnees } from '../../domain/metadonnees'
+import { DecisionTJDTO } from 'dbsder-api-types'
 
 export class ConvertedDecisionWithMetadonneesDto {
   decisionNormalisee: string
-  metadonnees: Metadonnees
+  metadonnees: DecisionTJDTO
 }

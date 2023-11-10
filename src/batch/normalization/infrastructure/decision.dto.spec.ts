@@ -1,9 +1,20 @@
-import { MockUtils, TODAY } from '../../../shared/infrastructure/utils/mock.utils'
+import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { mapDecisionNormaliseeToDecisionDto } from './decision.dto'
 import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-types'
 import { Occultation } from '../../../shared/domain/enums'
 
 describe('mapDecisionNormaliseeToDecisionDto', () => {
+  const now = new Date(2022, 10, 10)
+
+  beforeAll(() => {
+    jest.useFakeTimers()
+    jest.setSystemTime(now)
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+
   it('returns an object mapping normalized decision to decision DTO', async () => {
     // GIVEN
     const filename = 'test.json'
@@ -34,8 +45,8 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       blocOccultation: 0,
       chamberId: '',
       chamberName: '',
-      dateCreation: TODAY,
-      dateDecision: new Date(2022, 11 - 1, 21).toISOString(),
+      dateCreation: now.toISOString(),
+      dateDecision: new Date(2022, 10, 21).toISOString(),
       filenameSource: 'test.json',
       _id: 'TJ75011A01-1234520221121',
       jurisdictionCode: undefined,
