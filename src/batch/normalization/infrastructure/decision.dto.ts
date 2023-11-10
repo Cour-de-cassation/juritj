@@ -23,7 +23,7 @@ export function mapDecisionNormaliseeToDecisionDto(
     president: decision.metadonnees.president,
     recommandationOccultation: decision.metadonnees.recommandationOccultation,
     selection: decision.metadonnees.selection,
-    sommaire: decision.metadonnees.sommaire,
+    sommaire: decision.metadonnees.sommaire, //
     NACCode: decision.metadonnees.codeNAC,
     appeals: decision.metadonnees.numeroMesureInstruction ?? [],
     blocOccultation: 0,

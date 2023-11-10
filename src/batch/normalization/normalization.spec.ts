@@ -21,9 +21,10 @@ jest.mock('./index', () => ({
 
 describe('Normalization', () => {
   const mockUtils = new MockUtils()
-  const fakeWithMandatoryMetadonnees = mockUtils.mandatoryMetadonneesDtoMock
+  const fakeMetadonneesFromS3 = mockUtils.allAttributesMetadonneesDtoMock
+  const fakeNormalisedMetadonnees = mockUtils.decisionTJMock
 
-  const decisionName = 'filename.wpd'
+  const decisionName = mockUtils.decisionName
   const decisionIntegre: Express.Multer.File = {
     fieldname: 'decisionIntegre',
     originalname: decisionName,
@@ -39,16 +40,11 @@ describe('Normalization', () => {
 
   const mockDecision: CollectDto = {
     decisionIntegre,
-    metadonnees: fakeWithMandatoryMetadonnees
+    metadonnees: fakeMetadonneesFromS3
   }
 
   beforeEach(() => {
     jest.resetAllMocks()
-
-    jest
-      .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
-      .mockImplementationOnce(() => Promise.resolve([decisionName]))
-      .mockImplementation(() => Promise.resolve([]))
 
     jest
       .spyOn(DecisionS3Repository.prototype, 'getDecisionByFilename')
@@ -60,22 +56,40 @@ describe('Normalization', () => {
     jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockImplementation(jest.fn())
   })
 
+  beforeAll(() => {
+    jest.useFakeTimers()
+    jest.setSystemTime(mockUtils.dateNow)
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+
   describe('For one unique decision', () => {
+    beforeEach(() => {
+      jest
+        .spyOn(fetchDecisionListFromS3, 'fetchDecisionListFromS3')
+        .mockImplementationOnce(() => Promise.resolve([decisionName]))
+        .mockImplementation(() => Promise.resolve([]))
+    })
+
     it('returns decision with its metadonnees and decision ID', async () => {
       // GIVEN
       jest
         .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
-        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContent))
+        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContentToNormalize))
+      const normalisedDecision =
+        'Le contenu de ma décision avec des espaces et des backslash multiples \n '
 
       const expected = [
         {
           metadonnees: {
-            ...fakeWithMandatoryMetadonnees,
+            ...fakeNormalisedMetadonnees,
             _id: mockUtils.uniqueDecisionId,
-            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
+            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
+            originalText: normalisedDecision
           },
-          decisionNormalisee:
-            'Le contenu de ma décision avec des espaces et des backslash multiples \n '
+          decisionNormalisee: normalisedDecision
         }
       ]
 
@@ -100,9 +114,10 @@ describe('Normalization', () => {
       const expected = [
         {
           metadonnees: {
-            ...fakeWithMandatoryMetadonnees,
+            ...fakeNormalisedMetadonnees,
             _id: mockUtils.uniqueDecisionId,
-            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
+            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
+            originalText: expectedDecision
           },
           decisionNormalisee: expectedDecision
         }
@@ -130,24 +145,26 @@ describe('Normalization', () => {
 
       jest
         .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
-        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContent))
-        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContent))
+        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContentToNormalize))
+        .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContentToNormalize))
 
       const expected = [
         {
           metadonnees: {
-            ...fakeWithMandatoryMetadonnees,
+            ...fakeNormalisedMetadonnees,
             _id: mockUtils.uniqueDecisionId,
-            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
+            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
+            filenameSource: firstDecisionName
           },
           decisionNormalisee:
             'Le contenu de ma décision avec des espaces et des backslash multiples \n '
         },
         {
           metadonnees: {
-            ...fakeWithMandatoryMetadonnees,
+            ...fakeNormalisedMetadonnees,
             _id: mockUtils.uniqueDecisionId,
-            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus
+            labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
+            filenameSource: secondDecisionName
           },
           decisionNormalisee:
             'Le contenu de ma décision avec des espaces et des backslash multiples \n '

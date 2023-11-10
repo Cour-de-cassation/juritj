@@ -61,7 +61,7 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   if (!isDecisionFromTJTransmissibleToCC(decisionDto.codeDecision)) {
     logger.error({
       ...formatLogs,
-      msg: 'Decision can not be treated by Judilibre because NACCode is not in authorized NACCode list, changing LabelStatus to ignored_codeNACnonTransmisCC.'
+      msg: 'Decision can not be treated by Judilibre because codeDecision is not in authorized codeDecision list, changing LabelStatus to ignored_codeDecisionNonTransmisCC.'
     })
     return LabelStatus.IGNORED_CODE_DECISION_NON_TRANSMIS_CC
   }

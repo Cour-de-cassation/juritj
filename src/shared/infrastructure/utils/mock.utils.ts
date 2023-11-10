@@ -1,5 +1,5 @@
 import { Occultation, TypePartie } from '../../domain/enums'
-import { DecisionDTO, DecisionTJDTO, LabelStatus } from 'dbsder-api-types'
+import { DecisionDTO, DecisionTJDTO, LabelStatus, Sources } from 'dbsder-api-types'
 
 export class MockUtils {
   // Shared context
@@ -18,10 +18,14 @@ export class MockUtils {
     nom: 'nom Partie'
   }
 
-  decisionContent =
+  decisionContentToNormalize =
     '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t'
+  decisionContentNormalized =
+    'Le contenu de ma décision avec des espaces et des backslash multiples \n '
 
   decisionName = 'decisionName.wpd'
+
+  dateNow = new Date(2022, 10, 21)
 
   // JuriTJ Collect context
   decisionDtoMock = {
@@ -40,13 +44,13 @@ export class MockUtils {
     codeService: '0A',
     dateDecision: '20221121',
     libelleService: 'Libelle de service',
-    codeDecision: '0aA',
+    codeDecision: '55C',
     libelleCodeDecision: 'some libelle code decision',
     codeNAC: '11F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
     codeNature: '6C',
     libelleNature: 'Autres demandes en matière de frais et dépens',
-    decisionPublique: false,
+    decisionPublique: true,
     recommandationOccultation: Occultation.AUCUNE,
     selection: false,
     matiereDeterminee: true,
@@ -63,89 +67,64 @@ export class MockUtils {
     labelStatus: LabelStatus.TOBETREATED,
     numeroMesureInstruction: ['AZERTYUIOP'],
     decisionAssociee: this.decisionDtoMock,
-    filenameSource: 'test.wpd',
+    filenameSource: this.decisionName,
     indicateurQPC: true,
     idDecisionWinci: 'TJ00000',
     sourceId: this.uniqueDecisionIdHash
   }
 
   toNormalizeDecisionMock = {
-    decision: this.decisionContent,
+    decision: this.decisionContentToNormalize,
     metadonnees: this.allAttributesMetadonneesDtoMock
   }
 
+  // End of normalization context
   decisionMock: DecisionDTO = {
-    appeals: [],
-    chamberId: null,
-    chamberName: null,
-    dateCreation: '2020-11-10T11:01:32.180Z',
-    dateDecision: '2020-11-09T11:01:32.180Z',
-    jurisdictionCode: 'this.metadonneesDtoMock.codeJuridiction',
+    appeals: this.allAttributesMetadonneesDtoMock.numeroMesureInstruction,
+    chamberId: '',
+    chamberName: '',
+    dateCreation: this.dateNow.toISOString(),
+    dateDecision: this.dateNow.toISOString(),
+    jurisdictionCode: undefined,
     jurisdictionId: this.allAttributesMetadonneesDtoMock.idJuridiction,
     jurisdictionName: this.allAttributesMetadonneesDtoMock.nomJuridiction,
     labelStatus: this.allAttributesMetadonneesDtoMock.labelStatus,
-    labelTreatments: null,
     occultation: {
-      additionalTerms: 'this.metadonneesDtoMock.occultationComplementaire',
+      additionalTerms: '',
       categoriesToOmit: []
     },
-    originalText: this.decisionContent,
+    originalText: this.decisionContentNormalized,
     parties: this.allAttributesMetadonneesDtoMock.parties,
-    pseudoText: null,
-    pubCategory: null,
     registerNumber: this.allAttributesMetadonneesDtoMock.numeroRegistre,
-    solution: null,
-    sourceId: null,
-    sourceName: null,
-    zoning: {
-      introduction_subzonage: {
-        publication: []
-      }
-    },
-    formation: null,
-    blocOccultation: null,
-    natureAffaireCivil: this.allAttributesMetadonneesDtoMock.libelleNature,
-    natureAffairePenal: null,
+    sourceId: this.uniqueDecisionIdHash,
+    sourceName: Sources.TJ,
+    blocOccultation: 0,
     NPCode: this.allAttributesMetadonneesDtoMock.codeNature,
     NACCode: this.allAttributesMetadonneesDtoMock.codeNAC,
-    endCaseCode: null,
-    filenameSource: this.decisionName,
+    filenameSource: this.allAttributesMetadonneesDtoMock.filenameSource,
     _id: '',
-    analysis: {
-      analyse: [''],
-      doctrine: 'string',
-      link: '',
-      reference: [],
-      source: '',
-      summary: '',
-      target: '',
-      title: []
-    },
-    decatt: [],
-    publication: [],
-    NAOCode: '',
-    public: true
+    public: this.allAttributesMetadonneesDtoMock.decisionPublique
   }
 
   decisionTJMock: DecisionTJDTO = {
     ...this.decisionMock,
-    decisionAssociee: this.decisionDtoMock,
-    filenameSource: 'test.wpd',
+    decisionAssociee: this.allAttributesMetadonneesDtoMock.decisionAssociee,
     indicateurQPC: true,
     idDecisionWinci: 'TJ00000',
-    codeDecision: '55D',
-    NPCode: '6C',
-    codeService: '0A',
-    debatPublic: false,
-    libelleCodeDecision: '',
-    libelleNAC: '',
-    libelleNatureParticuliere: '',
-    libelleService: '',
-    matiereDeterminee: false,
+    codeDecision: this.allAttributesMetadonneesDtoMock.codeDecision,
+    codeService: this.allAttributesMetadonneesDtoMock.codeService,
+    debatPublic: this.allAttributesMetadonneesDtoMock.debatPublic,
+    libelleCodeDecision: this.allAttributesMetadonneesDtoMock.libelleCodeDecision,
+    libelleNAC: this.allAttributesMetadonneesDtoMock.libelleNAC,
+    libelleNatureParticuliere: this.allAttributesMetadonneesDtoMock.libelleNature,
+    libelleService: this.allAttributesMetadonneesDtoMock.libelleService,
+    matiereDeterminee: this.allAttributesMetadonneesDtoMock.matiereDeterminee,
     numeroRoleGeneral: '01/12345',
     pourvoiCourDeCassation: false,
     pourvoiLocal: false,
     recommandationOccultation: Occultation.AUCUNE,
+    president: undefined,
+    sommaire: undefined,
     selection: false
   }
 }

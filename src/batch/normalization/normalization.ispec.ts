@@ -31,9 +31,9 @@ jest.mock('./index', () => ({
 describe('Normalization', () => {
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
 
-  const decisionIntegre = 'données de la décision intègre'
   const mockUtils = new MockUtils()
-  const metadonnees = mockUtils.mandatoryMetadonneesDtoMock
+  const decisionIntegre = mockUtils.decisionContentToNormalize
+  const metadonneesFromS3 = mockUtils.allAttributesMetadonneesDtoMock
   const normalizedMetadonnees = mockUtils.decisionTJMock
 
   beforeEach(() => {
@@ -46,6 +46,15 @@ describe('Normalization', () => {
     jest
       .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
       .mockResolvedValue(decisionIntegre)
+  })
+
+  beforeAll(() => {
+    jest.useFakeTimers()
+    jest.setSystemTime(mockUtils.dateNow)
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
   })
 
   describe('Success Cases', () => {
@@ -67,26 +76,37 @@ describe('Normalization', () => {
 
     it('returns a list of normalized decisions when decisions are present', async () => {
       // GIVEN
+      const decisionIdJuridiction = 'TJ00001'
+      const objectId = decisionIdJuridiction + 'A01-1234520221121'
+      const sourceId = 1579505431
+      const fileName = 'filename'
+
       const listWithOneElementFromS3 = {
-        Contents: [{ Key: 'filename' }]
+        Contents: [{ Key: fileName }]
       }
       mockS3.on(ListObjectsV2Command).resolves(listWithOneElementFromS3)
 
-      const decisionIdJuridiction = 'TJ00001'
       mockS3.on(GetObjectCommand).resolves({
-        Body: createFakeDocument(decisionIntegre, metadonnees, decisionIdJuridiction)
+        Body: createFakeDocument(
+          decisionIntegre,
+          metadonneesFromS3,
+          decisionIdJuridiction,
+          objectId
+        )
       })
 
       jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue({})
 
       const expected = [
         {
-          decisionNormalisee: decisionIntegre,
+          decisionNormalisee: mockUtils.decisionContentNormalized,
           metadonnees: {
             ...normalizedMetadonnees,
-            idJuridiction: decisionIdJuridiction,
-            _id: decisionIdJuridiction + 'A01-1234520221121',
-            labelStatus: LabelStatus.TOBETREATED
+            jurisdictionId: decisionIdJuridiction,
+            _id: objectId,
+            labelStatus: LabelStatus.TOBETREATED,
+            filenameSource: fileName,
+            sourceId
           }
         }
       ]
@@ -100,12 +120,25 @@ describe('Normalization', () => {
 
     it('returns 3 normalized decisions when 3 decisions are available on S3 (restarts until all decisions from S3 are treated)', async () => {
       // GIVEN
+      const firstDecisionIdJuridiction = 'TJ00001'
+      const firstObjectId = firstDecisionIdJuridiction + 'A01-1234520221121'
+      const firstFilename = 'firstFilename'
+      const firstSourceId = 1579505431
+      const secondDecisionIdJuridiction = 'TJ00002'
+      const secondObjectId = secondDecisionIdJuridiction + 'A01-1234520221121'
+      const secondFilename = 'secondFilename'
+      const secondSourceId = 1082966996
+      const thirdDecisionIdJuridiction = 'TJ00003'
+      const thirdtObjectId = thirdDecisionIdJuridiction + 'A01-1234520221121'
+      const thirdFilename = 'thirdFilename'
+      const thirdSourceId = 4162437013
+
       // S3 must be called 3 times to return 2 + 1 decision filename
       const listWithTwoElementsFromS3 = {
-        Contents: [{ Key: 'firstFilename' }, { Key: 'secondFilename' }]
+        Contents: [{ Key: firstFilename }, { Key: secondFilename }]
       }
       const listWithOneElementFromS3 = {
-        Contents: [{ Key: 'thirdFilename' }]
+        Contents: [{ Key: thirdFilename }]
       }
       mockS3
         .on(ListObjectsV2Command)
@@ -114,19 +147,31 @@ describe('Normalization', () => {
         .resolves({})
 
       // S3 must be called 3 times to retrieve decisions content
-      const firstDecisionIdJuridiction = 'TJ00001'
-      const secondDecisionIdJuridiction = 'TJ00002'
-      const thirdDecisionIdJuridiction = 'TJ00003'
       mockS3
         .on(GetObjectCommand)
         .resolvesOnce({
-          Body: createFakeDocument(decisionIntegre, metadonnees, firstDecisionIdJuridiction)
+          Body: createFakeDocument(
+            decisionIntegre,
+            metadonneesFromS3,
+            firstDecisionIdJuridiction,
+            firstObjectId
+          )
         })
         .resolvesOnce({
-          Body: createFakeDocument(decisionIntegre, metadonnees, secondDecisionIdJuridiction)
+          Body: createFakeDocument(
+            decisionIntegre,
+            metadonneesFromS3,
+            secondDecisionIdJuridiction,
+            secondObjectId
+          )
         })
         .resolvesOnce({
-          Body: createFakeDocument(decisionIntegre, metadonnees, thirdDecisionIdJuridiction)
+          Body: createFakeDocument(
+            decisionIntegre,
+            metadonneesFromS3,
+            thirdDecisionIdJuridiction,
+            thirdtObjectId
+          )
         })
         .resolves({})
 
@@ -134,30 +179,36 @@ describe('Normalization', () => {
 
       const expected = [
         {
-          decisionNormalisee: decisionIntegre,
+          decisionNormalisee: mockUtils.decisionContentNormalized,
           metadonnees: {
-            normalizedMetadonnees,
-            idJuridiction: firstDecisionIdJuridiction,
-            _id: firstDecisionIdJuridiction + 'A01-1234520221121',
-            labelStatus: LabelStatus.TOBETREATED
+            ...normalizedMetadonnees,
+            jurisdictionId: firstDecisionIdJuridiction,
+            _id: firstObjectId,
+            labelStatus: LabelStatus.TOBETREATED,
+            filenameSource: firstFilename,
+            sourceId: firstSourceId
           }
         },
         {
-          decisionNormalisee: decisionIntegre,
+          decisionNormalisee: mockUtils.decisionContentNormalized,
           metadonnees: {
-            normalizedMetadonnees,
-            idJuridiction: secondDecisionIdJuridiction,
-            _id: secondDecisionIdJuridiction + 'A01-1234520221121',
-            labelStatus: LabelStatus.TOBETREATED
+            ...normalizedMetadonnees,
+            jurisdictionId: secondDecisionIdJuridiction,
+            _id: secondObjectId,
+            labelStatus: LabelStatus.TOBETREATED,
+            filenameSource: secondFilename,
+            sourceId: secondSourceId
           }
         },
         {
-          decisionNormalisee: decisionIntegre,
+          decisionNormalisee: mockUtils.decisionContentNormalized,
           metadonnees: {
-            normalizedMetadonnees,
-            idJuridiction: thirdDecisionIdJuridiction,
-            _id: thirdDecisionIdJuridiction + 'A01-1234520221121',
-            labelStatus: LabelStatus.TOBETREATED
+            ...normalizedMetadonnees,
+            jurisdictionId: thirdDecisionIdJuridiction,
+            _id: thirdtObjectId,
+            labelStatus: LabelStatus.TOBETREATED,
+            filenameSource: thirdFilename,
+            sourceId: thirdSourceId
           }
         }
       ]
@@ -172,22 +223,39 @@ describe('Normalization', () => {
 
     it('returns 2 normalized decisions with different creationDate when 2 decisions are available on S3 and treating in the same batch', async () => {
       // GIVEN
+      jest.useRealTimers()
+
+      const firstDecisionIdJuridiction = 'TJ00001'
+      const firstObjectId = firstDecisionIdJuridiction + 'A01-1234520221121'
+      const firstFilename = 'firstFilename'
+      const secondDecisionIdJuridiction = 'TJ00002'
+      const secondObjectId = secondDecisionIdJuridiction + 'A01-1234520221121'
+      const secondFilename = 'secondFilename'
+
       // S3 must be called 2 times to return 2 decision filename
       const listWithTwoElementsFromS3 = {
-        Contents: [{ Key: 'firstFilename' }, { Key: 'secondFilename' }]
+        Contents: [{ Key: firstFilename }, { Key: secondFilename }]
       }
       mockS3.on(ListObjectsV2Command).resolvesOnce(listWithTwoElementsFromS3).resolves({})
 
       // S3 must be called 2 times to retrieve decisions content
-      const firstDecisionIdJuridiction = 'TJ00001'
-      const secondDecisionIdJuridiction = 'TJ00002'
       mockS3
         .on(GetObjectCommand)
         .resolvesOnce({
-          Body: createFakeDocument(decisionIntegre, metadonnees, firstDecisionIdJuridiction)
+          Body: createFakeDocument(
+            decisionIntegre,
+            metadonneesFromS3,
+            firstDecisionIdJuridiction,
+            firstObjectId
+          )
         })
         .resolvesOnce({
-          Body: createFakeDocument(decisionIntegre, metadonnees, secondDecisionIdJuridiction)
+          Body: createFakeDocument(
+            decisionIntegre,
+            metadonneesFromS3,
+            secondDecisionIdJuridiction,
+            secondObjectId
+          )
         })
         .resolves({})
 
@@ -195,7 +263,6 @@ describe('Normalization', () => {
 
       // WHEN
       const result = await normalizationJob()
-      console.log({ result })
 
       // THEN
       expect(mockS3).toHaveReceivedCommandTimes(ListObjectsV2Command, 2)
@@ -222,8 +289,15 @@ describe('Normalization', () => {
       mockS3.on(ListObjectsV2Command).resolves(listWithOneElementFromS3)
 
       const decisionIdJuridiction = 'TJ00001'
+      const objectId = decisionIdJuridiction + 'A01-1234520221121'
+
       mockS3.on(GetObjectCommand).resolves({
-        Body: createFakeDocument(decisionIntegre, metadonnees, decisionIdJuridiction)
+        Body: createFakeDocument(
+          decisionIntegre,
+          metadonneesFromS3,
+          decisionIdJuridiction,
+          objectId
+        )
       })
 
       jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockRejectedValueOnce(new Error())
@@ -240,11 +314,12 @@ describe('Normalization', () => {
 function createFakeDocument(
   decisionIntegre: string,
   metadonnees: any,
-  decisionIdJuridiction: string
+  decisionIdJuridiction: string,
+  objectId: string
 ) {
   const decision = {
     decisionIntegre,
-    metadonnees: { ...metadonnees, idJuridiction: decisionIdJuridiction }
+    metadonnees: { ...metadonnees, idJuridiction: decisionIdJuridiction, _id: objectId }
   }
   const stream = new Readable()
   stream.push(JSON.stringify(decision))

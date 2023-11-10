@@ -4,11 +4,11 @@ import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-type
 import { Occultation } from '../../../shared/domain/enums'
 
 describe('mapDecisionNormaliseeToDecisionDto', () => {
-  const now = new Date(2022, 10, 10)
+  const mockUtils = new MockUtils()
 
   beforeAll(() => {
     jest.useFakeTimers()
-    jest.setSystemTime(now)
+    jest.setSystemTime(mockUtils.dateNow)
   })
 
   afterAll(() => {
@@ -18,9 +18,9 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
   it('returns an object mapping normalized decision to decision DTO', async () => {
     // GIVEN
     const filename = 'test.json'
-    const mockDecision = new MockUtils().toNormalizeDecisionMock
+    const mockDecision = mockUtils.toNormalizeDecisionMock
     const expectedDecisionDto: DecisionTJDTO = {
-      codeDecision: '0aA',
+      codeDecision: '55C',
       NPCode: '6C',
       codeService: '0A',
       debatPublic: true,
@@ -45,7 +45,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       blocOccultation: 0,
       chamberId: '',
       chamberName: '',
-      dateCreation: now.toISOString(),
+      dateCreation: mockUtils.dateNow.toISOString(),
       dateDecision: new Date(2022, 10, 21).toISOString(),
       filenameSource: 'test.json',
       _id: 'TJ75011A01-1234520221121',
@@ -70,7 +70,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
         }
       ],
       registerNumber: 'A',
-      sourceId: new MockUtils().uniqueDecisionIdHash,
+      sourceId: mockUtils.uniqueDecisionIdHash,
       sourceName: Sources.TJ
     }
 
