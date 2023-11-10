@@ -156,8 +156,7 @@ describe('Normalization', () => {
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             filenameSource: firstDecisionName
           },
-          decisionNormalisee:
-            'Le contenu de ma décision avec des espaces et des backslash multiples \n '
+          decisionNormalisee: mockUtils.decisionContentNormalized
         },
         {
           metadonnees: {
@@ -166,8 +165,7 @@ describe('Normalization', () => {
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             filenameSource: secondDecisionName
           },
-          decisionNormalisee:
-            'Le contenu de ma décision avec des espaces et des backslash multiples \n '
+          decisionNormalisee: mockUtils.decisionContentNormalized
         }
       ]
 
