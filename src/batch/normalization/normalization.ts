@@ -1,18 +1,15 @@
 import { v4 as uuidv4 } from 'uuid'
-import { MetadonneesNormalisee } from '../../shared/domain/metadonnees'
 import { generateUniqueId } from './services/generateUniqueId'
 import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
 import { ConvertedDecisionWithMetadonneesDto } from '../../shared/infrastructure/dto/convertedDecisionWithMetadonnees.dto'
 import { logger } from './index'
 import { fetchDecisionListFromS3 } from './services/fetchDecisionListFromS3'
 import { DecisionS3Repository } from '../../shared/infrastructure/repositories/decisionS3.repository'
-import { DecisionModel } from '../../shared/infrastructure/repositories/decisionModel.schema'
 import { mapDecisionNormaliseeToDecisionDto } from './infrastructure/decision.dto'
 import { transformDecisionIntegreFromWPDToText } from './services/transformDecisionIntegreContent'
 import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { computeLabelStatus } from './services/computeLabelStatus'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
-import { LabelStatus } from 'dbsder-api-types'
 import { normalizationFormatLogs } from './index'
 
 const dbSderApiGateway = new DbSderApiGateway()
@@ -30,18 +27,23 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         const jobId = uuidv4()
         normalizationFormatLogs.correlationId = jobId
 
+        // Step 1: Fetch decision from S3
         const decision: CollectDto = await s3Repository.getDecisionByFilename(decisionFilename)
 
-        const metadonnees = decision.metadonnees
+        // Step 2: Cloning decision to save it in normalized bucket
+        const decisionFromS3Clone = JSON.parse(JSON.stringify(decision))
+
         logger.info({
           ...normalizationFormatLogs,
           msg: 'Starting normalization of ' + decisionFilename
         })
 
-        const _id = generateUniqueId(metadonnees)
+        // Step 3: Generating unique id for decision
+        const _id = generateUniqueId(decision.metadonnees)
         normalizationFormatLogs.data = { decisionId: _id }
         logger.info({ ...normalizationFormatLogs, msg: 'Generated unique id for decision' })
 
+        // Step 4: Transforming decision from WPD to text
         const decisionContent = await transformDecisionIntegreFromWPDToText(
           decision.decisionIntegre
         )
@@ -51,36 +53,34 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           msg: 'Decision conversion finished. Removing unnecessary characters'
         })
 
+        // Step 5: Removing unnecessary characters from decision
         const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
 
-        const transformedMetadonnees: MetadonneesNormalisee = {
-          _id,
-          labelStatus: LabelStatus.TOBETREATED,
-          ...metadonnees
-        }
-
-        const transformedDecision: DecisionModel = {
-          decision: cleanedDecision,
-          metadonnees: transformedMetadonnees
-        }
-
+        // Step 6: Map decision to DBSDER API Type to save it in database
         const decisionToSave = mapDecisionNormaliseeToDecisionDto(
-          transformedDecision,
+          _id,
+          cleanedDecision,
+          decision.metadonnees,
           decisionFilename
         )
         decisionToSave.labelStatus = computeLabelStatus(decisionToSave)
 
+        // Step 7: Save decision in database
         await dbSderApiGateway.saveDecision(decisionToSave)
         logger.info({ ...normalizationFormatLogs, msg: 'Decision saved in database' })
 
-        decision.metadonnees = transformedMetadonnees
-        await s3Repository.saveDecisionNormalisee(JSON.stringify(decision), decisionFilename)
+        // Step 8: Save decision in normalized bucket
+        await s3Repository.saveDecisionNormalisee(
+          JSON.stringify(decisionFromS3Clone),
+          decisionFilename
+        )
 
         logger.info({
           ...normalizationFormatLogs,
           msg: 'Decision saved in normalized bucket. Deleting decision in raw bucket'
         })
 
+        // Step 9: Delete decision in raw bucket
         await s3Repository.deleteDecision(decisionFilename, bucketNameIntegre)
 
         logger.info({

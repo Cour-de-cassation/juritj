@@ -1,5 +1,11 @@
-import { Occultation, TypePartie } from '../../domain/enums'
-import { DecisionDTO, DecisionTJDTO, LabelStatus, Sources } from 'dbsder-api-types'
+import {
+  DecisionDTO,
+  DecisionTJDTO,
+  LabelStatus,
+  Sources,
+  Occultation,
+  TypePartie
+} from 'dbsder-api-types'
 
 export class MockUtils {
   // Shared context

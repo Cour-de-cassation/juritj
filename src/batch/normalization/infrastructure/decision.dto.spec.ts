@@ -1,7 +1,6 @@
-import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
+import { LabelStatus, Sources, DecisionTJDTO, Occultation } from 'dbsder-api-types'
 import { mapDecisionNormaliseeToDecisionDto } from './decision.dto'
-import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-types'
-import { Occultation } from '../../../shared/domain/enums'
+import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 
 describe('mapDecisionNormaliseeToDecisionDto', () => {
   const mockUtils = new MockUtils()
@@ -15,21 +14,19 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     jest.useRealTimers()
   })
 
-  it('returns an object mapping normalized decision to decision DTO', async () => {
+  it('returns an object mapping decision from S3 to DBSDER API decision type', async () => {
     // GIVEN
+    const generatedId = 'TJ75011A01-1234520221121'
+    const decisionContent = mockUtils.decisionContentNormalized
     const filename = 'test.json'
-    const mockDecision = mockUtils.toNormalizeDecisionMock
+    const mockDecision = mockUtils.mandatoryMetadonneesDtoMock
+
     const expectedDecisionDto: DecisionTJDTO = {
       codeDecision: '55C',
       NPCode: '6C',
       codeService: '0A',
       debatPublic: true,
-      decisionAssociee: {
-        date: '20221121',
-        idJuridiction: 'TJ00000',
-        numeroRegistre: 'A',
-        numeroRoleGeneral: '01/12345'
-      },
+      decisionAssociee: undefined,
       libelleCodeDecision: 'some libelle code decision',
       libelleNAC: 'Demande en dommages-intérêts contre un organisme',
       libelleNatureParticuliere: 'Autres demandes en matière de frais et dépens',
@@ -41,7 +38,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       recommandationOccultation: Occultation.AUCUNE,
       selection: false,
       NACCode: '11F',
-      appeals: ['AZERTYUIOP'],
+      appeals: [],
       blocOccultation: 0,
       chamberId: '',
       chamberName: '',
@@ -57,25 +54,20 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
         additionalTerms: '',
         categoriesToOmit: []
       },
-      originalText:
-        '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t',
-      parties: [
-        {
-          nom: 'nom Partie',
-          type: TypePartie.PP
-        },
-        {
-          nom: 'nom Partie',
-          type: TypePartie.PP
-        }
-      ],
+      originalText: mockUtils.decisionContentNormalized,
+      parties: undefined,
       registerNumber: 'A',
       sourceId: mockUtils.uniqueDecisionIdHash,
       sourceName: Sources.TJ
     }
 
     // WHEN
-    const mappedDecision = mapDecisionNormaliseeToDecisionDto(mockDecision, filename)
+    const mappedDecision = mapDecisionNormaliseeToDecisionDto(
+      generatedId,
+      decisionContent,
+      mockDecision,
+      filename
+    )
 
     // THEN
     expect(mappedDecision).toMatchObject(expectedDecisionDto)

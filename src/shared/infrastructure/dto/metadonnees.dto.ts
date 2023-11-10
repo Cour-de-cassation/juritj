@@ -15,7 +15,7 @@ import {
 } from 'class-validator'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { MockUtils } from '../utils/mock.utils'
-import { Occultation, QualitePartie, TypePartie } from '../../domain/enums'
+import { Occultation, QualitePartie, TypePartie } from 'dbsder-api-types'
 
 const metadonneesDtoExample = new MockUtils().allAttributesMetadonneesDtoMock
 
