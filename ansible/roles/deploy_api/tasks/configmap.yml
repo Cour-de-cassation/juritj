@@ -9,7 +9,7 @@
       kind: ConfigMap
       metadata:
         name: juritj-config
-        namespace: "{{ juritj-namespace }}"
+        namespace: "{{ juritj_namespace }}"
         labels:
           app: "{{ juritj_application }}"
       data:
