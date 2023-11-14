@@ -50,7 +50,7 @@ export function mapDecisionNormaliseeToDecisionDto(
     filenameSource: filename,
     parties: metadonnees.parties,
     indicateurQPC: metadonnees.indicateurQPC,
-    idDecisionWinci: metadonnees.idDecisionWinci
+    idDecisionWinci: metadonnees.idDecision
   }
 }
 
