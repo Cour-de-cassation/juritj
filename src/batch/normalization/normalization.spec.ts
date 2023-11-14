@@ -22,7 +22,7 @@ jest.mock('./index', () => ({
 describe('Normalization', () => {
   const mockUtils = new MockUtils()
   const fakeMetadonneesFromS3 = mockUtils.allAttributesMetadonneesDtoMock
-  const fakeNormalisedMetadonnees = mockUtils.decisionTJMock
+  const fakeNormalizedMetadonnees = mockUtils.decisionTJMock
 
   const decisionName = mockUtils.decisionName
   const decisionIntegre: Express.Multer.File = {
@@ -78,18 +78,17 @@ describe('Normalization', () => {
       jest
         .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
         .mockImplementationOnce(() => Promise.resolve(mockUtils.decisionContentToNormalize))
-      const normalisedDecision =
-        'Le contenu de ma décision avec des espaces et des backslash multiples \n '
+      const normalizedDecision = mockUtils.decisionContentNormalized
 
       const expected = [
         {
           metadonnees: {
-            ...fakeNormalisedMetadonnees,
+            ...fakeNormalizedMetadonnees,
             _id: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
-            originalText: normalisedDecision
+            originalText: normalizedDecision
           },
-          decisionNormalisee: normalisedDecision
+          decisionNormalisee: normalizedDecision
         }
       ]
 
@@ -114,7 +113,7 @@ describe('Normalization', () => {
       const expected = [
         {
           metadonnees: {
-            ...fakeNormalisedMetadonnees,
+            ...fakeNormalizedMetadonnees,
             _id: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             originalText: expectedDecision
@@ -151,7 +150,7 @@ describe('Normalization', () => {
       const expected = [
         {
           metadonnees: {
-            ...fakeNormalisedMetadonnees,
+            ...fakeNormalizedMetadonnees,
             _id: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             filenameSource: firstDecisionName
@@ -160,7 +159,7 @@ describe('Normalization', () => {
         },
         {
           metadonnees: {
-            ...fakeNormalisedMetadonnees,
+            ...fakeNormalizedMetadonnees,
             _id: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             filenameSource: secondDecisionName
