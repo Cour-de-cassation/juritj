@@ -1,8 +1,8 @@
 import { ArgumentMetadata } from '@nestjs/common'
-import { Occultation } from '../../../shared/domain/enums'
-import { ValidateDtoPipe } from '../../../api/infrastructure/pipes/validateDto.pipe'
+import { Occultation } from 'dbsder-api-types'
 import { MockUtils } from '../utils/mock.utils'
 import { MetadonneesDto, PresidentDto } from './metadonnees.dto'
+import { ValidateDtoPipe } from '../../../api/infrastructure/pipes/validateDto.pipe'
 import { BadPropertiesException } from '../../../api/infrastructure/exceptions/missingProperties.exception'
 
 describe('Validate MetadonneeDTO format', () => {

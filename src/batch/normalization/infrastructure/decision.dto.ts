@@ -1,64 +1,56 @@
-import { DecisionModel } from '../../../shared/infrastructure/repositories/decisionModel.schema'
+import { LabelStatus, Sources, DecisionTJDTO } from 'dbsder-api-types'
 import { hashDecisionId } from '../../../shared/infrastructure/utils/hash.utils'
-import { TODAY } from '../../../shared/infrastructure/utils/mock.utils'
-import { LabelStatus, Sources, TypePartie, DecisionTJDTO } from 'dbsder-api-types'
+import { MetadonneesDto } from '../../../shared/infrastructure/dto/metadonnees.dto'
 
 export function mapDecisionNormaliseeToDecisionDto(
-  decision: DecisionModel,
-  decisionName: string
+  generatedId: string,
+  decisionContent: string,
+  metadonnees: MetadonneesDto,
+  filename: string
 ): DecisionTJDTO {
   return {
-    codeDecision: decision.metadonnees.codeDecision,
-    NPCode: decision.metadonnees.codeNature,
-    codeService: decision.metadonnees.codeService,
-    debatPublic: decision.metadonnees.debatPublic,
-    decisionAssociee: decision.metadonnees.decisionAssociee,
-    libelleCodeDecision: decision.metadonnees.libelleCodeDecision,
-    libelleNAC: decision.metadonnees.libelleNAC,
-    libelleNatureParticuliere: decision.metadonnees.libelleNature,
-    libelleService: decision.metadonnees.libelleService,
-    matiereDeterminee: decision.metadonnees.matiereDeterminee,
-    numeroRoleGeneral: decision.metadonnees.numeroRoleGeneral,
-    pourvoiCourDeCassation: decision.metadonnees.pourvoiCourDeCassation,
-    pourvoiLocal: decision.metadonnees.pourvoiLocal,
-    president: decision.metadonnees.president,
-    recommandationOccultation: decision.metadonnees.recommandationOccultation,
-    selection: decision.metadonnees.selection,
-    sommaire: decision.metadonnees.sommaire,
-    NACCode: decision.metadonnees.codeNAC,
-    appeals: decision.metadonnees.numeroMesureInstruction ?? [],
+    codeDecision: metadonnees.codeDecision,
+    NPCode: metadonnees.codeNature,
+    codeService: metadonnees.codeService,
+    debatPublic: metadonnees.debatPublic,
+    decisionAssociee: metadonnees.decisionAssociee,
+    libelleCodeDecision: metadonnees.libelleCodeDecision,
+    libelleNAC: metadonnees.libelleNAC,
+    libelleNatureParticuliere: metadonnees.libelleNature,
+    libelleService: metadonnees.libelleService,
+    matiereDeterminee: metadonnees.matiereDeterminee,
+    numeroRoleGeneral: metadonnees.numeroRoleGeneral,
+    pourvoiCourDeCassation: metadonnees.pourvoiCourDeCassation,
+    pourvoiLocal: metadonnees.pourvoiLocal,
+    president: metadonnees.president,
+    recommandationOccultation: metadonnees.recommandationOccultation,
+    selection: metadonnees.selection,
+    sommaire: metadonnees.sommaire,
+    NACCode: metadonnees.codeNAC,
+    appeals: metadonnees.numeroMesureInstruction ?? [],
     blocOccultation: 0,
     chamberId: '',
     chamberName: '',
-    dateCreation: TODAY,
-    dateDecision: parseDate(decision.metadonnees.dateDecision).toISOString(),
-    _id: decision.metadonnees._id,
-    jurisdictionCode: decision.metadonnees.codeJuridiction,
-    jurisdictionId: decision.metadonnees.idJuridiction,
-    jurisdictionName: decision.metadonnees.nomJuridiction,
+    dateCreation: new Date().toISOString(),
+    dateDecision: parseDate(metadonnees.dateDecision).toISOString(),
+    _id: generatedId,
+    jurisdictionCode: metadonnees.codeJuridiction,
+    jurisdictionId: metadonnees.idJuridiction,
+    jurisdictionName: metadonnees.nomJuridiction,
     labelStatus: LabelStatus.TOBETREATED,
     occultation: {
-      additionalTerms: decision.metadonnees.occultationComplementaire ?? '',
+      additionalTerms: metadonnees.occultationComplementaire ?? '',
       categoriesToOmit: []
     },
-    originalText: decision.decision,
-    public: decision.metadonnees.decisionPublique,
-    registerNumber: decision.metadonnees.numeroRegistre,
-    sourceId: hashDecisionId(decision.metadonnees._id),
+    originalText: decisionContent,
+    public: metadonnees.decisionPublique,
+    registerNumber: metadonnees.numeroRegistre,
+    sourceId: hashDecisionId(generatedId),
     sourceName: Sources.TJ,
-    filenameSource: decisionName,
-    parties: [
-      {
-        nom: 'nom Partie',
-        type: TypePartie.PP
-      },
-      {
-        nom: 'nom Partie',
-        type: TypePartie.PP
-      }
-    ],
-    indicateurQPC: decision.metadonnees.indicateurQPC,
-    idDecisionWinci: decision.metadonnees.idDecisionWinci
+    filenameSource: filename,
+    parties: metadonnees.parties,
+    indicateurQPC: metadonnees.indicateurQPC,
+    idDecisionWinci: metadonnees.idDecisionWinci
   }
 }
 

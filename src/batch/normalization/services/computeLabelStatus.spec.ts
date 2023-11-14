@@ -141,7 +141,7 @@ describe('updateLabelStatus', () => {
       expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
     })
 
-    it('returns ignored_codeNACnonTransmisCC when codeNAC is not in the list of codeNAC that needs to be transmitted to CC', () => {
+    it('returns ignored_codeDecisionNonTransmisCC when codeDecision is not in the list of codeDecision that needs to be transmitted to CC', () => {
       // GIVEN
       const mockDecisionLabel = {
         ...new MockUtils().decisionTJMock,
