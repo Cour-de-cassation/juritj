@@ -4,3 +4,8 @@ juritj_namespace: juritj
 juritj_application: juritj
 
 juritj_app_selector: juritj-api
+
+s3_access_key: "{{ vault_s3_access_key }}"
+s3_secret_key: "{{ vault_s3_secret_key }}"
+dbsder_api_key: "{{ vault_dbsder_api_key }}"
+doc_password: "{{ vault_doc_password }}"
