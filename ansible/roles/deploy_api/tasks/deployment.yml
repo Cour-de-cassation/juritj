@@ -1,0 +1,35 @@
+---
+- name: Create Deployment
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: api-deployment
+        namespace: juritj
+        labels:
+          app:
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: "{{ juritj_app_selector }}"
+        template:
+          metadata:
+            labels:
+              app: api
+          spec:
+            containers:
+              - name: api
+                image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
+                ports:
+                  - containerPort: 3000
+                env:
+                  - configMapRef:
+                      name: juritj-config
+                  - secretRef:
+                      name: juritj-secret
+...

@@ -1,0 +1,8 @@
+---
+- hosts: k3s_master
+  roles:
+    - role: deploy_api
+      become: true
+      gather_facts: true
+
+...

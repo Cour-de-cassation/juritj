@@ -1,0 +1,69 @@
+---
+- name: Creation ingress
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: traefik.containo.us/v1alpha1
+      kind: IngressRoute
+      metadata:
+        name: ingress-route
+        namespace: "{{ juritj_namespace }}"
+      spec:
+        entryPoints:
+          - web
+
+        routes:
+          - match: Host(`juritj.judilibre-prive.local`) && PathPrefix(`/api`)
+            kind: Rule
+            services:
+              - name: api-service
+                port: api
+            middlewares:
+              - name: api-stripprefix
+          - match: Host(`juritj.judilibre-prive.local`) && PathPrefix(`/bucket`)
+            kind: Rule
+            services:
+              - name: bucket-service
+                port: console
+            middlewares:
+              - name: bucket-stripprefix
+          - match: Host(`juritj.judilibre-prive.local`) && PathPrefix(`/`)
+            kind: Rule
+            services:
+              - name: nginx-service
+                port: 80
+
+- name: Creation Middleware api
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: traefik.containo.us/v1alpha1
+      kind: Middleware
+      metadata:
+        name: api-stripprefix
+        namespace: "{{ juritj_namespace }}"
+      spec:
+        replacePathRegex:
+          regex: /api(/|$)(.*)
+          replacement: /$2
+
+- name: Creation Middleware bucket
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: traefik.containo.us/v1alpha1
+      kind: Middleware
+      metadata:
+        name: bucket-stripprefix
+        namespace: "{{ juritj_namespace }}"
+      spec:
+        replacePathRegex:
+          regex: /bucket(/|$)(.*)
+          replacement: /$2
+...

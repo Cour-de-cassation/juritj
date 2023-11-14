@@ -1,0 +1,22 @@
+---
+- name: Creation service
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: api-service
+        namespace: "{{ juritj_namespace }}"
+      spec:
+        selector:
+          app: "{{ juritj_app_selector }}"
+        ports:
+          - name: api
+            port: 3000
+            targetPort: 3000
+        type: ClusterIP
+
+...

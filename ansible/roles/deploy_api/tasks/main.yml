@@ -1,0 +1,23 @@
+---
+- name: Check if 'commit_sha' is present as var
+  fail:
+    msg: "Playbook required a commit_sha variable"
+  when: commit_sha is undefined
+
+- name: Deploy namespace
+  import_tasks: namespace.yml
+
+- name: Deploy configmap
+  import_tasks: configmap.yml
+
+- name: Deploy secrets
+  import_tasks: secrets.yml
+
+- name: Deploy deployment
+  import_tasks: deployment.yml
+
+- name: Deploy service
+  import_tasks: service.yml
+
+- name: Deploy ingress
+  import_tasks: ingress.yml

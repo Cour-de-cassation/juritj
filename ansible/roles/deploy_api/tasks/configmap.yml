@@ -1,0 +1,24 @@
+---
+- name: Creation de la ConfigMap
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: juritj-config
+        namespace: "{{ juritj-namespace }}"
+        labels:
+          app: "{{ juritj_application }}"
+      data:
+        DOC_LOGIN: "root"
+        S3_URL: "http://bucket-service:9000"
+        S3_REGION: "eu-west-paris-1"
+        S3_BUCKET_NAME_RAW: "juritj-test-bucket"
+        S3_BUCKET_NAME_NORMALIZED: "juritj-test-bucket-normalized"
+        DBSDER_API_URL: "http://api-service.dbsder:3000"
+        NO_COLOR: "true"
+
+...
