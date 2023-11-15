@@ -13,27 +13,21 @@
       spec:
         entryPoints:
           - web
-
         routes:
           - match: Host(`juritj.judilibre-prive.local`) && PathPrefix(`/api`)
             kind: Rule
             services:
-              - name: api-service
+              - name: "{{ api_service }}"
                 port: api
             middlewares:
-              - name: api-stripprefix
+              - name: "{{ api_stripprefix }}"
           - match: Host(`juritj.judilibre-prive.local`) && PathPrefix(`/bucket`)
             kind: Rule
             services:
-              - name: bucket-service
+              - name: "{{ bucket_service}}"
                 port: console
             middlewares:
-              - name: bucket-stripprefix
-          - match: Host(`juritj.judilibre-prive.local`) && PathPrefix(`/`)
-            kind: Rule
-            services:
-              - name: nginx-service
-                port: 80
+              - name: "{{ bucket_stripprefix }}"
 
 - name: Creation Middleware api
   k8s:
@@ -44,7 +38,7 @@
       apiVersion: traefik.containo.us/v1alpha1
       kind: Middleware
       metadata:
-        name: api-stripprefix
+        name: "{{ api_stripprefix }}"
         namespace: "{{ juritj_namespace }}"
       spec:
         replacePathRegex:
@@ -60,7 +54,7 @@
       apiVersion: traefik.containo.us/v1alpha1
       kind: Middleware
       metadata:
-        name: bucket-stripprefix
+        name: "{{ bucket_stripprefix }}"
         namespace: "{{ juritj_namespace }}"
       spec:
         replacePathRegex:

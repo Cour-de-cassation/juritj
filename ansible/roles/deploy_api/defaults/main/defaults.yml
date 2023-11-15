@@ -1,11 +1,6 @@
 ---
 juritj_namespace: juritj
-
 juritj_application: juritj
-
 juritj_app_selector: api
-
-s3_access_key: "{{ vault_s3_access_key }}"
-s3_secret_key: "{{ vault_s3_secret_key }}"
-dbsder_api_key: "{{ vault_dbsder_api_key }}"
-doc_password: "{{ vault_doc_password }}"
+api_stripprefix: api-stripprefix
+bucket_stripprefix: bucket-stripprefix

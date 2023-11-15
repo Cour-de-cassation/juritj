@@ -11,8 +11,8 @@
 - name: Deploy deployment
   import_tasks: deployment.yml
 
-- name: Deploy service
+- name: Deploy services
   import_tasks: service.yml
 
-- name: Deploy ingress
+- name: Deploy ingresses
   import_tasks: ingress.yml

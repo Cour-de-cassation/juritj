@@ -9,7 +9,7 @@
       kind: Deployment
       metadata:
         name: api-deployment
-        namespace: juritj
+        namespace: "{{ juritj_namespace }}"
         labels:
           app:
       spec:

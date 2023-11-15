@@ -13,12 +13,12 @@
         labels:
           app: "{{ juritj_application }}"
       data:
-        DOC_LOGIN: "root"
-        S3_URL: "http://bucket-service:9000"
-        S3_REGION: "eu-west-paris-1"
-        S3_BUCKET_NAME_RAW: "juritj-test-bucket"
-        S3_BUCKET_NAME_NORMALIZED: "juritj-test-bucket-normalized"
-        DBSDER_API_URL: "http://api-service.dbsder:3000"
-        NO_COLOR: "true"
+        DOC_LOGIN: "{{ doc_login }}"
+        S3_URL: "{{ s3_url }}"
+        S3_REGION: "{{ s3_region }}"
+        S3_BUCKET_NAME_RAW: "{{ s3_bucket_name }}"
+        S3_BUCKET_NAME_NORMALIZED: "{{ s3_bucket_name_normalized }}"
+        DBSDER_API_URL: "{{ dbsder_api_url }}"
+        NO_COLOR: "{{ no_color }}"
 
 ...
