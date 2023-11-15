@@ -16,3 +16,5 @@ minio_root_user: "root"
 minio_browser_redirect_url: "https://{{ juritj_private_name }}/bucket"
 
 normalization_batch_schedule: "* * * * *"
+
+minio_root_password: "{{ vault_minio_root_password }}"
