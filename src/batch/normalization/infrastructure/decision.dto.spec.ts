@@ -72,4 +72,71 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     // THEN
     expect(mappedDecision).toMatchObject(expectedDecisionDto)
   })
+
+  it('maps idDecision to idDecisionWinci for both decision and decisionAssociee', async () => {
+    // GIVEN
+    const generatedId = 'TJ75011A01-1234520221121'
+    const decisionContent = mockUtils.decisionContentNormalized
+    const filename = 'test.json'
+    const mockDecision = {
+      ...mockUtils.mandatoryMetadonneesDtoMock,
+      idDecision: 'TJ00000',
+      decisionAssociee: { ...mockUtils.decisionAssocieeDtoMock, idDecision: 'TJ11111' }
+    }
+
+    const expectedDecisionDto: DecisionTJDTO = {
+      codeDecision: '55C',
+      NPCode: '6C',
+      codeService: '0A',
+      debatPublic: true,
+      libelleCodeDecision: 'some libelle code decision',
+      libelleNAC: 'Demande en dommages-intérêts contre un organisme',
+      libelleNatureParticuliere: 'Autres demandes en matière de frais et dépens',
+      libelleService: 'Libelle de service',
+      matiereDeterminee: true,
+      numeroRoleGeneral: '01/12345',
+      pourvoiCourDeCassation: false,
+      pourvoiLocal: false,
+      recommandationOccultation: Occultation.AUCUNE,
+      selection: false,
+      NACCode: '11F',
+      appeals: [],
+      blocOccultation: 0,
+      chamberId: '',
+      chamberName: '',
+      dateCreation: mockUtils.dateNow.toISOString(),
+      dateDecision: new Date(2022, 10, 21).toISOString(),
+      filenameSource: 'test.json',
+      _id: 'TJ75011A01-1234520221121',
+      jurisdictionCode: undefined,
+      jurisdictionId: 'TJ75011',
+      jurisdictionName: 'Juridictions civiles de première instance',
+      labelStatus: LabelStatus.TOBETREATED,
+      occultation: {
+        additionalTerms: '',
+        categoriesToOmit: []
+      },
+      originalText: mockUtils.decisionContentNormalized,
+      parties: undefined,
+      registerNumber: 'A',
+      sourceId: mockUtils.uniqueDecisionIdHash,
+      sourceName: Sources.TJ,
+      idDecisionWinci: 'TJ00000',
+      decisionAssociee: {
+        ...mockUtils.decisionAssocieeTJDtoMock,
+        idDecisionWinci: 'TJ11111'
+      }
+    }
+
+    // WHEN
+    const mappedDecision = mapDecisionNormaliseeToDecisionDto(
+      generatedId,
+      decisionContent,
+      mockDecision,
+      filename
+    )
+
+    // THEN
+    expect(mappedDecision).toMatchObject(expectedDecisionDto)
+  })
 })

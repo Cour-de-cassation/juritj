@@ -571,7 +571,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             numeroRegistre: invalidNumeroRegistre
           }
         }
@@ -588,7 +588,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             numeroRegistre: invalidNumeroRegistre
           }
         }
@@ -607,7 +607,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             numeroRoleGeneral: invalidNumeroRoleGeneral
           }
         }
@@ -623,7 +623,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             numeroRoleGeneral: invalidNumeroRoleGeneral
           }
         }
@@ -642,7 +642,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             idJuridiction: invalidIdJuridiction
           }
         }
@@ -658,7 +658,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             idJuridiction: invalidIdJuridiction
           }
         }
@@ -676,7 +676,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             date: invalidDate
           }
         }
@@ -693,7 +693,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             date: invalidDate
           }
         }
@@ -710,7 +710,7 @@ describe('Validate MetadonneeDTO format', () => {
         const invalidMetadonnee = {
           ...someValidMetaDonneeDto,
           decisionAssociee: {
-            ...mockUtils.decisionDtoMock,
+            ...mockUtils.decisionAssocieeDtoMock,
             date: invalidDate
           }
         }

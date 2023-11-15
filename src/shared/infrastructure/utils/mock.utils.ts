@@ -34,12 +34,12 @@ export class MockUtils {
   dateNow = new Date(2022, 10, 21)
 
   // JuriTJ Collect context
-  decisionDtoMock = {
+  decisionAssocieeDtoMock = {
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
     idJuridiction: 'TJ00000',
     date: '20221121',
-    idDecisionWinci: 'TJ00001'
+    idDecision: 'TJ00001'
   }
 
   mandatoryMetadonneesDtoMock = {
@@ -72,7 +72,7 @@ export class MockUtils {
     _id: this.uniqueDecisionId,
     labelStatus: LabelStatus.TOBETREATED,
     numeroMesureInstruction: ['AZERTYUIOP'],
-    decisionAssociee: this.decisionDtoMock,
+    decisionAssociee: this.decisionAssocieeDtoMock,
     filenameSource: this.decisionName,
     indicateurQPC: true,
     idDecision: 'TJ00000',
@@ -112,11 +112,19 @@ export class MockUtils {
     public: this.allAttributesMetadonneesDtoMock.decisionPublique
   }
 
+  decisionAssocieeTJDtoMock = {
+    numeroRegistre: this.decisionAssocieeDtoMock.numeroRegistre,
+    numeroRoleGeneral: this.decisionAssocieeDtoMock.numeroRoleGeneral,
+    idJuridiction: this.decisionAssocieeDtoMock.idJuridiction,
+    date: this.decisionAssocieeDtoMock.date,
+    idDecisionWinci: this.decisionAssocieeDtoMock.idDecision
+  }
+
   decisionTJMock: DecisionTJDTO = {
     ...this.decisionMock,
-    decisionAssociee: this.allAttributesMetadonneesDtoMock.decisionAssociee,
+    decisionAssociee: this.decisionAssocieeTJDtoMock,
     indicateurQPC: true,
-    idDecisionWinci: 'TJ00000',
+    idDecisionWinci: this.allAttributesMetadonneesDtoMock.idDecision,
     codeDecision: this.allAttributesMetadonneesDtoMock.codeDecision,
     codeService: this.allAttributesMetadonneesDtoMock.codeService,
     debatPublic: this.allAttributesMetadonneesDtoMock.debatPublic,
@@ -125,7 +133,7 @@ export class MockUtils {
     libelleNatureParticuliere: this.allAttributesMetadonneesDtoMock.libelleNature,
     libelleService: this.allAttributesMetadonneesDtoMock.libelleService,
     matiereDeterminee: this.allAttributesMetadonneesDtoMock.matiereDeterminee,
-    numeroRoleGeneral: '01/12345',
+    numeroRoleGeneral: this.allAttributesMetadonneesDtoMock.numeroRoleGeneral,
     pourvoiCourDeCassation: false,
     pourvoiLocal: false,
     recommandationOccultation: Occultation.AUCUNE,

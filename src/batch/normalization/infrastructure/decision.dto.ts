@@ -1,6 +1,9 @@
-import { LabelStatus, Sources, DecisionTJDTO } from 'dbsder-api-types'
+import { LabelStatus, Sources, DecisionTJDTO, DecisionAssociee } from 'dbsder-api-types'
 import { hashDecisionId } from '../../../shared/infrastructure/utils/hash.utils'
-import { MetadonneesDto } from '../../../shared/infrastructure/dto/metadonnees.dto'
+import {
+  DecisionAssocieeDto,
+  MetadonneesDto
+} from '../../../shared/infrastructure/dto/metadonnees.dto'
 
 export function mapDecisionNormaliseeToDecisionDto(
   generatedId: string,
@@ -13,7 +16,7 @@ export function mapDecisionNormaliseeToDecisionDto(
     NPCode: metadonnees.codeNature,
     codeService: metadonnees.codeService,
     debatPublic: metadonnees.debatPublic,
-    decisionAssociee: metadonnees.decisionAssociee,
+    decisionAssociee: formatDecisionAssociee(metadonnees.decisionAssociee),
     libelleCodeDecision: metadonnees.libelleCodeDecision,
     libelleNAC: metadonnees.libelleNAC,
     libelleNatureParticuliere: metadonnees.libelleNature,
@@ -60,4 +63,10 @@ function parseDate(dateDecision: string) {
     date = dateDecision.substring(6, 8)
 
   return new Date(parseInt(year), parseInt(month) - 1, parseInt(date))
+}
+
+function formatDecisionAssociee(providedDecisionAssociee: DecisionAssocieeDto): DecisionAssociee {
+  if (!providedDecisionAssociee) return undefined
+  const { idDecision, ...decisionAssociee } = providedDecisionAssociee
+  return { ...decisionAssociee, idDecisionWinci: idDecision }
 }

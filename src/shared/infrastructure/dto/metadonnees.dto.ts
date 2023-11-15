@@ -55,7 +55,7 @@ export class PresidentDto {
   civilite?: string
 }
 
-export class DecisionDto {
+export class DecisionAssocieeDto {
   @ApiProperty({
     description: 'Numéro de registre de la décision associée',
     type: String,
@@ -94,6 +94,15 @@ export class DecisionDto {
   @Matches('^[0-9]{8}$')
   @IsDateString()
   date: string
+
+  @ApiPropertyOptional({
+    description: 'Identifiant de la décision associée dans le système source WinCI-TGI',
+    type: String,
+    example: 'idExemple'
+  })
+  @IsString()
+  @IsOptional()
+  idDecision?: string
 }
 
 export class PartieDto {
@@ -261,7 +270,7 @@ export class MetadonneesDto {
 
   @ApiPropertyOptional({
     description: 'Décision intègre chainée à la décision',
-    type: DecisionDto,
+    type: DecisionAssocieeDto,
     example: metadonneesDtoExample.decisionAssociee
   })
   @IsOptional()
@@ -269,8 +278,8 @@ export class MetadonneesDto {
   @IsObject()
   @IsNotEmptyObject()
   @ValidateNested()
-  @Type(() => DecisionDto)
-  decisionAssociee?: DecisionDto
+  @Type(() => DecisionAssocieeDto)
+  decisionAssociee?: DecisionAssocieeDto
 
   @ApiProperty({
     description: 'Liste des parties de la décision',
