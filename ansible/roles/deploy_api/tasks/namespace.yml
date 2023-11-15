@@ -10,6 +10,4 @@
       metadata:
         name: juritj
         namespace: "{{ juritj_namespace }}"
-
-
 ...
