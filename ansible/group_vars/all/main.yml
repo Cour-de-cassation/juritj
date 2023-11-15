@@ -1,5 +1,6 @@
 ---
 ansible_user: iliasaaguida
+ansible_python_interpreter: "/home/{{ ansible_user }}/ansible_venv/bin/python"
 
 api_service: "api-service"
 bucket_service: "bucket-service"
