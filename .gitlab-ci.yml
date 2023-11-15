@@ -114,14 +114,16 @@ deploy_api:
     - envsubst < .deploys/deploy_bucket.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_batch.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_ingress.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-  only:
-    - master
-    - re7
-    - dev
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: manual
   tags:
     - shell
   dependencies:
     - build_api
+  needs: ["build_api"]
 
 deploy_batch:
   stage: deploy
@@ -141,11 +143,14 @@ deploy_batch:
     DOLLAR: $$
   script:
     - envsubst < .deploys/deploy_batch.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-  only:
-    - master
-    - re7
-    - dev
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: manual
   tags:
     - shell
   dependencies:
     - build_batch
+  needs: ["build_batch"]
+  
