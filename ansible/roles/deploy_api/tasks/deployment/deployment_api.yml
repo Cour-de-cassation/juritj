@@ -16,7 +16,7 @@
         replicas: 1
         selector:
           matchLabels:
-            app: "{{ juritj_app_selector }}"
+            app: "{{ api_app_selector }}"
         template:
           metadata:
             labels:
@@ -29,7 +29,15 @@
                   - containerPort: 3000
                 envFrom:
                   - configMapRef:
-                      name: "juritj-config"
+                      name: "api-config"
                   - secretRef:
-                      name: "juritj-secret"
+                      name: "api-secret"
+                  - configMapRef:
+                      name: "bucket-config"
+                  - secretRef:
+                      name: "bucket-secret"
+                  - configMapRef:
+                      name: "s3-config"
+                  - secretRef:
+                      name: "s3-secret"
 ...

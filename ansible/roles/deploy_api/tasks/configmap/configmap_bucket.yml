@@ -1,0 +1,18 @@
+---
+- name: Creation de la ConfigMap
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: bucket-config
+        namespace: "{{ juritj_namespace }}"
+        labels:
+          app: "{{ juritj_application }}"
+      data:
+        MINIO_ROOT_USER: "{{ minio_root_user}}"
+        MINIO_BROWSER_REDIRECT_URL: "{{ minio_browser_redirect_url }}"
+...

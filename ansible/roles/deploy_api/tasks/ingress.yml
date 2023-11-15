@@ -14,14 +14,14 @@
         entryPoints:
           - web
         routes:
-          - match: Host(`juritj.judilibre-prive.local`) && PathPrefix(`/api`)
+          - match: Host(`"{{ juritj_private_name }}"`) && PathPrefix(`/api`)
             kind: Rule
             services:
               - name: "{{ api_service }}"
                 port: api
             middlewares:
               - name: "{{ api_stripprefix }}"
-          - match: Host(`juritj.judilibre-prive.local`) && PathPrefix(`/bucket`)
+          - match: Host(`"{{ juritj_private_name }}"`) && PathPrefix(`/bucket`)
             kind: Rule
             services:
               - name: "{{ bucket_service}}"

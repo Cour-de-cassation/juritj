@@ -3,16 +3,16 @@
   import_tasks: namespace.yml
 
 - name: Deploy configmap
-  import_tasks: configmap.yml
+  import_tasks: configmap/*.yml
 
 - name: Deploy secrets
-  import_tasks: secrets.yml
+  import_tasks: secrets/*.yml
 
-- name: Deploy deployment
-  import_tasks: deployment.yml
+- name: Deploy deployments
+  import_tasks: deployment/*.yml
 
 - name: Deploy services
-  import_tasks: service.yml
+  import_tasks: service/*.yml
 
-- name: Deploy ingresses
+- name: Deploy ingress
   import_tasks: ingress.yml

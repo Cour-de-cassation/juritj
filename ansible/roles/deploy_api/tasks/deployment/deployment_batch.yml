@@ -1,0 +1,40 @@
+---
+- name: Create Deployment
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: batch-deployment
+        namespace: "{{ juritj_namespace }}"
+        labels:
+          app:
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: batch
+        template:
+          metadata:
+            labels:
+              app: batch
+          spec:
+            containers:
+              - name: batch
+                image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
+                env:
+                  - name: NORMALIZATION_BATCH_SCHEDULE
+                    value: "{{ normalization_batch_schedule }}"
+                envFrom:
+                  - configMapRef:
+                      name: "api-config"
+                  - secretRef:
+                      name: "api-secret"
+                  - configMapRef:
+                      name: "s3-config"
+                  - secretRef:
+                      name: "s3-secret"
+...

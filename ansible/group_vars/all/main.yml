@@ -3,6 +3,7 @@ ansible_user: iliasaaguida
 
 api_service: "api-service"
 bucket_service: "bucket-service"
+juritj_private_name: "juritj.judilibre-prive.local"
 
 doc_login: "root"
 s3_url: "http://{{ bucket_service }}:9000"
@@ -11,3 +12,7 @@ s3_bucket_name: "juritj-test-bucket"
 s3_bucket_name_normalized: "juritj-test-bucket-normalized"
 dbsder_api_url: "http://{{ api_service }}.dbsder:3000"
 no_color: "true"
+minio_root_user: "root"
+minio_browser_redirect_url: "https://{{ juritj_private_name }}/bucket"
+
+normalization_batch_schedule: "* * * * *"

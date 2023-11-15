@@ -1,6 +1,9 @@
 ---
 juritj_namespace: juritj
 juritj_application: juritj
-juritj_app_selector: api
+
+api_app_selector: api
+bucket_app_selector: bucket
+
 api_stripprefix: api-stripprefix
 bucket_stripprefix: bucket-stripprefix
