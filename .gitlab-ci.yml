@@ -49,6 +49,7 @@ test:
 
 build_api:
   stage: build
+  needs: ["test"]
   variables:
     HTTP_PROXY: $HTTP_PROXY
     HTTPS_PROXY: $HTTPS_PROXY
@@ -69,6 +70,7 @@ build_api:
 
 build_batch:
   stage: build
+  needs: ["test"]
   variables:
     HTTP_PROXY: $HTTP_PROXY
     HTTPS_PROXY: $HTTPS_PROXY
@@ -89,6 +91,7 @@ build_batch:
 
 deploy_api:
   stage: deploy
+  needs: ["build_api"]
   variables:
     JURITJ_DOC_LOGIN: $JURITJ_DOC_LOGIN
     JURITJ_DOC_PASSWORD: $JURITJ_DOC_PASSWORD
@@ -116,17 +119,15 @@ deploy_api:
     - envsubst < .deploys/deploy_ingress.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
   rules:
     - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
-      when: always
+      when: on_success
     - if: $CI_COMMIT_BRANCH == "master"
       when: manual
   tags:
     - shell
-  dependencies:
-    - build_api
-  needs: ["build_api"]
 
 deploy_batch:
   stage: deploy
+  needs: ["build_batch"]
   variables:
     MINIO_USER: $MINIO_USER
     MINIO_PASSWORD: $MINIO_PASSWORD
@@ -145,12 +146,8 @@ deploy_batch:
     - envsubst < .deploys/deploy_batch.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
   rules:
     - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
-      when: always
+      when: on_success
     - if: $CI_COMMIT_BRANCH == "master"
       when: manual
   tags:
     - shell
-  dependencies:
-    - build_batch
-  needs: ["build_batch"]
-  
