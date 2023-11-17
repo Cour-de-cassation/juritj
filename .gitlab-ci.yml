@@ -129,7 +129,7 @@ deploy_api:
     - ls -la /root/.ssh
     - cat /root/.ssh/id_rsa
     - ssh-keygen -l -f /root/.ssh/id_rsa
-    #- ssh -i /root/.ssh/id_rsa iliasaaguida@10.16.117.211
+    - ssh -i /root/.ssh/id_rsa iliasaaguida@10.16.117.211
     #- ANSIBLE_DEBUG=true ansible-playbook -vvvv -i ansible/inventory/dev.yml ansible/deploy_juritj.yml --vault-password-file=vault-pass.txt
   only:
     - ajout_ansible
