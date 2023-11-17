@@ -112,10 +112,41 @@ deploy_api:
     JURITJ_CURRENT_ENV: $JURITJ_CURRENT_ENV
     DOLLAR: $$
   script:
+<<<<<<< HEAD
     - envsubst < .deploys/deploy_namespace.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_api.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_bucket.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
     - envsubst < .deploys/deploy_ingress.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
+=======
+    - echo $ANSIBLE_VAULT_PASS > vault-pass.txt
+    - mkdir /root/.ssh
+    - cat $SSH_KEY > /root/.ssh/id_rsa
+    - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
+    - pwd
+    - chmod 600 /root/.ssh/id_rsa
+    - chmod 600 /root/.ssh/known_hosts
+    - cat /root/.ssh/known_hosts
+    - ls -la /root/.ssh
+    - ssh -i /root/.ssh/id_rsa iliasaaguida@10.16.117.211
+    #- ANSIBLE_DEBUG=true ansible-playbook -vvvv -i ansible/inventory/dev.yml ansible/deploy_juritj.yml --vault-password-file=vault-pass.txt
+  only:
+    - ajout_ansible
+    - dev
+  tags:
+    - docker
+  dependencies:
+    - build_api
+    - build_batch
+
+deploy_juritj_preprod:
+  stage: deploy
+  image: alpine/ansible:latest
+  variables:
+    DOLLAR: $$
+  script:
+    - echo $ANSIBLE_VAULT_PASS > vault-pass.txt
+    - ansible-playbook -i ansible/inventory/preprod.yml ansible/deploy_juritj.yml --vault-password-file=vault-pass.txt
+>>>>>>> c2645e7 (try ssh without ansible)
   rules:
     - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
       when: on_success
