@@ -12,22 +12,8 @@ test:
   services:
   - docker:20.10.22
   variables:
-    HTTP_PROXY: $HTTP_PROXY
-    HTTPS_PROXY: $HTTPS_PROXY
-    JURITJ_DOC_LOGIN: $JURITJ_DOC_LOGIN
-    JURITJ_DOC_PASSWORD: $JURITJ_DOC_PASSWORD
-    MINIO_USER: $MINIO_USER
-    MINIO_PASSWORD: $MINIO_PASSWORD
-    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
-    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
-    JURITJ_S3_URL: $JURITJ_S3_URL
-    JURITJ_S3_REGION: $JURITJ_S3_REGION
-    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
-    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-    JURITJ_DBSDER_API_KEY: $JURITJ_DBSDER_API_KEY
-    JURITJ_DBSDER_API_URL: $JURITJ_DBSDER_API_URL
-    JURITJ_NO_COLOR: $JURITJ_NO_COLOR
-
+    HTTP_PROXY: $HTTP_PROXY_DEV
+    HTTPS_PROXY: $HTTPS_PROXY_DEV
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build 
@@ -41,6 +27,7 @@ test:
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm test
     - echo 'ok'
   only:
+    - ajout_ansible
     - master
     - re7
     - dev
@@ -49,10 +36,9 @@ test:
 
 build_api:
   stage: build
-  needs: ["test"]
   variables:
-    HTTP_PROXY: $HTTP_PROXY
-    HTTPS_PROXY: $HTTPS_PROXY
+    HTTP_PROXY: $HTTP_PROXY_DEV
+    HTTPS_PROXY: $HTTPS_PROXY_DEV
   script: 
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
@@ -62,6 +48,7 @@ build_api:
         -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api .
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
   only:
+    - ajout_ansible
     - master
     - re7
     - dev
@@ -70,54 +57,31 @@ build_api:
 
 build_batch:
   stage: build
-  needs: ["test"]
   variables:
-    HTTP_PROXY: $HTTP_PROXY
-    HTTPS_PROXY: $HTTPS_PROXY
+    HTTP_PROXY: $HTTP_PROXY_DEV
+    HTTPS_PROXY: $HTTPS_PROXY_DEV
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
-        --build-arg http_proxy=http://10.16.117.210:3128
-        --build-arg https_proxy=http://10.16.117.210:3128
+        --build-arg http_proxy=$HTTP_PROXY
+        --build-arg https_proxy=$HTTPS_PROXY
         --target batch
         -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch .
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
   only:
+    - ajout_ansible
     - master
     - re7
     - dev
   tags:
     - docker
 
-deploy_api:
+deploy_juritj_dev:
   stage: deploy
-  needs: ["build_api"]
+  image: alpine/ansible:latest
   variables:
-    JURITJ_DOC_LOGIN: $JURITJ_DOC_LOGIN
-    JURITJ_DOC_PASSWORD: $JURITJ_DOC_PASSWORD
-    MINIO_USER: $MINIO_USER
-    MINIO_PASSWORD: $MINIO_PASSWORD
-    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
-    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
-    JURITJ_S3_URL: $JURITJ_S3_URL
-    JURITJ_S3_REGION: $JURITJ_S3_REGION
-    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
-    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-    JURITJ_SERVER_KEY: $JURITJ_SERVER_KEY
-    JURITJ_SERVER_KEY_PASSPHRASE: $JURITJ_SERVER_KEY_PASSPHRASE
-    JURITJ_SERVER_CERT: $JURITJ_SERVER_CERT
-    JURITJ_SERVER_CA_CERT: $JURITJ_SERVER_CA_CERT
-    JURITJ_WINCI_CA_CERT: $JURITJ_WINCI_CA_CERT
-    JURITJ_AUTO_SIGNED_CA_CERT: $JURITJ_AUTO_SIGNED_CA_CERT
-    JURITJ_CURRENT_ENV: $JURITJ_CURRENT_ENV
     DOLLAR: $$
   script:
-<<<<<<< HEAD
-    - envsubst < .deploys/deploy_namespace.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-    - envsubst < .deploys/deploy_api.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-    - envsubst < .deploys/deploy_bucket.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-    - envsubst < .deploys/deploy_ingress.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-=======
     - echo $ANSIBLE_VAULT_PASS > vault-pass.txt
     - mkdir /root/.ssh
     - cat $SSH_KEY > /root/.ssh/id_rsa
@@ -141,39 +105,41 @@ deploy_juritj_preprod:
     DOLLAR: $$
   script:
     - echo $ANSIBLE_VAULT_PASS > vault-pass.txt
+    - mkdir /root/.ssh
+    - cat $SSH_KEY > /root/.ssh/id_rsa
+    - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
+    - chmod 600 /root/.ssh/id_rsa
+    - chmod 600 /root/.ssh/known_hosts
+    - echo $ANSIBLE_VAULT_PASS > vault-pass.txt
     - ansible-playbook -i ansible/inventory/preprod.yml ansible/deploy_juritj.yml --vault-password-file=vault-pass.txt
->>>>>>> c2645e7 (try ssh without ansible)
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
-      when: on_success
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "ajout_ansible" || $CI_COMMIT_BRANCH == "re7"
       when: manual
   tags:
-    - shell
+    - docker
+  dependencies:
+    - build_api
+    - build_batch
 
-deploy_batch:
+deploy_juritj_prod:
   stage: deploy
-  needs: ["build_batch"]
+  image: alpine/ansible:latest
   variables:
-    MINIO_USER: $MINIO_USER
-    MINIO_PASSWORD: $MINIO_PASSWORD
-    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
-    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
-    JURITJ_S3_URL: $JURITJ_S3_URL
-    JURITJ_S3_REGION: $JURITJ_S3_REGION
-    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
-    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-    JURITJ_DBSDER_API_KEY: $JURITJ_DBSDER_API_KEY
-    JURITJ_DBSDER_API_URL: $JURITJ_DBSDER_API_URL
-    JURITJ_NORMALIZATION_BATCH_SCHEDULE: $JURITJ_NORMALIZATION_BATCH_SCHEDULE
-
     DOLLAR: $$
   script:
-    - envsubst < .deploys/deploy_batch.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
+    - echo $ANSIBLE_VAULT_PASS > vault-pass.txt
+    - mkdir /root/.ssh
+    - cat $SSH_KEY > /root/.ssh/id_rsa
+    - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
+    - chmod 600 /root/.ssh/id_rsa
+    - chmod 600 /root/.ssh/known_hosts
+    - echo $ANSIBLE_VAULT_PASS > vault-pass.txt
+    - ansible-playbook -i ansible/inventory/prod.yml ansible/deploy_juritj.yml --vault-password-file=vault-pass.txt
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
-      when: on_success
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "ajout_ansible" || $CI_COMMIT_BRANCH == "master"
       when: manual
   tags:
-    - shell
+    - docker
+  dependencies:
+    - build_api
+    - build_batch
