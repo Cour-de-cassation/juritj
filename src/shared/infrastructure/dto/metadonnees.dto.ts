@@ -203,7 +203,6 @@ export class MetadonneesDto {
     type: String,
     example: new MockUtils().allAttributesMetadonneesDtoMock.numeroMesureInstruction
   })
-  @IsArray()
   @IsString({ each: true })
   @Length(10, 10, { each: true })
   @IsOptional()
