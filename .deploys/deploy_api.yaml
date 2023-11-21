@@ -20,11 +20,11 @@ spec:
           image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
           resources:
             requests:
-              memory: "16Gi"
-              cpu: "10"
+              memory: "8Gi"
+              cpu: "2"
             limits:
-              memory: "32Gi"
-              cpu: "20"
+              memory: "16Gi"
+              cpu: "4"
           ports:
             - containerPort: 3000
           env:
