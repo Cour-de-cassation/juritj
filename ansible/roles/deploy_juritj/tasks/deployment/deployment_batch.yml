@@ -1,5 +1,5 @@
 ---
-- name: Create Deployment
+- name: Create batch Deployment
   k8s:
     apply: true
     state: present
