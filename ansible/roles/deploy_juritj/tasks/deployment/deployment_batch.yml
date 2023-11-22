@@ -8,7 +8,7 @@
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: "{{ batch_app_id }}"-deployment
+        name: "{{ batch_app_id }}-deployment"
         namespace: "{{ juritj_namespace }}"
         labels:
           app:
