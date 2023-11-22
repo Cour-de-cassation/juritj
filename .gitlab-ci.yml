@@ -2,6 +2,13 @@ image: docker:20.10.22
 services:
   - docker:20.10.22-dind
 
+variables:
+  dev: dev
+  re7: preprod
+  master: prod
+  api_docker_image: "$CI_REGISTRY/cour-de-cassation/dbsder-api:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api"
+  batch_docker_image: "$CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch"
+
 stages:
   - test
   - build
@@ -76,60 +83,19 @@ build_batch:
   tags:
     - docker
 
-deploy_juritj_dev:
+deploy_juritj:
   stage: deploy
   image: alpine/ansible:latest
   variables:
     DOLLAR: $$
   script:
+    - inventaire=$(eval "echo \$$CI_COMMIT_BRANCH")
     - mkdir /root/.ssh
     - cat $SSH_KEY > /root/.ssh/id_rsa
     - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
     - chmod 600 /root/.ssh/id_rsa
     - chmod 600 /root/.ssh/known_hosts
-    - ansible-playbook -i ansible/inventory/dev.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
-  only:
-    - ajout_ansible
-    - dev
-  tags:
-    - docker
-  dependencies:
-    - build_api
-    - build_batch
-
-deploy_juritj_preprod:
-  stage: deploy
-  image: alpine/ansible:latest
-  variables:
-    DOLLAR: $$
-  script:
-    - mkdir /root/.ssh
-    - cat $SSH_KEY > /root/.ssh/id_rsa
-    - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
-    - chmod 600 /root/.ssh/id_rsa
-    - chmod 600 /root/.ssh/known_hosts
-    - ansible-playbook -i ansible/inventory/preprod.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
-  rules:
-    - if: $CI_COMMIT_BRANCH == "ajout_ansible" || $CI_COMMIT_BRANCH == "re7"
-      when: manual
-  tags:
-    - docker
-  dependencies:
-    - build_api
-    - build_batch
-
-deploy_juritj_prod:
-  stage: deploy
-  image: alpine/ansible:latest
-  variables:
-    DOLLAR: $$
-  script:
-    - mkdir /root/.ssh
-    - cat $SSH_KEY > /root/.ssh/id_rsa
-    - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
-    - chmod 600 /root/.ssh/id_rsa
-    - chmod 600 /root/.ssh/known_hosts
-    - ansible-playbook -i ansible/inventory/prod.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
+    - ansible-playbook -e juritj_api_image=$api_docker_image -e juritj_batch_image=$batch_docker_image -i ansible/inventory/$inventaire.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
   rules:
     - if: $CI_COMMIT_BRANCH == "ajout_ansible" || $CI_COMMIT_BRANCH == "master"
       when: manual

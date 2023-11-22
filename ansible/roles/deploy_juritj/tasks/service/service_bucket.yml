@@ -12,7 +12,7 @@
         namespace: juritj
       spec:
         selector:
-          app: "{{ bucket_app_selector }}"
+          app: "{{ bucket_app_id}}"
         ports:
           - name: api
             port: 9000

@@ -8,7 +8,7 @@
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: api-deployment
+        name: "{{ api_app_id }}-deployment"
         namespace: "{{ juritj_namespace }}"
         labels:
           app:
@@ -16,15 +16,15 @@
         replicas: 1
         selector:
           matchLabels:
-            app: "{{ api_app_selector }}"
+            app: "{{ api_app_id }}"
         template:
           metadata:
             labels:
-              app: api
+              app: "{{ api_app_id }}"
           spec:
             containers:
-              - name: api
-                image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
+              - name: "{{ api_app_id }}"
+                image: "{{ juritj_api_image }}"
                 ports:
                   - containerPort: 3000
                 envFrom:

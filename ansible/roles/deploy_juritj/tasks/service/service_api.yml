@@ -12,7 +12,7 @@
         namespace: "{{ juritj_namespace }}"
       spec:
         selector:
-          app: "{{ api_app_selector }}"
+          app: "{{ api_app_id }}"
         ports:
           - name: api
             port: 3000

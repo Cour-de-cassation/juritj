@@ -8,7 +8,7 @@
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: batch-deployment
+        name: "{{ batch_app_id }}"-deployment
         namespace: "{{ juritj_namespace }}"
         labels:
           app:
@@ -16,15 +16,15 @@
         replicas: 1
         selector:
           matchLabels:
-            app: batch
+            app: "{{ batch_app_id }}"
         template:
           metadata:
             labels:
-              app: batch
+              app: "{{ batch_app_id }}"
           spec:
             containers:
-              - name: batch
-                image: $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
+              - name: "{{ batch_app_id }}"
+                image: "{{ juritj_batch_image }}"
                 env:
                   - name: NORMALIZATION_BATCH_SCHEDULE
                     value: "{{ normalization_batch_schedule }}"
