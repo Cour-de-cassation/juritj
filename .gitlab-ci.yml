@@ -97,8 +97,10 @@ deploy_juritj:
     - chmod 600 /root/.ssh/known_hosts
     - ansible-playbook -e juritj_api_image=$api_docker_image -e juritj_batch_image=$batch_docker_image -i ansible/inventory/$inventaire.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
   rules:
-    - if: $CI_COMMIT_BRANCH == "ajout_ansible" || $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "ajout_ansible" || $CI_COMMIT_BRANCH == "prod" || $CI_COMMIT_BRANCH == "re7"
       when: manual
+    - if: $CI_COMMIT_BRANCH == "dev"
+      when: on_success
   tags:
     - docker
   dependencies:
