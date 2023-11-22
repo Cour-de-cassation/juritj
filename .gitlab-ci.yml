@@ -89,7 +89,8 @@ deploy_juritj:
   variables:
     DOLLAR: $$
   script:
-    - inventaire=$(eval "echo \$$CI_COMMIT_BRANCH")
+    #- inventaire=$(eval "echo \$$CI_COMMIT_BRANCH")
+    - inventaire=$dev
     - mkdir /root/.ssh
     - cat $SSH_KEY > /root/.ssh/id_rsa
     - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
