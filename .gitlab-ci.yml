@@ -34,7 +34,6 @@ test:
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm test
     - echo 'ok'
   only:
-    - ajout_ansible
     - master
     - re7
     - dev
@@ -55,7 +54,6 @@ build_api:
         -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api .
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
   only:
-    - ajout_ansible
     - master
     - re7
     - dev
@@ -76,7 +74,6 @@ build_batch:
         -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch .
     - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
   only:
-    - ajout_ansible
     - master
     - re7
     - dev
@@ -89,8 +86,7 @@ deploy_juritj:
   variables:
     DOLLAR: $$
   script:
-    #- inventaire=$(eval "echo \$$CI_COMMIT_BRANCH")
-    - inventaire=$re7
+    - inventaire=$(eval "echo \$$CI_COMMIT_BRANCH")
     - mkdir /root/.ssh
     - cat $SSH_KEY > /root/.ssh/id_rsa
     - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
@@ -98,9 +94,9 @@ deploy_juritj:
     - chmod 600 /root/.ssh/known_hosts
     - ansible-playbook -e juritj_api_image=$api_docker_image -e juritj_batch_image=$batch_docker_image -i ansible/inventory/$inventaire.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
   rules:
-    - if: $CI_COMMIT_BRANCH == "ajout_ansible" || $CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == "re7"
+    - if: $CI_COMMIT_BRANCH == "master" 
       when: manual
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
       when: on_success
   tags:
     - docker
