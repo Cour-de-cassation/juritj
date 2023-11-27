@@ -6,8 +6,8 @@ variables:
   dev: dev
   re7: preprod
   master: prod
-  api_docker_image: "$CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api"
-  batch_docker_image: "$CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch"
+  api_docker_image: "$CI_REGISTRY/cour-de-cassation/juritj/api:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA"
+  batch_docker_image: "$CI_REGISTRY/cour-de-cassation/juritj/batch:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA"
 
 stages:
   - test
@@ -51,8 +51,8 @@ build_api:
         --build-arg http_proxy=$HTTP_PROXY
         --build-arg https_proxy=$HTTPS_PROXY
         --target api
-        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api .
-    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
+        -t $api_docker_image .
+    - docker push $api_docker_image
   only:
     - master
     - re7
@@ -71,8 +71,8 @@ build_batch:
         --build-arg http_proxy=$HTTP_PROXY
         --build-arg https_proxy=$HTTPS_PROXY
         --target batch
-        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch .
-    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
+        -t $batch_docker_image .
+    - docker push $batch_docker_image
   only:
     - master
     - re7
