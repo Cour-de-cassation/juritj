@@ -42,6 +42,7 @@ test:
 
 build_api:
   stage: build
+  needs: ["test"]
   variables:
     HTTP_PROXY: $HTTP_PROXY_DEV
     HTTPS_PROXY: $HTTPS_PROXY_DEV
@@ -62,6 +63,7 @@ build_api:
 
 build_batch:
   stage: build
+  needs: ["test"]
   variables:
     HTTP_PROXY: $HTTP_PROXY_DEV
     HTTPS_PROXY: $HTTPS_PROXY_DEV
@@ -100,6 +102,6 @@ deploy_juritj:
       when: on_success
   tags:
     - docker
-  dependencies:
+  needs:
     - build_api
     - build_batch
