@@ -1,0 +1,25 @@
+---
+- name: Creation bucket service
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: "{{ bucket_service }}"
+        namespace: juritj
+      spec:
+        selector:
+          app: "{{ bucket_app_id}}"
+        ports:
+          - name: api
+            port: 9000
+            targetPort: 9000
+          - name: console
+            port: 9001
+            targetPort: 9001
+        type: ClusterIP
+
+...

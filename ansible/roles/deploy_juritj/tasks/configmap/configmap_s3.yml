@@ -1,0 +1,20 @@
+---
+- name: Creation de la ConfigMap du s3
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: s3-config
+        namespace: "{{ juritj_namespace }}"
+        labels:
+          app: "{{ juritj_application }}"
+      data:
+        S3_URL: "{{ s3_url }}"
+        S3_REGION: "{{ s3_region }}"
+        S3_BUCKET_NAME_RAW: "{{ s3_bucket_name }}"
+        S3_BUCKET_NAME_NORMALIZED: "{{ s3_bucket_name_normalized }}"
+...

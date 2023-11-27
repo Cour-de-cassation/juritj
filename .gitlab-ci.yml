@@ -2,6 +2,13 @@ image: docker:20.10.22
 services:
   - docker:20.10.22-dind
 
+variables:
+  dev: dev
+  re7: preprod
+  master: prod
+  api_docker_image: "$CI_REGISTRY/cour-de-cassation/juritj/api:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA"
+  batch_docker_image: "$CI_REGISTRY/cour-de-cassation/juritj/batch:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA"
+
 stages:
   - test
   - build
@@ -12,22 +19,8 @@ test:
   services:
   - docker:20.10.22
   variables:
-    HTTP_PROXY: $HTTP_PROXY
-    HTTPS_PROXY: $HTTPS_PROXY
-    JURITJ_DOC_LOGIN: $JURITJ_DOC_LOGIN
-    JURITJ_DOC_PASSWORD: $JURITJ_DOC_PASSWORD
-    MINIO_USER: $MINIO_USER
-    MINIO_PASSWORD: $MINIO_PASSWORD
-    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
-    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
-    JURITJ_S3_URL: $JURITJ_S3_URL
-    JURITJ_S3_REGION: $JURITJ_S3_REGION
-    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
-    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-    JURITJ_DBSDER_API_KEY: $JURITJ_DBSDER_API_KEY
-    JURITJ_DBSDER_API_URL: $JURITJ_DBSDER_API_URL
-    JURITJ_NO_COLOR: $JURITJ_NO_COLOR
-
+    HTTP_PROXY: $HTTP_PROXY_DEV
+    HTTPS_PROXY: $HTTPS_PROXY_DEV
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build 
@@ -35,7 +28,7 @@ test:
         --build-arg https_proxy=$HTTPS_PROXY
         --target test
         -t juritj-test .
-    #- docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm audit
+    ##- docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm audit
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run format
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run lint
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm test
@@ -51,16 +44,16 @@ build_api:
   stage: build
   needs: ["test"]
   variables:
-    HTTP_PROXY: $HTTP_PROXY
-    HTTPS_PROXY: $HTTPS_PROXY
+    HTTP_PROXY: $HTTP_PROXY_DEV
+    HTTPS_PROXY: $HTTPS_PROXY_DEV
   script: 
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
         --build-arg http_proxy=$HTTP_PROXY
         --build-arg https_proxy=$HTTPS_PROXY
         --target api
-        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api .
-    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-api
+        -t $api_docker_image .
+    - docker push $api_docker_image
   only:
     - master
     - re7
@@ -72,16 +65,16 @@ build_batch:
   stage: build
   needs: ["test"]
   variables:
-    HTTP_PROXY: $HTTP_PROXY
-    HTTPS_PROXY: $HTTPS_PROXY
+    HTTP_PROXY: $HTTP_PROXY_DEV
+    HTTPS_PROXY: $HTTPS_PROXY_DEV
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build
-        --build-arg http_proxy=http://10.16.117.210:3128
-        --build-arg https_proxy=http://10.16.117.210:3128
+        --build-arg http_proxy=$HTTP_PROXY
+        --build-arg https_proxy=$HTTPS_PROXY
         --target batch
-        -t $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch .
-    - docker push $CI_REGISTRY/cour-de-cassation/juritj:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA-batch
+        -t $batch_docker_image .
+    - docker push $batch_docker_image
   only:
     - master
     - re7
@@ -89,64 +82,26 @@ build_batch:
   tags:
     - docker
 
-deploy_api:
+deploy_juritj:
   stage: deploy
-  needs: ["build_api"]
+  image: alpine/ansible:latest
   variables:
-    JURITJ_DOC_LOGIN: $JURITJ_DOC_LOGIN
-    JURITJ_DOC_PASSWORD: $JURITJ_DOC_PASSWORD
-    MINIO_USER: $MINIO_USER
-    MINIO_PASSWORD: $MINIO_PASSWORD
-    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
-    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
-    JURITJ_S3_URL: $JURITJ_S3_URL
-    JURITJ_S3_REGION: $JURITJ_S3_REGION
-    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
-    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-    JURITJ_SERVER_KEY: $JURITJ_SERVER_KEY
-    JURITJ_SERVER_KEY_PASSPHRASE: $JURITJ_SERVER_KEY_PASSPHRASE
-    JURITJ_SERVER_CERT: $JURITJ_SERVER_CERT
-    JURITJ_SERVER_CA_CERT: $JURITJ_SERVER_CA_CERT
-    JURITJ_WINCI_CA_CERT: $JURITJ_WINCI_CA_CERT
-    JURITJ_AUTO_SIGNED_CA_CERT: $JURITJ_AUTO_SIGNED_CA_CERT
-    JURITJ_CURRENT_ENV: $JURITJ_CURRENT_ENV
     DOLLAR: $$
   script:
-    - envsubst < .deploys/deploy_namespace.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-    - envsubst < .deploys/deploy_api.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-    - envsubst < .deploys/deploy_bucket.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-    - envsubst < .deploys/deploy_ingress.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
+    - inventaire=$(eval "echo \$$CI_COMMIT_BRANCH")
+    - mkdir /root/.ssh
+    - cat $SSH_KEY > /root/.ssh/id_rsa
+    - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
+    - chmod 600 /root/.ssh/id_rsa
+    - chmod 600 /root/.ssh/known_hosts
+    - ansible-playbook -e juritj_api_image=$api_docker_image -e juritj_batch_image=$batch_docker_image -i ansible/inventory/$inventaire.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
   rules:
+    - if: $CI_COMMIT_BRANCH == "master" 
+      when: manual
     - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
       when: on_success
-    - if: $CI_COMMIT_BRANCH == "master"
-      when: manual
   tags:
-    - shell
-
-deploy_batch:
-  stage: deploy
-  needs: ["build_batch"]
-  variables:
-    MINIO_USER: $MINIO_USER
-    MINIO_PASSWORD: $MINIO_PASSWORD
-    JURITJ_S3_ACCESS_KEY: $JURITJ_S3_ACCESS_KEY
-    JURITJ_S3_SECRET_KEY: $JURITJ_S3_SECRET_KEY
-    JURITJ_S3_URL: $JURITJ_S3_URL
-    JURITJ_S3_REGION: $JURITJ_S3_REGION
-    JURITJ_S3_BUCKET_NAME_RAW: $JURITJ_S3_BUCKET_NAME_RAW
-    JURITJ_S3_BUCKET_NAME_NORMALIZED: $JURITJ_S3_BUCKET_NAME_NORMALIZED
-    JURITJ_DBSDER_API_KEY: $JURITJ_DBSDER_API_KEY
-    JURITJ_DBSDER_API_URL: $JURITJ_DBSDER_API_URL
-    JURITJ_NORMALIZATION_BATCH_SCHEDULE: $JURITJ_NORMALIZATION_BATCH_SCHEDULE
-
-    DOLLAR: $$
-  script:
-    - envsubst < .deploys/deploy_batch.yaml | kubectl --kubeconfig=/home/gitlab-runner/.kube/$CI_COMMIT_BRANCH apply -f -
-  rules:
-    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
-      when: on_success
-    - if: $CI_COMMIT_BRANCH == "master"
-      when: manual
-  tags:
-    - shell
+    - docker
+  needs:
+    - build_api
+    - build_batch

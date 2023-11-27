@@ -1,0 +1,43 @@
+---
+- name: Create api Deployment
+  k8s:
+    apply: true
+    state: present
+    verify_ssl: true
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: "{{ api_app_id }}-deployment"
+        namespace: "{{ juritj_namespace }}"
+        labels:
+          app:
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: "{{ api_app_id }}"
+        template:
+          metadata:
+            labels:
+              app: "{{ api_app_id }}"
+          spec:
+            containers:
+              - name: "{{ api_app_id }}"
+                image: "{{ juritj_api_image }}"
+                ports:
+                  - containerPort: 3000
+                envFrom:
+                  - configMapRef:
+                      name: "api-config"
+                  - secretRef:
+                      name: "api-secret"
+                  - configMapRef:
+                      name: "bucket-config"
+                  - secretRef:
+                      name: "bucket-secret"
+                  - configMapRef:
+                      name: "s3-config"
+                  - secretRef:
+                      name: "s3-secret"
+...
