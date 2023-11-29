@@ -141,6 +141,21 @@ describe('updateLabelStatus', () => {
       expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
     })
 
+    it('returns ignored_debatNonPublic when decision debat is not public', () => {
+      // GIVEN
+      const mockDecisionLabel = {
+        ...new MockUtils().decisionTJMock,
+        debatPublic: false
+      }
+      const expectedLabelStatus = LabelStatus.IGNORED_DEBAT_NON_PUBLIC
+
+      // WHEN
+      mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+      // THEN
+      expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+    })
+
     it('returns ignored_codeDecisionBloqueCC when codeDecision is not in the list of codeDecision that needs to be transmitted to CC', () => {
       // GIVEN
       const mockDecisionLabel = {
