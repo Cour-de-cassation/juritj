@@ -61,9 +61,9 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   if (!isDecisionFromTJTransmissibleToCC(decisionDto.codeDecision)) {
     logger.error({
       ...formatLogs,
-      msg: 'Decision can not be treated by Judilibre because codeDecision is not in authorized codeDecision list, changing LabelStatus to ignored_codeDecisionNonTransmisCC.'
+      msg: 'Decision can not be treated by Judilibre because codeDecision is not in authorized codeDecision list, changing LabelStatus to ignored_codeDecisionBloqueCC.'
     })
-    return LabelStatus.IGNORED_CODE_DECISION_NON_TRANSMIS_CC
+    return LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC
   }
 
   return decisionDto.labelStatus
