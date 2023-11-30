@@ -43,6 +43,8 @@
                 - /data
                 - --console-address
                 - ":9001"
+            nodeSelector:
+              kubernetes.io/hostname: "{{ master_node_name }}"
             volumes:
             - name: bucket-volume
               hostPath:
