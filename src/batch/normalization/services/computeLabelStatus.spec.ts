@@ -141,13 +141,13 @@ describe('updateLabelStatus', () => {
       expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
     })
 
-    it('returns ignored_codeDecisionNonTransmisCC when codeDecision is not in the list of codeDecision that needs to be transmitted to CC', () => {
+    it('returns ignored_codeDecisionBloqueCC when codeDecision is not in the list of codeDecision that needs to be transmitted to CC', () => {
       // GIVEN
       const mockDecisionLabel = {
         ...new MockUtils().decisionTJMock,
         codeDecision: '32A'
       }
-      const expectedLabelStatus = LabelStatus.IGNORED_CODE_DECISION_NON_TRANSMIS_CC
+      const expectedLabelStatus = LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC
 
       // WHEN
       mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
