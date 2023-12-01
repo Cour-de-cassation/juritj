@@ -30,6 +30,15 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
     return LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
   }
 
+  if (decisionDto.debatPublic === false) {
+    logger.error({
+      ...formatLogs,
+      msg: `Decision debat is not public, changing LabelStatus to ${LabelStatus.IGNORED_DEBAT_NON_PUBLIC}.`
+    })
+
+    return LabelStatus.IGNORED_DEBAT_NON_PUBLIC
+  }
+
   if (isDecisionOlderThanSixMonths(dateCreation, dateDecision)) {
     logger.error({
       ...formatLogs,
