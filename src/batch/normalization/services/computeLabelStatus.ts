@@ -17,7 +17,7 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   if (isDecisionInTheFuture(dateCreation, dateDecision)) {
     logger.error({
       ...formatLogs,
-      msg: 'Incorrect date, dateDecision must be before dateCreation.. Changing LabelStatus to ignored_dateDecisionIncoherente.'
+      msg: `Incorrect date, dateDecision must be before dateCreation.. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE}.`
     })
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
@@ -25,16 +25,15 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   if (decisionDto.public === false) {
     logger.error({
       ...formatLogs,
-      msg: 'Decision is not public, changing LabelStatus to ignored_decisionNonPublique.'
+      msg: `Decision is not public, changing LabelStatus to ${LabelStatus.IGNORED_DECISION_NON_PUBLIQUE}.`
     })
-
     return LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
   }
 
   if (isDecisionOlderThanSixMonths(dateCreation, dateDecision)) {
     logger.error({
       ...formatLogs,
-      msg: 'Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ignored_dateDecisionIncoherente.'
+      msg: `Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE}.`
     })
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
@@ -43,25 +42,23 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   if (isDecisionPartiallyPublic(decisionDto.NACCode)) {
     logger.info({
       ...formatLogs,
-      msg: 'Decision can not be treated by Judilibre because NACCode indicates that the decision is partially public, changing LabelStatus to ignored_codeNACdeDecisionPartiellementPublique.'
+      msg: `Decision can not be treated by Judilibre because NACCode indicates that the decision is partially public, changing LabelStatus to ${LabelStatus.IGNORED_CODE_NAC_DECISION_PARTIELLEMENT_PUBLIQUE}.`
     })
-
     return LabelStatus.IGNORED_CODE_NAC_DECISION_PARTIELLEMENT_PUBLIQUE
   }
 
   if (isDecisionNotPublic(decisionDto.NACCode)) {
     logger.info({
       ...formatLogs,
-      msg: 'Decision can not be treated by Judilibre because NACCode indicates that the decision can not be public, changing LabelStatus to ignored_codeNACdeDecisionNonPublique.'
+      msg: `Decision can not be treated by Judilibre because NACCode indicates that the decision can not be public, changing LabelStatus to ${LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE}.`
     })
-
     return LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
   }
 
   if (!isDecisionFromTJTransmissibleToCC(decisionDto.codeDecision)) {
     logger.error({
       ...formatLogs,
-      msg: 'Decision can not be treated by Judilibre because codeDecision is not in authorized codeDecision list, changing LabelStatus to ignored_codeDecisionBloqueCC.'
+      msg: `Decision can not be treated by Judilibre because codeDecision is not in authorized codeDecision list, changing LabelStatus to ${LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC}.`
     })
     return LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC
   }
