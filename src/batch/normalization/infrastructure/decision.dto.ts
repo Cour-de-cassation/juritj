@@ -36,7 +36,7 @@ export function mapDecisionNormaliseeToDecisionDto(
     chamberName: '',
     dateCreation: new Date().toISOString(),
     dateDecision: parseDate(metadonnees.dateDecision).toISOString(),
-    _id: generatedId,
+    idDecisionTJ: generatedId,
     jurisdictionCode: metadonnees.codeJuridiction,
     jurisdictionId: metadonnees.idJuridiction,
     jurisdictionName: metadonnees.nomJuridiction,
