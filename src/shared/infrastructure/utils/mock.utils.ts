@@ -57,7 +57,8 @@ export class MockUtils {
     codeNature: '6C',
     libelleNature: 'Autres demandes en matière de frais et dépens',
     decisionPublique: true,
-    recommandationOccultation: Occultation.AUCUNE,
+    recommandationOccultation: Occultation.SUBSTITUANT,
+    occultationComplementaire: 'occultation complementaire',
     selection: false,
     matiereDeterminee: true,
     pourvoiLocal: false,
@@ -96,7 +97,7 @@ export class MockUtils {
     jurisdictionName: this.allAttributesMetadonneesDtoMock.nomJuridiction,
     labelStatus: this.allAttributesMetadonneesDtoMock.labelStatus,
     occultation: {
-      additionalTerms: '',
+      additionalTerms: this.mandatoryMetadonneesDtoMock.occultationComplementaire,
       categoriesToOmit: []
     },
     originalText: this.decisionContentNormalized,
@@ -135,7 +136,7 @@ export class MockUtils {
     numeroRoleGeneral: this.allAttributesMetadonneesDtoMock.numeroRoleGeneral,
     pourvoiCourDeCassation: false,
     pourvoiLocal: false,
-    recommandationOccultation: Occultation.AUCUNE,
+    recommandationOccultation: Occultation.SUBSTITUANT,
     president: undefined,
     sommaire: undefined,
     selection: false,

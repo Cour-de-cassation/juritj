@@ -35,7 +35,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       numeroRoleGeneral: '01/12345',
       pourvoiCourDeCassation: false,
       pourvoiLocal: false,
-      recommandationOccultation: Occultation.AUCUNE,
+      recommandationOccultation: Occultation.SUBSTITUANT,
       selection: false,
       NACCode: '11F',
       appeals: [],
@@ -51,7 +51,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       jurisdictionName: 'Juridictions civiles de première instance',
       labelStatus: LabelStatus.TOBETREATED,
       occultation: {
-        additionalTerms: '',
+        additionalTerms: 'occultation complementaire',
         categoriesToOmit: []
       },
       originalText: mockUtils.decisionContentNormalized,
@@ -97,7 +97,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       numeroRoleGeneral: '01/12345',
       pourvoiCourDeCassation: false,
       pourvoiLocal: false,
-      recommandationOccultation: Occultation.AUCUNE,
+      recommandationOccultation: Occultation.SUBSTITUANT,
       selection: false,
       NACCode: '11F',
       appeals: [],
@@ -113,7 +113,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       jurisdictionName: 'Juridictions civiles de première instance',
       labelStatus: LabelStatus.TOBETREATED,
       occultation: {
-        additionalTerms: '',
+        additionalTerms: 'occultation complementaire',
         categoriesToOmit: []
       },
       originalText: mockUtils.decisionContentNormalized,
