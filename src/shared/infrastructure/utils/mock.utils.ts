@@ -108,7 +108,6 @@ export class MockUtils {
     NPCode: this.allAttributesMetadonneesDtoMock.codeNature,
     NACCode: this.allAttributesMetadonneesDtoMock.codeNAC,
     filenameSource: this.allAttributesMetadonneesDtoMock.filenameSource,
-    _id: '',
     public: this.allAttributesMetadonneesDtoMock.decisionPublique
   }
 
@@ -139,6 +138,7 @@ export class MockUtils {
     recommandationOccultation: Occultation.AUCUNE,
     president: undefined,
     sommaire: undefined,
-    selection: false
+    selection: false,
+    idDecisionTJ: this.uniqueDecisionId
   }
 }

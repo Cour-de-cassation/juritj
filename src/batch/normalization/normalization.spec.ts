@@ -84,7 +84,7 @@ describe('Normalization', () => {
         {
           metadonnees: {
             ...fakeNormalizedMetadonnees,
-            _id: mockUtils.uniqueDecisionId,
+            idDecisionTJ: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             originalText: normalizedDecision
           },
@@ -114,7 +114,7 @@ describe('Normalization', () => {
         {
           metadonnees: {
             ...fakeNormalizedMetadonnees,
-            _id: mockUtils.uniqueDecisionId,
+            idDecisionTJ: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             originalText: expectedDecision
           },
@@ -151,7 +151,7 @@ describe('Normalization', () => {
         {
           metadonnees: {
             ...fakeNormalizedMetadonnees,
-            _id: mockUtils.uniqueDecisionId,
+            idDecisionTJ: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             filenameSource: firstDecisionName
           },
@@ -160,7 +160,7 @@ describe('Normalization', () => {
         {
           metadonnees: {
             ...fakeNormalizedMetadonnees,
-            _id: mockUtils.uniqueDecisionId,
+            idDecisionTJ: mockUtils.uniqueDecisionId,
             labelStatus: mockUtils.allAttributesMetadonneesDtoMock.labelStatus,
             filenameSource: secondDecisionName
           },

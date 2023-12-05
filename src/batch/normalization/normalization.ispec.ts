@@ -103,10 +103,10 @@ describe('Normalization', () => {
           metadonnees: {
             ...normalizedMetadonnees,
             jurisdictionId: decisionIdJuridiction,
-            _id: objectId,
             labelStatus: LabelStatus.TOBETREATED,
             filenameSource: fileName,
-            sourceId
+            sourceId,
+            idDecisionTJ: objectId
           }
         }
       ]
@@ -183,7 +183,7 @@ describe('Normalization', () => {
           metadonnees: {
             ...normalizedMetadonnees,
             jurisdictionId: firstDecisionIdJuridiction,
-            _id: firstObjectId,
+            idDecisionTJ: firstObjectId,
             labelStatus: LabelStatus.TOBETREATED,
             filenameSource: firstFilename,
             sourceId: firstSourceId
@@ -194,7 +194,7 @@ describe('Normalization', () => {
           metadonnees: {
             ...normalizedMetadonnees,
             jurisdictionId: secondDecisionIdJuridiction,
-            _id: secondObjectId,
+            idDecisionTJ: secondObjectId,
             labelStatus: LabelStatus.TOBETREATED,
             filenameSource: secondFilename,
             sourceId: secondSourceId
@@ -205,7 +205,7 @@ describe('Normalization', () => {
           metadonnees: {
             ...normalizedMetadonnees,
             jurisdictionId: thirdDecisionIdJuridiction,
-            _id: thirdtObjectId,
+            idDecisionTJ: thirdtObjectId,
             labelStatus: LabelStatus.TOBETREATED,
             filenameSource: thirdFilename,
             sourceId: thirdSourceId

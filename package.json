@@ -41,7 +41,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "0.14.0",
     "cron": "2.4.3",
-    "dbsder-api-types": "1.1.27",
+    "dbsder-api-types": "1.1.29",
     "express-basic-auth": "1.2.1",
     "joi": "17.11.0",
     "reflect-metadata": "0.1.13",
