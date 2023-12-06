@@ -91,7 +91,7 @@ describe('SaveDecision Usecase', () => {
     usecase.execute(decisionIntegre, metadonnees)
 
     // THEN
-    expect(mockDecisionRepository.saveDecisionIntegre).toBeCalledWith(
+    expect(mockDecisionRepository.saveDecisionIntegre).toHaveBeenCalledWith(
       expectedRequestDto,
       generatedFilename
     )
