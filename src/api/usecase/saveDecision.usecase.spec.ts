@@ -19,13 +19,14 @@ describe('SaveDecision Usecase', () => {
     // GIVEN
     const originalName = 'test.wpd'
     const generatedFilename = fakeFilename + '.json'
+    const stream = new Readable()
     const decisionIntegre: Express.Multer.File = {
       fieldname: '',
       originalname: originalName,
       encoding: '',
       mimetype: '',
       size: 0,
-      stream: new Readable(),
+      stream,
       destination: '',
       filename: originalName,
       path: '',
@@ -44,41 +45,7 @@ describe('SaveDecision Usecase', () => {
         encoding: '',
         mimetype: '',
         size: 0,
-        stream: {
-          _readableState: {
-            objectMode: false,
-            highWaterMark: 16384,
-            buffer: { head: null, tail: null, length: 0 },
-            length: 0,
-            pipes: [],
-            flowing: null,
-            ended: false,
-            endEmitted: false,
-            reading: false,
-            constructed: true,
-            sync: true,
-            needReadable: false,
-            emittedReadable: false,
-            readableListening: false,
-            resumeScheduled: false,
-            errorEmitted: false,
-            emitClose: true,
-            autoDestroy: true,
-            destroyed: false,
-            errored: null,
-            closed: false,
-            closeEmitted: false,
-            defaultEncoding: 'utf8',
-            awaitDrainWriters: null,
-            multiAwaitDrain: false,
-            readingMore: false,
-            dataEmitted: false,
-            decoder: null,
-            encoding: null
-          },
-          _events: {},
-          _eventsCount: 0
-        },
+        stream,
         destination: '',
         filename: originalName,
         path: '',
