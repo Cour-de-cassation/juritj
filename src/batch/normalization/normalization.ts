@@ -11,6 +11,7 @@ import { CollectDto } from '../../shared/infrastructure/dto/collect.dto'
 import { computeLabelStatus } from './services/computeLabelStatus'
 import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 import { normalizationFormatLogs } from './index'
+import { computeOccultation } from './services/computeOccultation'
 
 const dbSderApiGateway = new DbSderApiGateway()
 const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW
@@ -64,6 +65,10 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           decisionFilename
         )
         decisionToSave.labelStatus = computeLabelStatus(decisionToSave)
+        decisionToSave.occultation = computeOccultation(
+          decision.metadonnees.recommandationOccultation,
+          decision.metadonnees.occultationComplementaire
+        )
 
         // Step 7: Save decision in database
         await dbSderApiGateway.saveDecision(decisionToSave)
