@@ -4,5 +4,6 @@ s3_secret_key: "{{ vault_s3_secret_key }}"
 dbsder_api_key: "{{ vault_dbsder_api_key }}"
 doc_password: "{{ vault_doc_password }}"
 minio_root_password: "{{ vault_minio_root_password }}"
+dbsder_api_url: "http://deactivating-batch-in-prod"
 
 master_node_name: "jud7vcorc001"
