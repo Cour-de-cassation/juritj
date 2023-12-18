@@ -52,7 +52,7 @@ export class MockUtils {
     libelleService: 'Libelle de service',
     codeDecision: '55C',
     libelleCodeDecision: 'some libelle code decision',
-    codeNAC: '11F',
+    codeNAC: '12F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
     codeNature: '6C',
     libelleNature: 'Autres demandes en matière de frais et dépens',

@@ -2,6 +2,7 @@ import { LabelStatus } from 'dbsder-api-types'
 import { computeLabelStatus } from './computeLabelStatus'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 import { codeNACListNotPublic, codeNACListPartiallyPublic } from '../infrastructure/codeNACList'
+import { codeDecisionListDebatNonPublic } from '../infrastructure/codeDecisionList'
 
 jest.mock('../index', () => ({
   logger: {
@@ -160,7 +161,7 @@ describe('updateLabelStatus', () => {
       // GIVEN
       const mockDecisionLabel = {
         ...new MockUtils().decisionTJMock,
-        codeDecision: '32A'
+        codeDecision: '54L'
       }
       const expectedLabelStatus = LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC
 
@@ -214,6 +215,25 @@ describe('updateLabelStatus', () => {
             NACCode: codeNAC
           }
           const expectedLabelStatus = LabelStatus.IGNORED_CODE_NAC_DECISION_PARTIELLEMENT_PUBLIQUE
+
+          // WHEN
+          mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+          // THEN
+          expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+        })
+      })
+    })
+
+    describe('returns ignored_DebatNonPublic', () => {
+      codeDecisionListDebatNonPublic.forEach((codeDecision) => {
+        it(`when decision has ${codeDecision} codeDecision indicating that the decision debat is not public`, () => {
+          // GIVEN
+          const mockDecisionLabel = {
+            ...new MockUtils().decisionTJMock,
+            codeDecision: codeDecision
+          }
+          const expectedLabelStatus = LabelStatus.IGNORED_DEBAT_NON_PUBLIC
 
           // WHEN
           mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)

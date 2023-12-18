@@ -3,7 +3,10 @@ import { logger } from '../index'
 import { codeNACListNotPublic, codeNACListPartiallyPublic } from '../infrastructure/codeNACList'
 import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
 import { normalizationFormatLogs } from '../index'
-import { codeDecisionListTransmissibleToCC } from '../infrastructure/codeDecisionList'
+import {
+  codeDecisionListDebatNonPublic,
+  codeDecisionListTransmissibleToCC
+} from '../infrastructure/codeDecisionList'
 
 export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   const dateCreation = new Date(decisionDto.dateCreation)
@@ -22,21 +25,21 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
 
-  if (decisionDto.public === false) {
-    logger.error({
-      ...formatLogs,
-      msg: `Decision is not public, changing LabelStatus to ${LabelStatus.IGNORED_DECISION_NON_PUBLIQUE}.`
-    })
-    return LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
-  }
-
-  if (decisionDto.debatPublic === false) {
+  if (decisionDto.debatPublic === false || isDecisionDebatNonPublic(decisionDto.codeDecision)) {
     logger.error({
       ...formatLogs,
       msg: `Decision debat is not public, changing LabelStatus to ${LabelStatus.IGNORED_DEBAT_NON_PUBLIC}.`
     })
 
     return LabelStatus.IGNORED_DEBAT_NON_PUBLIC
+  }
+
+  if (decisionDto.public === false) {
+    logger.error({
+      ...formatLogs,
+      msg: `Decision is not public, changing LabelStatus to ${LabelStatus.IGNORED_DECISION_NON_PUBLIQUE}.`
+    })
+    return LabelStatus.IGNORED_DECISION_NON_PUBLIQUE
   }
 
   if (isDecisionOlderThanSixMonths(dateCreation, dateDecision)) {
@@ -98,4 +101,8 @@ function isDecisionNotPublic(codeNAC: string): boolean {
 
 function isDecisionPartiallyPublic(codeNAC: string): boolean {
   return codeNACListPartiallyPublic.includes(codeNAC)
+}
+
+function isDecisionDebatNonPublic(codeDecision: string): boolean {
+  return codeDecisionListDebatNonPublic.includes(codeDecision)
 }
