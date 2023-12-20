@@ -9,8 +9,8 @@ import {
 
 export class MockUtils {
   // Shared context
-  uniqueDecisionId = `TJ75011A01-1234520221121`
-  uniqueDecisionIdHash = 1616441172
+  uniqueDecisionId = `TJ75011A01-1234520240120`
+  uniqueDecisionIdHash = 2276616178
 
   presidentDtoMock = {
     fonction: 'president',
@@ -31,14 +31,14 @@ export class MockUtils {
 
   decisionName = 'decisionName.wpd'
 
-  dateNow = new Date(2022, 10, 21)
+  dateNow = new Date(2023, 12, 20)
 
   // JuriTJ Collect context
   decisionAssocieeDtoMock = {
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
     idJuridiction: 'TJ00000',
-    date: '20221121',
+    date: '20240120',
     idDecision: 'TJ00001'
   }
 
@@ -48,7 +48,7 @@ export class MockUtils {
     numeroRegistre: 'A',
     numeroRoleGeneral: '01/12345',
     codeService: '0A',
-    dateDecision: '20221121',
+    dateDecision: '20240120',
     libelleService: 'Libelle de service',
     codeDecision: '55C',
     libelleCodeDecision: 'some libelle code decision',

@@ -43,7 +43,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       chamberId: '',
       chamberName: '',
       dateCreation: mockUtils.dateNow.toISOString(),
-      dateDecision: new Date(2022, 10, 21).toISOString(),
+      dateDecision: new Date(2024, 0, 20).toISOString(),
       filenameSource: 'test.json',
       idDecisionTJ: 'TJ75011A01-1234520221121',
       jurisdictionCode: undefined,
@@ -57,7 +57,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       originalText: mockUtils.decisionContentNormalized,
       parties: undefined,
       registerNumber: 'A',
-      sourceId: mockUtils.uniqueDecisionIdHash,
+      sourceId: 1616441172,
       sourceName: Sources.TJ
     }
 
@@ -105,7 +105,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       chamberId: '',
       chamberName: '',
       dateCreation: mockUtils.dateNow.toISOString(),
-      dateDecision: new Date(2022, 10, 21).toISOString(),
+      dateDecision: new Date(2024, 0, 20).toISOString(),
       filenameSource: 'test.json',
       idDecisionTJ: 'TJ75011A01-1234520221121',
       jurisdictionCode: undefined,
@@ -119,7 +119,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       originalText: mockUtils.decisionContentNormalized,
       parties: undefined,
       registerNumber: 'A',
-      sourceId: mockUtils.uniqueDecisionIdHash,
+      sourceId: 1616441172,
       sourceName: Sources.TJ,
       idDecisionWinci: 'TJ00000',
       decisionAssociee: {

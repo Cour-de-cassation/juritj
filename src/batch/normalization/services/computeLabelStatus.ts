@@ -5,9 +5,12 @@ import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.util
 import { normalizationFormatLogs } from '../index'
 import { codeDecisionListTransmissibleToCC } from '../infrastructure/codeDecisionList'
 
+const dateMiseEnService = new Date('2023-12-15')
+
 export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   const dateCreation = new Date(decisionDto.dateCreation)
   const dateDecision = new Date(decisionDto.dateDecision)
+
   const formatLogs: LogsFormat = {
     ...normalizationFormatLogs,
     operationName: 'computeLabelStatus',
@@ -45,6 +48,14 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
       msg: `Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE}.`
     })
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
+  }
+
+  if (isDecisionOlderThanMiseEnService(dateDecision)) {
+    logger.error({
+      ...formatLogs,
+      msg: `Incorrect date, dateDecision must be after mise en service. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE}.`
+    })
+    return LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
   }
 
   // We don't check if NACCode is provided because it is a mandatory field for TJ decisions (but optional for DBSDER API)
@@ -90,6 +101,10 @@ function isDecisionOlderThanSixMonths(dateCreation: Date, dateDecision: Date): b
 
 function isDecisionFromTJTransmissibleToCC(codeNAC: string): boolean {
   return codeDecisionListTransmissibleToCC.includes(codeNAC)
+}
+
+function isDecisionOlderThanMiseEnService(dateDecision: Date): boolean {
+  return dateDecision < dateMiseEnService
 }
 
 function isDecisionNotPublic(codeNAC: string): boolean {
