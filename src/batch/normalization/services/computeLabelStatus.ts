@@ -25,7 +25,7 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
 
-  if (decisionDto.debatPublic === false || isDecisionDebatNonPublic(decisionDto.codeDecision)) {
+  if (!decisionDto.debatPublic || isDecisionDebatNonPublic(decisionDto.codeDecision)) {
     logger.error({
       ...formatLogs,
       msg: `Decision debat is not public, changing LabelStatus to ${LabelStatus.IGNORED_DEBAT_NON_PUBLIC}.`
@@ -34,7 +34,7 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
     return LabelStatus.IGNORED_DEBAT_NON_PUBLIC
   }
 
-  if (decisionDto.public === false) {
+  if (!decisionDto.public) {
     logger.error({
       ...formatLogs,
       msg: `Decision is not public, changing LabelStatus to ${LabelStatus.IGNORED_DECISION_NON_PUBLIQUE}.`
