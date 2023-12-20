@@ -16,49 +16,13 @@ describe('updateLabelStatus', () => {
   describe('Returns provided labelStatus', () => {
     it('when decision is not ignored', () => {
       // GIVEN
-      const dateDecember2022 = new Date(2022, 11, 31)
-      const dateMarch2023 = new Date(2023, 2, 31)
+      const dateDecember2023 = new Date(2023, 11, 31)
+      const dateMarch2024 = new Date(2024, 2, 29)
       const mockDecisionLabel = {
         ...mockUtils.decisionTJMock,
-        dateDecision: dateDecember2022.toISOString(),
-        dateCreation: dateMarch2023.toISOString(),
+        dateDecision: dateDecember2023.toISOString(),
+        dateCreation: dateMarch2024.toISOString(),
         public: true
-      }
-      const expectedLabelStatus = LabelStatus.TOBETREATED
-
-      // WHEN
-      mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
-
-      // THEN
-      expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
-    })
-
-    it('when decisionDate is in September 2022 and dateCreation is in March 2023', () => {
-      // GIVEN
-      const dateSeptember2022 = new Date(2022, 8, 20)
-      const dateMarch2023 = new Date(2023, 2, 25)
-      const mockDecisionLabel = {
-        ...mockUtils.decisionTJMock,
-        dateDecision: dateSeptember2022.toISOString(),
-        dateCreation: dateMarch2023.toISOString()
-      }
-      const expectedLabelStatus = LabelStatus.TOBETREATED
-
-      // WHEN
-      mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
-
-      // THEN
-      expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
-    })
-
-    it('when decisionDate is in January 2023 and dateCreation is in July 2023', () => {
-      // GIVEN
-      const dateJanuary2023 = new Date(2023, 0, 15)
-      const dateJuly2023 = new Date(2023, 6, 20)
-      const mockDecisionLabel = {
-        ...mockUtils.decisionTJMock,
-        dateDecision: dateJanuary2023.toISOString(),
-        dateCreation: dateJuly2023.toISOString()
       }
       const expectedLabelStatus = LabelStatus.TOBETREATED
 
@@ -221,6 +185,60 @@ describe('updateLabelStatus', () => {
           // THEN
           expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
         })
+      })
+    })
+
+    describe('returns ignored_dateAvantMiseEnService', () => {
+      it('when decisionDate is before mise en service date', () => {
+        // GIVEN
+        const dateDecisionBeforeMiseEnService = new Date(2023, 11, 15)
+        const mockDecisionLabel = {
+          ...new MockUtils().decisionTJMock,
+          dateDecision: dateDecisionBeforeMiseEnService.toISOString()
+        }
+        const expectedLabelStatus = LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
+
+        // WHEN
+        mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+        // THEN
+        expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+      })
+
+      it('when decisionDate is in January 2023 and dateCreation is in July 2023', () => {
+        // GIVEN
+        const dateJanuary2023 = new Date(2023, 0, 15)
+        const dateJuly2023 = new Date(2023, 6, 20)
+        const mockDecisionLabel = {
+          ...mockUtils.decisionTJMock,
+          dateDecision: dateJanuary2023.toISOString(),
+          dateCreation: dateJuly2023.toISOString()
+        }
+        // change with new condditions now this is before mise en service
+        const expectedLabelStatus = LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
+
+        // WHEN
+        mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+        // THEN
+        expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+      })
+      it('when decisionDate is in September 2022 and dateCreation is in March 2023', () => {
+        // GIVEN
+        const dateSeptember2022 = new Date(2022, 8, 20)
+        const dateMarch2023 = new Date(2023, 2, 25)
+        const mockDecisionLabel = {
+          ...mockUtils.decisionTJMock,
+          dateDecision: dateSeptember2022.toISOString(),
+          dateCreation: dateMarch2023.toISOString()
+        }
+        const expectedLabelStatus = LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
+
+        // WHEN
+        mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+        // THEN
+        expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
       })
     })
   })

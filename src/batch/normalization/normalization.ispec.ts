@@ -77,8 +77,8 @@ describe('Normalization', () => {
     it('returns a list of normalized decisions when decisions are present', async () => {
       // GIVEN
       const decisionIdJuridiction = 'TJ00001'
-      const objectId = decisionIdJuridiction + 'A01-1234520221121'
-      const sourceId = 1579505431
+      const objectId = decisionIdJuridiction + 'A01-1234520240120'
+      const sourceId = 2391756977
       const fileName = 'filename'
 
       const listWithOneElementFromS3 = {
@@ -121,17 +121,17 @@ describe('Normalization', () => {
     it('returns 3 normalized decisions when 3 decisions are available on S3 (restarts until all decisions from S3 are treated)', async () => {
       // GIVEN
       const firstDecisionIdJuridiction = 'TJ00001'
-      const firstObjectId = firstDecisionIdJuridiction + 'A01-1234520221121'
+      const firstObjectId = firstDecisionIdJuridiction + 'A01-1234520240120'
       const firstFilename = 'firstFilename'
-      const firstSourceId = 1579505431
+      const firstSourceId = 2391756977
       const secondDecisionIdJuridiction = 'TJ00002'
-      const secondObjectId = secondDecisionIdJuridiction + 'A01-1234520221121'
+      const secondObjectId = secondDecisionIdJuridiction + 'A01-1234520240120'
       const secondFilename = 'secondFilename'
-      const secondSourceId = 1082966996
+      const secondSourceId = 305355506
       const thirdDecisionIdJuridiction = 'TJ00003'
-      const thirdtObjectId = thirdDecisionIdJuridiction + 'A01-1234520221121'
+      const thirdtObjectId = thirdDecisionIdJuridiction + 'A01-1234520240120'
       const thirdFilename = 'thirdFilename'
-      const thirdSourceId = 4162437013
+      const thirdSourceId = 4103784243
 
       // S3 must be called 3 times to return 2 + 1 decision filename
       const listWithTwoElementsFromS3 = {
@@ -226,10 +226,10 @@ describe('Normalization', () => {
       jest.useRealTimers()
 
       const firstDecisionIdJuridiction = 'TJ00001'
-      const firstObjectId = firstDecisionIdJuridiction + 'A01-1234520221121'
+      const firstObjectId = firstDecisionIdJuridiction + 'A01-1234520240120'
       const firstFilename = 'firstFilename'
       const secondDecisionIdJuridiction = 'TJ00002'
-      const secondObjectId = secondDecisionIdJuridiction + 'A01-1234520221121'
+      const secondObjectId = secondDecisionIdJuridiction + 'A01-1234520240120'
       const secondFilename = 'secondFilename'
 
       // S3 must be called 2 times to return 2 decision filename
@@ -289,7 +289,7 @@ describe('Normalization', () => {
       mockS3.on(ListObjectsV2Command).resolves(listWithOneElementFromS3)
 
       const decisionIdJuridiction = 'TJ00001'
-      const objectId = decisionIdJuridiction + 'A01-1234520221121'
+      const objectId = decisionIdJuridiction + 'A01-1234520240120'
 
       mockS3.on(GetObjectCommand).resolves({
         Body: createFakeDocument(
