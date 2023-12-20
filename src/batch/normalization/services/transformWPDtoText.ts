@@ -15,7 +15,7 @@ export async function readWordperfectDocument(filename: string) {
   const cmdPath = await getConversionCommandPath(CONVERSION_COMMAND)
   if (cmdPath && existsSync(filename)) {
     try {
-      const { stdout } = await execPromise('wpd2text ./' + filename)
+      const { stdout } = await execPromise("wpd2text '" + filename + "'")
       return stdout
     } catch (error) {
       logger.error({
