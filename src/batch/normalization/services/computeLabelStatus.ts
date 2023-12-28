@@ -25,6 +25,22 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
 
+  if (isDecisionOlderThanSixMonths(dateCreation, dateDecision)) {
+    logger.error({
+      ...formatLogs,
+      msg: `Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE}.`
+    })
+    return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
+  }
+
+  if (isDecisionOlderThanMiseEnService(dateDecision)) {
+    logger.error({
+      ...formatLogs,
+      msg: `Incorrect date, dateDecision must be after mise en service. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE}.`
+    })
+    return LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
+  }
+
   if (decisionDto.public === false) {
     logger.error({
       ...formatLogs,
@@ -40,22 +56,6 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
     })
 
     return LabelStatus.IGNORED_DEBAT_NON_PUBLIC
-  }
-
-  if (isDecisionOlderThanSixMonths(dateCreation, dateDecision)) {
-    logger.error({
-      ...formatLogs,
-      msg: `Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE}.`
-    })
-    return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
-  }
-
-  if (isDecisionOlderThanMiseEnService(dateDecision)) {
-    logger.error({
-      ...formatLogs,
-      msg: `Incorrect date, dateDecision must be after mise en service. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE}.`
-    })
-    return LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
   }
 
   // We don't check if NACCode is provided because it is a mandatory field for TJ decisions (but optional for DBSDER API)
