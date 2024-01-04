@@ -191,7 +191,7 @@ describe('updateLabelStatus', () => {
     describe('returns ignored_dateAvantMiseEnService', () => {
       it('when decisionDate is before mise en service date', () => {
         // GIVEN
-        const dateDecisionBeforeMiseEnService = new Date(2023, 11, 13)
+        const dateDecisionBeforeMiseEnService = new Date(2023, 11, 15)
         const mockDecisionLabel = {
           ...new MockUtils().decisionTJMock,
           dateDecision: dateDecisionBeforeMiseEnService.toISOString()
@@ -233,6 +233,21 @@ describe('updateLabelStatus', () => {
           dateCreation: dateMarch2023.toISOString()
         }
         const expectedLabelStatus = LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
+
+        // WHEN
+        mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+        // THEN
+        expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+      })
+      it('when originalText contains tibetan characters', () => {
+        // GIVEN
+
+        const mockDecisionLabel = {
+          ...mockUtils.decisionTJMock,
+          originalText: 'la somme de 66. 224, 25 €, après imputation de la créance des tiers payeurs et déduction faite des provisions à hauteur de 9. 000 སྒྱ, en réparation de son préjudice corporel, consécutif à l’accident survenu le'
+        }
+        const expectedLabelStatus = LabelStatus.IGNORED_CARACTERE_INCONNU
 
         // WHEN
         mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
