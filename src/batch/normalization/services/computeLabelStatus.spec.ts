@@ -191,7 +191,7 @@ describe('updateLabelStatus', () => {
     describe('returns ignored_dateAvantMiseEnService', () => {
       it('when decisionDate is before mise en service date', () => {
         // GIVEN
-        const dateDecisionBeforeMiseEnService = new Date(2023, 11, 15)
+        const dateDecisionBeforeMiseEnService = new Date(2023, 11, 13)
         const mockDecisionLabel = {
           ...new MockUtils().decisionTJMock,
           dateDecision: dateDecisionBeforeMiseEnService.toISOString()
