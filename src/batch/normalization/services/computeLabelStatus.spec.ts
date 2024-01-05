@@ -240,6 +240,21 @@ describe('updateLabelStatus', () => {
         // THEN
         expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
       })
+      it('when originalText contains tibetan characters', () => {
+        // GIVEN
+
+        const mockDecisionLabel = {
+          ...mockUtils.decisionTJMock,
+          originalText: 'la somme de 66. 224, 25 €, après imputation de la créance des tiers payeurs et déduction faite des provisions à hauteur de 9. 000 སྒྱ, en réparation de son préjudice corporel, consécutif à l’accident survenu le'
+        }
+        const expectedLabelStatus = LabelStatus.IGNORED_CARACTERE_INCONNU
+
+        // WHEN
+        mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
+
+        // THEN
+        expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
+      })
     })
   })
 })
