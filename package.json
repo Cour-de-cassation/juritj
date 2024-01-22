@@ -43,7 +43,7 @@
     "cron": "2.4.3",
     "dbsder-api-types": "1.1.34",
     "express-basic-auth": "1.2.1",
-    "joi": "17.11.1",
+    "joi": "17.12.0",
     "reflect-metadata": "0.1.14",
     "nestjs-pino": "4.0.0",
     "pino-http": "9.0.0",
