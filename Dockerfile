@@ -1,6 +1,6 @@
 # Source : https://github.com/nestjs/awesome-nestjs#resources boilerplates
 # --- Builder --- #
-FROM node:18-alpine as builder
+FROM node:20.11.0-alpine as builder
 
 ENV NODE_ENV build
 
@@ -29,7 +29,7 @@ RUN npm run build && npm prune --production
 
 
 # --- Base final image with only shared dist content --- #
-FROM node:18-alpine as shared
+FROM node:20.11.0-alpine as shared
 
 ENV NODE_ENV production
 
@@ -63,7 +63,7 @@ CMD ["node", "dist/api/main"]
 
 
 # --- DEBUG / TESTING PURPOSE --- #
-FROM node:18-bullseye as debug 
+FROM node:20.11.0-bullseye as debug 
 
 ENV NODE_ENV production
 
