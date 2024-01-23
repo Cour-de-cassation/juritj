@@ -21,9 +21,9 @@ async function startJob() {
     operationName: 'startJob',
     msg: 'Starting normalization...'
   }
-  new CronJob({
+  const job = CronJob.from({
     cronTime: process.env.NORMALIZATION_BATCH_SCHEDULE || CRON_EVERY_HOUR,
-    async onTick() {
+    onTick: async function () {
       if (isJobCompleted) {
         isJobCompleted = false
         logger.info(formatLogs)
@@ -44,9 +44,9 @@ async function startJob() {
         logger.info('Normalization job already running...')
       }
     },
+    start: true, // This attribute starts the cron job after its instantiation (equivalent to cron.start())
     timeZone: 'Europe/Paris',
     runOnInit: true, // This attribute is set to launch the normalization batch once at the start of the cronjob
-    start: true // This attribute starts the cron job after its instantiation (equivalent to cron.start())
   })
 }
 

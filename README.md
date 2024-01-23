@@ -15,6 +15,10 @@ Le batch de Normalisation est un programme qui a pour objectif de récupérer, t
 ```bash
 nvm install
 ```
+- Puis lancer la commande :
+```bash
+ nvm use
+```
 
 ### Installation 
 
