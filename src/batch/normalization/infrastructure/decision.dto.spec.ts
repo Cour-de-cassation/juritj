@@ -23,7 +23,6 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
 
     const expectedDecisionDto: DecisionTJDTO = {
       codeDecision: '55C',
-      NPCode: '6C',
       codeService: '0A',
       debatPublic: true,
       decisionAssociee: undefined,

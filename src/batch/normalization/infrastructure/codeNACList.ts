@@ -161,12 +161,7 @@ const codeNACListNotPublicTJ = [
 ]
 
 // Liste de codes NAC mal formés mais présents dans les systèmes
-const codeNACListWrong = [
-  '0',
-  '000',
-  '00A',
-  '00X'
-]
+const codeNACListWrong = ['0', '000', '00A', '00X']
 
 // Liste de codes NAC relevant des CPH et non des TJ
 const codeNACListCPH = [
