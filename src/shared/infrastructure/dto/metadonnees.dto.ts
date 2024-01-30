@@ -214,7 +214,7 @@ export class MetadonneesDto {
     example: metadonneesDtoExample.codeService
   })
   @IsString()
-  @Matches('^\S{2}$')
+  @Matches('^[\\S]{2}$')
   codeService: string
 
   @ApiProperty({
