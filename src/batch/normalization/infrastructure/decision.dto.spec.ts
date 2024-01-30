@@ -81,7 +81,8 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     const mockDecision = {
       ...mockUtils.mandatoryMetadonneesDtoMock,
       idDecision: 'TJ00000',
-      decisionAssociee: { ...mockUtils.decisionAssocieeDtoMock, idDecision: 'TJ11111' }
+      decisionAssociee: { ...mockUtils.decisionAssocieeDtoMock, idDecision: 'TJ11111' },
+      codeNature: '6C'
     }
 
     const expectedDecisionDto: DecisionTJDTO = {
