@@ -54,7 +54,6 @@ export class MockUtils {
     libelleCodeDecision: 'some libelle code decision',
     codeNAC: '11F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
-    libelleNature: 'Autres demandes en matière de frais et dépens',
     decisionPublique: true,
     recommandationOccultation: Occultation.SUBSTITUANT,
     occultationComplementaire: 'occultation complementaire',
@@ -77,7 +76,8 @@ export class MockUtils {
     indicateurQPC: true,
     idDecision: 'TJ00000',
     sourceId: this.uniqueDecisionIdHash,
-    codeNature: '6C'
+    codeNature: '6C',
+    libelleNature: 'Autres demandes en matière de frais et dépens'
   }
 
   toNormalizeDecisionMock = {

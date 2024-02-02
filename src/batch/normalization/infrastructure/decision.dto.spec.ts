@@ -28,7 +28,6 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       decisionAssociee: undefined,
       libelleCodeDecision: 'some libelle code decision',
       libelleNAC: 'Demande en dommages-intérêts contre un organisme',
-      libelleNatureParticuliere: 'Autres demandes en matière de frais et dépens',
       libelleService: 'Libelle de service',
       matiereDeterminee: true,
       numeroRoleGeneral: '01/12345',
@@ -81,7 +80,8 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       ...mockUtils.mandatoryMetadonneesDtoMock,
       idDecision: 'TJ00000',
       decisionAssociee: { ...mockUtils.decisionAssocieeDtoMock, idDecision: 'TJ11111' },
-      codeNature: '6C'
+      codeNature: '6C',
+      libelleNature: 'Autres demandes en matière de frais et dépens',
     }
 
     const expectedDecisionDto: DecisionTJDTO = {

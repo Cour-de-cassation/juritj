@@ -327,13 +327,14 @@ export class MetadonneesDto {
   @Matches('^[0-9a-zA-Z]{1,2}$')
   codeNature?: string
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Libellé du code de nature particulière',
     type: String,
     example: metadonneesDtoExample.libelleNature
   })
+  @IsOptional()
   @IsString()
-  libelleNature: string
+  libelleNature?: string
 
   @ApiProperty({
     description: 'Caractère public de la décision',
