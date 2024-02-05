@@ -214,7 +214,7 @@ export class MetadonneesDto {
     example: metadonneesDtoExample.codeService
   })
   @IsString()
-  @Matches('^[0-9a-zA-Z]{2}$')
+  @Matches('^[\\S]{2}$')
   codeService: string
 
   @ApiProperty({
@@ -317,22 +317,24 @@ export class MetadonneesDto {
   @IsString()
   libelleNAC: string
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Complément d'information du code NAC. Au format : ^[0-9a-zA-Z]{1-2}$",
     type: String,
     example: metadonneesDtoExample.codeNature
   })
+  @IsOptional()
   @IsString()
   @Matches('^[0-9a-zA-Z]{1,2}$')
-  codeNature: string
+  codeNature?: string
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Libellé du code de nature particulière',
     type: String,
     example: metadonneesDtoExample.libelleNature
   })
+  @IsOptional()
   @IsString()
-  libelleNature: string
+  libelleNature?: string
 
   @ApiProperty({
     description: 'Caractère public de la décision',
