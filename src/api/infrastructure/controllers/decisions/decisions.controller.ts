@@ -102,12 +102,13 @@ export class DecisionsController {
         throw new UnexpectedException(error)
       })
 
-    this.logger.log({
-      ...formatLogs,
-      msg: routePath + ' returns ' + HttpStatus.ACCEPTED,
-      data: { decision: metadonneesDto },
-      statusCode: HttpStatus.ACCEPTED
-    })
+      const { parties, president, sommaire, ...nonSensitiveMetadata} = metadonneesDto
+      this.logger.log({
+        ...formatLogs,
+        msg: routePath + ' returns ' + HttpStatus.ACCEPTED,
+        data: { decisionMetadata: nonSensitiveMetadata },
+        statusCode: HttpStatus.ACCEPTED
+      })
 
     return { filename, body: 'Nous avons bien reçu la décision intègre et ses métadonnées.' }
   }
