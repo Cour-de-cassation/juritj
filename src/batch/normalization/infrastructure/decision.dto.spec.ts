@@ -81,7 +81,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       idDecision: 'TJ00000',
       decisionAssociee: { ...mockUtils.decisionAssocieeDtoMock, idDecision: 'TJ11111' },
       codeNature: '6C',
-      libelleNature: 'Autres demandes en matière de frais et dépens',
+      libelleNature: 'Autres demandes en matière de frais et dépens'
     }
 
     const expectedDecisionDto: DecisionTJDTO = {

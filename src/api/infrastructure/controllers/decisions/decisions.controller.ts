@@ -102,10 +102,12 @@ export class DecisionsController {
         throw new UnexpectedException(error)
       })
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { parties, president, sommaire, ...nonSensitiveMetadata } = metadonneesDto
     this.logger.log({
       ...formatLogs,
       msg: routePath + ' returns ' + HttpStatus.ACCEPTED,
-      data: { decision: metadonneesDto },
+      data: { decisionMetadata: nonSensitiveMetadata },
       statusCode: HttpStatus.ACCEPTED
     })
 

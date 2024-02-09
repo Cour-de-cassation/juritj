@@ -13,7 +13,7 @@ export class ValidateDtoPipe implements PipeTransform {
     const errors: ValidationError[] = await validate(object)
     if (errors.length > 0) {
       const messages = errors.map((err) => err.property)
-      throw new BadPropertiesException(messages.join(', '))
+      throw new BadPropertiesException(messages, value)
     }
     return value
   }
