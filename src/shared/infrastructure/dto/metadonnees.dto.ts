@@ -280,7 +280,7 @@ export class MetadonneesDto {
   @Type(() => DecisionAssocieeDto)
   decisionAssociee?: DecisionAssocieeDto
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Liste des parties de la décision',
     type: [PartieDto],
     example: metadonneesDtoExample.parties
