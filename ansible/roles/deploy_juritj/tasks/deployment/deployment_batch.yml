@@ -28,6 +28,8 @@
                 env:
                   - name: NORMALIZATION_BATCH_SCHEDULE
                     value: "{{ normalization_batch_schedule }}"
+                  - name: COMMISSIONING_DATE
+                    value: "{{ commissioning_date }}"
                 envFrom:
                   - configMapRef:
                       name: "api-config"

@@ -74,6 +74,9 @@ DBSDER_API_KEY=normalization_api_key
 ### Batch
 NORMALIZATION_BATCH_SCHEDULE='* * * * *'  #lancer le batch toutes les minutes
 
+### Date of commissioning to block older decisions
+COMMISSIONING_DATE=2023-12-15
+
 ```
 
 Une fois le `.env` créé, le dupliquer et renommer le fichier nouvellement créé en `docker.env`. Adapter les valeurs des variables suivantes : 
