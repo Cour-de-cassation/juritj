@@ -324,7 +324,7 @@ export class MetadonneesDto {
   })
   @IsOptional()
   @IsString()
-  @Matches('^[0-9a-zA-Z]{1,2}$')
+  @Matches('^[0-9a-zA-Z]{0,2}$')
   codeNature?: string
 
   @ApiPropertyOptional({
