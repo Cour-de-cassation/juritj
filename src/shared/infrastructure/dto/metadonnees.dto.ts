@@ -209,7 +209,7 @@ export class MetadonneesDto {
   numeroMesureInstruction?: string[]
 
   @ApiProperty({
-    description: 'Identifiant du service de la juridiction. Au format: ^[0-9a-zA-Z]{2}$',
+    description: 'Identifiant du service de la juridiction. Au format: ^[\\S]{2}$',
     type: String,
     example: metadonneesDtoExample.codeService
   })
@@ -318,7 +318,7 @@ export class MetadonneesDto {
   libelleNAC: string
 
   @ApiPropertyOptional({
-    description: "Complément d'information du code NAC. Au format : ^[0-9a-zA-Z]{1-2}$",
+    description: "Complément d'information du code NAC. Au format : ^[0-9a-zA-Z]{0,2}$",
     type: String,
     example: metadonneesDtoExample.codeNature
   })
