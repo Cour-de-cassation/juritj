@@ -7,6 +7,9 @@ export class BadPropertiesException extends HttpException {
         missingProperties: missingProperties,
         codeJuridiction: value.codeJuridiction,
         codeService: value.codeService,
+        codeNature: value.codeNature,
+        codeNAC: value.codeNAC,
+        codeDecision: value.codeDecision,
         dateDecision: value.dateDecision,
         numeroRoleGeneral: value.numeroRoleGeneral,
         numeroRegistre: value.numeroRegistre
