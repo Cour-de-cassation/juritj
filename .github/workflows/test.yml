@@ -1,11 +1,9 @@
 name: Test JuriTJ
 
 on:
-  push:
-    branches:
-      - dev
-      - re7
-      - main
+    push:
+      branches:
+        - '*'
 
 jobs:
   test:
