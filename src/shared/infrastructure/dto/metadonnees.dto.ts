@@ -318,13 +318,13 @@ export class MetadonneesDto {
   libelleNAC: string
 
   @ApiPropertyOptional({
-    description: "Complément d'information du code NAC. Au format : ^[0-9a-zA-Z]{0,2}$",
+    description: "Complément d'information du code NAC. Au format : ^[0-9a-zA-Z ]{0,2}$",
     type: String,
     example: metadonneesDtoExample.codeNature
   })
   @IsOptional()
   @IsString()
-  @Matches('^[0-9a-zA-Z]{0,2}$')
+  @Matches('^[0-9a-zA-Z ]{0,2}$')
   codeNature?: string
 
   @ApiPropertyOptional({
