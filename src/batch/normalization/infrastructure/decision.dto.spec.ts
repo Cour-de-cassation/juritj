@@ -22,7 +22,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     const mockDecision = mockUtils.mandatoryMetadonneesDtoMock
 
     const expectedDecisionDto: DecisionTJDTO = {
-      codeDecision: '55C',
+      endCaseCode: '55C',
       codeService: '0A',
       debatPublic: true,
       decisionAssociee: undefined,
@@ -85,7 +85,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     }
 
     const expectedDecisionDto: DecisionTJDTO = {
-      codeDecision: '55C',
+      endCaseCode: '55C',
       NPCode: '6C',
       codeService: '0A',
       debatPublic: true,

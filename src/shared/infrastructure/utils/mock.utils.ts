@@ -122,13 +122,13 @@ export class MockUtils {
 
   decisionTJMock: DecisionTJDTO = {
     ...this.decisionMock,
+    endCaseCode: this.allAttributesMetadonneesDtoMock.codeDecision,
     decisionAssociee: this.decisionAssocieeTJDtoMock,
     indicateurQPC: true,
     idDecisionWinci: this.allAttributesMetadonneesDtoMock.idDecision,
-    codeDecision: this.allAttributesMetadonneesDtoMock.codeDecision,
     codeService: this.allAttributesMetadonneesDtoMock.codeService,
     debatPublic: this.allAttributesMetadonneesDtoMock.debatPublic,
-    libelleCodeDecision: this.allAttributesMetadonneesDtoMock.libelleCodeDecision,
+    libelleEndCaseCode: this.allAttributesMetadonneesDtoMock.libelleCodeDecision,
     libelleNAC: this.allAttributesMetadonneesDtoMock.libelleNAC,
     libelleNatureParticuliere: this.allAttributesMetadonneesDtoMock.libelleNature,
     libelleService: this.allAttributesMetadonneesDtoMock.libelleService,
