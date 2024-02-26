@@ -71,8 +71,6 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         )
 
         // Step 7: Save decision in database
-
-        logger.info({ ...decisionToSave, msg: `Decision to save in dbSder codeDecison===> --- endCaseCode: ${decisionToSave.endCaseCode}` })
         await dbSderApiGateway.saveDecision(decisionToSave)
         logger.info({ ...normalizationFormatLogs, msg: 'Decision saved in database' })
 
