@@ -33,11 +33,11 @@ describe('updateLabelStatus', () => {
       expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
     })
 
-    it(`when decision codeDecision is in transmissible codeDecision list`, () => {
+    it(`when decision endCaseCode (codeDecision) is in transmissible codeDecision list`, () => {
       // GIVEN
       const mockDecisionLabel = {
         ...mockUtils.decisionTJMock,
-        codeDecision: '22H'
+        endCaseCode: '22H'
       }
       const expectedLabelStatus = LabelStatus.TOBETREATED
 
@@ -120,11 +120,11 @@ describe('updateLabelStatus', () => {
       expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
     })
 
-    it('returns ignored_codeDecisionBloqueCC when codeDecision is not in the list of codeDecision that needs to be transmitted to CC', () => {
+    it('returns ignored_codeDecisionBloqueCC when endCaseCode (codeDecision) is not in the list of codeDecision that needs to be transmitted to CC', () => {
       // GIVEN
       const mockDecisionLabel = {
         ...new MockUtils().decisionTJMock,
-        codeDecision: '32A'
+        endCaseCode: '32A'
       }
       const expectedLabelStatus = LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC
 
