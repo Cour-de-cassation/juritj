@@ -51,7 +51,7 @@ export class MockUtils {
     dateDecision: '20240120',
     libelleService: 'Libelle de service',
     codeDecision: '55C',
-    libelleCodeDecision: 'some libelle code decision',
+    libelleCodeDecision: 'some libelle code decision / endCaseCode',
     codeNAC: '11F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
     decisionPublique: true,
