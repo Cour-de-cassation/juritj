@@ -12,12 +12,12 @@ export function mapDecisionNormaliseeToDecisionDto(
   filename: string
 ): DecisionTJDTO {
   return {
-    codeDecision: metadonnees.codeDecision,
+    endCaseCode: metadonnees.codeDecision,
     NPCode: metadonnees.codeNature,
     codeService: metadonnees.codeService,
     debatPublic: metadonnees.debatPublic,
     decisionAssociee: formatDecisionAssociee(metadonnees.decisionAssociee),
-    libelleCodeDecision: metadonnees.libelleCodeDecision,
+    libelleEndCaseCode: metadonnees.libelleCodeDecision,
     libelleNAC: metadonnees.libelleNAC,
     libelleNatureParticuliere: metadonnees.libelleNature,
     libelleService: metadonnees.libelleService,

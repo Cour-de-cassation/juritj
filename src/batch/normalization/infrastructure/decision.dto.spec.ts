@@ -22,11 +22,11 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     const mockDecision = mockUtils.mandatoryMetadonneesDtoMock
 
     const expectedDecisionDto: DecisionTJDTO = {
-      codeDecision: '55C',
+      endCaseCode: '55C',
       codeService: '0A',
       debatPublic: true,
       decisionAssociee: undefined,
-      libelleCodeDecision: 'some libelle code decision',
+      libelleEndCaseCode: 'some libelle code decision / endCaseCode',
       libelleNAC: 'Demande en dommages-intérêts contre un organisme',
       libelleService: 'Libelle de service',
       matiereDeterminee: true,
@@ -85,11 +85,11 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     }
 
     const expectedDecisionDto: DecisionTJDTO = {
-      codeDecision: '55C',
+      endCaseCode: '55C',
       NPCode: '6C',
       codeService: '0A',
       debatPublic: true,
-      libelleCodeDecision: 'some libelle code decision',
+      libelleEndCaseCode: 'some libelle code decision / endCaseCode',
       libelleNAC: 'Demande en dommages-intérêts contre un organisme',
       libelleNatureParticuliere: 'Autres demandes en matière de frais et dépens',
       libelleService: 'Libelle de service',

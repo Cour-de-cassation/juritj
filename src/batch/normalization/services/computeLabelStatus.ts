@@ -77,7 +77,7 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
     return LabelStatus.IGNORED_CODE_NAC_DECISION_NON_PUBLIQUE
   }
 
-  if (!isDecisionFromTJTransmissibleToCC(decisionDto.codeDecision)) {
+  if (!isDecisionFromTJTransmissibleToCC(decisionDto.endCaseCode)) {
     logger.error({
       ...formatLogs,
       msg: `Decision can not be treated by Judilibre because codeDecision is not in authorized codeDecision list, changing LabelStatus to ${LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC}.`
@@ -108,8 +108,8 @@ function isDecisionOlderThanSixMonths(dateCreation: Date, dateDecision: Date): b
   return monthDecision < sixMonthsBeforeMonthCreation
 }
 
-function isDecisionFromTJTransmissibleToCC(codeDecision: string): boolean {
-  return codeDecisionListTransmissibleToCC.includes(codeDecision)
+function isDecisionFromTJTransmissibleToCC(endCaseCode: string): boolean {
+  return codeDecisionListTransmissibleToCC.includes(endCaseCode)
 }
 
 function isDecisionOlderThanMiseEnService(dateDecision: Date): boolean {
