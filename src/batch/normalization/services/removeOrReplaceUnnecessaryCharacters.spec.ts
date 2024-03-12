@@ -1,4 +1,4 @@
-import { removeUnnecessaryCharacters } from './removeUnnecessaryCharacters'
+import { removeOrReplaceUnnecessaryCharacters } from './removeOrReplaceUnnecessaryCharacters'
 
 describe('Remove unnecessary characters from decision', () => {
   it('replaces multiple return character \r to a newline character \n', () => {
@@ -6,7 +6,7 @@ describe('Remove unnecessary characters from decision', () => {
     const rawString = 'A string with \r character \r'
     const trueString = 'A string with \n character \n'
     // WHEN
-    const normalizedString = removeUnnecessaryCharacters(rawString)
+    const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
     // THEN
     expect(normalizedString).toEqual(trueString)
   })
@@ -17,7 +17,7 @@ describe('Remove unnecessary characters from decision', () => {
     const trueString = 'A string with \n character \n'
 
     // WHEN
-    const normalizedString = removeUnnecessaryCharacters(rawString)
+    const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
 
     // THEN
     expect(normalizedString).toEqual(trueString)
@@ -29,7 +29,7 @@ describe('Remove unnecessary characters from decision', () => {
     const trueString = 'A string with \n character \n'
 
     // WHEN
-    const normalizedString = removeUnnecessaryCharacters(rawString)
+    const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
 
     // THEN
     expect(normalizedString).toEqual(trueString)
@@ -41,7 +41,7 @@ describe('Remove unnecessary characters from decision', () => {
     const trueString = 'A string with character '
 
     // WHEN
-    const normalizedString = removeUnnecessaryCharacters(rawString)
+    const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
 
     // THEN
     expect(normalizedString).toEqual(trueString)
@@ -53,7 +53,7 @@ describe('Remove unnecessary characters from decision', () => {
     const trueString = 'A string with character '
 
     // WHEN
-    const normalizedString = removeUnnecessaryCharacters(rawString)
+    const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
 
     // THEN
     expect(normalizedString).toEqual(trueString)
@@ -65,7 +65,19 @@ describe('Remove unnecessary characters from decision', () => {
     const trueString = 'A string with space character'
 
     // WHEN
-    const normalizedString = removeUnnecessaryCharacters(rawString)
+    const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
+
+    // THEN
+    expect(normalizedString).toEqual(trueString)
+  })
+
+  it('replaces multiple tibetain characters with terms', () => {
+    // GIVEN
+    const rawString = "A string with ༄ and ༅  'ྒ string with tibetain characters.";
+    const trueString = "A string with É and  ' string with tibetain characters.";
+
+    // WHEN
+    const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
 
     // THEN
     expect(normalizedString).toEqual(trueString)
