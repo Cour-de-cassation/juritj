@@ -6,6 +6,8 @@ export class BadPropertiesException extends HttpException {
       JSON.stringify({
         missingProperties: missingProperties,
         codeJuridiction: value.codeJuridiction,
+        idJuridiction: value.idJuridiction,
+        nomJuridiction: value.nomJuridiction,
         codeService: value.codeService,
         codeNature: value.codeNature,
         codeNAC: value.codeNAC,
