@@ -246,5 +246,10 @@ export const authorizedCharacters = [
   '➝',
   '◦',
   '˚',
-  '◊'
+  '◊',
+  // ajout au 11/03/2024
+  '─',
+  '™',
+  '≥',
+  '✥'
 ]

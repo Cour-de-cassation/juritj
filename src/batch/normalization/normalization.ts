@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { generateUniqueId } from './services/generateUniqueId'
-import { removeUnnecessaryCharacters } from './services/removeUnnecessaryCharacters'
+import { removeOrReplaceUnnecessaryCharacters } from './services/removeOrReplaceUnnecessaryCharacters'
 import { ConvertedDecisionWithMetadonneesDto } from '../../shared/infrastructure/dto/convertedDecisionWithMetadonnees.dto'
 import { logger } from './index'
 import { fetchDecisionListFromS3 } from './services/fetchDecisionListFromS3'
@@ -54,8 +54,8 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           msg: 'Decision conversion finished. Removing unnecessary characters'
         })
 
-        // Step 5: Removing unnecessary characters from decision
-        const cleanedDecision = removeUnnecessaryCharacters(decisionContent)
+        // Step 5: Removing or replace (by other thing) unnecessary characters from decision
+        const cleanedDecision = removeOrReplaceUnnecessaryCharacters(decisionContent)
 
         // Step 6: Map decision to DBSDER API Type to save it in database
         const decisionToSave = mapDecisionNormaliseeToDecisionDto(
