@@ -32,10 +32,10 @@ const characterReplacementMapUnicode = {
     '3924': '-'
 };
 
-export const characterReplacementMap = Object.keys(characterReplacementMapUnicode).reduce(
-    (result, key) => {
-        result[String.fromCharCode(parseInt(key))] = characterReplacementMapUnicode[key];
-        return result;
-    },
-    {}
-)
+export const characterReplacementMap = (inputString: string) => {
+    return Object.entries(characterReplacementMapUnicode).reduce((acc, [key, value]) => {
+        const regex = new RegExp(String.fromCharCode(parseInt(key)), 'g');
+        return acc.replace(regex, value);
+    }, 
+    inputString);
+};
