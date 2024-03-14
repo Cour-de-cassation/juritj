@@ -1,5 +1,18 @@
 import { characterReplacementMap } from "../infrastructure/characterReplacementMap";
 
+
+export const replaceUnknownCharacters = (text: string) => {
+    let replacedText = '';
+    for (var character of text){
+        if (characterReplacementMap[character] == undefined) {
+            replacedText += character;
+        } else {
+            replacedText += characterReplacementMap[character];
+        }
+    }
+    return replacedText;
+}
+
 export const removeOrReplaceUnnecessaryCharacters = (rawString: string): string => {
   
   // Regular expressions to remove specific characters
@@ -17,7 +30,7 @@ export const removeOrReplaceUnnecessaryCharacters = (rawString: string): string 
   stringWithoutCarriageReturn = stringWithoutCarriageReturn.replace(multipleSpaceRegex, ' ');
 
   //replace tibetain characters
-  stringWithoutCarriageReturn = characterReplacementMap(stringWithoutCarriageReturn);
+  let normalizedText = replaceUnknownCharacters(stringWithoutCarriageReturn);
 
-  return stringWithoutCarriageReturn;
+  return normalizedText;
 }
