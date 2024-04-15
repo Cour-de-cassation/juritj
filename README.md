@@ -98,6 +98,20 @@ Démarrer l'application nécessite au préalable d'initaliser les fichiers de va
     ```
     Attention, pour que le batch fonctionne, préciser l'url de l'API DBSDER dans les fichiers de variables d'environnement. 
 
+- Autres commandes utiles : 
+    - Stopper tous les container :
+        ```bash
+        npm run docker:stop
+        ```
+    - Stopper le container du S3:
+        ```bash
+        npm run docker:stop:s3
+        ```
+    - Arrêter et nettoyer l'environnement docker de l'application:
+        ```bash
+        npm run docker:kill
+        ```
+
 ### Documentation JuriTJ 
 
 Le dossier `/documentation` contient : 
