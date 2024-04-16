@@ -22,15 +22,20 @@ Pour installer les packages nécessaires au bon fonctionnement de l'application,
 ```bash
 npm install
 ```  
-N'oubliez pas d'installer **husky** pour obtenir les hooks de commit/push
+Vous pouvez installer **husky** pour obtenir les hooks de commit/push
 ```bash
 npx husky install
 ```
 
 Il est également nécessaire d'installer `libwpd` en local afin d'exécuter le batch. 
 Sur macOS : 
-```
+```bash
 brew install libwpd
+```
+
+Sur linux : 
+```bash
+apt-get install libwpd-tools
 ```
 
 ### Tests
@@ -46,47 +51,8 @@ npm run test
 ### Variables d'environnement en local
 
 JuriTJ a besoin de deux fichiers de variables d'environnements : 
-- `.env` dédié à l'exécution sans docker
-- `docker.env` dédié à l'exécution par docker 
-
-Créer un fichier `.env` à la racine du dossier avec les variables suivantes :
-
-```.env
-### Pour désactiver la coloration des logs
-NO_COLOR=true 
-
-### API DOCUMENTATION
-DOC_LOGIN=root
-DOC_PASSWORD=root
-
-### Minio 
-S3_BUCKET_NAME_RAW=juritj-test-bucket
-S3_BUCKET_NAME_NORMALIZED=juritj-test-bucket-normalized
-S3_URL=http://localhost:9000 
-S3_ACCESS_KEY=local_access_key
-S3_SECRET_KEY=local_secret_key
-S3_REGION=eu-west-paris-1
-
-### DbSder API
-DBSDER_API_URL=http://dbsder-api:3000
-DBSDER_API_KEY=normalization_api_key
-
-### Batch
-NORMALIZATION_BATCH_SCHEDULE='* * * * *'  #lancer le batch toutes les minutes
-
-### Date of commissioning to block older decisions
-COMMISSIONING_DATE=2023-12-15
-
-```
-
-Une fois le `.env` créé, le dupliquer et renommer le fichier nouvellement créé en `docker.env`. Adapter les valeurs des variables suivantes : 
-```docker.env
-S3_URL=http://bucket:9000 
-DBSDER_API_URL=http://dbsder-api:3000
-DBSDER_API_KEY=normalization_api_key
-```
-
-Un exemple de fichier `.env` est nommé `.env.example`
+- Dupliquer le fichier `docker.env.example` et le rennomer `docker.env`, adapter les variables d'environnement si besoin
+- Dupliquer le fichier `.env.example` et le rennomer `.env`, adapter les variables d'environnement si besoin
 
 ### Configuration des certificats
 
@@ -111,26 +77,40 @@ Pour effectuer des tests Postman sur l'environnement de développement :
 
 Démarrer l'application nécessite au préalable d'initaliser les fichiers de variables d'environnement. 
 
-Pour lancer l'ensemble de JuriTJ avec Docker, écrire dans un terminal : 
-```bash
-npm run docker:build
-npm run docker:start
-```
+- Pour lancer l'ensemble de JuriTJ avec Docker : 
+    ```bash
+    npm run docker:build
+    npm run docker:start
+    ```
 
-Pour lancer l'API en phase de développement et afin de disposer d'une mise à jour à chaud du serveur à chaque changement, écrire dans un terminal : 
-```bash
-npm run docker:build
-npm run docker:start:s3
-npm run start:dev
-```
+- Pour lancer l'API en phase de développement et afin de disposer d'une mise à jour à chaud du serveur à chaque changement: 
+    ```bash
+    npm run docker:build
+    npm run docker:start:s3
+    npm run start:dev
+    ```
 
-Pour lancer le batch de normalisation manuellement, écrire dans un terminal : 
-```bash
-npm run docker:build
-npm run docker:start:s3
-npm run batch:start
-```
-Attention, pour que le batch fonctionne, préciser l'url de l'API DBSDER dans le docker.env. 
+- Pour lancer le batch de normalisation manuellement, écrire dans un terminal : 
+    ```bash
+    npm run docker:build
+    npm run docker:start:s3
+    npm run batch:start
+    ```
+    Attention, pour que le batch fonctionne, préciser l'url de l'API DBSDER dans les fichiers de variables d'environnement. 
+
+- Autres commandes utiles : 
+    - Stopper tous les container :
+        ```bash
+        npm run docker:stop
+        ```
+    - Stopper le container du S3:
+        ```bash
+        npm run docker:stop:s3
+        ```
+    - Arrêter et nettoyer l'environnement docker de l'application:
+        ```bash
+        npm run docker:kill
+        ```
 
 ### Documentation JuriTJ 
 
