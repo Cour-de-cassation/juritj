@@ -103,13 +103,17 @@ Démarrer l'application nécessite au préalable d'initaliser les fichiers de va
         ```bash
         npm run docker:stop
         ```
-    - Stopper le container du S3:
+    - Stopper le container du S3 :
         ```bash
         npm run docker:stop:s3
         ```
-    - Arrêter et nettoyer l'environnement docker de l'application:
+    - Arrêter et nettoyer l'environnement docker de l'application :
         ```bash
         npm run docker:kill
+        ```
+    - Lancer le lint et le formatage du code :
+        ```bash
+        npm run fix
         ```
 
 ### Documentation JuriTJ 
