@@ -21,10 +21,6 @@ nvm install
 Pour installer les packages nécessaires au bon fonctionnement de l'application, ouvrir un terminal et entrer la commande suivante : 
 ```bash
 npm install
-```  
-Vous pouvez installer **husky** pour obtenir les hooks de commit/push
-```bash
-npx husky install
 ```
 
 Il est également nécessaire d'installer `libwpd` en local afin d'exécuter le batch. 
