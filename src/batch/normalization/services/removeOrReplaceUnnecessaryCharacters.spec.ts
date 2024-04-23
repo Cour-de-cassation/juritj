@@ -73,8 +73,8 @@ describe('Remove unnecessary characters from decision', () => {
 
   it('replaces multiple tibetain characters with terms', () => {
     // GIVEN
-    const rawString = "A string with ༄ and ༅  'ྒ string with tibetain characters.";
-    const trueString = "A string with É and  ' string with tibetain characters.";
+    const rawString = "A string with ༄ and ༅  'ྒ string with tibetain characters."
+    const trueString = "A string with É and  ' string with tibetain characters."
 
     // WHEN
     const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
