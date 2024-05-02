@@ -21,10 +21,6 @@ nvm install
 Pour installer les packages nécessaires au bon fonctionnement de l'application, ouvrir un terminal et entrer la commande suivante : 
 ```bash
 npm install
-```  
-Vous pouvez installer **husky** pour obtenir les hooks de commit/push
-```bash
-npx husky install
 ```
 
 Il est également nécessaire d'installer `libwpd` en local afin d'exécuter le batch. 
@@ -103,13 +99,17 @@ Démarrer l'application nécessite au préalable d'initaliser les fichiers de va
         ```bash
         npm run docker:stop
         ```
-    - Stopper le container du S3:
+    - Stopper le container du S3 :
         ```bash
         npm run docker:stop:s3
         ```
-    - Arrêter et nettoyer l'environnement docker de l'application:
+    - Arrêter et nettoyer l'environnement docker de l'application :
         ```bash
         npm run docker:kill
+        ```
+    - Lancer le lint et le formatage du code :
+        ```bash
+        npm run fix
         ```
 
 ### Documentation JuriTJ 
