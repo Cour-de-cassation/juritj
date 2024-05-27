@@ -43,7 +43,8 @@ export function mapDecisionNormaliseeToDecisionDto(
     labelStatus: LabelStatus.TOBETREATED,
     occultation: {
       additionalTerms: metadonnees.occultationComplementaire ?? '',
-      categoriesToOmit: []
+      categoriesToOmit: [],
+      motivationOccultation: !metadonnees.debatPublic
     },
     originalText: decisionContent,
     public: metadonnees.decisionPublique,
