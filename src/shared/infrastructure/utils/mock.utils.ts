@@ -98,7 +98,8 @@ export class MockUtils {
     labelStatus: this.allAttributesMetadonneesDtoMock.labelStatus,
     occultation: {
       additionalTerms: this.mandatoryMetadonneesDtoMock.occultationComplementaire,
-      categoriesToOmit: []
+      categoriesToOmit: [],
+      motivationOccultation: !this.mandatoryMetadonneesDtoMock.debatPublic
     },
     originalText: this.decisionContentNormalized,
     parties: this.allAttributesMetadonneesDtoMock.parties,

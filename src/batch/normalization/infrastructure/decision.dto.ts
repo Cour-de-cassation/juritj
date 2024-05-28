@@ -44,7 +44,7 @@ export function mapDecisionNormaliseeToDecisionDto(
     occultation: {
       additionalTerms: metadonnees.occultationComplementaire ?? '',
       categoriesToOmit: [],
-      motivationOccultation: !metadonnees.debatPublic
+      motivationOccultation: undefined
     },
     originalText: decisionContent,
     public: metadonnees.decisionPublique,

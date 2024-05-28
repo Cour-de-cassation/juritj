@@ -4,7 +4,8 @@ import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.util
 
 export function computeOccultation(
   recommandationOccultation: string,
-  occultationComplementaire: string
+  occultationComplementaire: string,
+  denatPublic: boolean
 ): DecisionOccultation {
   const formatLogs: LogsFormat = {
     ...normalizationFormatLogs,
@@ -25,6 +26,7 @@ export function computeOccultation(
 
   return {
     additionalTerms,
-    categoriesToOmit: []
+    categoriesToOmit: [],
+    motivationOccultation: !denatPublic
   }
 }
