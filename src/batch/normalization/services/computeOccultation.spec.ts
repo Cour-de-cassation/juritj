@@ -11,19 +11,22 @@ jest.mock('../index', () => ({
 
 describe('compute occultation', () => {
   const providedOccultationComplementaire = 'occultation complementaire'
+  const debatPublic = true
 
   it('returns an empty additionalTerms when recommandationOccultation has value "aucune"', () => {
     // GIVEN
     const providedRecommandationOccultation = Occultation.AUCUNE
     const expectedResponse: DecisionOccultation = {
       additionalTerms: '',
-      categoriesToOmit: []
+      categoriesToOmit: [],
+      motivationOccultation: false
     }
 
     // WHEN
     const response = computeOccultation(
       providedRecommandationOccultation,
-      providedOccultationComplementaire
+      providedOccultationComplementaire,
+      debatPublic
     )
 
     // THEN
@@ -35,13 +38,15 @@ describe('compute occultation', () => {
     const providedRecommandationOccultation = Occultation.CONFORME
     const expectedResponse: DecisionOccultation = {
       additionalTerms: '',
-      categoriesToOmit: []
+      categoriesToOmit: [],
+      motivationOccultation: false
     }
 
     // WHEN
     const response = computeOccultation(
       providedRecommandationOccultation,
-      providedOccultationComplementaire
+      providedOccultationComplementaire,
+      debatPublic
     )
 
     // THEN
@@ -53,13 +58,15 @@ describe('compute occultation', () => {
     const providedRecommandationOccultation = Occultation.SUBSTITUANT
     const expectedResponse: DecisionOccultation = {
       additionalTerms: providedOccultationComplementaire,
-      categoriesToOmit: []
+      categoriesToOmit: [],
+      motivationOccultation: false
     }
 
     // WHEN
     const response = computeOccultation(
       providedRecommandationOccultation,
-      providedOccultationComplementaire
+      providedOccultationComplementaire,
+      debatPublic
     )
 
     // THEN
@@ -71,13 +78,36 @@ describe('compute occultation', () => {
     const providedRecommandationOccultation = Occultation.COMPLEMENT
     const expectedResponse: DecisionOccultation = {
       additionalTerms: providedOccultationComplementaire,
-      categoriesToOmit: []
+      categoriesToOmit: [],
+      motivationOccultation: false
     }
 
     // WHEN
     const response = computeOccultation(
       providedRecommandationOccultation,
-      providedOccultationComplementaire
+      providedOccultationComplementaire,
+      debatPublic
+    )
+
+    // THEN
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('returns motivationOccultation true when debat are not public', () => {
+    // GIVEN
+    const debatPublic = false
+    const providedRecommandationOccultation = Occultation.COMPLEMENT
+    const expectedResponse: DecisionOccultation = {
+      additionalTerms: providedOccultationComplementaire,
+      categoriesToOmit: [],
+      motivationOccultation: true
+    }
+
+    // WHEN
+    const response = computeOccultation(
+      providedRecommandationOccultation,
+      providedOccultationComplementaire,
+      debatPublic
     )
 
     // THEN

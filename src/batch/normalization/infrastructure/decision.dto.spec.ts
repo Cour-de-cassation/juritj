@@ -50,7 +50,8 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       labelStatus: LabelStatus.TOBETREATED,
       occultation: {
         additionalTerms: 'occultation complementaire',
-        categoriesToOmit: []
+        categoriesToOmit: [],
+        motivationOccultation: undefined
       },
       originalText: mockUtils.decisionContentNormalized,
       parties: undefined,
@@ -114,7 +115,8 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       labelStatus: LabelStatus.TOBETREATED,
       occultation: {
         additionalTerms: 'occultation complementaire',
-        categoriesToOmit: []
+        categoriesToOmit: [],
+        motivationOccultation: undefined
       },
       originalText: mockUtils.decisionContentNormalized,
       parties: undefined,
