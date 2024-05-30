@@ -21,14 +21,20 @@ export class SaveDecisionUsecase {
     decisionIntegre: Express.Multer.File,
     metadonnees: MetadonneesDto
   ): Promise<string> {
+    const uuid = uuidv4()
+
+    const bucketFileExtension = '.json'
+    const bucketFileName = uuidv4() + bucketFileExtension
+
+    const wpdFileExtension = '.wpd'
+    decisionIntegre.originalname = uuid + wpdFileExtension
+
     const requestDto = {
       decisionIntegre,
       metadonnees
     }
-    const fileExtension = '.json'
-    const filename = uuidv4() + fileExtension
 
-    await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), filename)
-    return filename
+    await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), bucketFileName)
+    return bucketFileName
   }
 }

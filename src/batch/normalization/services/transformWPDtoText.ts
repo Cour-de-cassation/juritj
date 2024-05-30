@@ -1,4 +1,4 @@
-import { existsSync } from 'fs'
+import { existsSync, statSync } from 'fs'
 import { promisify } from 'util'
 import { exec } from 'child_process'
 import { logger, normalizationFormatLogs } from '../index'
@@ -15,6 +15,14 @@ export async function readWordperfectDocument(filename: string) {
   const cmdPath = await getConversionCommandPath(CONVERSION_COMMAND)
   if (cmdPath && existsSync(filename)) {
     try {
+      if (!statSync(filename).isFile()) {
+        logger.error({
+          ...normalizationFormatLogs,
+          msg: `Path provided is not a file: ${filename}`
+        })
+        throw new Error()
+      }
+
       const { stdout } = await execPromise("wpd2text '" + filename + "'")
       return stdout
     } catch (error) {
