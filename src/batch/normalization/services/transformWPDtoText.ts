@@ -23,7 +23,8 @@ export async function readWordperfectDocument(filename: string) {
         throw new Error()
       }
 
-      const { stdout } = await execPromise("wpd2text '" + filename + "'")
+      // Escape the quote character in the filename in case of renormalization of decisions received at the beginning of the project that may contain quotes in filenames.
+      const { stdout } = await execPromise("wpd2text '" + filename.replace(/'/g, `'\\''`) + "'")
       return stdout
     } catch (error) {
       logger.error({
