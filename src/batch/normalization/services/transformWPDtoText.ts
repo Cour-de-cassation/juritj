@@ -1,4 +1,4 @@
-import { existsSync } from 'fs'
+import { existsSync, statSync } from 'fs'
 import { promisify } from 'util'
 import { exec } from 'child_process'
 import { logger, normalizationFormatLogs } from '../index'
@@ -15,7 +15,16 @@ export async function readWordperfectDocument(filename: string) {
   const cmdPath = await getConversionCommandPath(CONVERSION_COMMAND)
   if (cmdPath && existsSync(filename)) {
     try {
-      const { stdout } = await execPromise("wpd2text '" + filename + "'")
+      if (!statSync(filename).isFile()) {
+        logger.error({
+          ...normalizationFormatLogs,
+          msg: `Path provided is not a file: ${filename}`
+        })
+        throw new Error()
+      }
+
+      // Escape the quote character in the filename in case of renormalization of decisions received at the beginning of the project that may contain quotes in filenames.
+      const { stdout } = await execPromise("wpd2text '" + filename.replace(/'/g, `'\\''`) + "'")
       return stdout
     } catch (error) {
       logger.error({
