@@ -19,16 +19,19 @@ export const removeOrReplaceUnnecessaryCharacters = (rawString: string): string 
   const multipleSpaceRegex = /[ ]{2,}/gi
 
   // Replace tab or pageBreak characters with an empty string
-  const stringWithoutTabOrPageBreak = rawString.replace(tabOrPageBreakRegex, '')
+  const stringWithoutTabOrPageBreak = rawString.replace(tabOrPageBreakRegex, ' ')
 
   // Replace carriageReturn characters with a newline character
-  let stringWithoutCarriageReturn = stringWithoutTabOrPageBreak.replace(carriageReturnRegex, '\n')
+  const stringWithoutCarriageReturn = stringWithoutTabOrPageBreak.replace(carriageReturnRegex, '\n')
 
   // Replace multiple consecutive spaces with a white space
-  stringWithoutCarriageReturn = stringWithoutCarriageReturn.replace(multipleSpaceRegex, ' ')
+  const stringWithoutConsecutiveSpaces = stringWithoutCarriageReturn.replace(
+    multipleSpaceRegex,
+    ' '
+  )
 
   //replace tibetain characters
-  const normalizedText = replaceUnknownCharacters(stringWithoutCarriageReturn)
+  const normalizedText = replaceUnknownCharacters(stringWithoutConsecutiveSpaces)
 
   return normalizedText
 }
