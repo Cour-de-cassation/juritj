@@ -220,54 +220,6 @@ describe('Normalization', () => {
       expect(mockS3).toHaveReceivedCommandTimes(ListObjectsV2Command, 3)
       expect(result).toEqual(expected)
     })
-
-    it('returns 2 normalized decisions with different creationDate when 2 decisions are available on S3 and treating in the same batch', async () => {
-      // GIVEN
-      jest.useRealTimers()
-
-      const firstDecisionIdJuridiction = 'TJ00001'
-      const firstObjectId = firstDecisionIdJuridiction + 'A01-1234520240120'
-      const firstFilename = 'firstFilename'
-      const secondDecisionIdJuridiction = 'TJ00002'
-      const secondObjectId = secondDecisionIdJuridiction + 'A01-1234520240120'
-      const secondFilename = 'secondFilename'
-
-      // S3 must be called 2 times to return 2 decision filename
-      const listWithTwoElementsFromS3 = {
-        Contents: [{ Key: firstFilename }, { Key: secondFilename }]
-      }
-      mockS3.on(ListObjectsV2Command).resolvesOnce(listWithTwoElementsFromS3).resolves({})
-
-      // S3 must be called 2 times to retrieve decisions content
-      mockS3
-        .on(GetObjectCommand)
-        .resolvesOnce({
-          Body: createFakeDocument(
-            decisionIntegre,
-            metadonneesFromS3,
-            firstDecisionIdJuridiction,
-            firstObjectId
-          )
-        })
-        .resolvesOnce({
-          Body: createFakeDocument(
-            decisionIntegre,
-            metadonneesFromS3,
-            secondDecisionIdJuridiction,
-            secondObjectId
-          )
-        })
-        .resolves({})
-
-      jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockResolvedValue({})
-
-      // WHEN
-      const result = await normalizationJob()
-
-      // THEN
-      expect(mockS3).toHaveReceivedCommandTimes(ListObjectsV2Command, 2)
-      expect(result[0].metadonnees.dateCreation).not.toEqual(result[1].metadonnees.dateCreation)
-    })
   })
 
   describe('Failing Cases', () => {

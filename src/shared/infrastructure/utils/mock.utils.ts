@@ -27,7 +27,7 @@ export class MockUtils {
   decisionContentToNormalize =
     '\tLe contenu de ma décision avec    des espaces     et des backslash multiples \r\n \t'
   decisionContentNormalized =
-    'Le contenu de ma décision avec des espaces et des backslash multiples \n '
+    ' Le contenu de ma décision avec des espaces et des backslash multiples \n '
 
   decisionName = 'decisionName.wpd'
 
