@@ -2,7 +2,7 @@ import { DecisionTJDTO, LabelStatus } from 'dbsder-api-types'
 import { logger } from '../index'
 import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
 import { normalizationFormatLogs } from '../index'
-import { codeDecisionListTransmissibleToCC } from '../infrastructure/codeDecisionList'
+import { codeDecisionListNotTransmissibleToCC } from '../infrastructure/codeDecisionList'
 import { authorizedCharacters } from '../infrastructure/authorizedCharactersList'
 
 const dateMiseEnService = getMiseEnServiceDate()
@@ -45,7 +45,7 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
   if (!isDecisionFromTJTransmissibleToCC(decisionDto.endCaseCode)) {
     logger.error({
       ...formatLogs,
-      msg: `Decision can not be treated by Judilibre because codeDecision is not in authorized codeDecision list, changing LabelStatus to ${LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC}.`
+      msg: `Decision can not be treated by Judilibre because codeDecision is in blocked codeDecision list, changing LabelStatus to ${LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC}.`
     })
     return LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC
   }
@@ -75,7 +75,7 @@ function isDecisionOlderThanSixMonths(dateCreation: Date, dateDecision: Date): b
 }
 
 function isDecisionFromTJTransmissibleToCC(endCaseCode: string): boolean {
-  return codeDecisionListTransmissibleToCC.includes(endCaseCode)
+  return !codeDecisionListNotTransmissibleToCC.includes(endCaseCode)
 }
 
 function isDecisionOlderThanMiseEnService(dateDecision: Date): boolean {
