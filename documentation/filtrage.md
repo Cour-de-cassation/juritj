@@ -53,5 +53,7 @@ Etant donné qu'une décision ne peut avoir qu'une raison de blocage, si une dé
 1. Si la date de la décision est dans l'avenir : `ignored_dateDecisionIncoherente`
 2. Si la date de la décision est antérieure à plus de 6 mois par rapport a aujourd'hui : `ignored_dateDecisionIncoherente`
 3. Si la date de la décision est antérieure au 15/12/2023, date de la mise en service de l'Open data des décisions des tribunaux judiciaires : `ignored_dateAvantMiseEnService`
-4. Si le code de décision est présent dans la liste des codes de décision ne présentant pas d'intérêts : `ignored_codeDecisionBloqueCC`
+4. Si le code de décision est présent dans la [liste des codes de décision ne présentant pas d'intérêts](../src/batch/normalization/infrastructure/codeDecisionList.ts) : `ignored_codeDecisionBloqueCC`
 5. Si le texte contient des caractères qui ne sont pas dans la [liste des caractères acceptables](../src/batch/normalization/infrastructure/authorizedCharactersList.ts) (La conversion du texte de la décision du format wordperfect vers texte entraine parfois l'apparition de caractères spéciaux non désirés.) : `ignored_caractereInconnu`
+
+La décision est ensuite insérée dans la base SDER via l'api-dbsder, ou d'autres filtres sont en place.
