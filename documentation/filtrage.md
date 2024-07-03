@@ -47,13 +47,13 @@ Voici les critères que les métadonnées doivent respecter pour que la décisio
 
 ### Filtrage par validation des métadonnées
 
-Une fois la décision collectée, elle est normalisée au sein d'un batch qui effectue des filtrage en fonction des métadonnées de la décision. Les règles de filtrage présentées ici sont implémentées dans le fichier [computeLabelStatus](../src/batch/normalization/services/computeLabelStatus.ts). Si une décision est présente dans notre base de donnée avec un `labelStatus` différent de `toBeTreated` alors elle se sera pas traitée et restera bloquée jusqu'a un éventuel déblocage.
-Etant donné qu'une décision ne peut avoir qu'une raison de blocage, si une décision est bloquée selon un filtre alors les filtres suivants ne sont pas évalués et la décision est bloquée avec le `labelStatus` associé au premier blocage.
+Une fois la décision collectée, elle est normalisée au sein d'un batch qui effectue des filtrage en fonction des métadonnées de la décision. Les règles de filtrage présentées ici sont implémentées dans le fichier [computeLabelStatus](../src/batch/normalization/services/computeLabelStatus.ts). Le blocage de la décision s'effectue via son champ `labelStatus`. Si une décision est présente dans notre base de donnée avec un `labelStatus` différent de `toBeTreated` alors elle se sera pas traitée et restera bloquée jusqu'a un éventuel déblocage.
+Etant donné qu'une décision ne peut avoir qu'une seule raison de blocage le filtrage est effectué de mannière séquentielle. Si une décision est bloquée selon un filtre alors les filtres suivants ne sont pas évalués et la décision est bloquée avec le `labelStatus` associé au premier blocage rencontré.
 
-1. Si la date de la décision est dans l'avenir : `ignored_dateDecisionIncoherente`
-2. Si la date de la décision est antérieure à plus de 6 mois par rapport a aujourd'hui : `ignored_dateDecisionIncoherente`
-3. Si la date de la décision est antérieure au 15/12/2023, date de la mise en service de l'Open data des décisions des tribunaux judiciaires : `ignored_dateAvantMiseEnService`
-4. Si le code de décision est présent dans la [liste des codes de décision ne présentant pas d'intérêts](../src/batch/normalization/infrastructure/codeDecisionList.ts) : `ignored_codeDecisionBloqueCC`
-5. Si le texte contient des caractères qui ne sont pas dans la [liste des caractères acceptables](../src/batch/normalization/infrastructure/authorizedCharactersList.ts) (La conversion du texte de la décision du format wordperfect vers texte entraine parfois l'apparition de caractères spéciaux non désirés.) : `ignored_caractereInconnu`
+1. Si la date de la décision est dans l'avenir : `labelStatus = ignored_dateDecisionIncoherente`
+2. Si la date de la décision est antérieure à plus de 6 mois par rapport a aujourd'hui : `labelStatus = ignored_dateDecisionIncoherente`
+3. Si la date de la décision est antérieure au 15/12/2023, date de la mise en service de l'Open data des décisions des tribunaux judiciaires : `labelStatus = ignored_dateAvantMiseEnService`
+4. Si le code de décision est présent dans la [liste des codes de décision ne présentant pas d'intérêts](../src/batch/normalization/infrastructure/codeDecisionList.ts) : `labelStatus = ignored_codeDecisionBloqueCC`
+5. Si le texte contient des caractères qui ne sont pas dans la [liste des caractères acceptables](../src/batch/normalization/infrastructure/authorizedCharactersList.ts) (La conversion du texte de la décision du format wordperfect vers texte entraine parfois l'apparition de caractères spéciaux non désirés.) : `labelStatus = ignored_caractereInconnu`
 
 La décision est ensuite insérée dans la base SDER via l'api-dbsder, ou d'autres filtres sont en place.
