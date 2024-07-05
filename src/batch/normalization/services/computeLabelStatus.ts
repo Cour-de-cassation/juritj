@@ -26,14 +26,6 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
     return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
   }
 
-  if (isDecisionOlderThanSixMonths(dateCreation, dateDecision)) {
-    logger.error({
-      ...formatLogs,
-      msg: `Incorrect date, dateDecision must be less than 6 months old. Changing LabelStatus to ${LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE}.`
-    })
-    return LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
-  }
-
   if (isDecisionOlderThanMiseEnService(dateDecision)) {
     logger.error({
       ...formatLogs,
@@ -63,15 +55,6 @@ export function computeLabelStatus(decisionDto: DecisionTJDTO): LabelStatus {
 
 function isDecisionInTheFuture(dateCreation: Date, dateDecision: Date): boolean {
   return dateDecision > dateCreation
-}
-
-function isDecisionOlderThanSixMonths(dateCreation: Date, dateDecision: Date): boolean {
-  const monthDecision = new Date(dateDecision.getFullYear(), dateDecision.getMonth()).toISOString()
-  const sixMonthsBeforeMonthCreation = new Date(
-    dateCreation.getFullYear(),
-    dateCreation.getMonth() - 6
-  ).toISOString()
-  return monthDecision < sixMonthsBeforeMonthCreation
 }
 
 function isDecisionFromTJTransmissibleToCC(endCaseCode: string): boolean {
