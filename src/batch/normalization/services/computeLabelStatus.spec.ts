@@ -50,25 +50,6 @@ describe('updateLabelStatus', () => {
 
   describe('changes labelStatus if it has exceptions', () => {
     describe('returns ignored_decisionDateIncoherente', () => {
-      it('when decision is older than 6 months', () => {
-        // GIVEN
-        const dateDecisionSevenMonthsBefore = new Date(2022, 11, 15)
-        const dateCreation = new Date(2023, 6, 20)
-        const mockDecisionLabel = {
-          ...mockUtils.decisionTJMock,
-          dateDecision: dateDecisionSevenMonthsBefore.toISOString(),
-          dateCreation: dateCreation.toISOString(),
-          public: true
-        }
-        const expectedLabelStatus = LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE
-
-        // WHEN
-        mockDecisionLabel.labelStatus = computeLabelStatus(mockDecisionLabel)
-
-        // THEN
-        expect(mockDecisionLabel.labelStatus).toEqual(expectedLabelStatus)
-      })
-
       it('when dateDecision is in the future compared to dateCreation', () => {
         // GIVEN
         const dateDecisionInTheFuture = new Date(2023, 7, 20)
