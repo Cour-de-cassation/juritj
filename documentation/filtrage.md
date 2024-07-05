@@ -51,9 +51,8 @@ Une fois la décision collectée, elle est normalisée au sein d'un batch qui ef
 Etant donné qu'une décision ne peut avoir qu'une seule raison de blocage, le filtrage est effectué de manière séquentielle. Si une décision est bloquée selon un filtre alors les filtres suivants ne sont pas évalués et la décision est bloquée avec le `labelStatus` associé au premier blocage rencontré.
 
 1. Si la date de la décision est dans l'avenir : `labelStatus = ignored_dateDecisionIncoherente`
-2. Si la date de la décision est antérieure à plus de 6 mois par rapport à aujourd'hui : `labelStatus = ignored_dateDecisionIncoherente`
-3. Si la date de la décision est antérieure au 15/12/2023, date de la mise en service de l'Open data des décisions des tribunaux judiciaires : `labelStatus = ignored_dateAvantMiseEnService`
-4. Si le code de décision est présent dans la [liste des codes de décision ne présentant pas d'intérêts](../src/batch/normalization/infrastructure/codeDecisionList.ts) : `labelStatus = ignored_codeDecisionBloqueCC`
-5. Si le texte contient des caractères qui ne sont pas dans la [liste des caractères acceptables](../src/batch/normalization/infrastructure/authorizedCharactersList.ts) (La conversion du texte de la décision du format wordperfect vers texte entraîne parfois l'apparition de caractères spéciaux non désirés.) : `labelStatus = ignored_caractereInconnu`
+2. Si la date de la décision est antérieure au 15/12/2023, date de la mise en service de l'Open data des décisions des tribunaux judiciaires : `labelStatus = ignored_dateAvantMiseEnService`
+3. Si le code de décision est présent dans la [liste des codes de décision ne présentant pas d'intérêts](../src/batch/normalization/infrastructure/codeDecisionList.ts) : `labelStatus = ignored_codeDecisionBloqueCC`
+4. Si le texte contient des caractères qui ne sont pas dans la [liste des caractères acceptables](../src/batch/normalization/infrastructure/authorizedCharactersList.ts) (La conversion du texte de la décision du format wordperfect vers texte entraîne parfois l'apparition de caractères spéciaux non désirés.) : `labelStatus = ignored_caractereInconnu`
 
 La décision est ensuite insérée dans la base SDER via l'api-dbsder, ou d'autres filtres sont en place.
