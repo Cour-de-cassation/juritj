@@ -8,3 +8,12 @@ export class BadFileFormatException extends HttpException {
     )
   }
 }
+
+export class BadFileSizeException extends HttpException {
+  constructor(readableBytes) {
+    super(
+      `Vous devez fournir un fichier 'decisionIntegre' de moins de ${readableBytes}.`,
+      HttpStatus.BAD_REQUEST
+    )
+  }
+}
