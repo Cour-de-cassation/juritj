@@ -119,6 +119,24 @@ describe('Decisions Controller', () => {
         // THEN
         expect(res.statusCode).toBe(HttpStatus.BAD_REQUEST)
       })
+
+      it('when file is more or equal than 10Mo size', async () => {
+        // GIVEN
+        const wordperfectFilename = 'filename.wpd'
+        const bufferSize = 10000000 // 10Mo
+
+        // WHEN
+        const res = await request(app.getHttpServer())
+          .post('/decisions')
+          .attach('decisionIntegre', Buffer.alloc(bufferSize), {
+            filename: wordperfectFilename,
+            contentType: 'application/xml',
+          })
+          .field('metadonnees', JSON.stringify(metadata))
+
+        // THEN
+        expect(res.statusCode).toBe(HttpStatus.BAD_REQUEST)
+      })
     })
 
     describe('returns 503', () => {

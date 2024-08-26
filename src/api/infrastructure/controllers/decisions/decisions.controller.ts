@@ -28,11 +28,16 @@ import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
 import { DecisionS3Repository } from '../../../../shared/infrastructure/repositories/decisionS3.repository'
 import { CollectDto } from '../../../../shared/infrastructure/dto/collect.dto'
 import { MetadonneesDto } from '../../../../shared/infrastructure/dto/metadonnees.dto'
-import { BadFileFormatException } from '../../exceptions/badFileFormat.exception'
+import { BadFileFormatException, BadFileSizeException } from '../../exceptions/badFileFormat.exception'
 import { BucketError } from '../../../../shared/domain/errors/bucket.error'
 import { InfrastructureExpection } from '../../../../shared/infrastructure/exceptions/infrastructure.exception'
 import { UnexpectedException } from '../../../../shared/infrastructure/exceptions/unexpected.exception'
 import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.utils'
+
+const FILE_MAX_SIZE = {
+  size: 10000000, 
+  readSize: "10Mo"
+} as const
 
 export interface CollecteDecisionResponse {
   filename: string | void
@@ -73,6 +78,10 @@ export class DecisionsController {
     if (!decisionIntegre || !isWordperfectFileType(decisionIntegre)) {
       throw new BadFileFormatException()
     }
+    if (decisionIntegre.size >= FILE_MAX_SIZE.size) {
+      throw new BadFileSizeException(FILE_MAX_SIZE.readSize)
+    }
+    
     const routePath = request.method + ' ' + request.path
 
     const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository(this.logger))
