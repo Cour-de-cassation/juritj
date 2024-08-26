@@ -130,7 +130,7 @@ describe('Decisions Controller', () => {
           .post('/decisions')
           .attach('decisionIntegre', Buffer.alloc(bufferSize), {
             filename: wordperfectFilename,
-            contentType: 'application/xml',
+            contentType: 'application/xml'
           })
           .field('metadonnees', JSON.stringify(metadata))
 
