@@ -56,19 +56,7 @@ JuriTJ a besoin de deux fichiers de variables d'environnements :
 - Dupliquer le fichier `docker.env.example` et le rennomer `docker.env`, adapter les variables d'environnement si besoin
 - Dupliquer le fichier `.env.example` et le rennomer `.env`, adapter les variables d'environnement si besoin
 
-### Configuration des certificats
-
-Les certificats étant gérés par l'infrastructure, nous n'avons pas de configuration à effectuer en local.
-
-Pour l'environnement de développement :
-
-- La gestion des certificats est gérée par l'infrastructure
-- Elle dispose des éléments suivants :
-  - Certificat de l'autorité de certification WINCI, signé par PEKIN, afin d'autoriser les appels effectués par des clients disposant d'un certificat PEKIN
-  - Certificat de l'autorité de certification auto-signée, afin d'autoriser les appels effectués par des clients disposant d'un certificat auto-signé (pour permettre les tests en environnement de développement)
-  - Certificat serveur signé par PEKIN
-  - Clé privée serveur
-  - Mot de passe de la clé privée serveur
+### Configuration de Postman
 
 Pour effectuer des tests Postman sur l'environnement de développement :
 
@@ -133,7 +121,7 @@ Le dossier `/documentation` contient :
 - Le dossier `adr` qui historise les choix structurant de l'équipe
 - Les requêtes Postman et comment les installer [lien](documentation/postman/README.md)
 
-### CI
+### OPS
 
 #### Lancer un job depuis une branche spécifique
 
@@ -150,22 +138,14 @@ test: # job
 
 Une fois cette branche poussée, la CI lancera le job automatiquement (compter 5 mns de délai environ)
 
-## Configuration des buckets
+#### Configuration des certificats
 
-1. le bucket doit tourner
-2. executer
+Les certificats étant gérés au niveau de l'infrastructure, nous n'avons pas de configuration à effectuer en local.
 
-```bash
-kubectl run -i --tty --rm --namespace juritj --image=minio/mc -- bash
-```
+Les éléments suivant ont été installés sur l'infrastructure :
 
-3. executer ces commandes dans le conteneur
-   JURITJ_S3_ACCESS_KEY et JURITJ_S3_SECRET_KEY sont à récuperer dans les variables ci/cd GITLAB
-
-_exemple pour un bucket_
-
-```BASH
-mc config host add myminio http://bucket-service:9000 $JURITJ_S3_ACCESS_KEY $JURITJ_S3_SECRET_KEY
-mc mb --ignore-existing myminio/juritj-test-bucket
-mc policy download myminio/juritj-test-bucket
-```
+- Certificat de l'autorité de certification WINCI, signé par PEKIN, afin d'autoriser les appels effectués par des clients disposant d'un certificat PEKIN
+- Pour l'environement de developpement : Certificat de l'autorité de certification auto-signée, afin d'autoriser les appels effectués par des clients disposant d'un certificat auto-signé (pour permettre les tests)
+- Certificat serveur signé par PEKIN
+- Clé privée serveur
+- Mot de passe de la clé privée serveur
