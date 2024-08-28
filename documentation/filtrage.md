@@ -10,7 +10,18 @@
 
 ### Filtrage à la collecte de la décision :
 
-Les données collectées au travers de l'API juritj doivent respecter le contrat d'interface établi. Les juridictions nous transmettent via l'API le fichier du texte intègre de la décision au format wordperfect assorti des métadonnées de la décision. Si les métadonnées ne sont pas fournies en totalité ou sont fournies dans un format incorrect alors la décision n'est pas acceptée par l'API avec une erreur HTTP 400. Ainsi, la juridiction est informée du rejet de la collecte de sa décision.
+Une transmission de décision à la Cour de cassation pour mise en _open data_ comporte 2 éléments :
+
+- le texte intègre de la décision au format wordperfect
+- les métadonnées de la décision au format JSON
+
+#### Fichier wordperfect
+
+Le fichier wordperfect transmis doit avoir une taille inférieure à 10Mo, sinon une erreur HTTP 400 est renvoyée par l'API.
+
+#### Métadonnées
+
+Les métadonnées collectées au travers de l'API juritj doivent respecter le contrat d'interface établi. Si les métadonnées ne sont pas fournies en totalité ou sont fournies dans un format incorrect alors la décision n'est pas acceptée par l'API avec une erreur HTTP 400. Ainsi, la juridiction est informée du rejet de la collecte de sa décision.
 Voici les critères que les métadonnées doivent respecter pour que la décision soit acceptée par l'API (défini [ici](../src/shared/infrastructure/dto/metadonnees.dto.ts) dans le code) :
 
 | Nom de la variable        | Type de variable | Obligatoire | Autre validation                                                           |
