@@ -14,7 +14,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/api/main",
     "docker:build": "docker compose -f docker-compose.local.yml build",
-    "docker:start": "docker compose -f docker-compose.local.yml up -d",
+    "docker:start": "docker compose -f docker-compose.local.yml up",
     "docker:stop": "docker compose -f docker-compose.local.yml stop",
     "docker:kill": "docker compose -f docker-compose.local.yml down --remove-orphans --volumes --rmi all",
     "batch:start": "npx ts-node -r dotenv/config src/batch/normalization/index.ts",

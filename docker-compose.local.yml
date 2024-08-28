@@ -33,23 +33,27 @@ services:
   api:
     build:
       context: ./
-      target: api
+      target: api-local
     env_file:
       - docker.env
     expose: 
       - 3009
     ports:
       - 3009:3000
+    volumes:
+      - .:/home/node
 
   batch: 
     build:
       context: ./
-      target: batch
+      target: batch-local
     env_file:
       - docker.env
     networks:
       - default
       - dbsder-external-network
+    volumes:
+      - .:/home/node
 
 networks:
   default:
@@ -60,5 +64,3 @@ volumes:
   bucket-storage:
     driver: local
     name: juritj-bucket-storage
-
-
