@@ -93,7 +93,7 @@ describe('compute occultation', () => {
     expect(response).toEqual(expectedResponse)
   })
 
-  it('returns motivationOccultation true when debat are not public', () => {
+  it('returns motivationOccultation true when debat are not public and recommandationOccultation are followed (conforme or complémentaire)', () => {
     // GIVEN
     const debatPublic = false
     const providedRecommandationOccultation = Occultation.COMPLEMENT
@@ -101,6 +101,27 @@ describe('compute occultation', () => {
       additionalTerms: providedOccultationComplementaire,
       categoriesToOmit: [],
       motivationOccultation: true
+    }
+
+    // WHEN
+    const response = computeOccultation(
+      providedRecommandationOccultation,
+      providedOccultationComplementaire,
+      debatPublic
+    )
+
+    // THEN
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('returns motivationOccultation false when recommandationOccultation are not followed (aucune or substituant)', () => {
+    // GIVEN
+    const debatPublic = false
+    const providedRecommandationOccultation = Occultation.AUCUNE
+    const expectedResponse: DecisionOccultation = {
+      additionalTerms: '',
+      categoriesToOmit: [],
+      motivationOccultation: false
     }
 
     // WHEN
