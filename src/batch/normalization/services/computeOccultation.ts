@@ -4,8 +4,8 @@ import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.util
 
 export function computeOccultation(
   recommandationOccultation: string,
-  occultationComplementaire: string,
-  denatPublic: boolean
+  occultationSupplementaire: string,
+  debatPublic: boolean
 ): DecisionOccultation {
   const formatLogs: LogsFormat = {
     ...normalizationFormatLogs,
@@ -16,17 +16,21 @@ export function computeOccultation(
   const additionalTerms =
     recommandationOccultation === Occultation.SUBSTITUANT ||
     recommandationOccultation === Occultation.COMPLEMENT
-      ? occultationComplementaire
+      ? occultationSupplementaire
       : ''
 
   logger.info({
     ...formatLogs,
-    msg: `additionalTerms computed: ${additionalTerms}`
+    msg: `additionalTerms computed`
   })
 
   return {
     additionalTerms,
     categoriesToOmit: [],
-    motivationOccultation: !denatPublic
+    motivationOccultation:
+      recommandationOccultation === Occultation.AUCUNE ||
+      recommandationOccultation === Occultation.SUBSTITUANT
+        ? false
+        : !debatPublic
   }
 }
