@@ -47,7 +47,7 @@ Voici les critères que les métadonnées doivent respecter pour que la décisio
 | libelleNature             | string           | Non         | -                                                                          |
 | decisionPublique          | boolean          | Oui         | -                                                                          |
 | recommandationOccultation | complexe         | Oui         | Uniquement les valeurs 'conforme', 'aucune', 'substituant' ou 'complément' |
-| occultationComplementaire | string           | Non         | -                                                                          |
+| occultationComplementaire | string           | Non         | Champ libre pour transmettre des consignes d'occultation supplémentaires   |
 | selection                 | boolean          | Oui         | -                                                                          |
 | matiereDeterminee         | boolean          | Oui         | -                                                                          |
 | pourvoiLocal              | boolean          | Oui         | -                                                                          |
