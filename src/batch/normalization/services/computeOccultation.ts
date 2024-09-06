@@ -24,13 +24,20 @@ export function computeOccultation(
     msg: `additionalTerms computed`
   })
 
+  const motivationOccultation =
+    recommandationOccultation === Occultation.AUCUNE ||
+    recommandationOccultation === Occultation.SUBSTITUANT
+      ? false
+      : !debatPublic
+
+  logger.info({
+    ...formatLogs,
+    msg: `motivationOccultation computed ${motivationOccultation}`
+  })
+
   return {
     additionalTerms,
     categoriesToOmit: [],
-    motivationOccultation:
-      recommandationOccultation === Occultation.AUCUNE ||
-      recommandationOccultation === Occultation.SUBSTITUANT
-        ? false
-        : !debatPublic
+    motivationOccultation
   }
 }
