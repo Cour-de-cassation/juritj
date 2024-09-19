@@ -17,7 +17,7 @@
     "docker:start": "docker compose -f docker-compose.local.yml up -d",
     "docker:logs": "docker compose -f docker-compose.local.yml logs --follow",
     "docker:stop": "docker compose -f docker-compose.local.yml stop",
-    "docker:kill": "docker compose -f docker-compose.local.yml down --remove-orphans --volumes --rmi all",
+    "docker:kill": "docker compose -f docker-compose.local.yml down --remove-orphans --volumes --rmi local",
     "batch:start": "npx ts-node -r dotenv/config src/batch/normalization/index.ts",
     "batch:start:watch": "nodemon --config nodemon-batch.json",
     "batch:start:prod": "node -r dotenv/config dist/batch/normalization/index.js",

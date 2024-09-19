@@ -6,31 +6,21 @@ services:
     command: minio server /data --console-address :9001
     volumes:
       - bucket-storage:/data
+    expose:
+      - 9001
     ports:
       - 9000:9000
       - 9001:9001
     environment:
       - MINIO_ROOT_USER=root
       - MINIO_ROOT_PASSWORD=root1234
-    networks:
-      - judilibre-local
 
   createbuckets:
     image: minio/mc
     depends_on:
       - bucket
     entrypoint: > # source: https://github.com/minio/minio/issues/4769 
-      /bin/sh -c "
-      /usr/bin/mc config host add myminio http://bucket:9000 root root1234;
-      /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket &&
-      /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket-normalized &&
-      /usr/bin/mc policy download myminio/juritj-test-bucket &&
-      /usr/bin/mc policy download myminio/juritj-test-bucket-normalized &&
-      /usr/bin/mc admin user svcacct add --access-key "local_access_key" --secret-key "local_secret_key" myminio root;
-      exit 0;
-      "
-    networks:
-      - judilibre-local
+      /bin/sh -c " /usr/bin/mc config host add myminio http://bucket:9000 root root1234; /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket && /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket-normalized && /usr/bin/mc policy download myminio/juritj-test-bucket && /usr/bin/mc policy download myminio/juritj-test-bucket-normalized && /usr/bin/mc admin user svcacct add --access-key "local_access_key" --secret-key "local_secret_key" myminio root; exit 0; "
 
   api:
     build:
@@ -38,6 +28,8 @@ services:
       target: api-local
     env_file:
       - docker.env
+    expose:
+      - 3009
     ports:
       - 3009:3009
     volumes:
@@ -45,7 +37,7 @@ services:
     networks:
       - judilibre-local
 
-  batch: 
+  batch:
     build:
       context: ./
       target: batch-local
@@ -53,11 +45,10 @@ services:
       - docker.env
     volumes:
       - .:/home/node
-    networks:
-      - judilibre-local
 
 networks:
-  judilibre-local:
+  default:
+  dbsder-external-network:
     external: true
 
 volumes:
