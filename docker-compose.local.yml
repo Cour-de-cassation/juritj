@@ -6,7 +6,7 @@ services:
     command: minio server /data --console-address :9001
     volumes:
       - bucket-storage:/data
-    expose:
+    expose: 
       - 9001
     ports:
       - 9000:9000
@@ -20,31 +20,36 @@ services:
     depends_on:
       - bucket
     entrypoint: > # source: https://github.com/minio/minio/issues/4769 
-      /bin/sh -c " /usr/bin/mc config host add myminio http://bucket:9000 root root1234; /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket && /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket-normalized && /usr/bin/mc policy download myminio/juritj-test-bucket && /usr/bin/mc policy download myminio/juritj-test-bucket-normalized && /usr/bin/mc admin user svcacct add --access-key "local_access_key" --secret-key "local_secret_key" myminio root; exit 0; "
+      /bin/sh -c "
+      /usr/bin/mc config host add myminio http://bucket:9000 root root1234;
+      /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket &&
+      /usr/bin/mc mb --ignore-existing myminio/juritj-test-bucket-normalized &&
+      /usr/bin/mc policy download myminio/juritj-test-bucket &&
+      /usr/bin/mc policy download myminio/juritj-test-bucket-normalized &&
+      /usr/bin/mc admin user svcacct add --access-key "local_access_key" --secret-key "local_secret_key" myminio root;
+      exit 0;
+      "
 
   api:
     build:
       context: ./
-      target: api-local
+      target: api
     env_file:
       - docker.env
-    expose:
+    expose: 
       - 3009
     ports:
-      - 3009:3009
-    volumes:
-      - .:/home/node
-    networks:
-      - judilibre-local
+      - 3009:3000
 
-  batch:
+  batch: 
     build:
       context: ./
-      target: batch-local
+      target: batch
     env_file:
       - docker.env
-    volumes:
-      - .:/home/node
+    networks:
+      - default
+      - dbsder-external-network
 
 networks:
   default:
@@ -55,3 +60,5 @@ volumes:
   bucket-storage:
     driver: local
     name: juritj-bucket-storage
+
+
