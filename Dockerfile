@@ -83,3 +83,32 @@ RUN apt install libwpd-tools -y
 
 USER node
 CMD ["node", "dist/api/main"]
+
+# --- ONLY USED TO LAUNCH DOCKER IN LOCAL WITH HOT-RELOAD: ---#
+
+# --- Base image with only shared content --- #
+FROM node:18-alpine as shared-local
+
+ENV NODE_ENV local
+
+USER node
+WORKDIR /home/node
+
+COPY --chown=node:node . .
+
+# --- Base image with batch content --- #
+FROM shared-local as batch-local
+
+USER root
+RUN apk add cmd:wpd2text
+
+USER node
+
+CMD ["npm", "run", "batch:start:watch"]
+
+# --- Base image with api content --- #
+FROM shared-local as api-local
+
+USER node
+
+CMD ["npm", "run", "start:dev"]
