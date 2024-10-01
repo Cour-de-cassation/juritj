@@ -95,6 +95,7 @@ USER node
 WORKDIR /home/node
 
 COPY --chown=node:node . .
+RUN npm i
 
 # --- Base image with batch content --- #
 FROM shared-local as batch-local
