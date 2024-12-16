@@ -209,12 +209,12 @@ export class MetadonneesDto {
   numeroMesureInstruction?: string[]
 
   @ApiProperty({
-    description: 'Identifiant du service de la juridiction. Au format: ^[\\S]{2}$',
+    description: 'Identifiant du service de la juridiction. Au format: ^.{2}$',
     type: String,
     example: metadonneesDtoExample.codeService
   })
   @IsString()
-  @Matches('^[\\S]{2}$')
+  @Matches('^.{2}$')
   codeService: string
 
   @ApiProperty({

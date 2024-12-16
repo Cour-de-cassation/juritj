@@ -91,7 +91,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
 
         logger.info({
           ...normalizationFormatLogs,
-          msg: 'Successful normalization of' + decisionFilename
+          msg: 'Successful normalization of ' + decisionFilename
         })
         listConvertedDecision.push({
           metadonnees: decisionToSave,
