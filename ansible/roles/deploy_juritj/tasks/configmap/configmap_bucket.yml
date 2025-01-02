@@ -14,5 +14,5 @@
           app: "{{ juritj_application }}"
       data:
         MINIO_ROOT_USER: "{{ minio_root_user}}"
-        MINIO_BROWSER_REDIRECT_URL: "{{ minio_browser_redirect_url }}"
+        #MINIO_BROWSER_REDIRECT_URL: "{{ minio_browser_redirect_url }}"
 ...
