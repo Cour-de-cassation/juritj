@@ -92,6 +92,26 @@ export class DecisionS3Repository implements DecisionRepository {
     }
   }
 
+  async getNormalizedDecisionByFilename(filename: string): Promise<CollectDto> {
+    const reqParams = {
+      Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,
+      Key: filename
+    }
+
+    try {
+      const decisionFromS3 = await this.s3Client.send(new GetObjectCommand(reqParams))
+      const stringifiedDecision = await decisionFromS3.Body?.transformToString()
+      return JSON.parse(stringifiedDecision)
+    } catch (error) {
+      this.logger.error({
+        operationName: 'getNormalizedDecisionByFilename',
+        msg: error.message,
+        data: error
+      })
+      throw new BucketError(error)
+    }
+  }
+
   async getDecisionList(
     maxNumberOfDecisionsToRetrieve?: number,
     startAfterFileName?: string
