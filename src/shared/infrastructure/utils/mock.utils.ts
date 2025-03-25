@@ -110,7 +110,8 @@ export class MockUtils {
     NPCode: this.allAttributesMetadonneesDtoMock.codeNature,
     NACCode: this.allAttributesMetadonneesDtoMock.codeNAC,
     filenameSource: this.allAttributesMetadonneesDtoMock.filenameSource,
-    public: this.allAttributesMetadonneesDtoMock.decisionPublique
+    public: this.allAttributesMetadonneesDtoMock.decisionPublique,
+    selection: false
   }
 
   decisionAssocieeTJDtoMock = {
@@ -140,7 +141,6 @@ export class MockUtils {
     recommandationOccultation: Occultation.SUBSTITUANT,
     president: undefined,
     sommaire: undefined,
-    selection: false,
     idDecisionTJ: this.uniqueDecisionId
   }
 }
