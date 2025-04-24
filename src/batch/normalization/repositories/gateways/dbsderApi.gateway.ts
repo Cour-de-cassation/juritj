@@ -7,11 +7,11 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { logger, normalizationFormatLogs } from '../../index'
-import { DecisionDTO } from 'dbsder-api-types'
+import { UnIdentifiedDecisionTj } from 'dbsder-api-types'
 import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.utils'
 
 export class DbSderApiGateway {
-  async saveDecision(decisionToSave: DecisionDTO) {
+  async saveDecision(decisionToSave: UnIdentifiedDecisionTj) {
     const urlToCall = process.env.DBSDER_API_URL + '/v1/decisions'
 
     const result = await axios

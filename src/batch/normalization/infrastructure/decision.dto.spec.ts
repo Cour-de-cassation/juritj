@@ -1,4 +1,4 @@
-import { LabelStatus, Sources, DecisionTJDTO, Occultation } from 'dbsder-api-types'
+import { LabelStatus, UnIdentifiedDecisionTj, SuiviOccultation } from 'dbsder-api-types'
 import { mapDecisionNormaliseeToDecisionDto } from './decision.dto'
 import { MockUtils } from '../../../shared/infrastructure/utils/mock.utils'
 
@@ -21,7 +21,13 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
     const filename = 'test.json'
     const mockDecision = mockUtils.mandatoryMetadonneesDtoMock
 
-    const expectedDecisionDto: DecisionTJDTO = {
+    const expectedDecisionDto: UnIdentifiedDecisionTj = {
+      __v: 0,
+      NPCode: "",
+      libelleNatureParticuliere: "",
+      indicateurQPC: false,
+      decatt: [],
+      publication: [],
       endCaseCode: '55C',
       codeService: '0A',
       debatPublic: true,
@@ -33,7 +39,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       numeroRoleGeneral: '01/12345',
       pourvoiCourDeCassation: false,
       pourvoiLocal: false,
-      recommandationOccultation: Occultation.SUBSTITUANT,
+      recommandationOccultation: SuiviOccultation.SUBSTITUANT,
       selection: false,
       NACCode: '11F',
       appeals: [],
@@ -57,7 +63,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       parties: undefined,
       registerNumber: 'A',
       sourceId: 1616441172,
-      sourceName: Sources.TJ
+      sourceName: 'juritj'
     }
 
     // WHEN
@@ -85,7 +91,11 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       libelleNature: 'Autres demandes en matière de frais et dépens'
     }
 
-    const expectedDecisionDto: DecisionTJDTO = {
+    const expectedDecisionDto: UnIdentifiedDecisionTj = {
+      __v: 0,
+      indicateurQPC: false,
+      decatt: [],
+      publication: [],
       endCaseCode: '55C',
       NPCode: '6C',
       codeService: '0A',
@@ -98,7 +108,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       numeroRoleGeneral: '01/12345',
       pourvoiCourDeCassation: false,
       pourvoiLocal: false,
-      recommandationOccultation: Occultation.SUBSTITUANT,
+      recommandationOccultation: SuiviOccultation.SUBSTITUANT,
       selection: false,
       NACCode: '11F',
       appeals: [],
@@ -122,7 +132,7 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
       parties: undefined,
       registerNumber: 'A',
       sourceId: 1616441172,
-      sourceName: Sources.TJ,
+      sourceName: 'juritj',
       idDecisionWinci: 'TJ00000',
       decisionAssociee: {
         ...mockUtils.decisionAssocieeTJDtoMock,

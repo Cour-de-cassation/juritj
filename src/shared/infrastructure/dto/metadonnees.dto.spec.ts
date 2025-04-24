@@ -1,5 +1,5 @@
 import { ArgumentMetadata } from '@nestjs/common'
-import { Occultation } from 'dbsder-api-types'
+import { SuiviOccultation } from 'dbsder-api-types'
 import { MockUtils } from '../utils/mock.utils'
 import { MetadonneesDto, PresidentDto } from './metadonnees.dto'
 import { ValidateDtoPipe } from '../../../api/infrastructure/pipes/validateDto.pipe'
@@ -433,7 +433,9 @@ describe('Validate MetadonneeDTO format', () => {
       // GIVEN
       const presidentWithOneProperty: PresidentDto = {
         nom: 'some valid name',
-        fonction: 'some title'
+        prenom: "hello",
+        fonction: 'some title',
+        civilite: ""
       }
       const metadonneesWithPresident = {
         ...someValidMetaDonneeDto,
@@ -900,7 +902,7 @@ describe('Validate MetadonneeDTO format', () => {
         .rejects.toThrow(BadPropertiesException)
     })
 
-    it.each(Object.values(Occultation))(
+    it.each(Object.values(SuiviOccultation))(
       'succeeds when recommandationOccultation is equal to %p',
       async (providedRecommandationOccultation) => {
         // GIVEN

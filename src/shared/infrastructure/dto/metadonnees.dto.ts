@@ -4,7 +4,9 @@ import {
   IsBoolean,
   IsDateString,
   IsDefined,
+  isEnum,
   IsEnum,
+  IsIn,
   IsNotEmptyObject,
   IsObject,
   IsOptional,
@@ -15,7 +17,7 @@ import {
 } from 'class-validator'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { MockUtils } from '../utils/mock.utils'
-import { Occultation, QualitePartie, TypePartie } from 'dbsder-api-types'
+import { TypePartieExhaustive, QualitePartieExhaustive, SuiviOccultation } from 'dbsder-api-types'
 
 const metadonneesDtoExample = new MockUtils().allAttributesMetadonneesDtoMock
 
@@ -36,14 +38,13 @@ export class PresidentDto {
   @IsString()
   nom: string
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Prénom du président de jugement',
     type: String,
     example: new MockUtils().presidentDtoMock.prenom
   })
   @IsString()
-  @IsOptional()
-  prenom?: string
+  prenom: string
 
   @ApiPropertyOptional({
     description: 'Civilité du président de jugement',
@@ -51,8 +52,7 @@ export class PresidentDto {
     example: new MockUtils().presidentDtoMock.civilite
   })
   @IsString()
-  @IsOptional()
-  civilite?: string
+  civilite: string
 }
 
 export class DecisionAssocieeDto {
@@ -108,11 +108,11 @@ export class DecisionAssocieeDto {
 export class PartieDto {
   @ApiProperty({
     description: 'Type du partie de la décision',
-    enum: TypePartie,
+    enum: [TypePartieExhaustive],
     example: metadonneesDtoExample.parties[0].type
   })
-  @IsEnum(TypePartie)
-  type: TypePartie
+  @IsEnum([TypePartieExhaustive])
+  type: TypePartieExhaustive
 
   @ApiProperty({
     description: 'Nom du partie de la décision',
@@ -142,12 +142,12 @@ export class PartieDto {
 
   @ApiPropertyOptional({
     description: 'Qualité du partie de la décision',
-    enum: QualitePartie,
+    enum: [QualitePartieExhaustive],
     example: 'Qualité'
   })
-  @IsEnum(QualitePartie)
+  @IsEnum([QualitePartieExhaustive])
   @IsOptional()
-  qualite?: QualitePartie
+  qualite?: QualitePartieExhaustive
 }
 
 export class MetadonneesDto {
@@ -346,11 +346,11 @@ export class MetadonneesDto {
 
   @ApiProperty({
     description: "Utilisation des recommandations pour l'occultation",
-    enum: Occultation,
+    enum: SuiviOccultation,
     example: metadonneesDtoExample.recommandationOccultation
   })
-  @IsEnum(Occultation)
-  recommandationOccultation: Occultation
+  @IsEnum(SuiviOccultation)
+  recommandationOccultation: SuiviOccultation
 
   @ApiPropertyOptional({
     description: "Champ libre contenant les demandes d'occultations complémentaires",
