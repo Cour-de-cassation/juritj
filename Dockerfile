@@ -92,6 +92,9 @@ FROM node:18-alpine as shared-local
 
 ENV NODE_ENV local
 
+USER root
+RUN apk add cmd:wpd2text
+
 USER node
 WORKDIR /home/node
 
@@ -100,9 +103,6 @@ RUN npm i
 
 # --- Base image with batch content --- #
 FROM shared-local as batch-local
-
-USER root
-RUN apk add cmd:wpd2text
 
 USER node
 

@@ -1,10 +1,8 @@
 import {
-  DecisionDTO,
-  DecisionTJDTO,
+  UnIdentifiedDecisionTj,
   LabelStatus,
-  Sources,
-  Occultation,
-  TypePartie
+  SuiviOccultation,
+  TypePartieExhaustive
 } from 'dbsder-api-types'
 
 export class MockUtils {
@@ -20,7 +18,7 @@ export class MockUtils {
   }
 
   partieDtoMock = {
-    type: TypePartie.PP,
+    type: TypePartieExhaustive.PP,
     nom: 'nom Partie'
   }
 
@@ -55,7 +53,7 @@ export class MockUtils {
     codeNAC: '11F',
     libelleNAC: 'Demande en dommages-intérêts contre un organisme',
     decisionPublique: true,
-    recommandationOccultation: Occultation.SUBSTITUANT,
+    recommandationOccultation: SuiviOccultation.SUBSTITUANT,
     occultationComplementaire: 'occultation complementaire',
     selection: false,
     matiereDeterminee: true,
@@ -85,8 +83,15 @@ export class MockUtils {
     metadonnees: this.allAttributesMetadonneesDtoMock
   }
 
-  // End of normalization context
-  decisionMock: DecisionDTO = {
+  decisionAssocieeTJDtoMock = {
+    numeroRegistre: this.decisionAssocieeDtoMock.numeroRegistre,
+    numeroRoleGeneral: this.decisionAssocieeDtoMock.numeroRoleGeneral,
+    idJuridiction: this.decisionAssocieeDtoMock.idJuridiction,
+    date: this.decisionAssocieeDtoMock.date,
+    idDecisionWinci: this.decisionAssocieeDtoMock.idDecision
+  }
+
+  decisionTJMock: UnIdentifiedDecisionTj = {
     appeals: this.allAttributesMetadonneesDtoMock.numeroMesureInstruction,
     chamberId: '',
     chamberName: '',
@@ -105,25 +110,13 @@ export class MockUtils {
     parties: this.allAttributesMetadonneesDtoMock.parties,
     registerNumber: this.allAttributesMetadonneesDtoMock.numeroRegistre,
     sourceId: this.uniqueDecisionIdHash,
-    sourceName: Sources.TJ,
+    sourceName: 'juritj',
     blocOccultation: 0,
     NPCode: this.allAttributesMetadonneesDtoMock.codeNature,
     NACCode: this.allAttributesMetadonneesDtoMock.codeNAC,
     filenameSource: this.allAttributesMetadonneesDtoMock.filenameSource,
     public: this.allAttributesMetadonneesDtoMock.decisionPublique,
-    selection: false
-  }
-
-  decisionAssocieeTJDtoMock = {
-    numeroRegistre: this.decisionAssocieeDtoMock.numeroRegistre,
-    numeroRoleGeneral: this.decisionAssocieeDtoMock.numeroRoleGeneral,
-    idJuridiction: this.decisionAssocieeDtoMock.idJuridiction,
-    date: this.decisionAssocieeDtoMock.date,
-    idDecisionWinci: this.decisionAssocieeDtoMock.idDecision
-  }
-
-  decisionTJMock: DecisionTJDTO = {
-    ...this.decisionMock,
+    selection: false,
     endCaseCode: this.allAttributesMetadonneesDtoMock.codeDecision,
     decisionAssociee: this.decisionAssocieeTJDtoMock,
     indicateurQPC: true,
@@ -138,9 +131,12 @@ export class MockUtils {
     numeroRoleGeneral: this.allAttributesMetadonneesDtoMock.numeroRoleGeneral,
     pourvoiCourDeCassation: false,
     pourvoiLocal: false,
-    recommandationOccultation: Occultation.SUBSTITUANT,
+    recommandationOccultation: SuiviOccultation.SUBSTITUANT,
     president: undefined,
     sommaire: undefined,
-    idDecisionTJ: this.uniqueDecisionId
+    idDecisionTJ: this.uniqueDecisionId,
+    __v: 0,
+    decatt: [],
+    publication: []
   }
 }

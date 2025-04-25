@@ -12,7 +12,7 @@ import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.u
 
 export class DbSderApiGateway {
   async saveDecision(decisionToSave: UnIdentifiedDecisionTj) {
-    const urlToCall = process.env.DBSDER_API_URL + '/v1/decisions'
+    const urlToCall = process.env.DBSDER_API_URL + '/decisions'
 
     const result = await axios
       .put(
