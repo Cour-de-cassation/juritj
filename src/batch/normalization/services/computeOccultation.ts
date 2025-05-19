@@ -6,7 +6,7 @@ export function computeOccultation(
   recommandationOccultation: string,
   occultationSupplementaire: string,
   debatPublic: boolean
-): UnIdentifiedDecisionTj["occultation"] {
+): UnIdentifiedDecisionTj['occultation'] {
   const formatLogs: LogsFormat = {
     ...normalizationFormatLogs,
     operationName: 'computeOccultation',

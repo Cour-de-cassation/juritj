@@ -16,7 +16,7 @@ describe('compute occultation', () => {
   it('returns an empty additionalTerms when recommandationOccultation has value "aucune"', () => {
     // GIVEN
     const providedRecommandationOccultation = SuiviOccultation.AUCUNE
-    const expectedResponse: UnIdentifiedDecisionTj["occultation"] = {
+    const expectedResponse: UnIdentifiedDecisionTj['occultation'] = {
       additionalTerms: '',
       categoriesToOmit: [],
       motivationOccultation: false
@@ -36,7 +36,7 @@ describe('compute occultation', () => {
   it('returns an empty additionalTerms when recommandationOccultation has value "conforme"', () => {
     // GIVEN
     const providedRecommandationOccultation = SuiviOccultation.CONFORME
-    const expectedResponse: UnIdentifiedDecisionTj["occultation"] = {
+    const expectedResponse: UnIdentifiedDecisionTj['occultation'] = {
       additionalTerms: '',
       categoriesToOmit: [],
       motivationOccultation: false
@@ -56,7 +56,7 @@ describe('compute occultation', () => {
   it('returns an additionalTerms equal to OccultationComplementaire when recommandationOccultation has value "substituant"', () => {
     // GIVEN
     const providedRecommandationOccultation = SuiviOccultation.SUBSTITUANT
-    const expectedResponse: UnIdentifiedDecisionTj["occultation"] = {
+    const expectedResponse: UnIdentifiedDecisionTj['occultation'] = {
       additionalTerms: providedOccultationComplementaire,
       categoriesToOmit: [],
       motivationOccultation: false
@@ -76,7 +76,7 @@ describe('compute occultation', () => {
   it('returns an additionalTerms equal to OccultationComplementaire when recommandationOccultation has value "complément"', () => {
     // GIVEN
     const providedRecommandationOccultation = SuiviOccultation.COMPLEMENT
-    const expectedResponse: UnIdentifiedDecisionTj["occultation"] = {
+    const expectedResponse: UnIdentifiedDecisionTj['occultation'] = {
       additionalTerms: providedOccultationComplementaire,
       categoriesToOmit: [],
       motivationOccultation: false
@@ -97,7 +97,7 @@ describe('compute occultation', () => {
     // GIVEN
     const debatPublic = false
     const providedRecommandationOccultation = SuiviOccultation.COMPLEMENT
-    const expectedResponse: UnIdentifiedDecisionTj["occultation"] = {
+    const expectedResponse: UnIdentifiedDecisionTj['occultation'] = {
       additionalTerms: providedOccultationComplementaire,
       categoriesToOmit: [],
       motivationOccultation: true
@@ -118,7 +118,7 @@ describe('compute occultation', () => {
     // GIVEN
     const debatPublic = false
     const providedRecommandationOccultation = SuiviOccultation.AUCUNE
-    const expectedResponse: UnIdentifiedDecisionTj["occultation"] = {
+    const expectedResponse: UnIdentifiedDecisionTj['occultation'] = {
       additionalTerms: '',
       categoriesToOmit: [],
       motivationOccultation: false

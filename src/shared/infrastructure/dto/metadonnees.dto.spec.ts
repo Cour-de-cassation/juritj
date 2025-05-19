@@ -433,9 +433,9 @@ describe('Validate MetadonneeDTO format', () => {
       // GIVEN
       const presidentWithOneProperty: PresidentDto = {
         nom: 'some valid name',
-        prenom: "hello",
+        prenom: 'hello',
         fonction: 'some title',
-        civilite: ""
+        civilite: ''
       }
       const metadonneesWithPresident = {
         ...someValidMetaDonneeDto,

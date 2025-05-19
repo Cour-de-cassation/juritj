@@ -51,7 +51,7 @@ export function mapDecisionNormaliseeToDecisionDto(
     public: metadonnees.decisionPublique,
     registerNumber: metadonnees.numeroRegistre,
     sourceId: hashDecisionId(generatedId),
-    sourceName: "juritj",
+    sourceName: 'juritj',
     filenameSource: filename,
     parties: metadonnees.parties,
     indicateurQPC: metadonnees.indicateurQPC,
@@ -69,7 +69,9 @@ function parseDate(dateDecision: string) {
   return new Date(parseInt(year), parseInt(month) - 1, parseInt(date))
 }
 
-function formatDecisionAssociee(providedDecisionAssociee: DecisionAssocieeDto): UnIdentifiedDecisionTj["decisionAssociee"] {
+function formatDecisionAssociee(
+  providedDecisionAssociee: DecisionAssocieeDto
+): UnIdentifiedDecisionTj['decisionAssociee'] {
   if (!providedDecisionAssociee) return undefined
   const { idDecision, ...decisionAssociee } = providedDecisionAssociee
   return { ...decisionAssociee, idDecisionWinci: idDecision }
