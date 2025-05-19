@@ -47,7 +47,7 @@ jobs:
         run: npm install
 
       - name: Format code
-        run: npm run format:check
+        run: npm run format
 
   lint:
     name: 🧹 Lint

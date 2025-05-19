@@ -23,7 +23,7 @@
     "batch:start:prod": "node -r dotenv/config dist/batch/normalization/index.js",
     "docker:start:s3": "docker compose -f docker-compose.local.yml up -d bucket && docker compose -f docker-compose.local.yml up -d createbuckets",
     "docker:stop:s3": "docker compose -f docker-compose.local.yml stop bucket",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --quiet",
+    "lint": "eslint \"src/**/*.ts\" --max-warnings 0",
     "test": "jest && npm run test:integration",
     "test:batch": "jest --testPathPattern=src/batch",
     "test:api": "jest --testPathPattern=src/api & npm run test:integration",
@@ -31,7 +31,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:integration": "jest --config ./jest-integration.json --runInBand",
-    "fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix && prettier \"src/**/*.ts\" --write"
+    "fix": "eslint \"src/**/*.ts\" --fix && prettier \"src/**/*.ts\" --write"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.441.0",
