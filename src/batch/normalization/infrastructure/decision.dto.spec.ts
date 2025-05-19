@@ -23,9 +23,6 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
 
     const expectedDecisionDto: UnIdentifiedDecisionTj = {
       __v: 0,
-      NPCode: '',
-      libelleNatureParticuliere: '',
-      indicateurQPC: false,
       decatt: [],
       publication: [],
       endCaseCode: '55C',
@@ -93,7 +90,6 @@ describe('mapDecisionNormaliseeToDecisionDto', () => {
 
     const expectedDecisionDto: UnIdentifiedDecisionTj = {
       __v: 0,
-      indicateurQPC: false,
       decatt: [],
       publication: [],
       endCaseCode: '55C',
