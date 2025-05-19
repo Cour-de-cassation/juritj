@@ -4,9 +4,7 @@ import {
   IsBoolean,
   IsDateString,
   IsDefined,
-  isEnum,
   IsEnum,
-  IsIn,
   IsNotEmptyObject,
   IsObject,
   IsOptional,
@@ -111,7 +109,7 @@ export class PartieDto {
     enum: [TypePartieExhaustive],
     example: metadonneesDtoExample.parties[0].type
   })
-  @IsEnum([TypePartieExhaustive])
+  @IsEnum(TypePartieExhaustive)
   type: TypePartieExhaustive
 
   @ApiProperty({
@@ -145,7 +143,7 @@ export class PartieDto {
     enum: [QualitePartieExhaustive],
     example: 'Qualité'
   })
-  @IsEnum([QualitePartieExhaustive])
+  @IsEnum(QualitePartieExhaustive)
   @IsOptional()
   qualite?: QualitePartieExhaustive
 }
