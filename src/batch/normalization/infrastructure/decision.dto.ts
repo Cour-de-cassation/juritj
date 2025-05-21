@@ -1,4 +1,4 @@
-import { LabelStatus, Sources, DecisionTJDTO, DecisionAssociee } from 'dbsder-api-types'
+import { LabelStatus, UnIdentifiedDecisionTj } from 'dbsder-api-types'
 import { hashDecisionId } from '../../../shared/infrastructure/utils/hash.utils'
 import {
   DecisionAssocieeDto,
@@ -10,8 +10,9 @@ export function mapDecisionNormaliseeToDecisionDto(
   decisionContent: string,
   metadonnees: MetadonneesDto,
   filename: string
-): DecisionTJDTO {
+): UnIdentifiedDecisionTj {
   return {
+    __v: 0,
     endCaseCode: metadonnees.codeDecision,
     NPCode: metadonnees.codeNature,
     codeService: metadonnees.codeService,
@@ -50,11 +51,13 @@ export function mapDecisionNormaliseeToDecisionDto(
     public: metadonnees.decisionPublique,
     registerNumber: metadonnees.numeroRegistre,
     sourceId: hashDecisionId(generatedId),
-    sourceName: Sources.TJ,
+    sourceName: 'juritj',
     filenameSource: filename,
     parties: metadonnees.parties,
     indicateurQPC: metadonnees.indicateurQPC,
-    idDecisionWinci: metadonnees.idDecision
+    idDecisionWinci: metadonnees.idDecision,
+    decatt: [],
+    publication: []
   }
 }
 
@@ -66,7 +69,9 @@ function parseDate(dateDecision: string) {
   return new Date(parseInt(year), parseInt(month) - 1, parseInt(date))
 }
 
-function formatDecisionAssociee(providedDecisionAssociee: DecisionAssocieeDto): DecisionAssociee {
+function formatDecisionAssociee(
+  providedDecisionAssociee: DecisionAssocieeDto
+): UnIdentifiedDecisionTj['decisionAssociee'] {
   if (!providedDecisionAssociee) return undefined
   const { idDecision, ...decisionAssociee } = providedDecisionAssociee
   return { ...decisionAssociee, idDecisionWinci: idDecision }
