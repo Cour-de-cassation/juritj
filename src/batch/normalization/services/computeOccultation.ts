@@ -1,4 +1,4 @@
-import { DecisionOccultation, Occultation } from 'dbsder-api-types'
+import { UnIdentifiedDecisionTj, SuiviOccultation } from 'dbsder-api-types'
 import { logger, normalizationFormatLogs } from '../index'
 import { LogsFormat } from '../../../shared/infrastructure/utils/logsFormat.utils'
 
@@ -6,7 +6,7 @@ export function computeOccultation(
   recommandationOccultation: string,
   occultationSupplementaire: string,
   debatPublic: boolean
-): DecisionOccultation {
+): UnIdentifiedDecisionTj['occultation'] {
   const formatLogs: LogsFormat = {
     ...normalizationFormatLogs,
     operationName: 'computeOccultation',
@@ -14,8 +14,8 @@ export function computeOccultation(
   }
 
   const additionalTerms =
-    recommandationOccultation === Occultation.SUBSTITUANT ||
-    recommandationOccultation === Occultation.COMPLEMENT
+    recommandationOccultation === SuiviOccultation.SUBSTITUANT ||
+    recommandationOccultation === SuiviOccultation.COMPLEMENT
       ? occultationSupplementaire
       : ''
 
@@ -25,8 +25,8 @@ export function computeOccultation(
   })
 
   const motivationOccultation =
-    recommandationOccultation === Occultation.AUCUNE ||
-    recommandationOccultation === Occultation.SUBSTITUANT
+    recommandationOccultation === SuiviOccultation.AUCUNE ||
+    recommandationOccultation === SuiviOccultation.SUBSTITUANT
       ? false
       : !debatPublic
 
