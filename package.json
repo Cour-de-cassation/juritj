@@ -46,7 +46,7 @@
     "class-transformer": "0.5.1",
     "class-validator": "0.14.0",
     "cron": "2.4.3",
-    "dbsder-api-types": "2.0.2",
+    "dbsder-api-types": "2.0.3",
     "express-basic-auth": "1.2.1",
     "joi": "17.11.0",
     "nestjs-pino": "3.5.0",
