@@ -35,7 +35,7 @@ describe('Normalization', () => {
     destination: '',
     filename: decisionName,
     path: '',
-    buffer: Buffer.from('Le contenu WPD de ma decision')
+    buffer: Buffer.from('Le contenu WPD\n de ma\n decision')
   }
 
   const mockDecision: CollectDto = {
