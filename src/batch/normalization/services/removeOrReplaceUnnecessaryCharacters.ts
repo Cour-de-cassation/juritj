@@ -33,5 +33,15 @@ export const removeOrReplaceUnnecessaryCharacters = (rawString: string): string 
   //replace tibetain characters
   const normalizedText = replaceUnknownCharacters(stringWithoutConsecutiveSpaces)
 
-  return normalizedText
+  return normalizedText.trim()
+}
+
+export function isEmptyText(text: string): boolean {
+  text = `${text}`.replace(/[\t\s\r\n]/gm, '').trim()
+  return text.length === 0
+}
+
+export function hasNoBreak(text: string): boolean {
+  const hasBreak = `${text}`.includes('\n')
+  return hasBreak === false
 }
