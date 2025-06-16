@@ -4,7 +4,7 @@ describe('Remove unnecessary characters from decision', () => {
   it('replaces multiple return character \r to a newline character \n', () => {
     // GIVEN
     const rawString = 'A string with \r character \r'
-    const trueString = 'A string with \n character \n'
+    const trueString = 'A string with \n character'
     // WHEN
     const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
     // THEN
@@ -14,7 +14,7 @@ describe('Remove unnecessary characters from decision', () => {
   it('replaces multiple \r\n to newline characters \n', () => {
     // GIVEN
     const rawString = 'A string with \r\n character \r\n'
-    const trueString = 'A string with \n character \n'
+    const trueString = 'A string with \n character'
 
     // WHEN
     const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
@@ -26,7 +26,7 @@ describe('Remove unnecessary characters from decision', () => {
   it('replaces \r\n and \r in the same sentence to newline characters \n', () => {
     // GIVEN
     const rawString = 'A string with \r\n character \r'
-    const trueString = 'A string with \n character \n'
+    const trueString = 'A string with \n character'
 
     // WHEN
     const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
@@ -38,7 +38,7 @@ describe('Remove unnecessary characters from decision', () => {
   it('deletes multiple tab character \t', () => {
     // GIVEN
     const rawString = 'A string with \t character \t'
-    const trueString = 'A string with character '
+    const trueString = 'A string with character'
 
     // WHEN
     const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
@@ -50,7 +50,7 @@ describe('Remove unnecessary characters from decision', () => {
   it('deletes multiple form feed character \f', () => {
     // GIVEN
     const rawString = 'A string with \f character \f'
-    const trueString = 'A string with character '
+    const trueString = 'A string with character'
 
     // WHEN
     const normalizedString = removeOrReplaceUnnecessaryCharacters(rawString)
