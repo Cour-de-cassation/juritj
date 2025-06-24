@@ -17,6 +17,15 @@ import { DbSderApiGateway } from './repositories/gateways/dbsderApi.gateway'
 import { normalizationFormatLogs } from './index'
 import { computeOccultation } from './services/computeOccultation'
 
+import { LabelStatus, PublishStatus, UnIdentifiedDecisionTj } from 'dbsder-api-types'
+
+import { strict as assert } from 'assert'
+
+interface Diff {
+  major: Array<string>
+  minor: Array<string>
+}
+
 const dbSderApiGateway = new DbSderApiGateway()
 const bucketNameIntegre = process.env.S3_BUCKET_NAME_RAW
 
@@ -79,9 +88,70 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           decision.metadonnees.debatPublic
         )
 
-        // Step 7: Save decision in database
-        await dbSderApiGateway.saveDecision(decisionToSave)
-        logger.info({ ...normalizationFormatLogs, msg: 'Decision saved in database' })
+        // Step 7: check diff (major/minor) and upsert/patch accordingly
+        const previousVersion = await dbSderApiGateway.getDecisionBySourceId(
+          decisionToSave.sourceId
+        )
+        if (previousVersion !== null) {
+          const diff = computeDiff(previousVersion, decisionToSave)
+          if (diff.major && diff.major.length > 0) {
+            // Update decision with major changes:
+            await dbSderApiGateway.saveDecision(decisionToSave)
+            logger.info({
+              ...normalizationFormatLogs,
+              msg: `Decision updated in database with major changes: ${JSON.stringify(diff.major)}`
+            })
+          } else if (diff.minor && diff.minor.length > 0) {
+            // Patch decision with minor changes:
+            delete decisionToSave.__v
+            delete decisionToSave.sourceId
+            delete decisionToSave.sourceName
+            delete decisionToSave.public
+            delete decisionToSave.debatPublic
+            delete decisionToSave.occultation
+            delete decisionToSave.originalText
+            // @TODO check other TJ-specific labelStatus?
+            if (
+              decisionToSave.labelStatus === LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE ||
+              decisionToSave.labelStatus === LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
+            ) {
+              decisionToSave.publishStatus = PublishStatus.BLOCKED
+              // Bad new date? Throw a warning... @TODO ODDJDashboard
+              logger.warn({
+                ...normalizationFormatLogs,
+                msg: `Decision has a bad updated date: ${decisionToSave.dateDecision}`
+              })
+            } else {
+              if (previousVersion.labelStatus === LabelStatus.EXPORTED) {
+                decisionToSave.labelStatus = LabelStatus.DONE
+              } else {
+                decisionToSave.labelStatus = previousVersion.labelStatus
+              }
+              if (
+                previousVersion.publishStatus === PublishStatus.SUCCESS ||
+                previousVersion.publishStatus === PublishStatus.UNPUBLISHED ||
+                previousVersion.publishStatus === PublishStatus.FAILURE_PREPARING ||
+                previousVersion.publishStatus === PublishStatus.FAILURE_INDEXING
+              ) {
+                decisionToSave.publishStatus = PublishStatus.TOBEPUBLISHED
+              } else {
+                decisionToSave.publishStatus = previousVersion.publishStatus
+              }
+            }
+            await dbSderApiGateway.patchDecision(previousVersion._id, decisionToSave)
+            logger.info({
+              ...normalizationFormatLogs,
+              msg: `Decision patched in database with minor changes: ${JSON.stringify(diff.minor)}`
+            })
+          } else {
+            // No change? Throw a warning and do nothing... @TODO ODDJDashboard
+            logger.warn({ ...normalizationFormatLogs, msg: 'Decision has no change' })
+          }
+        } else {
+          // Insert new decision:
+          await dbSderApiGateway.saveDecision(decisionToSave)
+          logger.info({ ...normalizationFormatLogs, msg: `Decision saved in database` })
+        }
 
         // Step 8: Save decision in normalized bucket
         await s3Repository.saveDecisionNormalisee(
@@ -128,4 +198,143 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
   }
 
   return listConvertedDecision
+}
+
+function computeDiff(
+  oldDecision: UnIdentifiedDecisionTj,
+  newDecision: UnIdentifiedDecisionTj
+): Diff {
+  const diff: Diff = {
+    major: [],
+    minor: []
+  }
+
+  // Major changes...
+  // Note: we skip zoning diff, because the zoning should only change if the originalText changes (which is a major change anyway). If the zoning changes with the same given originalText, then the change comes from us, not from the sender
+  if (newDecision.public !== oldDecision.public) {
+    diff.major.push('public')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `major change to public: '${oldDecision.public}' -> '${newDecision.public}'`
+    })
+  }
+  if (newDecision.debatPublic !== oldDecision.debatPublic) {
+    diff.major.push('debatPublic')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `major change to debatPublic: '${oldDecision.debatPublic}' -> '${newDecision.debatPublic}'`
+    })
+  }
+  if (newDecision.originalText !== oldDecision.originalText) {
+    diff.major.push('originalText')
+  }
+  if (oldDecision.occultation.additionalTerms !== newDecision.occultation.additionalTerms) {
+    diff.major.push('occultation.additionalTerms')
+  }
+  if (
+    oldDecision.occultation.motivationOccultation !== newDecision.occultation.motivationOccultation
+  ) {
+    diff.major.push('occultation.motivationOccultation')
+  }
+  if (
+    (!oldDecision.occultation.categoriesToOmit && newDecision.occultation.categoriesToOmit) ||
+    (oldDecision.occultation.categoriesToOmit && !newDecision.occultation.categoriesToOmit)
+  ) {
+    diff.major.push('occultation.categoriesToOmit')
+  } else if (oldDecision.occultation.categoriesToOmit && newDecision.occultation.categoriesToOmit) {
+    if (
+      oldDecision.occultation.categoriesToOmit.length !==
+      newDecision.occultation.categoriesToOmit.length
+    ) {
+      diff.major.push('occultation.categoriesToOmit')
+    } else {
+      oldDecision.occultation.categoriesToOmit.sort()
+      newDecision.occultation.categoriesToOmit.sort()
+      if (
+        JSON.stringify(oldDecision.occultation.categoriesToOmit) !==
+        JSON.stringify(newDecision.occultation.categoriesToOmit)
+      ) {
+        diff.major.push('occultation.categoriesToOmit')
+      }
+    }
+  }
+  // @TODO other major changes? (NAC, etc.)
+
+  // Minor changes...
+  if (newDecision.chamberId !== oldDecision.chamberId) {
+    diff.minor.push('chamberId')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to chamberId: '${oldDecision.chamberId}' -> '${newDecision.chamberId}'`
+    })
+  }
+  if (newDecision.chamberName !== oldDecision.chamberName) {
+    diff.minor.push('chamberName')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to chamberName: '${oldDecision.chamberName}' -> '${newDecision.chamberName}'`
+    })
+  }
+  if (newDecision.dateDecision !== oldDecision.dateDecision) {
+    diff.minor.push('dateDecision')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to dateDecision: '${oldDecision.dateDecision}' -> '${newDecision.dateDecision}'`
+    })
+  }
+  if (newDecision.jurisdictionCode !== oldDecision.jurisdictionCode) {
+    diff.minor.push('jurisdictionCode')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to jurisdictionCode: '${oldDecision.jurisdictionCode}' -> '${newDecision.jurisdictionCode}'`
+    })
+  }
+  if (newDecision.jurisdictionName !== oldDecision.jurisdictionName) {
+    diff.minor.push('jurisdictionName')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to jurisdictionName: '${oldDecision.jurisdictionName}' -> '${newDecision.jurisdictionName}'`
+    })
+  }
+  if (newDecision.registerNumber !== oldDecision.registerNumber) {
+    diff.minor.push('registerNumber')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to registerNumber: '${oldDecision.registerNumber}' -> '${newDecision.registerNumber}'`
+    })
+  }
+  if (newDecision.solution !== oldDecision.solution) {
+    diff.minor.push('solution')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to solution: '${oldDecision.solution}' -> '${newDecision.solution}'`
+    })
+  }
+  if (
+    (!oldDecision.parties && newDecision.parties) ||
+    (oldDecision.parties && !newDecision.parties)
+  ) {
+    diff.minor.push('parties')
+  } else if (oldDecision.parties && newDecision.parties) {
+    if (oldDecision.parties.length !== newDecision.parties.length) {
+      diff.minor.push('parties')
+    } else {
+      try {
+        assert.deepStrictEqual(oldDecision.parties, newDecision.parties)
+      } catch (_) {
+        diff.minor.push('parties')
+      }
+    }
+  }
+  if (newDecision.selection !== oldDecision.selection) {
+    diff.minor.push('selection')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to selection: '${oldDecision.selection}' -> '${newDecision.selection}'`
+    })
+  }
+  // @TODO other minor changes?
+  diff.major.sort()
+  diff.minor.sort()
+  return diff
 }
