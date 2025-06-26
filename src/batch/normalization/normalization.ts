@@ -110,16 +110,29 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
             delete decisionToSave.debatPublic
             delete decisionToSave.occultation
             delete decisionToSave.originalText
-            // @TODO check other TJ-specific labelStatus?
             if (
               decisionToSave.labelStatus === LabelStatus.IGNORED_DATE_DECISION_INCOHERENTE ||
               decisionToSave.labelStatus === LabelStatus.IGNORED_DATE_AVANT_MISE_EN_SERVICE
             ) {
               decisionToSave.publishStatus = PublishStatus.BLOCKED
-              // Bad new date? Throw a warning... @TODO ODDJDashboard
+              // Bad dateDecision? Throw a warning... @TODO ODDJDashboard
               logger.warn({
                 ...normalizationFormatLogs,
                 msg: `Decision has a bad updated date: ${decisionToSave.dateDecision}`
+              })
+            } else if (decisionToSave.labelStatus === LabelStatus.IGNORED_CODE_DECISION_BLOQUE_CC) {
+              decisionToSave.publishStatus = PublishStatus.BLOCKED
+              // Bad endCaseCode? Throw a warning... @TODO ODDJDashboard
+              logger.warn({
+                ...normalizationFormatLogs,
+                msg: `Decision has a codeDecision in blocked codeDecision list: ${decisionToSave.endCaseCode}`
+              })
+            } else if (decisionToSave.labelStatus === LabelStatus.IGNORED_CARACTERE_INCONNU) {
+              decisionToSave.publishStatus = PublishStatus.BLOCKED
+              // Unknown characters? Throw a warning... @TODO ODDJDashboard
+              logger.warn({
+                ...normalizationFormatLogs,
+                msg: `Decision contains unknown characters`
               })
             } else {
               if (previousVersion.labelStatus === LabelStatus.EXPORTED) {
@@ -258,23 +271,17 @@ function computeDiff(
       }
     }
   }
-  // @TODO other major changes? (NAC, etc.)
+  if (oldDecision.NACCode !== newDecision.NACCode) {
+    diff.major.push('NACCode')
+  }
+  if (oldDecision.endCaseCode !== newDecision.endCaseCode) {
+    diff.major.push('endCaseCode')
+  }
+  if (oldDecision.recommandationOccultation !== newDecision.recommandationOccultation) {
+    diff.major.push('recommandationOccultation')
+  }
 
   // Minor changes...
-  if (newDecision.chamberId !== oldDecision.chamberId) {
-    diff.minor.push('chamberId')
-    logger.info({
-      ...normalizationFormatLogs,
-      msg: `minor change to chamberId: '${oldDecision.chamberId}' -> '${newDecision.chamberId}'`
-    })
-  }
-  if (newDecision.chamberName !== oldDecision.chamberName) {
-    diff.minor.push('chamberName')
-    logger.info({
-      ...normalizationFormatLogs,
-      msg: `minor change to chamberName: '${oldDecision.chamberName}' -> '${newDecision.chamberName}'`
-    })
-  }
   if (newDecision.dateDecision !== oldDecision.dateDecision) {
     diff.minor.push('dateDecision')
     logger.info({
@@ -282,32 +289,18 @@ function computeDiff(
       msg: `minor change to dateDecision: '${oldDecision.dateDecision}' -> '${newDecision.dateDecision}'`
     })
   }
-  if (newDecision.jurisdictionCode !== oldDecision.jurisdictionCode) {
-    diff.minor.push('jurisdictionCode')
+  if (newDecision.jurisdictionId !== oldDecision.jurisdictionId) {
+    diff.minor.push('jurisdictionId')
     logger.info({
       ...normalizationFormatLogs,
-      msg: `minor change to jurisdictionCode: '${oldDecision.jurisdictionCode}' -> '${newDecision.jurisdictionCode}'`
+      msg: `minor change to jurisdictionId: '${oldDecision.jurisdictionId}' -> '${newDecision.jurisdictionId}'`
     })
   }
-  if (newDecision.jurisdictionName !== oldDecision.jurisdictionName) {
-    diff.minor.push('jurisdictionName')
+  if (newDecision.numeroRoleGeneral !== oldDecision.numeroRoleGeneral) {
+    diff.minor.push('numeroRoleGeneral')
     logger.info({
       ...normalizationFormatLogs,
-      msg: `minor change to jurisdictionName: '${oldDecision.jurisdictionName}' -> '${newDecision.jurisdictionName}'`
-    })
-  }
-  if (newDecision.registerNumber !== oldDecision.registerNumber) {
-    diff.minor.push('registerNumber')
-    logger.info({
-      ...normalizationFormatLogs,
-      msg: `minor change to registerNumber: '${oldDecision.registerNumber}' -> '${newDecision.registerNumber}'`
-    })
-  }
-  if (newDecision.solution !== oldDecision.solution) {
-    diff.minor.push('solution')
-    logger.info({
-      ...normalizationFormatLogs,
-      msg: `minor change to solution: '${oldDecision.solution}' -> '${newDecision.solution}'`
+      msg: `minor change to numeroRoleGeneral: '${oldDecision.numeroRoleGeneral}' -> '${newDecision.numeroRoleGeneral}'`
     })
   }
   if (
@@ -333,7 +326,13 @@ function computeDiff(
       msg: `minor change to selection: '${oldDecision.selection}' -> '${newDecision.selection}'`
     })
   }
-  // @TODO other minor changes?
+  if (newDecision.libelleEndCaseCode !== oldDecision.libelleEndCaseCode) {
+    diff.minor.push('libelleEndCaseCode')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to libelleEndCaseCode: '${oldDecision.libelleEndCaseCode}' -> '${newDecision.libelleEndCaseCode}'`
+    })
+  }
   diff.major.sort()
   diff.minor.sort()
   return diff
