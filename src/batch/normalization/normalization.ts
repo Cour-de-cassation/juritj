@@ -253,6 +253,8 @@ function computeDiff(
   ) {
     diff.major.push('occultation.motivationOccultation')
   }
+  /*  @FIXME categoriesToOmit is changed by the DBSDER API, 
+      so it's ALWAYS different from the one computed in the normalization batch
   if (
     (!oldDecision.occultation.categoriesToOmit && newDecision.occultation.categoriesToOmit) ||
     (oldDecision.occultation.categoriesToOmit && !newDecision.occultation.categoriesToOmit)
@@ -275,6 +277,7 @@ function computeDiff(
       }
     }
   }
+  */
   if (oldDecision.NACCode !== newDecision.NACCode) {
     diff.major.push('NACCode')
   }
