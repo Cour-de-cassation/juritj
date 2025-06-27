@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { logger, normalizationFormatLogs } from '../../index'
-import { UnIdentifiedDecisionTj } from 'dbsder-api-types'
+import { DecisionTj, UnIdentifiedDecisionTj } from 'dbsder-api-types'
 import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.utils'
 
 export class DbSderApiGateway {
@@ -74,10 +74,17 @@ export class DbSderApiGateway {
   }
 
   async getDecisionBySourceId(sourceId: number) {
+    type Response = {
+      decisions: (Omit<DecisionTj, '_id'> & { _id: string })[]
+      totalDecisions: number
+      nextPage?: string
+      previousPage?: string
+    }
+
     const urlToCall = process.env.DBSDER_API_URL + '/decisions'
 
     const result = await axios
-      .get(urlToCall, {
+      .get<Response>(urlToCall, {
         params: { sourceName: 'juritj', sourceId: `${sourceId}` },
         headers: {
           'x-api-key': process.env.DBSDER_API_KEY
@@ -129,8 +136,8 @@ export class DbSderApiGateway {
         throw new ServiceUnavailableException('DbSder API is unavailable')
       })
 
-    if (result && Array.isArray(result.data) && result.data.length > 0) {
-      return result.data[0]
+    if (result && Array.isArray(result.data.decisions) && result.data.decisions.length > 0) {
+      return result.data.decisions[0]
     } else {
       return null
     }

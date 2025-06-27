@@ -89,6 +89,10 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
         )
 
         // Step 7: check diff (major/minor) and upsert/patch accordingly
+        logger.info({
+          ...normalizationFormatLogs,
+          msg: `Check diff with previous version of decision ${decisionToSave.sourceId} (if any)...`
+        })
         const previousVersion = await dbSderApiGateway.getDecisionBySourceId(
           decisionToSave.sourceId
         )
