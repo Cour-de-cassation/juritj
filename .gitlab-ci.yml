@@ -33,7 +33,7 @@ test:
 
 .build_and_push_template:
   stage: build
-    variables:
+  variables:
     HTTP_PROXY: $HTTP_PROXY_DEV
     HTTPS_PROXY: $HTTPS_PROXY_DEV
   script:
