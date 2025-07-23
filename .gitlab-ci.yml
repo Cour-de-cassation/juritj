@@ -27,7 +27,7 @@ test:
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run lint
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm test
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == "cicd-refacto"'
   tags:
     - docker
 
@@ -52,7 +52,7 @@ test:
       -t $DOCKER_IMAGE_NAME .
     - docker push $DOCKER_IMAGE_NAME
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == "cicd-refacto"'
     - if: '$CI_COMMIT_TAG'
   needs:
     - test
@@ -93,7 +93,7 @@ deploy_dev:
     ENV: dev
   extends: .deploy_template
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG || $CI_COMMIT_BRANCH == "cicd-refacto"'
       when: on_success
   needs:
     - build_and_push_api
