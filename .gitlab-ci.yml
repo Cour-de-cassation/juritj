@@ -3,11 +3,8 @@ services:
   - docker:20.10.22-dind
 
 variables:
-  dev: dev
-  re7: preprod
-  master: prod
-  api_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/api:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA'
-  batch_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/batch:$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA'
+  api_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/api:$CI_COMMIT_SHORT_SHA'
+  batch_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/batch:$CI_COMMIT_SHORT_SHA'
 
 stages:
   - test
@@ -16,8 +13,6 @@ stages:
 
 test:
   stage: test
-  services:
-    - docker:20.10.22
   variables:
     HTTP_PROXY: $HTTP_PROXY_DEV
     HTTPS_PROXY: $HTTPS_PROXY_DEV
@@ -28,80 +23,97 @@ test:
       --build-arg https_proxy=$HTTPS_PROXY
       --target test
       -t juritj-test .
-    ##- docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm audit
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run format
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run lint
     - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm test
-    - echo 'ok'
-  only:
-    - master
-    - re7
-    - dev
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
   tags:
     - docker
 
-build_api:
+.build_and_push_template:
   stage: build
-  needs: ['test']
-  variables:
+    variables:
     HTTP_PROXY: $HTTP_PROXY_DEV
     HTTPS_PROXY: $HTTPS_PROXY_DEV
   script:
     - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+
+    # To avoid rebuild existing image when addind tag to a commit
+    - |
+      if docker pull "$DOCKER_IMAGE_NAME"; then
+        echo "Docker image $DOCKER_IMAGE_NAME already exist, skiping build and push."
+        exit 0
+      fi
     - docker build
       --build-arg http_proxy=$HTTP_PROXY
       --build-arg https_proxy=$HTTPS_PROXY
-      --target api
-      -t $api_docker_image .
-    - docker push $api_docker_image
-  only:
-    - master
-    - re7
-    - dev
+      --target $TARGET
+      -t $DOCKER_IMAGE_NAME .
+    - docker push $DOCKER_IMAGE_NAME
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
+  needs:
+    - test
   tags:
     - docker
 
-build_batch:
-  stage: build
-  needs: ['test']
+build_and_push_api:
   variables:
-    HTTP_PROXY: $HTTP_PROXY_DEV
-    HTTPS_PROXY: $HTTPS_PROXY_DEV
-  script:
-    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
-    - docker build
-      --build-arg http_proxy=$HTTP_PROXY
-      --build-arg https_proxy=$HTTPS_PROXY
-      --target batch
-      -t $batch_docker_image .
-    - docker push $batch_docker_image
-  only:
-    - master
-    - re7
-    - dev
-  tags:
-    - docker
+    DOCKER_IMAGE_NAME: $api_docker_image
+    TARGET: api
+  extends: .build_and_push_template
 
-deploy_juritj:
+build_and_push_batch:
+  variables:
+    DOCKER_IMAGE_NAME: $batch_docker_image
+    TARGET: batch
+  extends: .build_and_push_template
+
+.deploy_template:
   stage: deploy
+  environment: $ENV
   image: alpine/ansible:2.16.1
-  variables:
-    DOLLAR: $$
   script:
-    - inventaire=$(eval "echo \$$CI_COMMIT_BRANCH")
     - mkdir /root/.ssh
-    - cat $SSH_KEY > /root/.ssh/id_rsa
-    - cat $KNOWN_HOSTS > /root/.ssh/known_hosts
+    - cat "$SSH_KEY" > /root/.ssh/id_rsa
+    - cat "$KNOWN_HOSTS" > /root/.ssh/known_hosts
     - chmod 600 /root/.ssh/id_rsa
     - chmod 600 /root/.ssh/known_hosts
-    - ansible-playbook -e juritj_api_image=$api_docker_image -e juritj_batch_image=$batch_docker_image -i ansible/inventory/$inventaire.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
-  rules:
-    - if: $CI_COMMIT_BRANCH == "master"
-      when: manual
-    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "re7"
-      when: on_success
+    - ansible-playbook -e juritj_api_image=$api_docker_image -e juritj_batch_image=$batch_docker_image -i ansible/inventory/$ENV.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
+  needs:
+    - build_and_push_api
+    - build_and_push_batch
   tags:
     - docker
+
+deploy_dev:
+  variables:
+    ENV: dev
+  extends: .deploy_template
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
+      when: on_success
   needs:
-    - build_api
-    - build_batch
+    - build_and_push_api
+
+deploy_preprod:
+  variables:
+    ENV: preprod
+  extends: .deploy_template
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+  needs:
+    - deploy_dev
+
+deploy_prod:
+  variables:
+    ENV: prod
+  extends: .deploy_template
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+  needs:
+    - deploy_preprod
