@@ -12,11 +12,9 @@ Le batch de Normalisation est un programme qui a pour objectif de récupérer, t
 
 ### Pré-requis
 
-- Installer [nvm](https://github.com/nvm-sh/nvm) afin d'avoir la version utilisée pour cette application et lancer la commande :
+L'application nécessite node ainsi qu'un bucket S3, une connexion à une API de pseudonymisation ([nlp-api](https://github.com/Cour-de-cassation/nlp-api)) et une connexion à une API de sauvegarde ([dbsder-api](https://github.com/Cour-de-cassation/dbsder-api)), n'hésitez pas à jeter un coup d'oeil à [juridependencies](https://github.com/Cour-de-cassation/juridependencies).
 
-```bash
-nvm install
-```
+La version de Node utilisée par ce projet est indiquée dans le fichier [.nvmrc](.nvmrc).
 
 ### Installation
 
@@ -51,9 +49,6 @@ Il est également possible de ne lancer que les tests d'API (`npm run test:api`)
 
 ### Variables d'environnement en local
 
-JuriTJ a besoin de deux fichiers de variables d'environnements :
-
-- Dupliquer le fichier `docker.env.example` et le rennomer `docker.env`, adapter les variables d'environnement si besoin
 - Dupliquer le fichier `.env.example` et le rennomer `.env`, adapter les variables d'environnement si besoin
 
 ### Configuration de Postman
@@ -67,28 +62,23 @@ Pour effectuer des tests Postman sur l'environnement de développement :
 
 ### Démarrer l'application en local
 
-Démarrer l'application nécessite au préalable d'initaliser les fichiers de variables d'environnement.
+Démarrer l'application nécessite au préalable d'initaliser les fichiers de variables d'environnement et de disposer des pré-requis suscités.
 
-- Pour lancer l'ensemble de JuriTJ avec Docker :
+- Pour lancer l'ensemble de JuriTJ avec Docker (hot-reload inclu) :
 
   ```bash
-  npm run docker:build
-  npm run docker:start
+  npm run start:docker
   ```
 
 - Pour lancer l'API en phase de développement et afin de disposer d'une mise à jour à chaud du serveur à chaque changement:
 
   ```bash
-  npm run docker:build
-  npm run docker:start:s3
   npm run start:dev
   ```
 
 - Pour lancer le batch de normalisation manuellement, écrire dans un terminal :
 
   ```bash
-  npm run docker:build
-  npm run docker:start:s3
   npm run batch:start
   ```
 
@@ -97,15 +87,7 @@ Démarrer l'application nécessite au préalable d'initaliser les fichiers de va
 - Autres commandes utiles :
   - Stopper tous les container :
     ```bash
-    npm run docker:stop
-    ```
-  - Stopper le container du S3 :
-    ```bash
-    npm run docker:stop:s3
-    ```
-  - Arrêter et nettoyer l'environnement docker de l'application :
-    ```bash
-    npm run docker:kill
+    npm run stop:docker
     ```
   - Lancer le lint et le formatage du code :
     ```bash
