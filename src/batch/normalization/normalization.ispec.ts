@@ -46,6 +46,10 @@ describe('Normalization', () => {
     jest
       .spyOn(transformDecisionIntegreFromWPDToText, 'transformDecisionIntegreFromWPDToText')
       .mockResolvedValue(decisionIntegre)
+
+    jest
+      .spyOn(DbSderApiGateway.prototype, 'getDecisionBySourceId')
+      .mockImplementation(() => Promise.resolve(null))
   })
 
   beforeAll(() => {
