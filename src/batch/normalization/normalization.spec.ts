@@ -54,6 +54,9 @@ describe('Normalization', () => {
       .mockImplementation(jest.fn())
     jest.spyOn(DecisionS3Repository.prototype, 'deleteDecision').mockImplementation(jest.fn())
     jest.spyOn(DbSderApiGateway.prototype, 'saveDecision').mockImplementation(jest.fn())
+    jest
+      .spyOn(DbSderApiGateway.prototype, 'getDecisionBySourceId')
+      .mockImplementation(() => Promise.resolve(null))
   })
 
   beforeAll(() => {
