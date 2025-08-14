@@ -1,0 +1,24 @@
+name: opendata
+
+services:
+  juritj-api:
+    build:
+      target: api-local
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - .:/home/node
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  juritj-batch: 
+    build:
+      target: batch-local
+    env_file:
+      - .env
+    volumes:
+      - .:/home/node
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
