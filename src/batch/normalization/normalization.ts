@@ -20,6 +20,7 @@ import { computeOccultation } from './services/computeOccultation'
 import { LabelStatus, PublishStatus, UnIdentifiedDecisionTj } from 'dbsder-api-types'
 
 import { strict as assert } from 'assert'
+import { postDecisionToNormalisation } from './repositories/gateways/jurinorm.gateway'
 
 interface Diff {
   major: Array<string>
@@ -100,7 +101,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           const diff = computeDiff(previousVersion, decisionToSave)
           if (diff.major && diff.major.length > 0) {
             // Update decision with major changes:
-            await dbSderApiGateway.saveDecision(decisionToSave)
+            await postDecisionToNormalisation(decisionToSave)
             logger.info({
               ...normalizationFormatLogs,
               msg: `Decision updated in database with major changes: ${JSON.stringify(diff.major)}`
@@ -166,7 +167,7 @@ export async function normalizationJob(): Promise<ConvertedDecisionWithMetadonne
           }
         } else {
           // Insert new decision:
-          await dbSderApiGateway.saveDecision(decisionToSave)
+          await postDecisionToNormalisation(decisionToSave)
           logger.info({ ...normalizationFormatLogs, msg: `Decision saved in database` })
         }
 
