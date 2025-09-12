@@ -253,31 +253,6 @@ function computeDiff(
   ) {
     diff.major.push('occultation.motivationOccultation')
   }
-  /*  @FIXME categoriesToOmit is changed by the DBSDER API, 
-      so it's ALWAYS different from the one computed in the normalization batch
-  if (
-    (!oldDecision.occultation.categoriesToOmit && newDecision.occultation.categoriesToOmit) ||
-    (oldDecision.occultation.categoriesToOmit && !newDecision.occultation.categoriesToOmit)
-  ) {
-    diff.major.push('occultation.categoriesToOmit')
-  } else if (oldDecision.occultation.categoriesToOmit && newDecision.occultation.categoriesToOmit) {
-    if (
-      oldDecision.occultation.categoriesToOmit.length !==
-      newDecision.occultation.categoriesToOmit.length
-    ) {
-      diff.major.push('occultation.categoriesToOmit')
-    } else {
-      oldDecision.occultation.categoriesToOmit.sort()
-      newDecision.occultation.categoriesToOmit.sort()
-      if (
-        JSON.stringify(oldDecision.occultation.categoriesToOmit) !==
-        JSON.stringify(newDecision.occultation.categoriesToOmit)
-      ) {
-        diff.major.push('occultation.categoriesToOmit')
-      }
-    }
-  }
-  */
   if (oldDecision.NACCode !== newDecision.NACCode) {
     diff.major.push('NACCode')
   }
@@ -301,6 +276,13 @@ function computeDiff(
     logger.info({
       ...normalizationFormatLogs,
       msg: `minor change to jurisdictionId: '${oldDecision.jurisdictionId}' -> '${newDecision.jurisdictionId}'`
+    })
+  }
+  if (newDecision.jurisdictionName !== oldDecision.jurisdictionName) {
+    diff.minor.push('jurisdictionName')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to jurisdictionName: '${oldDecision.jurisdictionName}' -> '${newDecision.jurisdictionName}'`
     })
   }
   if (newDecision.numeroRoleGeneral !== oldDecision.numeroRoleGeneral) {
@@ -338,6 +320,118 @@ function computeDiff(
     logger.info({
       ...normalizationFormatLogs,
       msg: `minor change to libelleEndCaseCode: '${oldDecision.libelleEndCaseCode}' -> '${newDecision.libelleEndCaseCode}'`
+    })
+  }
+  if (newDecision.registerNumber !== oldDecision.registerNumber) {
+    diff.minor.push('registerNumber')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to registerNumber: '${oldDecision.registerNumber}' -> '${newDecision.registerNumber}'`
+    })
+  }
+  if (newDecision.jurisdictionCode !== oldDecision.jurisdictionCode) {
+    diff.minor.push('jurisdictionCode')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to jurisdictionCode: '${oldDecision.jurisdictionCode}' -> '${newDecision.jurisdictionCode}'`
+    })
+  }
+  if (newDecision.solution !== oldDecision.solution) {
+    diff.minor.push('solution')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to solution: '${oldDecision.solution}' -> '${newDecision.solution}'`
+    })
+  }
+  if (newDecision.formation !== oldDecision.formation) {
+    diff.minor.push('formation')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to formation: '${oldDecision.formation}' -> '${newDecision.formation}'`
+    })
+  }
+  if (newDecision.libelleNAC !== oldDecision.libelleNAC) {
+    diff.minor.push('libelleNAC')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to libelleNAC: '${oldDecision.libelleNAC}' -> '${newDecision.libelleNAC}'`
+    })
+  }
+  if (newDecision.NPCode !== oldDecision.NPCode) {
+    diff.minor.push('NPCode')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to NPCode: '${oldDecision.NPCode}' -> '${newDecision.NPCode}'`
+    })
+  }
+  if (newDecision.libelleNatureParticuliere !== oldDecision.libelleNatureParticuliere) {
+    diff.minor.push('libelleNatureParticuliere')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to libelleNatureParticuliere: '${oldDecision.libelleNatureParticuliere}' -> '${newDecision.libelleNatureParticuliere}'`
+    })
+  }
+  if (newDecision.codeService !== oldDecision.codeService) {
+    diff.minor.push('codeService')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to codeService: '${oldDecision.codeService}' -> '${newDecision.codeService}'`
+    })
+  }
+  if (newDecision.libelleService !== oldDecision.libelleService) {
+    diff.minor.push('libelleService')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to libelleService: '${oldDecision.libelleService}' -> '${newDecision.libelleService}'`
+    })
+  }
+  if (newDecision.indicateurQPC !== oldDecision.indicateurQPC) {
+    diff.minor.push('indicateurQPC')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to indicateurQPC: '${oldDecision.indicateurQPC}' -> '${newDecision.indicateurQPC}'`
+    })
+  }
+  if (newDecision.matiereDeterminee !== oldDecision.matiereDeterminee) {
+    diff.minor.push('matiereDeterminee')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to matiereDeterminee: '${oldDecision.matiereDeterminee}' -> '${newDecision.matiereDeterminee}'`
+    })
+  }
+  if (newDecision.pourvoiCourDeCassation !== oldDecision.pourvoiCourDeCassation) {
+    diff.minor.push('pourvoiCourDeCassation')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to pourvoiCourDeCassation: '${oldDecision.pourvoiCourDeCassation}' -> '${newDecision.pourvoiCourDeCassation}'`
+    })
+  }
+  if (newDecision.pourvoiLocal !== oldDecision.pourvoiLocal) {
+    diff.minor.push('pourvoiLocal')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to pourvoiLocal: '${oldDecision.pourvoiLocal}' -> '${newDecision.pourvoiLocal}'`
+    })
+  }
+  if (newDecision.sommaire !== oldDecision.sommaire) {
+    diff.minor.push('sommaire')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to sommaire: '${oldDecision.sommaire}' -> '${newDecision.sommaire}'`
+    })
+  }
+  if (newDecision.president !== oldDecision.president) {
+    diff.minor.push('president')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to president: '${oldDecision.president}' -> '${newDecision.president}'`
+    })
+  }
+  if (newDecision.decisionAssociee !== oldDecision.decisionAssociee) {
+    diff.minor.push('decisionAssociee')
+    logger.info({
+      ...normalizationFormatLogs,
+      msg: `minor change to decisionAssociee: '${oldDecision.decisionAssociee}' -> '${newDecision.decisionAssociee}'`
     })
   }
   diff.major.sort()
