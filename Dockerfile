@@ -49,9 +49,8 @@ RUN apk add cmd:wpd2text
 
 USER node
 COPY --from=prod --chown=node:node /home/node/dist/batch ./dist/batch
-COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
 
-ENTRYPOINT ["/bin/sh", "batch_docker_entrypoint.sh"]
+CMD ["node", "dist/batch/normalization"]
 
 # --- Base final image with api dist content --- #
 FROM shared as api
@@ -70,12 +69,9 @@ ENV NODE_ENV production
 USER node
 WORKDIR /home/node
 
-ENTRYPOINT ["/bin/sh", "batch_docker_entrypoint.sh"]
 COPY --from=prod --chown=node:node /home/node/package*.json ./
 COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=prod --chown=node:node /home/node/dist ./dist
-COPY --chown=node:node batch_docker_entrypoint.sh batch_docker_entrypoint.sh
-RUN chmod +x batch_docker_entrypoint.sh
 
 USER root
 RUN apt update
