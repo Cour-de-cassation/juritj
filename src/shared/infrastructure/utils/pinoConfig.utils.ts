@@ -3,7 +3,7 @@ import { ServerResponse } from 'http'
 import { IncomingMessage } from 'http'
 import { LoggerModule } from 'nestjs-pino'
 import { ReqId } from 'pino-http'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 const pinoPrettyConf = {
   target: 'pino-pretty',
@@ -54,7 +54,7 @@ export const configureLoggerModule = (): DynamicModule =>
       },
       transport: process.env.NODE_ENV === 'local' ? pinoPrettyConf : undefined,
       genReqId: (request: IncomingMessage, response: ServerResponse): ReqId => {
-        const correlationId = request.headers['x-correlation-id'] ?? uuid.v4()
+        const correlationId = request.headers['x-correlation-id'] ?? uuidv4()
         request.headers['x-correlation-id'] = correlationId
         response.setHeader('x-correlation-id', correlationId)
         return correlationId
