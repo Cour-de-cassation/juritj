@@ -21,7 +21,7 @@ async function startJob() {
     operationName: 'startJob',
     msg: 'Starting normalization...'
   }
-  new CronJob({
+  CronJob.from({
     cronTime: process.env.NORMALIZATION_BATCH_SCHEDULE || CRON_EVERY_HOUR,
     async onTick() {
       if (isJobCompleted) {

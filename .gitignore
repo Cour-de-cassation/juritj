@@ -43,7 +43,3 @@ docker.env
 
 # Wordperfect Documents
 *.wpd
-
-# Secrets
-/secrets/
-!/secrets/dev/generate-keys.sh
