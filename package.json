@@ -29,7 +29,7 @@
     "fix": "eslint \"src/**/*.ts\" --fix && prettier \"src/**/*.ts\" --write"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.890.0",
+    "@aws-sdk/client-s3": "3.893.0",
     "@nestjs/axios": "4.0.1",
     "@nestjs/common": "11.1.6",
     "@nestjs/config": "4.0.2",
