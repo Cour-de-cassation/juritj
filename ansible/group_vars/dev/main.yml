@@ -7,3 +7,5 @@ minio_root_password: "{{ vault_minio_root_password }}"
 
 commissioning_date: "2023-01-01"
 master_node_name: "judilibre-dev"
+
+normalization_batch_schedule: "* * 31 2 *" # 31 Février (jamais exécuté)
