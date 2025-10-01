@@ -50,4 +50,4 @@ async function startJob() {
   })
 }
 
-// startJob()
+startJob()
