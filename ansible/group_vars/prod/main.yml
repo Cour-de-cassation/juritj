@@ -5,5 +5,4 @@ dbsder_api_key: "{{ vault_dbsder_api_key }}"
 doc_password: "{{ vault_doc_password }}"
 minio_root_password: "{{ vault_minio_root_password }}"
 
-commissioning_date: "2023-12-15"
 master_node_name: "jud7vcorc001"

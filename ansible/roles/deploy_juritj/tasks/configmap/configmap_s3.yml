@@ -16,5 +16,4 @@
         S3_URL: "{{ s3_url }}"
         S3_REGION: "{{ s3_region }}"
         S3_BUCKET_NAME_RAW: "{{ s3_bucket_name }}"
-        S3_BUCKET_NAME_NORMALIZED: "{{ s3_bucket_name_normalized }}"
 ...

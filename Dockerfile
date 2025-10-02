@@ -29,9 +29,9 @@ RUN npm run build && npm prune --production
 
 
 # --- Base final image with only shared dist content --- #
-FROM node:24-alpine as shared
+FROM node:24-alpine AS shared
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 USER node
 WORKDIR /home/node
@@ -41,19 +41,8 @@ COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=prod --chown=node:node /home/node/dist/shared ./dist/shared
 COPY --from=prod --chown=node:node /home/node/dist/scripts ./dist/scripts
 
-# --- Base final image with batch dist content --- #
-FROM shared as batch 
-
-USER root
-RUN apk add cmd:wpd2text
-
-USER node
-COPY --from=prod --chown=node:node /home/node/dist/batch ./dist/batch
-
-CMD ["node", "dist/batch/normalization"]
-
 # --- Base final image with api dist content --- #
-FROM shared as api
+FROM shared AS api
 
 USER node
 COPY --from=prod --chown=node:node /home/node/dist/api ./dist/api
@@ -62,9 +51,9 @@ CMD ["node", "dist/api/main"]
 
 
 # --- DEBUG / TESTING PURPOSE --- #
-FROM node:24-bullseye as debug 
+FROM node:24-bullseye AS debug 
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 USER node
 WORKDIR /home/node
@@ -83,9 +72,9 @@ CMD ["node", "dist/api/main"]
 # --- ONLY USED TO LAUNCH DOCKER IN LOCAL WITH HOT-RELOAD: ---#
 
 # --- Base image with only shared content --- #
-FROM node:24-alpine as shared-local
+FROM node:24-alpine AS shared-local
 
-ENV NODE_ENV local
+ENV NODE_ENV=local
 
 USER root
 RUN apk add cmd:wpd2text
@@ -96,15 +85,8 @@ WORKDIR /home/node
 COPY --chown=node:node . .
 RUN npm i
 
-# --- Base image with batch content --- #
-FROM shared-local as batch-local
-
-USER node
-
-CMD ["npm", "run", "batch:start:watch"]
-
 # --- Base image with api content --- #
-FROM shared-local as api-local
+FROM shared-local AS api-local
 
 USER node
 

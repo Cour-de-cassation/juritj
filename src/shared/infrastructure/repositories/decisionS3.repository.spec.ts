@@ -40,23 +40,6 @@ describe('DecisionS3Repository', () => {
         .rejects.toThrow(BucketError)
     })
 
-    it('saves a normalized decision on S3', async () => {
-      // GIVEN
-      const expectedReqParams = {
-        Body: requestS3DtoJson,
-        Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,
-        Key: filename
-      }
-
-      mockS3.on(PutObjectCommand).resolves({})
-
-      // WHEN
-      await repository.saveDecisionNormalisee(requestS3DtoJson, filename)
-
-      // THEN
-      expect(mockS3).toHaveReceivedCommandWith(PutObjectCommand, expectedReqParams)
-    })
-
     it('saves an integre decision on S3', async () => {
       // GIVEN
       const expectedReqParams = {

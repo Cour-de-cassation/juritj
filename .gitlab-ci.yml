@@ -4,7 +4,6 @@ services:
 
 variables:
   api_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/api:$CI_COMMIT_SHORT_SHA'
-  batch_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/batch:$CI_COMMIT_SHORT_SHA'
 
 stages:
   - test
@@ -63,12 +62,6 @@ build_and_push_api:
     TARGET: api
   extends: .build_and_push_template
 
-build_and_push_batch:
-  variables:
-    DOCKER_IMAGE_NAME: $batch_docker_image
-    TARGET: batch
-  extends: .build_and_push_template
-
 .deploy_template:
   stage: deploy
   environment: $ENV
@@ -79,10 +72,9 @@ build_and_push_batch:
     - cat "$KNOWN_HOSTS" > /root/.ssh/known_hosts
     - chmod 600 /root/.ssh/id_rsa
     - chmod 600 /root/.ssh/known_hosts
-    - ansible-playbook -e juritj_api_image=$api_docker_image -e juritj_batch_image=$batch_docker_image -i ansible/inventory/$ENV.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
+    - ansible-playbook -e juritj_api_image=$api_docker_image -i ansible/inventory/$ENV.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
   needs:
     - build_and_push_api
-    - build_and_push_batch
   tags:
     - docker
 

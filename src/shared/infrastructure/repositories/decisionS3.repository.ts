@@ -44,15 +44,6 @@ export class DecisionS3Repository implements DecisionRepository {
     await this.saveDecision(reqParams)
   }
 
-  async saveDecisionNormalisee(requestToS3Dto: string, filename: string) {
-    const reqParams = {
-      Body: requestToS3Dto,
-      Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,
-      Key: filename
-    }
-    await this.saveDecision(reqParams)
-  }
-
   async saveDecision(reqParams): Promise<void> {
     try {
       await this.s3Client.send(new PutObjectCommand(reqParams))
@@ -88,26 +79,6 @@ export class DecisionS3Repository implements DecisionRepository {
       return JSON.parse(stringifiedDecision)
     } catch (error) {
       this.logger.error({ operationName: 'getDecisionByFilename', msg: error.message, data: error })
-      throw new BucketError(error)
-    }
-  }
-
-  async getNormalizedDecisionByFilename(filename: string): Promise<CollectDto> {
-    const reqParams = {
-      Bucket: process.env.S3_BUCKET_NAME_NORMALIZED,
-      Key: filename
-    }
-
-    try {
-      const decisionFromS3 = await this.s3Client.send(new GetObjectCommand(reqParams))
-      const stringifiedDecision = await decisionFromS3.Body?.transformToString()
-      return JSON.parse(stringifiedDecision)
-    } catch (error) {
-      this.logger.error({
-        operationName: 'getNormalizedDecisionByFilename',
-        msg: error.message,
-        data: error
-      })
       throw new BucketError(error)
     }
   }
