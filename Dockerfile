@@ -39,7 +39,6 @@ WORKDIR /home/node
 COPY --from=prod --chown=node:node /home/node/package*.json ./
 COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=prod --chown=node:node /home/node/dist/shared ./dist/shared
-COPY --from=prod --chown=node:node /home/node/dist/scripts ./dist/scripts
 
 # --- Base final image with api dist content --- #
 FROM shared AS api
