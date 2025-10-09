@@ -6,3 +6,4 @@ doc_password: "{{ vault_doc_password }}"
 minio_root_password: "{{ vault_minio_root_password }}"
 
 master_node_name: "jud7vcorc001"
+file_db_url: "{{ vault_file_db_url }}"
