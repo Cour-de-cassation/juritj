@@ -36,7 +36,7 @@ export class SaveDecisionUsecase {
     await this.rawFilesRepository.createFileInformation({
       path: decisionFileName,
       events: [{ status: 'created', date: new Date() }],
-      metadonnees
+      metadatas: metadonnees
     })
     return decisionFileName
   }

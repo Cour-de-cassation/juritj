@@ -8,6 +8,6 @@ export interface RawFilesRepository {
   createFileInformation(file: {
     path: string
     events: [{ status: 'created'; date: Date }]
-    metadonnees: MetadonneesDto
+    metadatas: MetadonneesDto
   }): Promise<unknown>
 }
