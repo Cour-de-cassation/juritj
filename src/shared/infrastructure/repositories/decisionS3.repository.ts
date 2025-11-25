@@ -45,7 +45,7 @@ export class DecisionS3Repository implements DecisionRepository {
     await this.saveDecision(reqParams)
   }
 
-  async saveDecision(reqParams): Promise<void> {
+  async saveDecision(reqParams: PutObjectCommand): Promise<void> {
     try {
       await this.s3Client.send(reqParams)
     } catch (error) {

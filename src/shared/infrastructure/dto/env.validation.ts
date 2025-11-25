@@ -17,6 +17,6 @@ export const envValidationConfig = {
         version: ['uuidv4'],
         separator: true
       }),
-    FILE_DB_URL: Joi.string().required() 
+    FILE_DB_URL: Joi.string().required()
   })
 }

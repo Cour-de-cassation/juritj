@@ -88,7 +88,10 @@ export class DecisionsController {
 
     const routePath = request.method + ' ' + request.path
 
-    const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository(this.logger), new DecisionMongoRepository())
+    const decisionUseCase = new SaveDecisionUsecase(
+      new DecisionS3Repository(this.logger),
+      new DecisionMongoRepository()
+    )
     const formatLogs: LogsFormat = {
       operationName: 'collectDecisions',
       httpMethod: request.method,

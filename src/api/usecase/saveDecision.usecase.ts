@@ -27,8 +27,6 @@ export class SaveDecisionUsecase {
     decisionIntegre: Express.Multer.File,
     metadonnees: MetadonneesDto
   ): Promise<string> {
-    const uuid = uuidv4()
-
     const wpdFileExtension = '.wpd'
     const decisionFileName = uuidv4() + wpdFileExtension
 
