@@ -1,9 +1,15 @@
-import { DecisionRepository, RawFilesRepository } from '../domain/decisions/repositories/decision.repository'
+import {
+  DecisionRepository,
+  RawFilesRepository
+} from '../domain/decisions/repositories/decision.repository'
 import { v4 as uuidv4 } from 'uuid'
 import { MetadonneesDto } from '../../shared/infrastructure/dto/metadonnees.dto'
 
 export class SaveDecisionUsecase {
-  constructor(private decisionsRepository: DecisionRepository, private rawFilesRepository: RawFilesRepository ) {}
+  constructor(
+    private decisionsRepository: DecisionRepository,
+    private rawFilesRepository: RawFilesRepository
+  ) {}
 
   /**
    * Pour le SaveDecisionUseCase, nous choisissons de déroger à une règle fondamentale de la Clean Archi :
@@ -23,23 +29,17 @@ export class SaveDecisionUsecase {
   ): Promise<string> {
     const uuid = uuidv4()
 
-    const bucketFileExtension = '.json'
-    const bucketFileName = uuidv4() + bucketFileExtension
-
     const wpdFileExtension = '.wpd'
-    decisionIntegre.originalname = uuid + wpdFileExtension
+    const decisionFileName = uuidv4() + wpdFileExtension
 
-    const requestDto = {
-      decisionIntegre,
-      metadonnees
-    }
+    decisionIntegre.originalname = decisionFileName
 
-    await this.decisionsRepository.saveDecisionIntegre(JSON.stringify(requestDto), bucketFileName)
-    await this.rawFilesRepository.createFileInformation({ 
-      path: bucketFileName, 
-      events: [{ status: "created", date: new Date()}],
+    await this.decisionsRepository.saveDecisionIntegre(decisionIntegre)
+    await this.rawFilesRepository.createFileInformation({
+      path: decisionFileName,
+      events: [{ status: 'created', date: new Date() }],
       metadonnees
     })
-    return bucketFileName
+    return decisionFileName
   }
 }
