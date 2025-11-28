@@ -7,5 +7,6 @@ process.env = {
   S3_REGION: 's3-region',
   S3_BUCKET_NAME_RAW: 'fake-raw-bucket-name',
   DBSDER_API_URL: 'http://localhost:3000',
-  DBSDER_API_KEY: '9ad44ab5-3416-4989-90a6-3cfe972175de'
+  DBSDER_API_KEY: '9ad44ab5-3416-4989-90a6-3cfe972175de',
+  FILE_DB_URL: 'mongodb://localhost:55433/rawfiles'
 }
