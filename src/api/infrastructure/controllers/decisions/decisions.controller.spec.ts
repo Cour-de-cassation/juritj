@@ -1,6 +1,15 @@
 import { Readable } from 'stream'
 import { isWordperfectFileType } from './decisions.controller'
 
+jest.mock('../../../../shared/infrastructure/repositories/decisionMongo.repository', () => {
+  return {
+    DecisionMongoRepository: jest.fn().mockImplementation(() => ({
+      createFileInformation: jest.fn(),
+      constructor: jest.fn()
+    }))
+  }
+})
+
 describe('Decision Controller', () => {
   describe('isWordperfectFileType', () => {
     const file: Express.Multer.File = {
