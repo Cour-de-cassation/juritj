@@ -7,7 +7,7 @@ bucket_service: "bucket-service"
 juritj_private_name: "juritj.judilibre-prive.local"
 
 doc_login: "root"
-s3_url: "http://{{ bucket_service }}:9000"
+s3_url: "http://bucket-service.bucket.svc.cluster.local:9000"
 s3_region: "eu-west-paris-1"
 s3_bucket_name: "juritj-bucket"
 dbsder_api_url: "http://{{ api_service }}.dbsder:3000"
