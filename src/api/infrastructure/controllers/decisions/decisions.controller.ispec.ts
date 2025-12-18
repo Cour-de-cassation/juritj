@@ -9,9 +9,11 @@ import { RequestLoggerInterceptor } from '../../interceptors/request-logger.inte
 
 jest.mock('../../../../shared/infrastructure/repositories/decisionMongo.repository', () => {
   return {
-    DecisionMongoRepository: jest.fn().mockImplementation(() => ({
-      createFileInformation: jest.fn()
-    }))
+    DecisionMongoRepository: jest.fn().mockImplementation(() => {
+      return {
+        createFileInformation: jest.fn()
+      }
+    })
   }
 })
 

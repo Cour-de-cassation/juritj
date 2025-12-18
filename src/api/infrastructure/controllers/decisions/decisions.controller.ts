@@ -48,12 +48,11 @@ export interface CollecteDecisionResponse {
   body: string
 }
 
-const decisionMongoRepository = new DecisionMongoRepository()
-
 @ApiTags('Collect')
 @Controller('decisions')
 export class DecisionsController {
   private readonly logger = new Logger()
+  private readonly decisionMongoRepository = new DecisionMongoRepository()
 
   @Post()
   @ApiConsumes('multipart/form-data')
@@ -92,7 +91,7 @@ export class DecisionsController {
 
     const decisionUseCase = new SaveDecisionUsecase(
       new DecisionS3Repository(this.logger),
-      decisionMongoRepository
+      this.decisionMongoRepository
     )
     const formatLogs: LogsFormat = {
       operationName: 'collectDecisions',
