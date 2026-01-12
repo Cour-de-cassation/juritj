@@ -32,12 +32,4 @@
                       name: "api-config"
                   - secretRef:
                       name: "api-secret"
-                  - configMapRef:
-                      name: "bucket-config"
-                  - secretRef:
-                      name: "bucket-secret"
-                  - configMapRef:
-                      name: "s3-config"
-                  - secretRef:
-                      name: "s3-secret"
 ...
