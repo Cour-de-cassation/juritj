@@ -3,7 +3,5 @@ juritj_namespace: juritj
 juritj_application: juritj
 
 api_app_id: api
-bucket_app_id: bucket
 
 api_stripprefix: api-stripprefix
-bucket_stripprefix: bucket-stripprefix

@@ -3,7 +3,6 @@ s3_access_key: "{{ vault_s3_access_key }}"
 s3_secret_key: "{{ vault_s3_secret_key }}"
 dbsder_api_key: "{{ vault_dbsder_api_key }}"
 doc_password: "{{ vault_doc_password }}"
-minio_root_password: "{{ vault_minio_root_password }}"
 
 master_node_name: "jud7vcorc901"
 file_db_url: "{{ vault_file_db_url }}"
