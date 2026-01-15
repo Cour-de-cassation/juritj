@@ -34,19 +34,20 @@ export class DecisionS3Repository implements DecisionRepository {
     this.logger = logger
   }
 
-  async saveDecisionIntegre(requestToS3Dto: string, filename: string) {
-    const reqParams = {
-      Body: requestToS3Dto,
+  async saveDecisionIntegre(decisionIntegre: Express.Multer.File) {
+    const reqParams: PutObjectCommand = new PutObjectCommand({
+      Body: decisionIntegre.buffer,
       Bucket: process.env.S3_BUCKET_NAME_RAW,
-      Key: filename
-    }
+      Key: decisionIntegre.originalname,
+      ContentType: decisionIntegre.mimetype
+    })
 
     await this.saveDecision(reqParams)
   }
 
-  async saveDecision(reqParams): Promise<void> {
+  async saveDecision(reqParams: PutObjectCommand): Promise<void> {
     try {
-      await this.s3Client.send(new PutObjectCommand(reqParams))
+      await this.s3Client.send(reqParams)
     } catch (error) {
       this.logger.error({ operationName: 'saveDecision', msg: error.message, data: error })
       throw new BucketError(error)

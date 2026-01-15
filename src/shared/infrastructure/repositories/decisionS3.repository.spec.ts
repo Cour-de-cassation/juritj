@@ -25,8 +25,19 @@ describe('DecisionS3Repository', () => {
   })
 
   describe('saveDecision', () => {
-    const requestS3Dto = { decisionIntegre: 'decision', metadonnees: 'metadonnees' }
-    const requestS3DtoJson = JSON.stringify(requestS3Dto)
+    const decisionContent = 'decision'
+    const decisionIntegre: Express.Multer.File = {
+      fieldname: 'file',
+      originalname: filename,
+      encoding: '7bit',
+      mimetype: 'application/wordperfect',
+      size: Buffer.from(decisionContent).length,
+      buffer: Buffer.from(decisionContent),
+      destination: '',
+      filename: filename,
+      path: '',
+      stream: new Readable()
+    }
 
     it('throws error when S3 called failed', async () => {
       // GIVEN
@@ -34,7 +45,7 @@ describe('DecisionS3Repository', () => {
 
       await expect(
         // WHEN
-        repository.saveDecision(requestS3DtoJson)
+        repository.saveDecisionIntegre(decisionIntegre)
       )
         // THEN
         .rejects.toThrow(BucketError)
@@ -43,15 +54,16 @@ describe('DecisionS3Repository', () => {
     it('saves an integre decision on S3', async () => {
       // GIVEN
       const expectedReqParams = {
-        Body: requestS3DtoJson,
+        Body: decisionIntegre.buffer,
         Bucket: process.env.S3_BUCKET_NAME_RAW,
-        Key: filename
+        Key: filename,
+        ContentType: decisionIntegre.mimetype
       }
 
       mockS3.on(PutObjectCommand).resolves({})
 
       // WHEN
-      await repository.saveDecisionIntegre(requestS3DtoJson, filename)
+      await repository.saveDecisionIntegre(decisionIntegre)
 
       // THEN
       expect(mockS3).toHaveReceivedCommandWith(PutObjectCommand, expectedReqParams)

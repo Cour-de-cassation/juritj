@@ -7,6 +7,16 @@ import { AppModule } from '../../../app.module'
 import { MockUtils } from '../../../../shared/infrastructure/utils/mock.utils'
 import { RequestLoggerInterceptor } from '../../interceptors/request-logger.interceptor'
 
+jest.mock('../../../../shared/infrastructure/repositories/decisionMongo.repository', () => {
+  return {
+    DecisionMongoRepository: jest.fn().mockImplementation(() => {
+      return {
+        createFileInformation: jest.fn()
+      }
+    })
+  }
+})
+
 describe('Decisions Controller', () => {
   let app: INestApplication
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)

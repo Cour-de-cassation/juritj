@@ -25,6 +25,7 @@ import { SaveDecisionUsecase } from '../../../../api/usecase/saveDecision.usecas
 import { LoggingInterceptor } from '../../interceptors/logging.interceptor'
 import { StringToJsonPipe } from '../../pipes/stringToJson.pipe'
 import { ValidateDtoPipe } from '../../pipes/validateDto.pipe'
+import { DecisionMongoRepository } from '../../../../shared/infrastructure/repositories/decisionMongo.repository'
 import { DecisionS3Repository } from '../../../../shared/infrastructure/repositories/decisionS3.repository'
 import { CollectDto } from '../../../../shared/infrastructure/dto/collect.dto'
 import { MetadonneesDto } from '../../../../shared/infrastructure/dto/metadonnees.dto'
@@ -51,6 +52,7 @@ export interface CollecteDecisionResponse {
 @Controller('decisions')
 export class DecisionsController {
   private readonly logger = new Logger()
+  private readonly decisionMongoRepository = new DecisionMongoRepository()
 
   @Post()
   @ApiConsumes('multipart/form-data')
@@ -87,7 +89,10 @@ export class DecisionsController {
 
     const routePath = request.method + ' ' + request.path
 
-    const decisionUseCase = new SaveDecisionUsecase(new DecisionS3Repository(this.logger))
+    const decisionUseCase = new SaveDecisionUsecase(
+      new DecisionS3Repository(this.logger),
+      this.decisionMongoRepository
+    )
     const formatLogs: LogsFormat = {
       operationName: 'collectDecisions',
       httpMethod: request.method,

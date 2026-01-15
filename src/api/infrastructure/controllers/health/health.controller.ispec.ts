@@ -6,6 +6,16 @@ import { mockClient, AwsClientStub } from 'aws-sdk-client-mock'
 import { AppModule } from '../../../app.module'
 import { RequestLoggerInterceptor } from '../../interceptors/request-logger.interceptor'
 
+jest.mock('../../../../shared/infrastructure/repositories/decisionMongo.repository', () => {
+  return {
+    DecisionMongoRepository: jest.fn().mockImplementation(() => {
+      return {
+        createFileInformation: jest.fn()
+      }
+    })
+  }
+})
+
 describe('HealthController', () => {
   let app: INestApplication
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)

@@ -5,3 +5,4 @@ dbsder_api_key: "{{ vault_dbsder_api_key }}"
 doc_password: "{{ vault_doc_password }}"
 
 master_node_name: "judilibre-dev"
+file_db_url: "{{ vault_file_db_url }}"
