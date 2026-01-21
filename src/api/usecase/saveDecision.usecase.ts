@@ -30,6 +30,10 @@ export class SaveDecisionUsecase {
     const wpdFileExtension = '.wpd'
     const decisionFileName = uuidv4() + wpdFileExtension
 
+    // On ne sait pas quel est l'utilisation de la réponse par les utilisateurs
+    // on conserve donc pour l'instant la réponse "historique" en .json
+    const fileNameToReturn = decisionFileName.replace('.wpd', '.json')
+
     decisionIntegre.originalname = decisionFileName
 
     await this.decisionsRepository.saveDecisionIntegre(decisionIntegre)
@@ -38,6 +42,6 @@ export class SaveDecisionUsecase {
       events: [{ status: 'created', date: new Date() }],
       metadatas: metadonnees
     })
-    return decisionFileName
+    return fileNameToReturn
   }
 }
