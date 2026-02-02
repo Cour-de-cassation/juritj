@@ -75,12 +75,12 @@ export class DecisionAssocieeDto {
 
   @ApiProperty({
     description:
-      'Identifiant de la juridiction émettrice propre au système d’information originel pour la décision associée. Au format ^TJ[0-9]{5}$',
+      'Identifiant de la juridiction émettrice propre au système d’information originel pour la décision associée. Au format ^TJ[0-9A-Z]{5}$',
     type: String,
     example: metadonneesDtoExample.decisionAssociee.idJuridiction
   })
   @IsString()
-  @Matches('^TJ[0-9]{5}$')
+  @Matches('^TJ[0-9A-Z]{5}$')
   idJuridiction: string
 
   @ApiProperty({
@@ -160,12 +160,12 @@ export class MetadonneesDto {
 
   @ApiProperty({
     description:
-      'Identifiant de la juridiction émettrice propre au système d’information originel. Au format ^TJ[0-9]{5}$',
+      'Identifiant de la juridiction émettrice propre au système d’information originel. Au format ^TJ[0-9A-Z]{5}$',
     type: String,
     example: metadonneesDtoExample.idJuridiction
   })
   @IsString()
-  @Matches('^TJ[0-9]{5}$')
+  @Matches('^TJ[0-9A-Z]{5}$')
   idJuridiction: string
 
   @ApiPropertyOptional({
