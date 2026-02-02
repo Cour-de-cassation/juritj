@@ -86,6 +86,16 @@ describe('Validate MetadonneeDTO format', () => {
         // THEN
         .rejects.toThrow(BadPropertiesException)
     })
+
+    it('passes when it is from Corsica', async () => {
+      // GIVEN
+      const corsicaIdJuridiction = 'TJ2B033'
+      const validMetadonnee = { ...someValidMetaDonneeDto, idJuridiction: corsicaIdJuridiction }
+      // WHEN
+      const response = await target.transform(validMetadonnee, metadata)
+      // THEN
+      expect(response).toEqual(validMetadonnee)
+    })
   })
 
   describe('codeJuridiction property', () => {
