@@ -1,109 +1,13 @@
-image: docker:20.10.22
-services:
-  - docker:20.10.22-dind
+# Template de .gitlab-ci.yml qui provient d'ops-automation
+include:
+  - project: 'cour-de-cassation/ops-automation'
+    file: 'template/gitlab-ci-template.yml'
+    ref: 'master'
 
+# Configuration spécifique a juritj
 variables:
-  api_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/api:$CI_COMMIT_SHORT_SHA'
+  DOCKER_BUILD_ARGS: '--target=api'
 
 stages:
-  - test
   - build
   - deploy
-
-test:
-  stage: test
-  variables:
-    HTTP_PROXY: $HTTP_PROXY_DEV
-    HTTPS_PROXY: $HTTPS_PROXY_DEV
-  script:
-    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
-    - docker build
-      --build-arg http_proxy=$HTTP_PROXY
-      --build-arg https_proxy=$HTTPS_PROXY
-      --target test
-      -t juritj-test .
-    - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run format
-    - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm run lint
-    - docker run -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY juritj-test npm test
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-  tags:
-    - docker
-
-.build_and_push_template:
-  stage: build
-  variables:
-    HTTP_PROXY: $HTTP_PROXY_DEV
-    HTTPS_PROXY: $HTTPS_PROXY_DEV
-  script:
-    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
-
-    # To avoid rebuild existing image when addind tag to a commit
-    - |
-      if docker pull "$DOCKER_IMAGE_NAME"; then
-        echo "Docker image $DOCKER_IMAGE_NAME already exist, skiping build and push."
-        exit 0
-      fi
-    - docker build
-      --build-arg http_proxy=$HTTP_PROXY
-      --build-arg https_proxy=$HTTPS_PROXY
-      --target $TARGET
-      -t $DOCKER_IMAGE_NAME .
-    - docker push $DOCKER_IMAGE_NAME
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-    - if: '$CI_COMMIT_TAG'
-  tags:
-    - docker
-
-build_and_push_api:
-  variables:
-    DOCKER_IMAGE_NAME: $api_docker_image
-    TARGET: api
-  extends: .build_and_push_template
-
-.deploy_template:
-  stage: deploy
-  environment: $ENV
-  image: alpine/ansible:2.16.1
-  script:
-    - mkdir /root/.ssh
-    - cat "$SSH_KEY" > /root/.ssh/id_rsa
-    - cat "$KNOWN_HOSTS" > /root/.ssh/known_hosts
-    - chmod 600 /root/.ssh/id_rsa
-    - chmod 600 /root/.ssh/known_hosts
-    - ansible-playbook -e juritj_api_image=$api_docker_image -i ansible/inventory/$ENV.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
-  needs:
-    - build_and_push_api
-  tags:
-    - docker
-
-deploy_dev:
-  variables:
-    ENV: dev
-  extends: .deploy_template
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
-      when: on_success
-  needs:
-    - build_and_push_api
-
-deploy_preprod:
-  variables:
-    ENV: preprod
-  extends: .deploy_template
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      when: manual
-  needs:
-    - deploy_dev
-
-deploy_prod:
-  variables:
-    ENV: prod
-  extends: .deploy_template
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      when: manual
-  needs:
-    - deploy_preprod

@@ -8,28 +8,28 @@
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: "{{ api_app_id }}-deployment"
-        namespace: "{{ juritj_namespace }}"
+        name: '{{ api_app_id }}-deployment'
+        namespace: '{{ juritj_namespace }}'
         labels:
           app:
       spec:
         replicas: 1
         selector:
           matchLabels:
-            app: "{{ api_app_id }}"
+            app: '{{ api_app_id }}'
         template:
           metadata:
             labels:
-              app: "{{ api_app_id }}"
+              app: '{{ api_app_id }}'
           spec:
             containers:
-              - name: "{{ api_app_id }}"
-                image: "{{ juritj_api_image }}"
+              - name: '{{ api_app_id }}'
+                image: '{{ app_image }}'
                 ports:
                   - containerPort: 3000
                 envFrom:
                   - configMapRef:
-                      name: "api-config"
+                      name: 'api-config'
                   - secretRef:
-                      name: "api-secret"
+                      name: 'api-secret'
 ...
