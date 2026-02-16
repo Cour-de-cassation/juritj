@@ -49,7 +49,7 @@ build_and_push_dev:
   variables:
     DOCKER_IMAGE_NAME: $dev_docker_image
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
 
 build_and_push_preprod:
   extends: .build_and_push_template
