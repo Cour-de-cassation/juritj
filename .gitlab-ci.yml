@@ -1,116 +1,16 @@
-image: docker:20.10.22
-services:
-  - docker:20.10.22-dind
+# Template de .gitlab-ci.yml qui provient d'ops-automation
+include:
+  - project: 'cour-de-cassation/ops-automation'
+    file: 'template/gitlab-ci-template.yml'
+    ref: 'master'
 
+# Configuration spécifique a juritj
 variables:
-  dev_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/dev:$CI_COMMIT_SHORT_SHA'
-  preprod_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/preprod:$CI_COMMIT_SHORT_SHA'
-  prod_docker_image: '$CI_REGISTRY/cour-de-cassation/juritj/prod:$CI_COMMIT_SHORT_SHA'
+  ANSIBLE_PLAYBOOK_PATH: "ansible/deploy_juritj.yml"
+  ANSIBLE_INVENTORY_PATH: "ansible/inventory"
+  DOCKER_BUILD_ARGS: "--target=api"
+  ANSIBLE_IMAGE_NAME: "juritj_api_image"
 
 stages:
   - build
   - deploy
-
-.build_and_push_template:
-  stage: build
-  variables:
-    HTTP_PROXY: $HTTP_PROXY_DEV
-    HTTPS_PROXY: $HTTPS_PROXY_DEV
-  script:
-    - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
-
-    # Check if image exists for this or another environment
-    - |
-      for env_image in "$dev_docker_image" "$preprod_docker_image" "$prod_docker_image"; do
-        if docker pull "$env_image" 2>/dev/null; then
-          if [ "$env_image" = "$DOCKER_IMAGE_NAME" ]; then
-            echo "Docker image $DOCKER_IMAGE_NAME already exists, skipping build and push."
-            exit 0
-          else
-            echo "Found existing image $env_image, retagging to $DOCKER_IMAGE_NAME"
-            docker tag "$env_image" "$DOCKER_IMAGE_NAME"
-            docker push "$DOCKER_IMAGE_NAME"
-            exit 0
-          fi
-        fi
-      done
-
-    # Build the image if it doesn't exist
-    - docker build
-      --build-arg http_proxy=$HTTP_PROXY
-      --build-arg https_proxy=$HTTPS_PROXY
-      --target api
-      -t $DOCKER_IMAGE_NAME .
-    - docker push $DOCKER_IMAGE_NAME
-  tags:
-    - docker
-
-build_and_push_dev:
-  extends: .build_and_push_template
-  variables:
-    DOCKER_IMAGE_NAME: $dev_docker_image
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
-
-build_and_push_preprod:
-  extends: .build_and_push_template
-  variables:
-    DOCKER_IMAGE_NAME: $preprod_docker_image
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      when: manual
-
-build_and_push_prod:
-  extends: .build_and_push_template
-  variables:
-    DOCKER_IMAGE_NAME: $prod_docker_image
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      when: manual
-
-.deploy_template:
-  stage: deploy
-  environment: $ENV
-  image: alpine/ansible:2.16.1
-  script:
-    - mkdir /root/.ssh
-    - cat "$SSH_KEY" > /root/.ssh/id_rsa
-    - cat "$KNOWN_HOSTS" > /root/.ssh/known_hosts
-    - chmod 600 /root/.ssh/id_rsa
-    - chmod 600 /root/.ssh/known_hosts
-    - ansible-playbook -e juritj_api_image=$JURITJ_API_IMAGE -i ansible/inventory/$ENV.yml ansible/deploy_juritj.yml --vault-password-file=$ANSIBLE_VAULT_PASS
-  tags:
-    - docker
-
-deploy_dev:
-  variables:
-    ENV: dev
-    JURITJ_API_IMAGE: $dev_docker_image
-  extends: .deploy_template
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
-      when: on_success
-  needs:
-    - build_and_push_dev
-
-deploy_preprod:
-  variables:
-    ENV: preprod
-    JURITJ_API_IMAGE: $preprod_docker_image
-  extends: .deploy_template
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      when: on_success
-  needs:
-    - build_and_push_preprod
-
-deploy_prod:
-  variables:
-    ENV: prod
-    JURITJ_API_IMAGE: $prod_docker_image
-  extends: .deploy_template
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      when: on_success
-  needs:
-    - build_and_push_prod
