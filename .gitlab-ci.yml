@@ -15,4 +15,3 @@ stages:
   - build
   - scan
   - deploy
-  
