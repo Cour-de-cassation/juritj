@@ -10,5 +10,6 @@ services:
       - ${PORT}:${PORT}
     volumes:
       - .:/home/node
+      - /home/node/node_modules
     extra_hosts:
       - "host.docker.internal:host-gateway"

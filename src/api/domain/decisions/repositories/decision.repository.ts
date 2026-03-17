@@ -7,7 +7,7 @@ export interface DecisionRepository {
 export interface RawFilesRepository {
   createFileInformation(file: {
     path: string
-    events: [{ status: 'created'; date: Date }]
+    events: [{ type: 'created'; date: Date }]
     metadatas: MetadonneesDto
   }): Promise<unknown>
 }
