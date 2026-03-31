@@ -9,14 +9,12 @@
       kind: ConfigMap
       metadata:
         name: api-config
-        namespace: "{{ juritj_namespace }}"
+        namespace: '{{ juritj_namespace }}'
         labels:
-          app: "{{ juritj_application }}"
+          app: '{{ juritj_application }}'
       data:
-        DOC_LOGIN: "{{ doc_login }}"
-        DBSDER_API_URL: "{{ dbsder_api_url }}"
-        NO_COLOR: "{{ no_color }}"
-        S3_URL: "{{ s3_url }}"
-        S3_REGION: "{{ s3_region }}"
-        S3_BUCKET_NAME_RAW: "{{ s3_bucket_name }}"
-...
+        DBSDER_API_URL: '{{ dbsder_api_url }}'
+        NO_COLOR: '{{ no_color }}'
+        S3_URL: '{{ s3_url }}'
+        S3_REGION: '{{ s3_region }}'
+        S3_BUCKET_NAME_RAW: '{{ s3_bucket_name }}'

@@ -2,13 +2,13 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2022",
+    "rootDir": "./src",
     "outDir": "./dist",
     "baseUrl": "./",
     "declaration": true,
     "removeComments": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "sourceMap": true,
     "incremental": true,
     "skipLibCheck": true,
@@ -17,6 +17,8 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "strictFunctionTypes": true // see: https://github.com/m-radzikowski/aws-sdk-client-mock/issues/167
-  }
+    "strictFunctionTypes": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.ispec.ts"]
 }
