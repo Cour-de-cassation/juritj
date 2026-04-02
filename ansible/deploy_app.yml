@@ -3,5 +3,4 @@
   roles:
     - role: deploy_juritj
       gather_facts: true
-
 ...

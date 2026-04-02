@@ -6,12 +6,8 @@ include:
 
 # Configuration spécifique a juritj
 variables:
-  ANSIBLE_PLAYBOOK_PATH: "ansible/deploy_juritj.yml"
-  ANSIBLE_INVENTORY_PATH: "ansible/inventory"
-  DOCKER_BUILD_ARGS: "--target=api"
-  ANSIBLE_IMAGE_NAME: "juritj_api_image"
+  DOCKER_BUILD_ARGS: '--target=api'
 
 stages:
   - build
-  - scan
   - deploy
