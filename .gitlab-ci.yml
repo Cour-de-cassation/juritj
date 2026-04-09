@@ -7,7 +7,3 @@ include:
 # Configuration spécifique a juritj
 variables:
   DOCKER_BUILD_ARGS: '--target=api'
-
-stages:
-  - build
-  - deploy
