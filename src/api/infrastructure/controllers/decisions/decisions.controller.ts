@@ -36,7 +36,8 @@ import {
 import { BucketError } from '../../../../shared/domain/errors/bucket.error'
 import { InfrastructureExpection } from '../../../../shared/infrastructure/exceptions/infrastructure.exception'
 import { UnexpectedException } from '../../../../shared/infrastructure/exceptions/unexpected.exception'
-import { LogsFormat } from '../../../../shared/infrastructure/utils/logsFormat.utils'
+import { TechLog } from '../../../../shared/infrastructure/utils/logsFormat.utils'
+import { logger } from '../../../../shared/infrastructure/utils/pinoConfig.utils'
 
 const FILE_MAX_SIZE = {
   size: 10000000,
@@ -51,7 +52,6 @@ export interface CollecteDecisionResponse {
 @ApiTags('Collect')
 @Controller('decisions')
 export class DecisionsController {
-  private readonly logger = new Logger()
   private readonly decisionMongoRepository = new DecisionMongoRepository()
 
   @Post()
@@ -90,31 +90,42 @@ export class DecisionsController {
     const routePath = request.method + ' ' + request.path
 
     const decisionUseCase = new SaveDecisionUsecase(
-      new DecisionS3Repository(this.logger),
+      new DecisionS3Repository(logger),
       this.decisionMongoRepository
     )
-    const formatLogs: LogsFormat = {
-      operationName: 'collectDecisions',
-      httpMethod: request.method,
-      path: request.path,
-      msg: `Starting ${routePath}...`,
-      correlationId: request.headers['x-correlation-id']
+
+    // techlog car pas de sourceId à ce niveau, nous avons juste le correlationId pour suivre la requête dans les logs
+    const formatLogs: TechLog = {
+      path: 'src/api/infrastructure/controllers/decisions/decisions.controller.ts',
+      operations: ['collect', 'decisions'],
+      message: JSON.stringify({
+        httpMethod: request.method,
+        path: request.path,
+        msg: `Starting ${routePath}...`,
+        correlationId: request.headers['x-correlation-id']
+      })
     }
+    logger.info(formatLogs)
+
     const filename = await decisionUseCase
       .execute(decisionIntegre, metadonneesDto)
       .catch((error) => {
         if (error instanceof BucketError) {
-          this.logger.error({
+          logger.error({
             ...formatLogs,
-            msg: error.message,
-            statusCode: HttpStatus.SERVICE_UNAVAILABLE
+            message: JSON.stringify({
+              msg: error.message,
+              statusCode: HttpStatus.SERVICE_UNAVAILABLE
+            })
           })
           throw new InfrastructureExpection(error.message)
         }
-        this.logger.error({
+        logger.error({
           ...formatLogs,
-          msg: error.message,
-          statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+          message: JSON.stringify({
+            msg: error.message,
+            statusCode: HttpStatus.INTERNAL_SERVER_ERROR
+          })
         })
         throw new UnexpectedException(error)
       })
@@ -123,11 +134,13 @@ export class DecisionsController {
     delete metadonneesDto['parties']
     delete metadonneesDto['president']
     delete metadonneesDto['sommaire']
-    this.logger.log({
+    logger.info({
       ...formatLogs,
-      msg: routePath + ' returns ' + HttpStatus.ACCEPTED,
-      data: { decision: metadonneesDto },
-      statusCode: HttpStatus.ACCEPTED
+      message: JSON.stringify({
+        msg: routePath + ' returns ' + HttpStatus.ACCEPTED,
+        data: { decision: metadonneesDto },
+        statusCode: HttpStatus.ACCEPTED
+      })
     })
 
     return { filename, body: 'Nous avons bien reçu la décision intègre et ses métadonnées.' }
