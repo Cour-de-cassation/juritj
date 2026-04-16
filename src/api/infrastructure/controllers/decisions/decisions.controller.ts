@@ -3,7 +3,6 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
-  Logger,
   Post,
   Req,
   UploadedFile,
