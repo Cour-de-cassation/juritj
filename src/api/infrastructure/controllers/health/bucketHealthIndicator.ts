@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { HealthIndicator, HealthIndicatorResult, HealthCheckError } from '@nestjs/terminus'
 import { DecisionS3Repository } from '../../../../shared/infrastructure/repositories/decisionS3.repository'
-import { logger } from '../../../../shared/infrastructure/utils/pinoConfig.utils'
 
 @Injectable()
 export class BucketHealthIndicator extends HealthIndicator {
@@ -12,7 +11,7 @@ export class BucketHealthIndicator extends HealthIndicator {
   }
 
   async isHealthy(): Promise<HealthIndicatorResult> {
-    const decisionS3Repository = new DecisionS3Repository(logger)
+    const decisionS3Repository = new DecisionS3Repository()
     try {
       await decisionS3Repository.getDecisionList()
       return this.getStatus(this.key, true)

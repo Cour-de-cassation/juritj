@@ -11,7 +11,6 @@ import 'aws-sdk-client-mock-jest'
 import { DecisionS3Repository } from './decisionS3.repository'
 import { Readable } from 'stream'
 import { BucketError } from '../../domain/errors/bucket.error'
-import { logger } from '../utils/pinoConfig.utils'
 
 describe('DecisionS3Repository', () => {
   let repository: DecisionS3Repository
@@ -21,7 +20,7 @@ describe('DecisionS3Repository', () => {
 
   beforeEach(() => {
     mockS3.reset()
-    repository = new DecisionS3Repository(logger)
+    repository = new DecisionS3Repository()
   })
 
   describe('saveDecision', () => {

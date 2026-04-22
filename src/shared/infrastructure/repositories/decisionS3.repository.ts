@@ -10,13 +10,12 @@ import {
 import { CollectDto } from '../dto/collect.dto'
 import { BucketError } from '../../domain/errors/bucket.error'
 import { DecisionRepository } from '../../../api/domain/decisions/repositories/decision.repository'
-import { CustomLogger } from '../utils/pinoConfig.utils'
+import { logger } from '../utils/pinoConfig.utils'
 
 export class DecisionS3Repository implements DecisionRepository {
   private s3Client: S3Client
-  private logger: CustomLogger
 
-  constructor(logger: CustomLogger, providedS3Client?: S3Client) {
+  constructor(providedS3Client?: S3Client) {
     if (providedS3Client) {
       this.s3Client = providedS3Client
     } else {
@@ -30,7 +29,6 @@ export class DecisionS3Repository implements DecisionRepository {
         }
       })
     }
-    this.logger = logger
   }
 
   async saveDecisionIntegre(decisionIntegre: Express.Multer.File) {
@@ -48,7 +46,7 @@ export class DecisionS3Repository implements DecisionRepository {
     try {
       await this.s3Client.send(reqParams)
     } catch (error) {
-      this.logger.error({
+      logger.error({
         operations: ['collect', 'decision'],
         path: './src/shared/infrastructure/repositories/decisionS3.repository.ts',
         message: JSON.stringify({ msg: error.message, data: error })
@@ -66,7 +64,7 @@ export class DecisionS3Repository implements DecisionRepository {
     try {
       await this.s3Client.send(new DeleteObjectCommand(reqParams))
     } catch (error) {
-      this.logger.error({
+      logger.error({
         operations: ['other', 'deleteDecision.decision'],
         path: './src/shared/infrastructure/repositories/decisionS3.repository.ts',
         message: JSON.stringify({ msg: error.message, data: error })
@@ -85,7 +83,7 @@ export class DecisionS3Repository implements DecisionRepository {
       const stringifiedDecision = await decisionFromS3.Body?.transformToString()
       return JSON.parse(stringifiedDecision)
     } catch (error) {
-      this.logger.error({
+      logger.error({
         operations: ['other', 'getDecisionByFilename.decision'],
         path: './src/shared/infrastructure/repositories/decisionS3.repository.ts',
         message: JSON.stringify({ msg: error.message, data: error })
@@ -110,7 +108,7 @@ export class DecisionS3Repository implements DecisionRepository {
       const decisionListFromS3 = await this.s3Client.send(new ListObjectsV2Command(reqParams))
       return decisionListFromS3.Contents ? decisionListFromS3.Contents : []
     } catch (error) {
-      this.logger.error({
+      logger.error({
         operations: ['other', 'getDecisionList.decision'],
         path: './src/shared/infrastructure/repositories/decisionS3.repository.ts',
         message: JSON.stringify({ msg: error.message, data: error })

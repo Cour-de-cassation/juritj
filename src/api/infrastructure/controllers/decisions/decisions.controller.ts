@@ -89,7 +89,7 @@ export class DecisionsController {
     const routePath = request.method + ' ' + request.path
 
     const decisionUseCase = new SaveDecisionUsecase(
-      new DecisionS3Repository(logger),
+      new DecisionS3Repository(),
       this.decisionMongoRepository
     )
 
