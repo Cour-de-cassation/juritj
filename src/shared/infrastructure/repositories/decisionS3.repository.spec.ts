@@ -10,7 +10,6 @@ import { sdkStreamMixin } from '@smithy/util-stream'
 import 'aws-sdk-client-mock-jest'
 import { DecisionS3Repository } from './decisionS3.repository'
 import { Readable } from 'stream'
-import { Logger } from '@nestjs/common'
 import { BucketError } from '../../domain/errors/bucket.error'
 
 describe('DecisionS3Repository', () => {
@@ -21,7 +20,7 @@ describe('DecisionS3Repository', () => {
 
   beforeEach(() => {
     mockS3.reset()
-    repository = new DecisionS3Repository(new Logger())
+    repository = new DecisionS3Repository()
   })
 
   describe('saveDecision', () => {

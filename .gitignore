@@ -44,3 +44,4 @@ docker.env
 
 # Wordperfect Documents
 *.wpd
+.vscode
