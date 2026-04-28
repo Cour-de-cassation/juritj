@@ -2,7 +2,7 @@
 include:
   - project: 'cour-de-cassation/ops-automation'
     file: 'template/gitlab-ci-template.yml'
-    ref: 'improve-gitlabci-template'
+    ref: 'master'
 
 # Configuration spécifique a juritj
 variables:
