@@ -59,4 +59,4 @@ FROM shared-local AS api-local
 
 USER node
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:watch"]

@@ -1,5 +1,0 @@
-{
-    "watch": ["src/shared", "src/batch"],
-    "ext": "ts",
-    "exec": "ts-node -r dotenv/config src/batch/normalization/index.ts"
-}
