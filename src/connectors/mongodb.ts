@@ -1,5 +1,6 @@
 import { Document, MongoClient, OptionalUnlessRequiredId, InferIdType, Db } from 'mongodb'
 import { FILE_DB_URL, S3_BUCKET_NAME_RAW } from '../config/env'
+import { logger } from '../config/logger'
 
 let dbPromise: Promise<Db> | null = null
 
@@ -23,4 +24,19 @@ export async function saveFileMetadata<T extends Document>(
   const db = await getDb()
   const { insertedId } = await db.collection<T>(S3_BUCKET_NAME_RAW).insertOne(file)
   return { _id: insertedId, ...file }
+}
+
+export async function checkDbHealth(): Promise<boolean> {
+  try {
+    const db = await getDb()
+    await db.command({ ping: 1 })
+    return true
+  } catch (error) {
+    logger.error({
+      operations: ['other', 'healthCheck'],
+      path: 'src/connectors/mongodb.ts',
+      message: JSON.stringify({ msg: error.message, data: error })
+    })
+    return false
+  }
 }

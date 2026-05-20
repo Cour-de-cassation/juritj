@@ -7,10 +7,12 @@ import healthRouter from './health'
 import { errorHandler } from './error'
 import { loggerHttp } from '../config/logger'
 import { setS3Client } from '../connectors/s3'
+import * as mongodb from '../connectors/mongodb'
 
 describe('Health API', () => {
   let app: express.Express
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
+  let mockCheckDbHealth: jest.SpyInstance
 
   beforeAll(() => {
     app = express()
@@ -24,31 +26,60 @@ describe('Health API', () => {
 
   beforeEach(() => {
     mockS3.reset()
+    mockCheckDbHealth = jest.spyOn(mongodb, 'checkDbHealth').mockResolvedValue(true)
+  })
+
+  afterEach(() => {
+    mockCheckDbHealth.mockRestore()
   })
 
   describe('GET /v1/health', () => {
-    it('returns a 200 OK with bucket status UP when bucket is available', async () => {
+    it('returns a 200 OK when all services are available', async () => {
       mockS3.on(ListObjectsV2Command).resolves({})
-      const expectedStatus = 'ok'
-      const expectedBucketStatus = 'up'
+      mockCheckDbHealth.mockResolvedValue(true)
 
       const result = await request(app).get('/v1/health')
 
       expect(result.statusCode).toEqual(200)
-      expect(result.body.status).toEqual(expectedStatus)
-      expect(result.body.info.bucket.status).toEqual(expectedBucketStatus)
+      expect(result.body.status).toEqual('ok')
+      expect(result.body.info.bucket.status).toEqual('up')
+      expect(result.body.info.database.status).toEqual('up')
     })
 
-    it('returns a 503 SERVICE UNAVAILABLE with bucket status DOWN when bucket is unavailable', async () => {
+    it('returns a 503 SERVICE UNAVAILABLE when bucket is unavailable', async () => {
       mockS3.on(ListObjectsV2Command).rejects(new Error('Some S3 error'))
-      const expectedStatus = 'error'
-      const expectedBucketStatus = 'down'
+      mockCheckDbHealth.mockResolvedValue(true)
 
       const result = await request(app).get('/v1/health')
 
       expect(result.statusCode).toEqual(503)
-      expect(result.body.status).toEqual(expectedStatus)
-      expect(result.body.error.bucket.status).toEqual(expectedBucketStatus)
+      expect(result.body.status).toEqual('error')
+      expect(result.body.error.bucket.status).toEqual('down')
+      expect(result.body.info.database.status).toEqual('up')
+    })
+
+    it('returns a 503 SERVICE UNAVAILABLE when database is unavailable', async () => {
+      mockS3.on(ListObjectsV2Command).resolves({})
+      mockCheckDbHealth.mockResolvedValue(false)
+
+      const result = await request(app).get('/v1/health')
+
+      expect(result.statusCode).toEqual(503)
+      expect(result.body.status).toEqual('error')
+      expect(result.body.info.bucket.status).toEqual('up')
+      expect(result.body.error.database.status).toEqual('down')
+    })
+
+    it('returns a 503 SERVICE UNAVAILABLE when all services are unavailable', async () => {
+      mockS3.on(ListObjectsV2Command).rejects(new Error('Some S3 error'))
+      mockCheckDbHealth.mockResolvedValue(false)
+
+      const result = await request(app).get('/v1/health')
+
+      expect(result.statusCode).toEqual(503)
+      expect(result.body.status).toEqual('error')
+      expect(result.body.error.bucket.status).toEqual('down')
+      expect(result.body.error.database.status).toEqual('down')
     })
   })
 })
