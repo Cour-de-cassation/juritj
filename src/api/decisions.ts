@@ -74,13 +74,15 @@ router.post('/v1/decisions', upload.single('decisionIntegre'), async (req, res, 
       if (error instanceof InfrastructureError) {
         logger.error({
           ...formatLogs,
-          message: JSON.stringify({ msg: error.message, statusCode: 503 })
+          message: JSON.stringify({ msg: error.message, statusCode: 503 }),
+          stack: error.stack
         })
         throw error
       }
       logger.error({
         ...formatLogs,
-        message: JSON.stringify({ msg: error.message, statusCode: 500 })
+        message: JSON.stringify({ msg: error.message, statusCode: 500 }),
+        stack: error.stack
       })
       throw new UnexpectedError(error.message)
     })

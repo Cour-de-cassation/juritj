@@ -8,7 +8,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
     path: 'src/api/error.ts',
     operations: ['other', `${req.method} ${req.path}`],
     message: `${err}`,
-    error: err
+    stack: err.stack
   })
 
   if (err instanceof MulterError) {
@@ -27,9 +27,13 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 
   if (isCustomError(err)) {
     switch (err.type) {
+      case 'validationError':
+        res
+          .status(400)
+          .json({ error: { type: err.type, message: err.message, details: err.details } })
+        return
       case 'badFileFormat':
       case 'badFileSize':
-      case 'validationError':
       case 'missingValue':
         res.status(400).json({ error: { type: err.type, message: err.message } })
         return

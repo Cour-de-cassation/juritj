@@ -35,7 +35,8 @@ export async function checkDbHealth(): Promise<boolean> {
     logger.error({
       operations: ['other', 'healthCheck'],
       path: 'src/connectors/mongodb.ts',
-      message: JSON.stringify({ msg: error.message, data: error })
+      message: JSON.stringify({ msg: error.message, data: error }),
+      stack: error.stack
     })
     return false
   }

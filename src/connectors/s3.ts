@@ -40,7 +40,8 @@ export async function saveDecisionFile(file: Express.Multer.File): Promise<void>
     logger.error({
       operations: ['collect', 'decision'],
       path: 'src/connectors/s3.ts',
-      message: JSON.stringify({ msg: error.message, data: error })
+      message: JSON.stringify({ msg: error.message, data: error }),
+      stack: error.stack
     })
     throw new InfrastructureError(error.message)
   }
@@ -61,7 +62,8 @@ export async function checkBucketHealth(): Promise<boolean> {
     logger.error({
       operations: ['other', 'healthCheck'],
       path: 'src/connectors/s3.ts',
-      message: JSON.stringify({ msg: error.message, data: error })
+      message: JSON.stringify({ msg: error.message, data: error }),
+      stack: error.stack
     })
     return false
   }
