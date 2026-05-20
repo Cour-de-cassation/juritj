@@ -42,8 +42,8 @@ describe('Health API', () => {
 
       expect(result.statusCode).toEqual(200)
       expect(result.body.status).toEqual('ok')
-      expect(result.body.info.bucket.status).toEqual('up')
-      expect(result.body.info.database.status).toEqual('up')
+      expect(result.body.details.bucket.status).toEqual('up')
+      expect(result.body.details.database.status).toEqual('up')
     })
 
     it('returns a 503 SERVICE UNAVAILABLE when bucket is unavailable', async () => {
@@ -54,8 +54,8 @@ describe('Health API', () => {
 
       expect(result.statusCode).toEqual(503)
       expect(result.body.status).toEqual('error')
-      expect(result.body.error.bucket.status).toEqual('down')
-      expect(result.body.info.database.status).toEqual('up')
+      expect(result.body.details.bucket.status).toEqual('down')
+      expect(result.body.details.database.status).toEqual('up')
     })
 
     it('returns a 503 SERVICE UNAVAILABLE when database is unavailable', async () => {
@@ -66,8 +66,8 @@ describe('Health API', () => {
 
       expect(result.statusCode).toEqual(503)
       expect(result.body.status).toEqual('error')
-      expect(result.body.info.bucket.status).toEqual('up')
-      expect(result.body.error.database.status).toEqual('down')
+      expect(result.body.details.bucket.status).toEqual('up')
+      expect(result.body.details.database.status).toEqual('down')
     })
 
     it('returns a 503 SERVICE UNAVAILABLE when all services are unavailable', async () => {
@@ -78,8 +78,8 @@ describe('Health API', () => {
 
       expect(result.statusCode).toEqual(503)
       expect(result.body.status).toEqual('error')
-      expect(result.body.error.bucket.status).toEqual('down')
-      expect(result.body.error.database.status).toEqual('down')
+      expect(result.body.details.bucket.status).toEqual('down')
+      expect(result.body.details.database.status).toEqual('down')
     })
   })
 })
