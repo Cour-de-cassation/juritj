@@ -1,5 +1,4 @@
-import { LabelStatus, SuiviOccultation, TypePartieExhaustive } from 'dbsder-api-types'
-import { Metadonnees } from '../services/decisions/models'
+import { Metadonnees, SuiviOccultation, TypePartieExhaustive } from '../services/decisions/models'
 
 export class MockUtils {
   uniqueDecisionId = `TJ75011A01-1234520240120`
@@ -54,20 +53,5 @@ export class MockUtils {
     pourvoiLocal: false,
     pourvoiCourDeCassation: false,
     debatPublic: true
-  }
-
-  allAttributesMetadonneesDtoMock = {
-    ...this.mandatoryMetadonneesDtoMock,
-    parties: [this.partieDtoMock, this.partieDtoMock],
-    _id: this.uniqueDecisionId,
-    labelStatus: LabelStatus.TOBETREATED,
-    numeroMesureInstruction: ['AZERTYUIOP'],
-    decisionAssociee: this.decisionAssocieeDtoMock,
-    filenameSource: this.decisionName,
-    indicateurQPC: true,
-    idDecision: 'TJ00000',
-    sourceId: this.uniqueDecisionIdHash,
-    codeNature: '6C',
-    libelleNature: 'Autres demandes en matière de frais et dépens'
   }
 }

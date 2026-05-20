@@ -1,6 +1,30 @@
 import { z } from 'zod'
-import { TypePartieExhaustive, QualitePartieExhaustive, SuiviOccultation } from 'dbsder-api-types'
 import { ValidationError } from '../error'
+
+export enum SuiviOccultation {
+  AUCUNE = 'aucune',
+  CONFORME = 'conforme',
+  SUBSTITUANT = 'substituant',
+  COMPLEMENT = 'complément'
+}
+
+export enum QualitePartieExhaustive {
+  F = 'F',
+  G = 'G',
+  I = 'I',
+  J = 'J',
+  K = 'K',
+  L = 'L',
+  M = 'M',
+  N = 'N'
+}
+
+export enum TypePartieExhaustive {
+  PP = 'PP',
+  PM = 'PM',
+  AA = 'AA',
+  NA = 'NA'
+}
 
 const PresidentSchema = z.object({
   fonction: z.string(),
