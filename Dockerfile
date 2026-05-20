@@ -35,7 +35,7 @@ CMD ["node", "dist/server.js"]
 # --- ONLY USED TO LAUNCH DOCKER IN LOCAL WITH HOT-RELOAD --- #
 FROM node:24-alpine AS api-local
 
-ENV NODE_ENV=local
+ENV ENV=local
 
 USER root
 RUN apk add cmd:wpd2text

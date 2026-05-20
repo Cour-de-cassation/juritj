@@ -1,5 +1,5 @@
 import pino, { Logger, LoggerOptions } from 'pino'
-import { NODE_ENV } from './env'
+import { ENV } from './env'
 import { Handler } from 'express'
 import { randomUUID } from 'crypto'
 
@@ -50,7 +50,7 @@ const loggerOptions: LoggerOptions = {
     censor: '',
     remove: true
   },
-  transport: NODE_ENV === 'LOCAL' ? pinoPrettyConf : undefined
+  transport: ENV === 'LOCAL' ? pinoPrettyConf : undefined
 }
 
 export type CustomLogger = Omit<Logger, 'error' | 'warn' | 'info'> & {
