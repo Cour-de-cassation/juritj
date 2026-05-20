@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Metadonnees } from './models'
 import { saveDecisionFile } from '../../connectors/s3'
-import { saveFileMetadata, FileInfo } from '../../connectors/mongodb'
+import { saveFileMetadata, RawFile } from '../../connectors/mongodb'
 
 export async function saveDecision(
   decisionIntegre: Express.Multer.File,
@@ -14,7 +14,7 @@ export async function saveDecision(
   decisionIntegre.originalname = decisionFileName
 
   await saveDecisionFile(decisionIntegre)
-  await saveFileMetadata<FileInfo>({
+  await saveFileMetadata<RawFile>({
     path: decisionFileName,
     events: [{ type: 'created', date: new Date() }],
     metadatas: metadonnees

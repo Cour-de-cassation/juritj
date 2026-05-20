@@ -12,7 +12,7 @@ function getDb(): Promise<Db> {
   return dbPromise
 }
 
-export type FileInfo = {
+export type RawFile = {
   path: string
   events: Array<{ type: string; date: Date }>
   metadatas: unknown
