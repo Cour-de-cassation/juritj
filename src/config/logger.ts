@@ -1,7 +1,6 @@
 import pino, { Logger, LoggerOptions } from 'pino'
 import { ENV } from './env'
 import { Handler } from 'express'
-import { randomUUID } from 'crypto'
 
 export type DecisionLog = {
   decision: {
