@@ -37,32 +37,6 @@ describe('Decisions API', () => {
   })
 
   describe('POST /v1/decisions', () => {
-    describe('returns 202', () => {
-      it('with generated correlation ID when there are metadata present with the wordperfect file', async () => {
-        const res = await request(app)
-          .post('/v1/decisions')
-          .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
-          .field('metadonnees', JSON.stringify(metadata))
-
-        expect(res.statusCode).toBe(202)
-        expect(res.body).toHaveProperty('filename')
-        expect(res.body).toHaveProperty('body')
-      })
-
-      it('with provided correlation ID when there are metadata present with the wordperfect file', async () => {
-        const providedCorrelationId = 'some id'
-
-        const res = await request(app)
-          .post('/v1/decisions')
-          .attach('decisionIntegre', myBufferedFile, wordperfectFilename)
-          .field('metadonnees', JSON.stringify(metadata))
-          .set({ 'x-correlation-id': providedCorrelationId })
-
-        expect(res.statusCode).toBe(202)
-        expect(res.headers['x-correlation-id']).toEqual(providedCorrelationId)
-      })
-    })
-
     describe('returns 400 Bad Request error', () => {
       it('when there is no file attached', async () => {
         const res = await request(app).post('/v1/decisions').send({ metadonnees: metadata })

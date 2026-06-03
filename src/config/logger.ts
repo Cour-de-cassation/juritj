@@ -72,10 +72,6 @@ declare module 'http' {
 }
 
 export const loggerHttp: Handler = (req, res, next) => {
-  const correlationId = (req.headers['x-correlation-id'] as string) ?? randomUUID()
-  req.headers['x-correlation-id'] = correlationId
-  res.setHeader('x-correlation-id', correlationId)
-
   const httpLogger = pino({
     ...loggerOptions,
     formatters: {
@@ -83,8 +79,7 @@ export const loggerHttp: Handler = (req, res, next) => {
       log: (content) => ({
         ...content,
         type: Object.keys(content).includes('decision') ? 'decision' : 'tech',
-        appName: 'juritj',
-        correlationId
+        appName: 'juritj'
       })
     }
   })

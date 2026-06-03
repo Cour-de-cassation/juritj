@@ -64,8 +64,7 @@ router.post('/v1/decisions', upload.single('decisionIntegre'), async (req, res, 
       message: JSON.stringify({
         httpMethod: req.method,
         path: req.path,
-        msg: `Starting ${routePath}...`,
-        correlationId: req.headers['x-correlation-id']
+        msg: `Starting ${routePath}...`
       })
     }
     logger.info(formatLogs)
