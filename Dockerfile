@@ -46,7 +46,6 @@ FROM node:24-alpine AS shared-local
 ENV NODE_ENV=local
 
 USER root
-RUN apk add cmd:wpd2text
 
 USER node
 WORKDIR /home/node
