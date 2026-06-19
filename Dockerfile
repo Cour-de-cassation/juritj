@@ -33,7 +33,6 @@ FROM node:24-alpine AS api-local
 ENV ENV=local
 
 USER root
-RUN apk add cmd:wpd2text
 
 USER node
 WORKDIR /home/node
