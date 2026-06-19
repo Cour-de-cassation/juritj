@@ -13,12 +13,7 @@ RUN npm ci
 
 COPY --chown=node:node . .
 
-
-# --- Only prod dependencies --- #
-FROM builder AS prod
-
 RUN npm run build && npm prune --production
-
 
 # --- Final production image --- #
 FROM node:24-alpine AS api
@@ -26,9 +21,9 @@ FROM node:24-alpine AS api
 USER node
 WORKDIR /home/node
 
-COPY --from=prod --chown=node:node /home/node/package*.json ./
-COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
-COPY --from=prod --chown=node:node /home/node/dist ./dist
+COPY --from=builder --chown=node:node /home/node/package*.json ./
+COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=builder --chown=node:node /home/node/dist ./dist
 
 CMD ["node", "dist/server.js"]
 
