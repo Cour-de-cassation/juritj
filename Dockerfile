@@ -1,4 +1,3 @@
-# Source : https://github.com/nestjs/awesome-nestjs#resources boilerplates
 # --- Builder --- #
 FROM node:24-alpine AS builder
 
@@ -14,36 +13,24 @@ RUN npm ci
 
 COPY --chown=node:node . .
 
-
-# --- Only prod dependencies --- #
-FROM builder AS prod
-
 RUN npm run build && npm prune --production
 
-
-# --- Base final image with only shared dist content --- #
-FROM node:24-alpine AS shared
+# --- Final production image --- #
+FROM node:24-alpine AS api
 
 USER node
 WORKDIR /home/node
 
-COPY --from=prod --chown=node:node /home/node/package*.json ./
-COPY --from=prod --chown=node:node /home/node/node_modules/ ./node_modules/
-COPY --from=prod --chown=node:node /home/node/dist/shared ./dist/shared
+COPY --from=builder --chown=node:node /home/node/package*.json ./
+COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=builder --chown=node:node /home/node/dist ./dist
 
-# --- Base final image with api dist content --- #
-FROM shared AS api
+CMD ["node", "dist/server.js"]
 
-USER node
-COPY --from=prod --chown=node:node /home/node/dist/api ./dist/api
+# --- ONLY USED TO LAUNCH DOCKER IN LOCAL WITH HOT-RELOAD --- #
+FROM node:24-alpine AS api-local
 
-CMD ["node", "dist/api/main"]
-
-# --- ONLY USED TO LAUNCH DOCKER IN LOCAL WITH HOT-RELOAD: ---#
-# --- Base image with only shared content --- #
-FROM node:24-alpine AS shared-local
-
-ENV NODE_ENV=local
+ENV ENV=local
 
 USER root
 
@@ -53,9 +40,4 @@ WORKDIR /home/node
 COPY --chown=node:node . .
 RUN npm i
 
-# --- Base image with api content --- #
-FROM shared-local AS api-local
-
-USER node
-
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:watch"]
