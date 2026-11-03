@@ -1,17 +1,20 @@
+import { jest, describe, expect, it, beforeEach } from '@jest/globals'
 import { MockUtils } from '../../utils/mock'
-
-const mockSaveDecisionFile = jest.fn()
-const mockSaveFileMetadata = jest.fn()
+import { saveDecision } from './handler'
+import { saveDecisionFile } from '../../connectors/s3'
+import { saveFileMetadata } from '../../connectors/mongodb'
+import { ObjectId } from 'mongodb'
 
 jest.mock('../../connectors/s3', () => ({
-  saveDecisionFile: (...args: unknown[]) => mockSaveDecisionFile(...args)
+  saveDecisionFile: jest.fn()
 }))
 
 jest.mock('../../connectors/mongodb', () => ({
-  saveFileMetadata: (...args: unknown[]) => mockSaveFileMetadata(...args)
+  saveFileMetadata: jest.fn()
 }))
 
-import { saveDecision } from './handler'
+const mockSaveDecisionFile = jest.mocked(saveDecisionFile)
+const mockSaveFileMetadata = jest.mocked(saveFileMetadata)
 
 const mockUtils = new MockUtils()
 
@@ -23,7 +26,7 @@ describe('saveDecision handler', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockSaveDecisionFile.mockResolvedValue(undefined)
-    mockSaveFileMetadata.mockResolvedValue({ _id: 'fake-id' })
+    mockSaveFileMetadata.mockResolvedValue({ _id: new ObjectId('111111111111111111111111') })
   })
 
   describe('execute', () => {

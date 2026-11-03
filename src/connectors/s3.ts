@@ -36,7 +36,8 @@ export async function saveDecisionFile(file: Express.Multer.File): Promise<void>
 
   try {
     await client.send(reqParams)
-  } catch (error) {
+  } catch (_err) {
+    const error = _err instanceof Error ? _err : new Error(`${_err}`)
     logger.error({
       operations: ['collect', 'decision'],
       path: 'src/connectors/s3.ts',
@@ -58,7 +59,8 @@ export async function checkBucketHealth(): Promise<boolean> {
       })
     )
     return true
-  } catch (error) {
+  } catch (_err) {
+    const error = _err instanceof Error ? _err : new Error(`${_err}`)
     logger.error({
       operations: ['other', 'healthCheck'],
       path: 'src/connectors/s3.ts',

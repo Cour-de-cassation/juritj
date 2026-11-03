@@ -1,3 +1,5 @@
+import { jest, describe, expect, it, beforeAll, beforeEach, afterEach } from '@jest/globals'
+
 import request from 'supertest'
 import express from 'express'
 import helmet from 'helmet'
@@ -12,7 +14,7 @@ import * as mongodb from '../connectors/mongodb'
 describe('Health API', () => {
   let app: express.Express
   const mockS3: AwsClientStub<S3Client> = mockClient(S3Client)
-  let mockCheckDbHealth: jest.SpyInstance
+  let mockCheckDbHealth: jest.SpiedFunction<typeof mongodb.checkDbHealth>
 
   beforeAll(() => {
     app = express()
