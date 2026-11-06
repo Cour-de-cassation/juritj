@@ -1,4 +1,5 @@
 process.env = {
+  ENV: 'test',
   S3_URL: 's3-url',
   S3_ACCESS_KEY: 's3-access-key',
   S3_SECRET_KEY: 's3-secret-key',

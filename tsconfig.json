@@ -1,23 +1,25 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "bundler",
     "target": "es2022",
     "outDir": "./dist",
-    "baseUrl": "./",
+    "rootDir": "./src",
+    "paths": { "src/*": ["./src/*"] },
     "declaration": true,
     "removeComments": true,
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "strictFunctionTypes": true
+    "strictFunctionTypes": true,
+    "types": ["node"],
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "src/.jest/**/*"]
 }

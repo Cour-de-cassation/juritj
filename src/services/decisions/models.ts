@@ -92,7 +92,7 @@ export type Partie = z.infer<typeof PartieSchema>
 export function parseMetadonnees(x: unknown): Metadonnees {
   const result = MetadonneesSchema.safeParse(x)
   if (!result.success) {
-    const errors = result.error.errors.map((e) => ({
+    const errors = result.error.issues.map((e) => ({
       path: e.path.join('.'),
       message: e.message
     }))

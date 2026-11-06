@@ -31,7 +31,8 @@ export async function checkDbHealth(): Promise<boolean> {
     const db = await getDb()
     await db.command({ ping: 1 })
     return true
-  } catch (error) {
+  } catch (_err) {
+    const error = _err instanceof Error ? _err : new Error(`${_err}`)
     logger.error({
       operations: ['other', 'healthCheck'],
       path: 'src/connectors/mongodb.ts',
